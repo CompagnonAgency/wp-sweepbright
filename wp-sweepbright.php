@@ -10,7 +10,7 @@
  * Author: Compagnon Agency
  * Author URI: https://compagnon.agency/
  * Text Domain: wp-sweepbright
- * Version: 0.9.0
+ * Version: 1.0.0
  */
 
 // If this file is called directly, abort.
@@ -23,7 +23,7 @@ if (!defined('WPINC')) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define('WP_SWEEPBRIGHT_VERSION', '0.0.1');
+define('WP_SWEEPBRIGHT_VERSION', '1.0.0');
 
 /**
  * The code that runs during plugin activation.
@@ -49,6 +49,15 @@ register_deactivation_hook(__FILE__, 'deactivate_wp_sweepbright');
  * admin-specific hooks, and public-facing site hooks.
  */
 require plugin_dir_path( __FILE__ ) . 'includes/class-wp-sweepbright.php';
+
+/**
+ * Auto update module.
+ */
+require plugin_dir_path( __FILE__ ) . 'lib/BFIGitHubPluginUploader.php';
+
+if (is_admin()) {
+  new BFIGitHubPluginUpdater( __FILE__, 'CompagnonAgency', 'wp-sweepbright');
+}
 
 /**
  * Begins execution of the plugin.
