@@ -38,7 +38,7 @@ class WP_SweepBright_Controller_Estate {
 	    "description_title" => [
 	      "en" => "Luxury Apartment",
 	      "fr" => "Appartement de luxe",
-	      "nl" => "Luxe appartement"
+	      "nl" => "Luxe appartement 53"
 	    ],
 	    "living_rooms" => 1,
 	    "kitchens" => 1,
@@ -108,13 +108,15 @@ class WP_SweepBright_Controller_Estate {
 	      "start_date" => "2018-01-01T10:00:00+00:00"
 	    ],
 	    "open_homes" => [
-        "start_date" => "2018-05-26T10:00:00+00:00",
-        "end_date" => "2018-05-26T10:00:00+00:00"
+        [
+					"start_date" => "2018-05-26T10:00:00+00:00",
+        	"end_date" => "2018-05-26T10:00:00+00:00"
+				]
 	    ],
 	    "price" => [
 	      "amount" => 100000,
 	      "currency" => "EUR",
-	      "hidden" => true
+	      "hidden" => false
 	    ],
 	    "price_negotiated" => 100000,
 	    "price_costs" => [
@@ -195,6 +197,78 @@ class WP_SweepBright_Controller_Estate {
 	        "filename" => "my-image.jpeg",
 	        "description" => "My image",
 	        "url" => "https://r-cf.bstatic.com/images/hotel/max1024x768/218/218401246.jpg",
+	        "url_expires_on" => "2017-01-01T12:12:12+00:00",
+	        "ordinal" => 1
+				],
+				[
+	        "id" => "1234-5678-9012",
+	        "filename" => "my-image.jpeg",
+	        "description" => "My image",
+	        "url" => "https://www.devuyst.be/wp-content/uploads/2019/10/De-Vuyst-Fire-and-interior-concepts-Referentie-Uitgelicht-008.jpg",
+	        "url_expires_on" => "2017-01-01T12:12:12+00:00",
+	        "ordinal" => 1
+				],
+				[
+	        "id" => "1234-5678-9012",
+	        "filename" => "my-image.jpeg",
+	        "description" => "My image",
+	        "url" => "https://occ-0-1723-1722.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABbP7JQDJPsK9k-PuDdCA1UF-q8lmYZoh69CO6ufCv-NezcKV8kKp3jIAryt_0Cp7K5ro5C21viJlnntCAq6ogSkVWjEQ.jpg?r=01d",
+	        "url_expires_on" => "2017-01-01T12:12:12+00:00",
+	        "ordinal" => 1
+				],
+				[
+	        "id" => "1234-5678-9012",
+	        "filename" => "my-image.jpeg",
+	        "description" => "My image",
+	        "url" => "https://www.hoog.design/shop/wp-content/uploads/2019/05/GrandJohnson-interieur-1-1-1280x960.jpg",
+	        "url_expires_on" => "2017-01-01T12:12:12+00:00",
+	        "ordinal" => 1
+				],
+				[
+	        "id" => "1234-5678-9012",
+	        "filename" => "my-image.jpeg",
+	        "description" => "My image",
+	        "url" => "https://hemelaer.be/wp-content/uploads/2019/11/Hemelaer-Interior-De-Sede-ds-2878-mood.jpg",
+	        "url_expires_on" => "2017-01-01T12:12:12+00:00",
+	        "ordinal" => 1
+				],
+				[
+	        "id" => "1234-5678-9012",
+	        "filename" => "my-image.jpeg",
+	        "description" => "My image",
+	        "url" => "https://i.pinimg.com/originals/cf/94/af/cf94afbf91498a61da9e3c73c1a18e10.jpg",
+	        "url_expires_on" => "2017-01-01T12:12:12+00:00",
+	        "ordinal" => 1
+				],
+				[
+	        "id" => "1234-5678-9012",
+	        "filename" => "my-image.jpeg",
+	        "description" => "My image",
+	        "url" => "https://cdn.shopify.com/s/files/1/0413/1759/7349/files/COSE-interior-Ravenna-Sofa-Lounge-Chair1440x900_1440x900_crop_center.jpg?v=1592040671",
+	        "url_expires_on" => "2017-01-01T12:12:12+00:00",
+	        "ordinal" => 1
+				],
+				[
+	        "id" => "1234-5678-9012",
+	        "filename" => "my-image.jpeg",
+	        "description" => "My image",
+	        "url" => "https://cdn.shopify.com/s/files/1/0413/1759/7349/files/COSE-interior-Ravenna-Sofa-Lounge-Chair1440x900_1440x900_crop_center.jpg?v=1592040671",
+	        "url_expires_on" => "2017-01-01T12:12:12+00:00",
+	        "ordinal" => 1
+				],
+				[
+	        "id" => "1234-5678-9012",
+	        "filename" => "my-image.jpeg",
+	        "description" => "My image",
+	        "url" => "https://cdn.shopify.com/s/files/1/0413/1759/7349/products/COSE-interior-Cotton-Fauteuil-4-scaled_1024x1024.jpg?v=1595358352",
+	        "url_expires_on" => "2017-01-01T12:12:12+00:00",
+	        "ordinal" => 1
+				],
+				[
+	        "id" => "1234-5678-9012",
+	        "filename" => "my-image.jpeg",
+	        "description" => "My image",
+	        "url" => "https://i.pinimg.com/474x/62/ff/32/62ff32bddb0d4ca4290977a69c97fb55.jpg",
 	        "url_expires_on" => "2017-01-01T12:12:12+00:00",
 	        "ordinal" => 1
 	      ]

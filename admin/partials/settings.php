@@ -42,6 +42,42 @@
 
     <hr>
 
+    <h2 class="title">Display options</h2>
+    <p>
+      Configure various display options.
+    </p>
+
+    <table class="form-table" role="presentation">
+      <tbody>
+        <tr>
+          <th scope="row">
+            <label for="max_per_page">Max results per page</label>
+          </th>
+          <td>
+            <input name="max_per_page" type="number" id="max_per_page" value="<?= WP_SweepBright_Helpers::settings_form()['max_per_page']; ?>" class="regular-text" required>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">
+            <label for="recent_total">Most recent estates</label>
+          </th>
+          <td>
+            <input name="recent_total" type="number" id="recent_total" value="<?= WP_SweepBright_Helpers::settings_form()['recent_total']; ?>" class="regular-text" required>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">
+            <label for="geo_distance">Geolocation distance</label>
+          </th>
+          <td>
+            <input name="geo_distance" type="number" id="geo_distance" value="<?= WP_SweepBright_Helpers::settings_form()['geo_distance']; ?>" class="regular-text" required>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <hr>
+
     <h2 class="title">Custom URL</h2>
     <p>
       Set a custom permalink for your properties. When having the URL set to e.g. <kbd>/estates</kbd>,<br>

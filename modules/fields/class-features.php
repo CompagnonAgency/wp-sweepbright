@@ -175,9 +175,9 @@ class FieldFeatures {
 					],
 				],
 				[
-					'key' => 'estate_type',
+					'key' => 'type',
 					'label' => 'Type',
-					'name' => 'type',
+					'name' => 'estateType',
 					'type' => 'select',
 					'default_value' => '',
 					'readonly' => 0,
@@ -193,7 +193,7 @@ class FieldFeatures {
 					],
 				],
 				[
-					'key' => 'estate_sub_type',
+					'key' => 'subtype',
 					'label' => 'Sub type',
 					'name' => 'sub_type',
 					'type' => 'select',

@@ -26,7 +26,11 @@ class WP_SweepBright_Logs extends WP_List_Table {
 	}
 
 	public static function get_term_id_by_slug() {
-		return get_term_by('slug', 'wp_sweepbright_logs', 'wp_log_type')->term_id;
+		$term_id = false;
+		if (get_term_by('slug', 'wp_sweepbright_logs', 'wp_log_type')) {
+			$term_id = get_term_by('slug', 'wp_sweepbright_logs', 'wp_log_type')->term_id;
+		}
+		return $term_id;
 	}
 
 

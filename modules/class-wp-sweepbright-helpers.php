@@ -30,6 +30,9 @@ class WP_SweepBright_Helpers {
 		  'client_id' => WP_SweepBright_Helpers::settings_form()['client_id'],
 		  'client_secret' => WP_SweepBright_Helpers::settings_form()['client_secret'],
 			'default_locale' => WP_SweepBright_Helpers::settings_form()['default_language'],
+			'max_per_page' => WP_SweepBright_Helpers::settings_form()['max_per_page'],
+			'recent_total' => WP_SweepBright_Helpers::settings_form()['recent_total'],
+			'geo_distance' => WP_SweepBright_Helpers::settings_form()['geo_distance'],
 		];
 
 		// Cleanup logs
@@ -301,6 +304,9 @@ class WP_SweepBright_Helpers {
 				'custom_url' => 'estates',
 				'default_language' => 'en',
 				'api_version' => 'v20191206',
+				'max_per_page' => 12,
+				'recent_total' => 3,
+				'geo_distance' => 5,
 			];
 		}
 		return $data;
@@ -314,6 +320,9 @@ class WP_SweepBright_Helpers {
 				'custom_url' => $_POST['custom_url'],
 				'default_language' => $_POST['default_language'],
 				'api_version' => $_POST['api_version'],
+				'max_per_page' => $_POST['max_per_page'],
+				'recent_total' => $_POST['recent_total'],
+				'geo_distance' => $_POST['geo_distance'],
 			];
 
 			if (get_option('wp_sweepbright_settings')) {

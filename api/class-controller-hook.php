@@ -158,7 +158,7 @@ class WP_SweepBright_Controller_Hook {
 		// Schedule single event (cron)
 		error_log('publishing_start_chron');
 
-		wp_schedule_single_event(current_time('timestamp'), 'schedule_estate', [$estate]);
+		wp_schedule_single_event(time(), 'schedule_estate', [$estate]);
 
 		spawn_cron();
 	}

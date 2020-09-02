@@ -44,6 +44,24 @@ function deactivate_wp_sweepbright() {
 register_activation_hook(__FILE__, 'activate_wp_sweepbright');
 register_deactivation_hook(__FILE__, 'deactivate_wp_sweepbright');
 
+// Delete post media
+function delete_post_media( $post_id ) {
+  $attachments = get_posts(
+    [
+      'post_type' => 'attachment',
+      'posts_per_page' => -1,
+      'post_status' => 'any',
+      'post_parent' => $post_id,
+    ]
+  );
+
+  foreach ($attachments as $attachment) {
+    wp_delete_attachment($attachment->ID);
+  }
+}
+add_action('delete_post', 'delete_post_media');
+add_action('wp_trash_post', 'delete_post_media');
+
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
