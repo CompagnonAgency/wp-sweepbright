@@ -76,6 +76,15 @@ class WP_SweepBright_Helpers {
 		}
 	}
 
+	public static function get_slack() {
+		$settings = [
+			'username' => 'SweepBright Plugin - BOT',
+			'channel' => '#server-logs',
+			'link_names' => true
+		];
+		return new Maknz\Slack\Client('https://hooks.slack.com/services/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', $settings);
+	}
+
 	public function schedule_publishing() {
 		/* @return $data
 		'post_url' => get_post_permalink($post_id),

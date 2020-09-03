@@ -8,11 +8,10 @@
         }
     ],
     "require": {
-      "php" : ">=7.0.0",
-      "guzzlehttp/guzzle": "^6.5",
-      "kamermans/guzzle-oauth2-subscriber": "^1.0",
+        "php": ">=7.0.0",
+        "guzzlehttp/guzzle": "^6.5",
+        "kamermans/guzzle-oauth2-subscriber": "^1.0",
         "brick/money": "^0.4.5",
-        "stillat/numeral.php": "^2.0",
-        "maknz/slack": "^1.7"
+        "stillat/numeral.php": "^2.0"
     }
 }

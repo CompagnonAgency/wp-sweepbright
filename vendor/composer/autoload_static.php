@@ -32,10 +32,6 @@ class ComposerStaticInit87b5d6ac9dfd7201e6e6d47beebb1164
         array (
             'Psr\\Http\\Message\\' => 17,
         ),
-        'M' => 
-        array (
-            'Maknz\\Slack\\' => 12,
-        ),
         'G' => 
         array (
             'GuzzleHttp\\Psr7\\' => 16,
@@ -73,10 +69,6 @@ class ComposerStaticInit87b5d6ac9dfd7201e6e6d47beebb1164
         'Psr\\Http\\Message\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/http-message/src',
-        ),
-        'Maknz\\Slack\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/maknz/slack/src',
         ),
         'GuzzleHttp\\Psr7\\' => 
         array (
