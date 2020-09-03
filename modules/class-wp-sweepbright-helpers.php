@@ -76,15 +76,6 @@ class WP_SweepBright_Helpers {
 		}
 	}
 
-	public static function get_slack() {
-		$settings = [
-			'username' => 'SweepBright Plugin - BOT',
-			'channel' => '#server-logs',
-			'link_names' => true
-		];
-		return new Maknz\Slack\Client('https://hooks.slack.com/services/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', $settings);
-	}
-
 	public function schedule_publishing() {
 		/* @return $data
 		'post_url' => get_post_permalink($post_id),
@@ -124,7 +115,6 @@ class WP_SweepBright_Helpers {
 				'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
 			]);
 			error_log('publishing_end');
-			WP_SweepBright_Helpers::get_slack()->send('[' . get_bloginfo('name') . '] "' . $data['estate']['description_title'][$locale] . '" completed successfully!');
 		}
 		add_action('schedule_estate', 'publish_estate');
 	}
