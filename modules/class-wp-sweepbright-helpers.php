@@ -82,7 +82,7 @@ class WP_SweepBright_Helpers {
 			'channel' => '#server-logs',
 			'link_names' => true
 		];
-		return new Maknz\Slack\Client('https://hooks.slack.com/services/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', $settings);
+		return new Maknz\Slack\Client('https://hooks.slack.com/services/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', $settings);
 	}
 
 	public function schedule_publishing() {
