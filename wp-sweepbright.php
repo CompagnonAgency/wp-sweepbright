@@ -44,6 +44,51 @@ function deactivate_wp_sweepbright() {
 register_activation_hook(__FILE__, 'activate_wp_sweepbright');
 register_deactivation_hook(__FILE__, 'deactivate_wp_sweepbright');
 
+// Delete post media
+function delete_post_media( $post_id ) {
+  $attachments = get_posts(
+    [
+      'post_type' => 'attachment',
+      'posts_per_page' => -1,
+      'post_status' => 'any',
+      'post_parent' => $post_id,
+    ]
+  );
+
+  foreach ($attachments as $attachment) {
+    wp_delete_attachment($attachment->ID);
+  }
+}
+add_action('delete_post', 'delete_post_media');
+add_action('wp_trash_post', 'delete_post_media');
+
+/**
+* Custom page templates for the estate page.
+*/
+add_filter('template_include', function($template) {
+  if (get_post() && 'sweepbright_estates' === get_post()->post_type)
+    return locate_template('single-estate.php');
+
+  return $template;
+});
+
+/**
+* Redirect estates that are no longer available.
+*/
+function redirect_pand() {
+  global $post;
+  global $wp_query;
+
+  if (($post && $post->post_type === 'sweepbright_estates')) {
+    if (get_field('estate', $post->ID)['status'] !== 'available') {
+      $wp_query->set_404();
+      status_header(404);
+      get_template_part(404); exit();
+    }
+  }
+}
+add_action('template_redirect', 'redirect_pand' );
+
 /**
  * The core plugin class that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.

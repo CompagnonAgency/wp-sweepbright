@@ -30,6 +30,11 @@ class WP_SweepBright_Helpers {
 		  'client_id' => WP_SweepBright_Helpers::settings_form()['client_id'],
 		  'client_secret' => WP_SweepBright_Helpers::settings_form()['client_secret'],
 			'default_locale' => WP_SweepBright_Helpers::settings_form()['default_language'],
+			'max_per_page' => WP_SweepBright_Helpers::settings_form()['max_per_page'],
+			'recent_total' => WP_SweepBright_Helpers::settings_form()['recent_total'],
+			'geo_distance' => WP_SweepBright_Helpers::settings_form()['geo_distance'],
+			'recaptcha_site_key' => WP_SweepBright_Helpers::settings_form()['recaptcha_site_key'],
+			'recaptcha_secret_key' => WP_SweepBright_Helpers::settings_form()['recaptcha_secret_key'],
 		];
 
 		// Cleanup logs
@@ -71,6 +76,15 @@ class WP_SweepBright_Helpers {
 		}
 	}
 
+	public static function get_slack() {
+		$settings = [
+			'username' => 'SweepBright Plugin - BOT',
+			'channel' => '#server-logs',
+			'link_names' => true
+		];
+		return new Maknz\Slack\Client('https://hooks.slack.com/services/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', $settings);
+	}
+
 	public function schedule_publishing() {
 		/* @return $data
 		'post_url' => get_post_permalink($post_id),
@@ -110,6 +124,7 @@ class WP_SweepBright_Helpers {
 				'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
 			]);
 			error_log('publishing_end');
+			WP_SweepBright_Helpers::get_slack()->send('[' . get_bloginfo('name') . '] "' . $data['estate']['description_title'][$locale] . '" completed successfully!');
 		}
 		add_action('schedule_estate', 'publish_estate');
 	}
@@ -214,6 +229,7 @@ class WP_SweepBright_Helpers {
 		$contact_request_estate_form .= "  <label>Message:</label><br>\n";
 		$contact_request_estate_form .= "  <textarea name=\"message\" required></textarea>\n";
 		$contact_request_estate_form .= "  <input type=\"hidden\" name=\"locale\" value=\"$locale\"><br>\n";
+		$contact_request_estate_form .= "  <input type=\"hidden\" name=\"recaptcha_response\" id=\"recaptchaResponse\"><br>\n";
 		$contact_request_estate_form .= "  <button class=\"btn btn-primary\" type=\"submit\" name=\"submit-contact-estate\">Send</button>\n";
 		$contact_request_estate_form .= " </div>";
 
@@ -243,6 +259,7 @@ class WP_SweepBright_Helpers {
 		$contact_request_general_form .= "  <label>Postal codes (split by comma):</label>\n";
 		$contact_request_general_form .= "  <input type=\"text\" name=\"postal_codes\" required><br>\n";
 		$contact_request_general_form .= "  <input type=\"hidden\" name=\"locale\" value=\"$locale\"><br>\n";
+		$contact_request_general_form .= "  <input type=\"hidden\" name=\"recaptcha_response\" id=\"recaptchaResponse\"><br>\n";
 		$contact_request_general_form .= "  <button class=\"btn btn-primary\" type=\"submit\" name=\"submit-contact-general\">Send</button>\n";
 		$contact_request_general_form .= " </div>";
 
@@ -266,8 +283,8 @@ class WP_SweepBright_Helpers {
 	public function save_contact_settings() {
 		if(isset($_POST['submit-contact-settings']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
 			$data = [
-				'contact_request_estate_form' => $_POST['contact_request_estate_form'],
-				'contact_request_general_form' => $_POST['contact_request_general_form'],
+				'contact_request_estate_form' => stripslashes($_POST['contact_request_estate_form']),
+				'contact_request_general_form' => stripslashes($_POST['contact_request_general_form']),
 				'autoresponder' => [
 					'to' => $_POST['mail_to'],
 					'cc' => $_POST['mail_cc'],
@@ -301,6 +318,11 @@ class WP_SweepBright_Helpers {
 				'custom_url' => 'estates',
 				'default_language' => 'en',
 				'api_version' => 'v20191206',
+				'max_per_page' => 12,
+				'recent_total' => 3,
+				'geo_distance' => 5,
+				'recaptcha_site_key' => '',
+				'recaptcha_secret_key' => '',
 			];
 		}
 		return $data;
@@ -314,6 +336,11 @@ class WP_SweepBright_Helpers {
 				'custom_url' => $_POST['custom_url'],
 				'default_language' => $_POST['default_language'],
 				'api_version' => $_POST['api_version'],
+				'max_per_page' => $_POST['max_per_page'],
+				'recent_total' => $_POST['recent_total'],
+				'geo_distance' => $_POST['geo_distance'],
+				'recaptcha_site_key' => $_POST['recaptcha_site_key'],
+				'recaptcha_secret_key' => $_POST['recaptcha_secret_key'],
 			];
 
 			if (get_option('wp_sweepbright_settings')) {

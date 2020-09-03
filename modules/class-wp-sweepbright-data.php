@@ -47,13 +47,25 @@ class WP_SweepBright_Data {
 				'public' => true,
 				'has_archive' => false,
 				'rewrite' => [
-					'slug' => WP_SweepBright_Helpers::settings_form()['custom_url'],
+					'slug' => WP_SweepBright_Helpers::settings_form()['custom_url'] . '/%post_id%',
 					'with_front' => false,
 				],
 				'show_in_menu' => 'wp-sweepbright',
 				'show_in_rest' => false,
 			]
 		);
+
+		function custom_permalink($post_link, $id = 0) {
+			if (strpos('%post_id%', $post_link) === 'FALSE') {
+				return $post_link;
+			}
+			$post = get_post($id);
+			if (is_wp_error($post) || $post->post_type != 'sweepbright_estates') {
+				return $post_link;
+			}
+			return str_replace('%post_id%', $post->ID, $post_link);
+		}
+		add_filter('post_type_link', 'custom_permalink', 1, 3);
 	}
 
 	public function acf_disable_fields() {
@@ -101,6 +113,7 @@ class WP_SweepBright_Data {
 				[FieldBuilding::retrieve()],
 				[FieldSizes::retrieve()],
 				[FieldEnergy::retrieve()],
+				[FieldEcology::retrieve()],
 				[FieldSecurity::retrieve()],
 				[FieldHeatingCooling::retrieve()],
 				[FieldComfort::retrieve()],

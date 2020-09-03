@@ -107,6 +107,13 @@ class WP_SweepBright_Admin {
 	}
 
 	/**
+	 * Load the geo location library.
+	 */
+	public function load_wp_sweepbright_geo() {
+		require_once plugin_dir_path( __DIR__ ). 'modules/class-wp-sweepbright-geo.php';
+	}
+
+	/**
 	 * Load the general SweepBright class containing global helpers.
 	 */
 	public function load_wp_sweepbright_helpers() {

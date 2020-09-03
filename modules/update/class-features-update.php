@@ -90,11 +90,11 @@ class FieldFeaturesUpdate {
     ], $post_id);
 
 		update_field('features', [
-      'estate_type' => $estate['type']
+      'type' => $estate['type']
     ], $post_id);
 
 		update_field('features', [
-      'estate_sub_type' => $estate['sub_type']
+      'subtype' => $estate['sub_type']
     ], $post_id);
 	}
 

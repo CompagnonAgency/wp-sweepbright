@@ -12,12 +12,16 @@ class FieldOpenHomesUpdate {
 	}
 
 	public static function update($estate, $post_id) {
-    update_field('open_homes', [
-      'open_homes_start_date' => $estate['open_homes']['start_date'],
-    ], $post_id);
-
-		update_field('open_homes', [
-      'open_homes_end_date' => $estate['open_homes']['end_date'],
+    $open_homes = [];
+	  foreach ($estate['open_homes'] as $key => $open_home) {
+	    $open_homes[] = [
+	      'acf_fc_layout' => 'open_home_layout',
+	      'open_homes_start_date' => $open_home['start_date'],
+	      'open_homes_end_date' => $open_home['end_date'],
+	    ];
+	  }
+	  update_field('open_homes', [
+	    'open_home_date' => $open_homes,
     ], $post_id);
 	}
 

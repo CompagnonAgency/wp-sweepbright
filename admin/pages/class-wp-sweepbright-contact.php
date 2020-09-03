@@ -13,13 +13,50 @@ class WP_SweepBright_Contact {
 
 	public function __construct() {
 		$this->register_shortcode();
-		$this->submit_estate_form();
-		$this->submit_general_form();
+		$this->verify_recaptcha();
+
+		add_action('wp_footer', 'add_recaptcha_to_footer');
+		function add_recaptcha_to_footer() {
+			WP_SweepBright_Contact::add_recaptcha();
+		}
+	}
+
+	public static function add_recaptcha() {
+		$script = '';
+		$script .= '<script id="wp-sweepbright-recaptcha-load" src="https://www.google.com/recaptcha/api.js?render='. WP_SweepBright_Helpers::settings_form()['recaptcha_site_key'] .'"></script>';
+		$script .= '<script id="wp-sweepbright-recaptcha-exec">';
+		$script .= 'grecaptcha.ready(function () {';
+		$script .= '	grecaptcha.execute(\''. WP_SweepBright_Helpers::settings_form()['recaptcha_site_key'] .'\', { action: \'contact\' }).then(function (token) {';
+		$script .= '		var recaptchaResponse = document.getElementById(\'recaptchaResponse\');';
+		$script .= '		recaptchaResponse.value = token;';
+		$script .= '	});';
+		$script .= '});';
+		$script .= '</script>';
+		echo $script;
+	}
+
+	public function verify_recaptcha() {
+		if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['recaptcha_response'])) {
+			$recaptcha_url = 'https://www.google.com/recaptcha/api/siteverify';
+			$recaptcha_secret = WP_SweepBright_Helpers::settings_form()['recaptcha_secret_key'];
+			$recaptcha_response = $_POST['recaptcha_response'];
+	
+			$recaptcha = file_get_contents($recaptcha_url . '?secret=' . $recaptcha_secret . '&response=' . $recaptcha_response);
+			$recaptcha = json_decode($recaptcha);
+	
+			if ($recaptcha->success) {
+				$this->submit_estate_form();
+				$this->submit_general_form();
+			} else {
+				echo 'Kon bericht niet versturen.';
+			}
+		}
 	}
 
 	public function register_shortcode() {
 		function contact_estate_shortcode() {
-			$form = "<form name=\"contact-estate\" method=\"post\" action=\"\">";
+			$form = "";
+			$form .= "<form name=\"contact-estate\" method=\"post\" action=\"\">";
 			$form .= stripslashes(WP_SweepBright_Helpers::contact_form()['contact_request_estate_form']);
 			$form .= "</form>";
 			return $form;
@@ -27,7 +64,8 @@ class WP_SweepBright_Contact {
 		add_shortcode('contact-request-estate', 'contact_estate_shortcode');
 
 		function contact_general_shortcode() {
-			$form = "<form name=\"contact-general\" method=\"post\" action=\"\">";
+			$form = "";
+			$form .= "<form name=\"contact-general\" method=\"post\" action=\"\">";
 			$form .= stripslashes(WP_SweepBright_Helpers::contact_form()['contact_request_general_form']);
 			$form .= "</form>";
 			return $form;

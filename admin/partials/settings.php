@@ -42,6 +42,70 @@
 
     <hr>
 
+    <h2 class="title">Display options</h2>
+    <p>
+      Configure various display options.
+    </p>
+
+    <table class="form-table" role="presentation">
+      <tbody>
+        <tr>
+          <th scope="row">
+            <label for="max_per_page">Max results per page</label>
+          </th>
+          <td>
+            <input name="max_per_page" type="number" id="max_per_page" value="<?= WP_SweepBright_Helpers::settings_form()['max_per_page']; ?>" class="regular-text" required>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">
+            <label for="recent_total">Most recent estates</label>
+          </th>
+          <td>
+            <input name="recent_total" type="number" id="recent_total" value="<?= WP_SweepBright_Helpers::settings_form()['recent_total']; ?>" class="regular-text" required>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">
+            <label for="geo_distance">Geolocation distance</label>
+          </th>
+          <td>
+            <input name="geo_distance" type="number" id="geo_distance" value="<?= WP_SweepBright_Helpers::settings_form()['geo_distance']; ?>" class="regular-text" required>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <h2 class="title">Google reCaptcha</h2>
+    <p>
+      Configure reCaptcha v3 for the contact forms.
+    </p>
+
+    <table class="form-table" role="presentation">
+      <tbody>
+        <tr>
+          <th scope="row">
+            <label for="recaptcha_site_key">Site key</label>
+          </th>
+          <td>
+            <input name="recaptcha_site_key" type="text" id="recaptcha_site_key" value="<?= WP_SweepBright_Helpers::settings_form()['recaptcha_site_key']; ?>" class="regular-text" required>
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">
+            <label for="recaptcha_secret_key">Secret key</label>
+          </th>
+          <td>
+            <input name="recaptcha_secret_key" type="text" id="recaptcha_secret_key" value="<?= WP_SweepBright_Helpers::settings_form()['recaptcha_secret_key']; ?>" class="regular-text" required>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <hr>
+
     <h2 class="title">Custom URL</h2>
     <p>
       Set a custom permalink for your properties. When having the URL set to e.g. <kbd>/estates</kbd>,<br>
@@ -79,11 +143,13 @@
 
     <h2 class="title">SweepBright API version</h2>
     <p>
-      By default the plugin will use SweepBright's latest API version, but you can also rollback if you need to support an older version.<br>
+      To ensure maximum compatibility and performance we only support the most recent API version.
+    </p>
+    <p>
       <a href="https://website.sweepbright.com/docs/#overview-of-versions" target="_blank">Click here</a> to learn more about the different versions.
     </p>
 
-    <select name="api_version" id="api_version" class="postform" value="<?= WP_SweepBright_Helpers::settings_form()['api_version']; ?>">
+    <select name="api_version" id="api_version" class="postform" value="<?= WP_SweepBright_Helpers::settings_form()['api_version']; ?>" disabled>
       <option class="level-0" value="v20191206" <?= WP_SweepBright_Helpers::settings_form()['api_version'] === 'v20191206' ? 'selected' : ''; ?>>v20191206 (latest)</option>
       <option class="level-0" value="v20191121" <?= WP_SweepBright_Helpers::settings_form()['api_version'] === 'v20191121' ? 'selected' : ''; ?>>v20191121 (stable)</option>
       <option class="level-0" value="20190920" <?= WP_SweepBright_Helpers::settings_form()['api_version'] === '20190920' ? 'selected' : ''; ?>>20190920 (stable)</option>

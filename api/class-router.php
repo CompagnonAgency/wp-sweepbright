@@ -35,6 +35,11 @@ class WP_SweepBright_Router {
 			register_rest_route('v1/sweepbright', '/contacts', array(
 		    'methods' => 'POST',
 				'callback' => __CLASS__ . '::contact_request_general',
+			));
+			
+			register_rest_route('v1/sweepbright', '/list', array(
+		    'methods' => 'GET',
+				'callback' => __CLASS__ . '::list',
 		  ));
 		});
 	}
@@ -69,6 +74,16 @@ class WP_SweepBright_Router {
 			'action' => 'contact_request_general',
 			'status' => 'Received',
 			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+		]);
+	}
+
+	public static function list($data) {
+		header('Content-Type: application/json');
+
+		return WP_SweepBright_Query::list([
+			'json' => true,
+			'ajax' => true,
+			'params' => $data,
 		]);
 	}
 

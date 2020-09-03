@@ -157,8 +157,10 @@ class WP_SweepBright_Controller_Hook {
 	public function async_publish_estate($estate) {
 		// Schedule single event (cron)
 		error_log('publishing_start_chron');
+		$locale = $GLOBALS['wp_sweepbright_config']['default_locale'];
+		WP_SweepBright_Helpers::get_slack()->send('[' . get_bloginfo('name') . '] "' . $estate['estate']['description_title'][$locale] . '" started publishing...');
 
-		wp_schedule_single_event(current_time('timestamp'), 'schedule_estate', [$estate]);
+		wp_schedule_single_event(time(), 'schedule_estate', [$estate]);
 
 		spawn_cron();
 	}
@@ -208,6 +210,7 @@ class WP_SweepBright_Controller_Hook {
 		require_once plugin_dir_path( __DIR__ ). 'modules/update/class-building-update.php';
 		require_once plugin_dir_path( __DIR__ ). 'modules/update/class-sizes-update.php';
 		require_once plugin_dir_path( __DIR__ ). 'modules/update/class-energy-update.php';
+		require_once plugin_dir_path( __DIR__ ). 'modules/update/class-ecology-update.php';
 		require_once plugin_dir_path( __DIR__ ). 'modules/update/class-security-update.php';
 		require_once plugin_dir_path( __DIR__ ). 'modules/update/class-heating-cooling-update.php';
 		require_once plugin_dir_path( __DIR__ ). 'modules/update/class-comfort-update.php';
@@ -230,6 +233,7 @@ class WP_SweepBright_Controller_Hook {
 		FieldBuildingUpdate::update($estate, $post_id);
 		FieldSizesUpdate::update($estate, $post_id);
 		FieldEnergyUpdate::update($estate, $post_id);
+		FieldEcologyUpdate::update($estate, $post_id);
 		FieldSecurityUpdate::update($estate, $post_id);
 		FieldHeatingCoolingUpdate::update($estate, $post_id);
 		FieldComfortUpdate::update($estate, $post_id);

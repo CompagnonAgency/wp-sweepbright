@@ -35,7 +35,7 @@ class FieldAmenities {
 								[
 									'key' => 'amenity_type',
 									'label' => 'Type',
-									'name' => 'type',
+									'name' => 'amenity_type',
 									'type' => 'select',
 									'default_value' => '',
 									'readonly' => 0,
