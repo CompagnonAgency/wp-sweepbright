@@ -149,7 +149,7 @@
       <a href="https://website.sweepbright.com/docs/#overview-of-versions" target="_blank">Click here</a> to learn more about the different versions.
     </p>
 
-    <select name="api_version" id="api_version" class="postform" value="<?= WP_SweepBright_Helpers::settings_form()['api_version']; ?>" disabled>
+    <select name="api_version" id="api_version" class="postform" value="<?= WP_SweepBright_Helpers::settings_form()['api_version']; ?>">
       <option class="level-0" value="v20191206" <?= WP_SweepBright_Helpers::settings_form()['api_version'] === 'v20191206' ? 'selected' : ''; ?>>v20191206 (latest)</option>
       <option class="level-0" value="v20191121" <?= WP_SweepBright_Helpers::settings_form()['api_version'] === 'v20191121' ? 'selected' : ''; ?>>v20191121 (stable)</option>
       <option class="level-0" value="20190920" <?= WP_SweepBright_Helpers::settings_form()['api_version'] === '20190920' ? 'selected' : ''; ?>>20190920 (stable)</option>

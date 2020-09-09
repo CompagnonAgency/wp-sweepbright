@@ -78,12 +78,24 @@ class WP_SweepBright_Query {
 	public static function filter($args, $data) {
 		// Defaults
 		$MAX_INT = 4294967295; // Todo: is this integer too large?
-		$data['price_min'] = $data['price_min'] ? $data['price_min'] : 0;
-		$data['price_max'] = $data['price_max'] ? $data['price_max'] : $MAX_INT;
-		$data['plot_area_min'] = $data['plot_area_min'] ? $data['plot_area_min'] : 0;
-		$data['plot_area_max'] = $data['plot_area_max'] ? $data['plot_area_max'] : $MAX_INT;
-		$data['liveable_area_min'] = $data['liveable_area_min'] ? $data['liveable_area_min'] : 0;
-		$data['liveable_area_max'] = $data['liveable_area_max'] ? $data['liveable_area_max'] : $MAX_INT;
+		$data['ids'] = isset($data['ids']) ? $data['ids'] : false;
+		$data['recent'] = isset($data['recent']) ? $data['recent'] : false;
+		$data['show_all'] = isset($data['show_all']) ? $data['show_all'] : false;
+		$data['filtered'] = isset($data['filtered']) ? $data['filtered'] : false;
+		$data['current_page'] = isset($data['current_page']) ? $data['current_page'] : false;
+		$data['sort'] = isset($data['sort']) ? $data['sort'] : false;
+		$data['type'] = isset($data['type']) ? $data['type'] : false;
+		$data['negotiation'] = isset($data['negotiation']) ? $data['negotiation'] : false;
+		$data['region'] = isset($data['region']) ? $data['region'] : false;
+		$data['lat'] = isset($data['lat']) ? $data['lat'] : false;
+		$data['lng'] = isset($data['lng']) ? $data['lng'] : false;
+
+		$data['price_min'] = isset($data['price_min']) ? $data['price_min'] : 0;
+		$data['price_max'] = isset($data['price_max']) ? $data['price_max'] : $MAX_INT;
+		$data['plot_area_min'] = isset($data['plot_area_min']) ? $data['plot_area_min'] : 0;
+		$data['plot_area_max'] = isset($data['plot_area_max']) ? $data['plot_area_max'] : $MAX_INT;
+		$data['liveable_area_min'] = isset($data['liveable_area_min']) ? $data['liveable_area_min'] : 0;
+		$data['liveable_area_max'] = isset($data['liveable_area_max']) ? $data['liveable_area_max'] : $MAX_INT;
 
 		// Filter parameters
 		$filter_params = [
@@ -106,34 +118,6 @@ class WP_SweepBright_Query {
 			'lng' => (float)$data['lng'],
 		];
 
-		// Default relations
-		$args['meta_query'] = [
-			'relation' => 'AND',
-			[
-				'relation' => 'OR',
-				[
-					'key' => 'estate_status',
-					'value' => 'available',
-					'compare' => 'LIKE',
-				],
-				[
-					'key' => 'estate_status',
-					'value' => 'option',
-					'compare' => 'LIKE',
-				],
-				[
-					'key' => 'estate_status',
-					'value' => 'rented',
-					'compare' => 'LIKE',
-				],
-				[
-					'key' => 'estate_status',
-					'value' => 'sold',
-					'compare' => 'LIKE',
-				],
-			],
-		];
-
 		// Get `order`
 		if ($filter_params['sort']) {
 			$order = strtoupper(explode('_', $filter_params['sort'])[1]);
@@ -145,11 +129,72 @@ class WP_SweepBright_Query {
 					'meta_value' => 'DESC',
 					'date' => $order
 				];
-			} else if ($order_by === 'price') {
+			}
+			
+			if ($order_by === 'price') {
 				$args['meta_type'] = 'NUMERIC';
 				$args['meta_key'] = 'price_amount';
 				$args['orderby'] = [
 					'price_amount' => $order
+				];
+			}
+
+			if ($order_by === 'relevant') {
+				$args['meta_query'][] = [
+					'relation' => 'AND',
+					[
+						'relation' => 'OR',
+						'query_sale' => [
+							'key' => 'features_negotiation',
+							'value' => 'sale',
+						],
+						'query_let' => [
+							'key' => 'features_negotiation',
+							'value' => 'let',
+						],
+					],
+					[
+						'relation' => 'OR',
+						'query_available' => [
+							'key' => 'estate_status',
+							'value' => 'available',
+						],
+						'query_option' => [
+							'key' => 'estate_status',
+							'value' => 'option',
+						],
+						'query_rented' => [
+							'key' => 'estate_status',
+							'value' => 'rented',
+						],
+						'query_sold' => [
+							'key' => 'estate_status',
+							'value' => 'sold',
+						],
+					],
+					[
+						'relation' => 'OR',
+						'query_open_home_enabled' => [
+							'key' => 'open_homes_hasOpenHome',
+							'value' => true,
+						],
+						'query_open_home_disabled' => [
+							'key' => 'open_homes_hasOpenHome',
+							'compare' => 'NOT EXISTS',
+						],
+					]
+				];
+
+				$args['orderby'] = [
+					'query_open_home_enabled' => 'ASC',
+					'query_open_home_disabled' => 'ASC',
+					'query_sale' => 'DESC',
+					'query_let' => 'DESC',
+					'query_available' => 'ASC',
+					'query_option' => 'ASC',
+					'query_rented' => 'ASC',
+					'query_sold' => 'ASC',
+					'date' => 'DESC',
 				];
 			}
 		}

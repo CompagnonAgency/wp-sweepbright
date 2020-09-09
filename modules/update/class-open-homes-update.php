@@ -19,7 +19,14 @@ class FieldOpenHomesUpdate {
 	      'open_homes_start_date' => $open_home['start_date'],
 	      'open_homes_end_date' => $open_home['end_date'],
 	    ];
-	  }
+		}
+
+		if (count($open_homes) > 0) {
+			update_field('open_homes', [
+				'hasOpenHome' => true,
+			], $post_id);
+		}
+
 	  update_field('open_homes', [
 	    'open_home_date' => $open_homes,
     ], $post_id);

@@ -16,9 +16,16 @@ class FieldOpenHomes {
       'key' => 'open_homes',
       'name' => 'open_homes',
       'label' => 'Open homes',
-      'layout' => 'table',
+      'layout' => 'row',
 			'type' => 'group',
 			'sub_fields' => [
+				[
+					'key'    => 'hasOpenHome',
+					'label'  => 'Enabled',
+					'name'   => 'hasOpenHome',
+					'type'   => 'true_false',
+					'ui' => true,
+				],
 				[
 					'key'    => 'open_home_date',
 					'label'  => 'Dates',

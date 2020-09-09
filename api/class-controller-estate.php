@@ -38,7 +38,7 @@ class WP_SweepBright_Controller_Estate {
 	    "description_title" => [
 	      "en" => "Luxury Apartment",
 	      "fr" => "Appartement de luxe",
-	      "nl" => "Luxe appartement 53"
+	      "nl" => "Luxe appartement 54 - updated"
 	    ],
 	    "living_rooms" => 1,
 	    "kitchens" => 1,
@@ -109,8 +109,8 @@ class WP_SweepBright_Controller_Estate {
 	    ],
 	    "open_homes" => [
         [
-					"start_date" => "2018-05-26T10:00:00+00:00",
-        	"end_date" => "2018-05-26T10:00:00+00:00"
+					"start_date" => "2020-10-26T10:00:00+00:00",
+        	"end_date" => "2020-10-26T11:00:00+00:00"
 				]
 	    ],
 	    "price" => [

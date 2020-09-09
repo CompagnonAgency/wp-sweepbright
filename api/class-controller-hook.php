@@ -158,7 +158,6 @@ class WP_SweepBright_Controller_Hook {
 		// Schedule single event (cron)
 		error_log('publishing_start_chron');
 		$locale = $GLOBALS['wp_sweepbright_config']['default_locale'];
-		WP_SweepBright_Helpers::get_slack()->send('[' . get_bloginfo('name') . '] "' . $estate['estate']['description_title'][$locale] . '" started publishing...');
 
 		wp_schedule_single_event(time(), 'schedule_estate', [$estate]);
 
