@@ -75,271 +75,43 @@ class WP_SweepBright_Query {
 		return $price;
 	}
 
-	public static function filter($args, $data) {
-		// Defaults
-		$MAX_INT = 4294967295; // Todo: is this integer too large?
-		$data['ids'] = isset($data['ids']) ? $data['ids'] : false;
-		$data['recent'] = isset($data['recent']) ? $data['recent'] : false;
-		$data['show_all'] = isset($data['show_all']) ? $data['show_all'] : false;
-		$data['filtered'] = isset($data['filtered']) ? $data['filtered'] : false;
-		$data['current_page'] = isset($data['current_page']) ? $data['current_page'] : false;
-		$data['sort'] = isset($data['sort']) ? $data['sort'] : false;
-		$data['type'] = isset($data['type']) ? $data['type'] : false;
-		$data['negotiation'] = isset($data['negotiation']) ? $data['negotiation'] : false;
-		$data['region'] = isset($data['region']) ? $data['region'] : false;
-		$data['lat'] = isset($data['lat']) ? $data['lat'] : false;
-		$data['lng'] = isset($data['lng']) ? $data['lng'] : false;
-
-		$data['price_min'] = isset($data['price_min']) ? $data['price_min'] : 0;
-		$data['price_max'] = isset($data['price_max']) ? $data['price_max'] : $MAX_INT;
-		$data['plot_area_min'] = isset($data['plot_area_min']) ? $data['plot_area_min'] : 0;
-		$data['plot_area_max'] = isset($data['plot_area_max']) ? $data['plot_area_max'] : $MAX_INT;
-		$data['liveable_area_min'] = isset($data['liveable_area_min']) ? $data['liveable_area_min'] : 0;
-		$data['liveable_area_max'] = isset($data['liveable_area_max']) ? $data['liveable_area_max'] : $MAX_INT;
-
-		// Filter parameters
-		$filter_params = [
-			'ids' => $data['ids'],
-			'recent' => $data['recent'],
-			'show_all' => $data['show_all'],
-			'filtered' => $data['filtered'],
-			'current_page' => $data['current_page'],
-			'sort' => $data['sort'],
-			'type' => $data['type'],
-			'price_min' => (float)$data['price_min'],
-			'price_max' => (float)$data['price_max'],
-			'negotiation' => $data['negotiation'],
-			'plot_area_min' => (float)$data['plot_area_min'],
-			'plot_area_max' => (float)$data['plot_area_max'],
-			'liveable_area_min' => (float)$data['liveable_area_min'],
-			'liveable_area_max' => (float)$data['liveable_area_max'],
-			'region' => $data['region'],
-			'lat' => (float)$data['lat'],
-			'lng' => (float)$data['lng'],
-		];
-
-		// Get `order`
-		if ($filter_params['sort']) {
-			$order = strtoupper(explode('_', $filter_params['sort'])[1]);
-			$order_by = explode('_', $filter_params['sort'])[0];
-	
-			// Order by date & price
-			if ($order_by === 'date') {
-				$args['orderby'] = [
-					'meta_value' => 'DESC',
-					'date' => $order
-				];
-			}
-			
-			if ($order_by === 'price') {
-				$args['meta_type'] = 'NUMERIC';
-				$args['meta_key'] = 'price_amount';
-				$args['orderby'] = [
-					'price_amount' => $order
-				];
-			}
-
-			if ($order_by === 'relevant') {
-				$args['meta_query'][] = [
-					'relation' => 'AND',
-					[
-						'relation' => 'OR',
-						'query_sale' => [
-							'key' => 'features_negotiation',
-							'value' => 'sale',
-						],
-						'query_let' => [
-							'key' => 'features_negotiation',
-							'value' => 'let',
-						],
-					],
-					[
-						'relation' => 'OR',
-						'query_available' => [
-							'key' => 'estate_status',
-							'value' => 'available',
-						],
-						'query_option' => [
-							'key' => 'estate_status',
-							'value' => 'option',
-						],
-						'query_rented' => [
-							'key' => 'estate_status',
-							'value' => 'rented',
-						],
-						'query_sold' => [
-							'key' => 'estate_status',
-							'value' => 'sold',
-						],
-					],
-					[
-						'relation' => 'OR',
-						'query_open_home_enabled' => [
-							'key' => 'open_homes_hasOpenHome',
-							'value' => true,
-						],
-						'query_open_home_disabled' => [
-							'key' => 'open_homes_hasOpenHome',
-							'compare' => 'NOT EXISTS',
-						],
-					]
-				];
-
-				$args['orderby'] = [
-					'query_open_home_enabled' => 'ASC',
-					'query_open_home_disabled' => 'ASC',
-					'query_sale' => 'DESC',
-					'query_let' => 'DESC',
-					'query_available' => 'ASC',
-					'query_option' => 'ASC',
-					'query_rented' => 'ASC',
-					'query_sold' => 'ASC',
-					'date' => 'DESC',
-				];
-			}
-		}
-
-		// Filters
-		$args['meta_query'][] = [
-			'relation' => 'AND',
-			[
-				'key' => 'features_type',
-				'value' => $filter_params['type'],
-				'compare' => 'LIKE'
-			],
-			[
-				'key' => 'features_negotiation',
-				'value' => $filter_params['negotiation'],
-				'compare' => 'LIKE'
-			],
-			[
-				'type' => 'NUMERIC',
-				'key' => 'price_amount',
-				'value' => $filter_params['price_min'],
-				'compare' => '>='
-			],
-			[
-				'type' => 'NUMERIC',
-				'key' => 'price_amount',
-				'value' => $filter_params['price_max'],
-				'compare' => '<='
-			],
-			[
-				'type' => 'NUMERIC',
-				'key' => 'sizes_plot_area_size',
-				'value' => $filter_params['plot_area_min'],
-				'compare' => '>='
-			],
-			[
-				'type' => 'NUMERIC',
-				'key' => 'sizes_plot_area_size',
-				'value' => $filter_params['plot_area_max'],
-				'compare' => '<='
-			],
-			[
-				'type' => 'NUMERIC',
-				'key' => 'sizes_liveable_area_size',
-				'value' => $filter_params['liveable_area_min'],
-				'compare' => '>='
-			],
-			[
-				'type' => 'NUMERIC',
-				'key' => 'sizes_liveable_area_size',
-				'value' => $filter_params['liveable_area_max'],
-				'compare' => '<='
-			],
-		];
-
-		// Pagination
-		$args['paged'] = $filter_params['current_page'];
-		if ($filter_params['filtered'] === 'true') {
-			$args['paged'] = 1;
-		}
-	
-		// Map view shows all results
-		if ($filter_params['show_all'] === 'true') {
-			$args['posts_per_page'] = -1;
-			$args['nopaging'] = true;
-		}
-
-		// Geo distance
-		if ($filter_params['lat'] && $filter_params['lng']) {
-			$distance = WP_SweepBright_Helpers::settings_form()['geo_distance'];
-			$wp_sweepbright_geo = new WP_SweepBright_Geo();
-			$bbox = $wp_sweepbright_geo->get_bounding_box_deg($filter_params['lat'], $filter_params['lng'], $distance);
-
-			$args['meta_query'][] = [
-				'key' => 'location_latitude',
-				'value' => [$bbox[1], $bbox[0]],
-				'compare' => 'BETWEEN'
-			];
-	
-			$args['meta_query'][] = [
-				'key' => 'location_longitude',
-				'value' => [$bbox[2], $bbox[3]],
-				'compare' => 'BETWEEN'
-			];
-		}
-
-		// Favorites
-		if ($filter_params['ids'] && count($filter_params['ids']) > 0) {
-			$args['post__in'] = $filter_params['ids'];
-		}
-
-		return $args;
-	}
-
 	public static function list($params) {
-		// Default
-		$args = [
-			'post_status' => 'publish',
-			'nopaging' => false,
-			'post_type' => 'sweepbright_estates',
-			'posts_per_page' => WP_SweepBright_Helpers::settings_form()['max_per_page'],
-		];
-
-		// Params
-		if (isset($params['recent'])) {
-			$args = array_merge($args, [
-				'posts_per_page' => WP_SweepBright_Helpers::settings_form()['recent_total'],
-				'order' => 'DESC',
-				'orderby' => 'date',
-			]);
-		}
-
-		// Filter parameters
-		if (isset($params['params'])) {
-			$args = WP_SweepBright_Query::filter($args, $params['params']);
-		}
-
-		// Query
-		$loop = new WP_Query($args);
-
-		// JSON return
-		if ($params['json']) {
-			$estates = [
-				'total' => $loop->max_num_pages,
-				'data' => [],
+		if (empty($params['recent']) && file_exists(plugin_dir_path( __DIR__ ). 'cache/cache.json')) {
+			$loop = json_decode(file_get_contents(plugin_dir_path( __DIR__ ). 'cache/cache.json'));
+			if (empty($loop)) {
+				$loop = json_encode([]);
+			}
+		} else {
+			// Default
+			$args = [
+				'post_status' => 'publish',
+				'nopaging' => true,
+				'no_found_rows' => true,
+				'update_post_meta_cache' => false, 
+				'update_post_term_cache' => false,
+				'post_type' => 'sweepbright_estates',
+				'fields' => 'ids'
 			];
-			$query = $loop->get_posts();
 
-			// Build query
-			foreach ($query as $item) {
-				$estates['data'][] = [
-					'id' => $item->ID,
-					'permalink' => get_the_permalink($item->ID),
-					'meta' => get_fields($item->ID),
-				];
+			// Recent posts
+			if (isset($params['recent'])) {
+				$args = array_merge($args, [
+					'nopaging' => false,
+					'posts_per_page' => WP_SweepBright_Helpers::settings_form()['recent_total'],
+					'order' => 'DESC',
+					'orderby' => 'date',
+				]);
 			}
 
-			// Don't encode JSON when called from a REST route
-			if (isset($params['ajax'])) {
-				$loop = $estates;
-			} else {
-				$loop = json_encode($estates);
+			// Query caching
+			$loop = WP_SweepBright_Helpers::cached_query($args);
+
+			// JSON return
+			if ($params['json']) {
+				$params['persistent'] = true;
+				$loop = WP_SweepBright_Helpers::render_json($loop, $params);
 			}
 		}
-
 		return $loop;
 	}
 

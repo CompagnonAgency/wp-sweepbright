@@ -83,6 +83,7 @@ class WP_SweepBright_Router {
 		return WP_SweepBright_Query::list([
 			'json' => true,
 			'ajax' => true,
+			'persistent' => false,
 			'params' => $data,
 		]);
 	}

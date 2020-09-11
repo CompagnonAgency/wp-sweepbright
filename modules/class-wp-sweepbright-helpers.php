@@ -76,6 +76,64 @@ class WP_SweepBright_Helpers {
 		}
 	}
 
+	public static function cached_query($args) {
+		$key = serialize($args);
+		if (!$query = wp_cache_get($key)) {
+			$query = new WP_Query($args);
+			wp_cache_set($key, $query, '', 3600);
+		}
+		return $query;
+	}
+
+	public static function store_cache() {
+		$loop = WP_SweepBright_Helpers::cached_query([
+			'post_status' => 'publish',
+			'nopaging' => true,
+			'no_found_rows' => true,
+			'update_post_meta_cache' => false, 
+			'update_post_term_cache' => false,
+			'post_type' => 'sweepbright_estates',
+			'fields' => 'ids'
+		]);
+
+		$loop = WP_SweepBright_Helpers::render_json($loop, [
+			'ajax' => true,
+			'persistent' => true,
+		]);
+	}
+
+	public static function render_json($loop, $params) {
+		$estates = [
+			'data' => [],
+		];
+		$query = $loop->get_posts();
+
+		// Build query
+		foreach ($query as $item) {
+			$estates['data'][] = [
+				'id' => $item,
+				'permalink' => get_the_permalink($item),
+				'date' => get_the_time('U', $item),
+				'meta' => get_fields($item),
+			];
+		}
+
+		// Don't encode JSON when called from a REST route
+		if (isset($params['ajax'])) {
+      $loop = $estates;
+      
+			// Store to cache
+			if (isset($params['persistent']) && $params['persistent']) {
+				$fp = fopen(plugin_dir_path( __DIR__ ). 'cache/cache.json', 'w');
+				fwrite($fp, json_encode($loop));
+				fclose($fp);
+			}
+		} else {
+			$loop = json_encode($estates);
+		}
+		return $loop;
+	}
+
 	public function schedule_publishing() {
 		/* @return $data
 		'post_url' => get_post_permalink($post_id),
@@ -83,6 +141,26 @@ class WP_SweepBright_Helpers {
 		'estate' => $estate,
 		'estate_id' => $estate['id']
 		*/
+		function cache_estates($params) {
+			WP_SweepBright_Helpers::log([
+				'estate_title' => $params['data']['estate']['description_title'][$params['locale']],
+				'post_id' => $params['data']['post_id'],
+				'action' => $params['data']['action'],
+				'status' => 'Cache started',
+				'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+			]);
+			error_log('cache_start');
+			WP_SweepBright_Helpers::store_cache();
+			WP_SweepBright_Helpers::log([
+				'estate_title' => $params['data']['estate']['description_title'][$params['locale']],
+				'post_id' => $params['data']['post_id'],
+				'action' => $params['data']['action'],
+				'status' => 'Cache completed',
+				'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+			]);
+			error_log('cache_end');
+		}
+
 		function publish_estate($data) {
 			error_log('publishing_start');
 			$locale = $GLOBALS['wp_sweepbright_config']['default_locale'];
@@ -101,8 +179,8 @@ class WP_SweepBright_Helpers {
 		    return false;
 		  } else {
 				WP_SweepBright_Controller_Hook::update_fields($data['estate'], $data['post_id']);
-		  }
-
+			}
+			
 			// Set the estate URL in SweepBright
 			WP_SweepBright_Controller_Hook::set_estate_url($data['estate_id'], get_permalink($data['post_id']));
 
@@ -115,12 +193,23 @@ class WP_SweepBright_Helpers {
 				'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
 			]);
 			error_log('publishing_end');
+			$params = [
+				'data' => $data,
+				'locale' => $locale
+			];
+			wp_schedule_single_event(time(), 'schedule_cache', [$params]);
+			spawn_cron();
 		}
 		add_action('schedule_estate', 'publish_estate');
+		add_action('schedule_cache', 'cache_estates');
 	}
 
-	public static function isLocalhost($whitelist = ['127.0.0.1', '::1']) {
-		return in_array($_SERVER['REMOTE_ADDR'], $whitelist);
+	public static function isLocalhost() {
+		$local = false;
+		if (in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1']) || getenv('ENV') === 'staging') {
+			$local = true;
+		}
+		return $local;
 	}
 
 	public static function get_post_ID_from_estate($id) {

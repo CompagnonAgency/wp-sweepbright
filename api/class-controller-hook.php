@@ -188,7 +188,7 @@ class WP_SweepBright_Controller_Hook {
 			'status' => 'Completed',
 			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
 		]);
-
+		WP_SweepBright_Helpers::store_cache();
 	  return true;
 	}
 

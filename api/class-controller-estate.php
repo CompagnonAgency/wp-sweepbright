@@ -25,11 +25,11 @@ class WP_SweepBright_Controller_Estate {
 			"id" => $estate_id,
 	    "is_project" => true,
 	    "project_id" => "32ed6c2a-716f-4077-9779-2b7794e46257",
-	    "type" => "apartment",
+	    "type" => "house",
 	    "sub_type" => "condo",
-	    "negotiation" => "let",
+	    "negotiation" => "sale",
 	    "rent_period" => "month",
-	    "status" => "available",
+	    "status" => "sold",
 	    "description" => [
 	      "en" => "Apartment with pool",
 	      "fr" => "Appartement avec piscine",
@@ -38,7 +38,7 @@ class WP_SweepBright_Controller_Estate {
 	    "description_title" => [
 	      "en" => "Luxury Apartment",
 	      "fr" => "Appartement de luxe",
-	      "nl" => "Luxe appartement 54 - updated"
+	      "nl" => "Pand 31 - PRODUCTION"
 	    ],
 	    "living_rooms" => 1,
 	    "kitchens" => 1,
@@ -107,14 +107,9 @@ class WP_SweepBright_Controller_Estate {
 	    "auction" => [
 	      "start_date" => "2018-01-01T10:00:00+00:00"
 	    ],
-	    "open_homes" => [
-        [
-					"start_date" => "2020-10-26T10:00:00+00:00",
-        	"end_date" => "2020-10-26T11:00:00+00:00"
-				]
-	    ],
+	    "open_homes" => [],
 	    "price" => [
-	      "amount" => 100000,
+	      "amount" => 980000,
 	      "currency" => "EUR",
 	      "hidden" => false
 	    ],
