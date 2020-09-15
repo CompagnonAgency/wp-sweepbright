@@ -18,8 +18,6 @@ class WP_SweepBright_Controller_Hook {
 	}
 
 	public function init($data) {
-		$hook_date = microtime(true);
-
 		// Get POST request arguments
 		$event = $data['event'];
 		$estate_id = $data['estate_id'];
@@ -49,7 +47,7 @@ class WP_SweepBright_Controller_Hook {
 		$headers = [
 			'Authorization' => 'Bearer ' . $auth_response['access_token'],
 			'Content-Type' => 'application/json',
-			'Accept' => 'application/vnd.sweepbright.v20191206+json',
+			'Accept' => 'application/vnd.sweepbright.' . WP_SweepBright_Helpers::settings_form()['api_version'] . '+json',
 		];
 		return $headers;
 	}
@@ -84,8 +82,7 @@ class WP_SweepBright_Controller_Hook {
 				$this->async_publish_estate($cron);
 				break;
 			case 'estate-deleted':
-				$estate = $this->get_estate($estate_id);
-				$this->delete_estate($estate, $estate_id);
+				$this->delete_estate($estate_id);
 				break;
 			default:
 				break;
@@ -176,18 +173,18 @@ class WP_SweepBright_Controller_Hook {
 	}
 
 	// Delete estate
-	public function delete_estate($estate, $estate_id) {
+	public function delete_estate($estate_id) {
 	  $id = WP_SweepBright_Helpers::get_post_ID_from_estate($estate_id);
-	  wp_delete_post($id, true);
 
 		$locale = $GLOBALS['wp_sweepbright_config']['default_locale'];
 		WP_SweepBright_Helpers::log([
-			'estate_title' => $estate['description_title'][$locale],
+			'estate_title' => get_field('estate', $id)['description_title'][$locale],
 			'post_id' => $id,
 			'action' => 'delete',
 			'status' => 'Completed',
 			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
 		]);
+	  wp_delete_post($id, true);
 		WP_SweepBright_Helpers::store_cache();
 	  return true;
 	}

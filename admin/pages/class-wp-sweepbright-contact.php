@@ -27,6 +27,7 @@ class WP_SweepBright_Contact {
 		$script .= '<script id="wp-sweepbright-recaptcha-exec">';
 		$script .= 'grecaptcha.ready(function () {';
 		$script .= '	grecaptcha.execute(\''. WP_SweepBright_Helpers::settings_form()['recaptcha_site_key'] .'\', { action: \'contact\' }).then(function (token) {';
+		$script .= '		window.WPContactRecaptcha = token;';
 		$script .= '		var recaptchaResponse = document.getElementById(\'recaptchaResponse\');';
 		$script .= '		recaptchaResponse.value = token;';
 		$script .= '	});';

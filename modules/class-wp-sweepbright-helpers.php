@@ -149,7 +149,6 @@ class WP_SweepBright_Helpers {
 				'status' => 'Cache started',
 				'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
 			]);
-			error_log('cache_start');
 			WP_SweepBright_Helpers::store_cache();
 			WP_SweepBright_Helpers::log([
 				'estate_title' => $params['data']['estate']['description_title'][$params['locale']],
@@ -158,11 +157,9 @@ class WP_SweepBright_Helpers {
 				'status' => 'Cache completed',
 				'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
 			]);
-			error_log('cache_end');
 		}
 
 		function publish_estate($data) {
-			error_log('publishing_start');
 			$locale = $GLOBALS['wp_sweepbright_config']['default_locale'];
 
 			// LOG START
@@ -192,7 +189,6 @@ class WP_SweepBright_Helpers {
 				'status' => 'Completed',
 				'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
 			]);
-			error_log('publishing_end');
 			$params = [
 				'data' => $data,
 				'locale' => $locale
@@ -320,7 +316,7 @@ class WP_SweepBright_Helpers {
 		$contact_request_general_form .= "  <label>Phone:</label> <input type=\"text\" name=\"phone\" required><br>\n";
 		$contact_request_general_form .= "  <label>Message:</label> <textarea name=\"message\" required></textarea><br>\n";
 		$contact_request_general_form .= "  <label>Negotiation:</label><br>\n";
-		$contact_request_general_form .= "  <select name=\"negotiation\">\n";
+		$contact_request_general_form .= "  <select name=\"negotiation\" required>\n";
 		$contact_request_general_form .= "    <option value=\"let\">Let</option>\n";
 		$contact_request_general_form .= "    <option value=\"sale\">Sale</option>\n";
 		$contact_request_general_form .= "  </select><br>\n";

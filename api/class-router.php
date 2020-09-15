@@ -19,27 +19,32 @@ class WP_SweepBright_Router {
 		add_action('rest_api_init', function () {
 		  register_rest_route('v1/sweepbright', '/hook', array(
 		    'methods' => 'POST',
-		    'callback' => __CLASS__ . '::hook',
+				'callback' => __CLASS__ . '::hook',
+				'permission_callback' => '__return_true',
 		  ));
 
 			register_rest_route('v1/sweepbright', '/estates/(?P<estate_id>[^/]+)', array(
 		    'methods' => 'GET',
 				'callback' => __CLASS__ . '::estate',
+				'permission_callback' => '__return_true',
 		  ));
 
 			register_rest_route('v1/sweepbright', '/estates/(?P<estate_id>[^/]+)/contacts', array(
 		    'methods' => 'POST',
 				'callback' => __CLASS__ . '::contact_request_estate',
+				'permission_callback' => '__return_true',
 		  ));
 
 			register_rest_route('v1/sweepbright', '/contacts', array(
 		    'methods' => 'POST',
 				'callback' => __CLASS__ . '::contact_request_general',
+				'permission_callback' => '__return_true',
 			));
 			
 			register_rest_route('v1/sweepbright', '/list', array(
 		    'methods' => 'GET',
 				'callback' => __CLASS__ . '::list',
+				'permission_callback' => '__return_true',
 		  ));
 		});
 	}
