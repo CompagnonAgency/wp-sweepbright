@@ -178,7 +178,7 @@ class WP_SweepBright_Controller_Hook {
 
 		$locale = $GLOBALS['wp_sweepbright_config']['default_locale'];
 		WP_SweepBright_Helpers::log([
-			'estate_title' => get_field('estate', $id)['description_title'][$locale],
+			'estate_title' => get_field('estate', $id)['title'][$locale],
 			'post_id' => $id,
 			'action' => 'delete',
 			'status' => 'Completed',

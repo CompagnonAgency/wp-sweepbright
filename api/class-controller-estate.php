@@ -29,7 +29,7 @@ class WP_SweepBright_Controller_Estate {
 	    "sub_type" => "condo",
 	    "negotiation" => "sale",
 	    "rent_period" => "month",
-	    "status" => "sold",
+	    "status" => "option",
 	    "description" => [
 	      "en" => "Apartment with pool",
 	      "fr" => "Appartement avec piscine",
@@ -38,7 +38,7 @@ class WP_SweepBright_Controller_Estate {
 	    "description_title" => [
 	      "en" => "Luxury Apartment",
 	      "fr" => "Appartement de luxe",
-	      "nl" => "Pand 31 - PRODUCTION"
+	      "nl" => "Pand 32 - PRODUCTION"
 	    ],
 	    "living_rooms" => 1,
 	    "kitchens" => 1,
