@@ -1,33 +1,45 @@
-(function ($) {
-	'use strict';
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import $ from 'jquery';
+import '../css/style.css';
+import Properties from '../vue-components/Properties.vue';
 
-	/**
-	 * All of the code for your admin-facing JavaScript source
-	 * should reside in this file.
-	 *
-	 * Note: It has been assumed you will write jQuery code here, so the
-	 * $ function reference has been prepared for usage within the scope
-	 * of this function.
-	 *
-	 * This enables you to define handlers, for when the DOM is ready:
-	 *
-	 * $(function() {
-	 *
-	 * });
-	 *
-	 * When the window is loaded:
-	 *
-	 * $( window ).load(function() {
-	 *
-	 * });
-	 *
-	 * ...and/or other possibilities.
-	 *
-	 * Ideally, it is not considered best practise to attach more than a
-	 * single DOM-ready or window-load handler for a particular page.
-	 * Although scripts in the WordPress core, Plugins and Themes may be
-	 * practising this, we should strive to set a better example in our own work.
-	 */
+// Pages
+import Overview from '../vue-components/Overview.vue';
+import Edit from '../vue-components/Edit.vue';
 
+Vue.use(require('vue-moment'));
 
-})(jQuery);
+// Devtools
+Vue.config.productionTip = false;
+Vue.config.devtools = false;
+
+// Router
+Vue.use(VueRouter);
+
+const routes = [
+	{
+		path: '/',
+		name: 'overview',
+		component: Overview,
+	},
+	{
+		path: '/edit/:id',
+		name: 'edit',
+		component: Edit,
+	},
+];
+
+const router = new VueRouter({
+	routes, // short for `routes: routes`
+});
+
+$(document).ready(() => {
+	if (document.querySelector('#sweepbright-properties')) {
+		new Vue({
+			router,
+			el: '#sweepbright-properties',
+			render: (h) => h(Properties),
+		});
+	}
+});

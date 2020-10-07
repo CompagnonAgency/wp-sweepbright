@@ -65,7 +65,10 @@ class WP_SweepBright_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wp-sweepbright-admin.css', array(), $this->version, 'all' );
+		if (get_current_screen()->base === "toplevel_page_wp-sweepbright-properties") {
+			wp_enqueue_style('font-awesome', 'https://pro.fontawesome.com/releases/v5.15.0/css/all.css');
+			wp_enqueue_style( $this->plugin_name, plugins_url('wp-sweepbright') . '/dist/wp-sweepbright-admin.css', array(), $this->version, 'all' );
+		}
 
 	}
 
@@ -85,8 +88,8 @@ class WP_SweepBright_Admin {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-sweepbright-admin.js', array( 'jquery' ), $this->version, false );
+	
+		wp_enqueue_script( $this->plugin_name, plugins_url('wp-sweepbright') . '/dist/wp-sweepbright-admin.js', array(), $this->version, false );
 
 	}
 
@@ -148,41 +151,70 @@ class WP_SweepBright_Admin {
 			'SweepBright',
 			'SweepBright',
 			'publish_pages',
-			$this->plugin_name,
+			$this->plugin_name . '-properties',
 			false,
 			$icon,
 			2
 		);
 
+		// Properties
+		add_submenu_page(
+			$this->plugin_name . '-properties',
+			'Properties',
+			'Properties',
+			'publish_pages',
+			$this->plugin_name . '-properties',
+			array( $this, 'load_admin_properties' ),
+		);
+
+		// Database
+		add_submenu_page(
+			$this->plugin_name . '-properties',
+			'Database',
+			'Database',
+			'activate_plugins',
+			'edit.php?post_type=sweepbright_estates',
+			false,
+		);
+
 		// Logs
 		add_submenu_page(
-			$this->plugin_name,
+			$this->plugin_name . '-properties',
 			'Logs',
 			'Logs',
-			'publish_pages',
+			'activate_plugins',
 			$this->plugin_name . '-logs',
 			array( $this, 'load_admin_logs' ),
 		);
 
 		// Contact
 		add_submenu_page(
-			$this->plugin_name,
+			$this->plugin_name . '-properties',
 			'Contact',
 			'Contact',
-			'publish_pages',
+			'activate_plugins',
 			$this->plugin_name . '-contact',
 			array( $this, 'load_admin_contact' ),
 		);
 
 		// Settings
 		add_submenu_page(
-			$this->plugin_name,
+			$this->plugin_name . '-properties',
 			'Settings',
 			'Settings',
-			'publish_pages',
+			'activate_plugins',
 			$this->plugin_name . '-settings',
 			array( $this, 'load_admin_settings' ),
 		);
+	}
+
+	/**
+	 * Load properties.
+	 */
+	public function load_admin_properties() {
+		require_once plugin_dir_path( __DIR__ ). 'admin/pages/class-wp-sweepbright-properties.php';
+		$wp_sweepbright_properties = new WP_SweepBright_Properties();
+		require_once plugin_dir_path( __FILE__ ). 'partials/properties.php';
 	}
 
 	/**

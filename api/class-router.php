@@ -45,6 +45,30 @@ class WP_SweepBright_Router {
 		    'methods' => 'GET',
 				'callback' => __CLASS__ . '::list',
 				'permission_callback' => '__return_true',
+			));
+			
+			register_rest_route('v1/sweepbright', '/logs', array(
+		    'methods' => 'GET',
+				'callback' => __CLASS__ . '::logs',
+				'permission_callback' => '__return_true',
+			));
+			
+			register_rest_route('v1/sweepbright', '/cache', array(
+		    'methods' => 'GET',
+				'callback' => __CLASS__ . '::cache',
+				'permission_callback' => '__return_true',
+			));
+			
+			register_rest_route('v1/sweepbright', '/property/(?P<estate_id>[^/]+)', array(
+		    'methods' => 'GET',
+				'callback' => __CLASS__ . '::property',
+				'permission_callback' => '__return_true',
+			));
+			
+			register_rest_route('v1/sweepbright', '/property/(?P<estate_id>[^/]+)/save', array(
+		    'methods' => 'POST',
+				'callback' => __CLASS__ . '::save_property',
+				'permission_callback' => '__return_true',
 		  ));
 		});
 	}
@@ -58,6 +82,30 @@ class WP_SweepBright_Router {
 		require_once plugin_dir_path( __DIR__ ). 'api/class-controller-estate.php';
 		$wp_sweepbright_controller_estate = new WP_SweepBright_Controller_Estate();
 		return $wp_sweepbright_controller_estate->init($data);
+	}
+
+	public static function logs($data) {
+		require_once plugin_dir_path( __DIR__ ). 'api/class-controller-logs.php';
+		$wp_sweepbright_controller_logs = new WP_SweepBright_Controller_Logs();
+		return $wp_sweepbright_controller_logs->init($data);
+	}
+
+	public static function cache($data) {
+		require_once plugin_dir_path( __DIR__ ). 'api/class-controller-cache.php';
+		$wp_sweepbright_controller_cache = new WP_SweepBright_Controller_cache();
+		return $wp_sweepbright_controller_cache->init($data);
+	}
+
+	public static function property($data) {
+		require_once plugin_dir_path( __DIR__ ). 'api/class-controller-property.php';
+		$wp_sweepbright_controller_property = new WP_SweepBright_Controller_property();
+		return $wp_sweepbright_controller_property->init($data);
+	}
+
+	public static function save_property($data) {
+		require_once plugin_dir_path( __DIR__ ). 'api/class-controller-property.php';
+		$wp_sweepbright_controller_property = new WP_SweepBright_Controller_property();
+		return $wp_sweepbright_controller_property->save($data);
 	}
 
 	public static function contact_request_estate($data) {

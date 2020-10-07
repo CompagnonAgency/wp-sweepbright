@@ -24,21 +24,21 @@ class WP_SweepBright_Controller_Estate {
 		return rest_ensure_response([
 			"id" => $estate_id,
 	    "is_project" => true,
-	    "project_id" => "32ed6c2a-716f-4077-9779-2b7794e46257",
+	    "project_id" => "staging-0000-0000-0000-0000006",
 	    "type" => "house",
 	    "sub_type" => "condo",
 	    "negotiation" => "sale",
 	    "rent_period" => "month",
-	    "status" => "option",
+	    "status" => "available",
 	    "description" => [
-	      "en" => "Apartment with pool",
-	      "fr" => "Appartement avec piscine",
-	      "nl" => "Appartement met zwembad"
+	      "en" => "",
+	      "fr" => "",
+	      "nl" => "In het West-Vlaamse Ruiselede, rustig gelegen halfweg Tielt en Aalter, realiseert IPON een nieuwe verkaveling nabij de Poekestraat. In een volgende fase worden op de loten 17, 18 en 19 drie woningen in landelijke stijl aangeboden."
 	    ],
 	    "description_title" => [
-	      "en" => "Luxury Apartment",
-	      "fr" => "Appartement de luxe",
-	      "nl" => "Pand 32 - PRODUCTION"
+	      "en" => "",
+	      "fr" => "",
+	      "nl" => "Baasrode"
 	    ],
 	    "living_rooms" => 1,
 	    "kitchens" => 1,
@@ -130,7 +130,7 @@ class WP_SweepBright_Controller_Estate {
 	        "latitude" => 1.2345,
 	        "longitude" => 1.2345
 	      ],
-	      "city" => "Brussels",
+	      "city" => "Ruiselede",
 	      "street" => "Street name",
 	      "street_2" => "Street name",
 	      "number" => "123",
@@ -171,102 +171,22 @@ class WP_SweepBright_Controller_Estate {
 	      ]
 	    ],
 	    "images" => [
+				[
+	        "id" => "1234-5678-9012",
+	        "filename" => "my-image.jpeg",
+	        "description" => "My image",
+	        "url" => "https://ipon-nv.be/sites/default/files/styles/realisation_detail/public/06722963_1_0.jpg",
+	        "url_expires_on" => "2017-01-01T12:12:12+00:00",
+	        "ordinal" => 1
+	      ],
 	      [
 	        "id" => "1234-5678-9012",
 	        "filename" => "my-image.jpeg",
 	        "description" => "My image",
-	        "url" => "https://odis.homeaway.com/odis/listing/98c336df-3433-415b-bc51-da4fd79fd7b2.c10.jpg",
+	        "url" => "https://ipon-nv.be/sites/default/files/06648235_1_2.jpg",
 	        "url_expires_on" => "2017-01-01T12:12:12+00:00",
 	        "ordinal" => 1
 	      ],
-				[
-	        "id" => "1234-5678-9012",
-	        "filename" => "my-image.jpeg",
-	        "description" => "My image",
-	        "url" => "https://cdn.boydforcongress.com/wp-content/uploads/bright-cozy-house-interior-design-ideas-idi-youtube_219078.jpg",
-	        "url_expires_on" => "2017-01-01T12:12:12+00:00",
-	        "ordinal" => 1
-	      ],
-				[
-	        "id" => "1234-5678-9012",
-	        "filename" => "my-image.jpeg",
-	        "description" => "My image",
-	        "url" => "https://r-cf.bstatic.com/images/hotel/max1024x768/218/218401246.jpg",
-	        "url_expires_on" => "2017-01-01T12:12:12+00:00",
-	        "ordinal" => 1
-				],
-				[
-	        "id" => "1234-5678-9012",
-	        "filename" => "my-image.jpeg",
-	        "description" => "My image",
-	        "url" => "https://www.devuyst.be/wp-content/uploads/2019/10/De-Vuyst-Fire-and-interior-concepts-Referentie-Uitgelicht-008.jpg",
-	        "url_expires_on" => "2017-01-01T12:12:12+00:00",
-	        "ordinal" => 1
-				],
-				[
-	        "id" => "1234-5678-9012",
-	        "filename" => "my-image.jpeg",
-	        "description" => "My image",
-	        "url" => "https://occ-0-1723-1722.1.nflxso.net/dnm/api/v6/E8vDc_W8CLv7-yMQu8KMEC7Rrr8/AAAABbP7JQDJPsK9k-PuDdCA1UF-q8lmYZoh69CO6ufCv-NezcKV8kKp3jIAryt_0Cp7K5ro5C21viJlnntCAq6ogSkVWjEQ.jpg?r=01d",
-	        "url_expires_on" => "2017-01-01T12:12:12+00:00",
-	        "ordinal" => 1
-				],
-				[
-	        "id" => "1234-5678-9012",
-	        "filename" => "my-image.jpeg",
-	        "description" => "My image",
-	        "url" => "https://www.hoog.design/shop/wp-content/uploads/2019/05/GrandJohnson-interieur-1-1-1280x960.jpg",
-	        "url_expires_on" => "2017-01-01T12:12:12+00:00",
-	        "ordinal" => 1
-				],
-				[
-	        "id" => "1234-5678-9012",
-	        "filename" => "my-image.jpeg",
-	        "description" => "My image",
-	        "url" => "https://hemelaer.be/wp-content/uploads/2019/11/Hemelaer-Interior-De-Sede-ds-2878-mood.jpg",
-	        "url_expires_on" => "2017-01-01T12:12:12+00:00",
-	        "ordinal" => 1
-				],
-				[
-	        "id" => "1234-5678-9012",
-	        "filename" => "my-image.jpeg",
-	        "description" => "My image",
-	        "url" => "https://i.pinimg.com/originals/cf/94/af/cf94afbf91498a61da9e3c73c1a18e10.jpg",
-	        "url_expires_on" => "2017-01-01T12:12:12+00:00",
-	        "ordinal" => 1
-				],
-				[
-	        "id" => "1234-5678-9012",
-	        "filename" => "my-image.jpeg",
-	        "description" => "My image",
-	        "url" => "https://cdn.shopify.com/s/files/1/0413/1759/7349/files/COSE-interior-Ravenna-Sofa-Lounge-Chair1440x900_1440x900_crop_center.jpg?v=1592040671",
-	        "url_expires_on" => "2017-01-01T12:12:12+00:00",
-	        "ordinal" => 1
-				],
-				[
-	        "id" => "1234-5678-9012",
-	        "filename" => "my-image.jpeg",
-	        "description" => "My image",
-	        "url" => "https://cdn.shopify.com/s/files/1/0413/1759/7349/files/COSE-interior-Ravenna-Sofa-Lounge-Chair1440x900_1440x900_crop_center.jpg?v=1592040671",
-	        "url_expires_on" => "2017-01-01T12:12:12+00:00",
-	        "ordinal" => 1
-				],
-				[
-	        "id" => "1234-5678-9012",
-	        "filename" => "my-image.jpeg",
-	        "description" => "My image",
-	        "url" => "https://cdn.shopify.com/s/files/1/0413/1759/7349/products/COSE-interior-Cotton-Fauteuil-4-scaled_1024x1024.jpg?v=1595358352",
-	        "url_expires_on" => "2017-01-01T12:12:12+00:00",
-	        "ordinal" => 1
-				],
-				[
-	        "id" => "1234-5678-9012",
-	        "filename" => "my-image.jpeg",
-	        "description" => "My image",
-	        "url" => "https://i.pinimg.com/474x/62/ff/32/62ff32bddb0d4ca4290977a69c97fb55.jpg",
-	        "url_expires_on" => "2017-01-01T12:12:12+00:00",
-	        "ordinal" => 1
-	      ]
 	    ],
 	    "plans" => [
 	      [
@@ -383,7 +303,10 @@ class WP_SweepBright_Controller_Estate {
 	    "settings" => [
 	      "reference" => "internal reference"
 	    ],
-	    "properties" => []
+	    "properties" => [
+				"staging-0000-0000-0000-0000003",
+				"staging-0000-0000-0000-0000004",
+			]
 		]);
 	}
 

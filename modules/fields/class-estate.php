@@ -124,6 +124,29 @@ class FieldEstate {
           'readonly' => 0,
           'disabled' => 0,
 				],
+				[
+					'key'    => 'properties',
+					'label'  => 'Properties',
+					'name'   => 'properties',
+					'type'   => 'flexible_content',
+					'button_label' => 'Add property',
+					'layouts' => [
+						[
+							'key'           => 'properties',
+							'name'          => 'property_layout',
+							'label'         => 'Property',
+							'display'       => 'block',
+							'sub_fields'    => [
+								[
+                  'key'    => 'property_item',
+                  'label'  => 'Property item',
+                  'name'   => 'property_item',
+                  'type'   => 'text',
+								],
+							],
+						],
+					]
+				],
       ],
     ];
 	}

@@ -174,18 +174,24 @@ class WP_SweepBright_Controller_Hook {
 
 	// Delete estate
 	public function delete_estate($estate_id) {
-	  $id = WP_SweepBright_Helpers::get_post_ID_from_estate($estate_id);
-
+		$id = WP_SweepBright_Helpers::get_post_ID_from_estate($estate_id);
 		$locale = $GLOBALS['wp_sweepbright_config']['default_locale'];
 		WP_SweepBright_Helpers::log([
 			'estate_title' => get_field('estate', $id)['title'][$locale],
 			'post_id' => $id,
 			'action' => 'delete',
-			'status' => 'Completed',
+			'status' => 'Started',
 			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
 		]);
 	  wp_delete_post($id, true);
 		WP_SweepBright_Helpers::store_cache();
+		WP_SweepBright_Helpers::log([
+			'estate_title' => get_field('estate', $id)['title'][$locale],
+			'post_id' => $id,
+			'action' => 'delete',
+			'status' => 'Cache completed',
+			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+		]);
 	  return true;
 	}
 

@@ -50,7 +50,7 @@ class WP_SweepBright_Data {
 					'slug' => WP_SweepBright_Helpers::settings_form()['custom_url'] . '/%post_id%',
 					'with_front' => false,
 				],
-				'show_in_menu' => 'wp-sweepbright',
+				'show_in_menu' => false,
 				'show_in_rest' => false,
 			]
 		);
@@ -99,6 +99,7 @@ class WP_SweepBright_Data {
 			require_once plugin_dir_path( __DIR__ ). 'modules/fields/class-office.php';
 			require_once plugin_dir_path( __DIR__ ). 'modules/fields/class-occupancy.php';
 			require_once plugin_dir_path( __DIR__ ). 'modules/fields/class-orientation.php';
+			require_once plugin_dir_path( __DIR__ ). 'modules/fields/class-custom.php';
 
 			// Merge fields into one group
 			$estate_fields = array_merge(
@@ -123,6 +124,7 @@ class WP_SweepBright_Data {
 				[FieldOffice::retrieve()],
 				[FieldOccupancy::retrieve()],
 				[FieldOrientation::retrieve()],
+				[FieldCustom::retrieve()],
 			);
 
 			// Field group

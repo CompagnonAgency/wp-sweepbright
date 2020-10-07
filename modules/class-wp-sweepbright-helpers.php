@@ -51,6 +51,21 @@ class WP_SweepBright_Helpers {
 
 		// Save global settings
 		$this->save_global_settings();
+
+		// Register list shortcode
+		$this->register_shortcodes();
+	}
+
+	public function register_shortcodes() {
+		function config_shortcode() {
+			$str = '';
+			$str .= '<script>';
+			$str .= 'window.sweepbrightPostsPerPage = '. WP_SweepBright_Helpers::settings_form()['max_per_page'] .';';
+			$str .= 'window.sweepbrightGeoDistance = '. WP_SweepBright_Helpers::settings_form()['geo_distance'] .';';
+			$str .= '</script>';
+			return $str;
+		}
+		add_shortcode('sweepbright-config', 'config_shortcode');
 	}
 
 	public function cleanup_logs() {
@@ -110,12 +125,15 @@ class WP_SweepBright_Helpers {
 
 		// Build query
 		foreach ($query as $item) {
-			$estates['data'][] = [
-				'id' => $item,
-				'permalink' => get_the_permalink($item),
-				'date' => get_the_time('U', $item),
-				'meta' => get_fields($item),
-			];
+			if ((!get_field('estate', $item)['is_project'] && !get_field('estate', $item)['project_id']) ||
+				get_field('estate', $item)['is_project']) {
+				$estates['data'][] = [
+					'id' => $item,
+					'permalink' => get_the_permalink($item),
+					'date' => get_the_time('U', $item),
+					'meta' => get_fields($item),
+				];
+			}
 		}
 
 		// Don't encode JSON when called from a REST route

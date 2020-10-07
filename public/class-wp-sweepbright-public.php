@@ -86,8 +86,6 @@ class WP_SweepBright_Public {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-sweepbright-public.js', array( 'jquery' ), $this->version, false );
-
 	}
 
 }

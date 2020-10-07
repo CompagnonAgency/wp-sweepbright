@@ -43,6 +43,19 @@ class FieldEstateUpdate {
 		update_field('estate', [
       'project_id' => $estate['project_id'],
     ], $post_id);
+
+    if (count($estate['properties'] > 0)) {
+      $properties = [];
+      foreach ($estate['properties'] as $property) {
+        $properties[] = [
+          'acf_fc_layout' => 'property_layout',
+          'property_item' => $property,
+        ];
+      }
+      update_field('estate', [
+        'properties' => $properties,
+      ], $post_id);
+    }
 	}
 
 }
