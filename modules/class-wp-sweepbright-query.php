@@ -11,12 +11,15 @@
 use Brick\Money\Money;
 use AnthonyMartin\GeoLocation\GeoPoint;
 
-class WP_SweepBright_Query {
+class WP_SweepBright_Query
+{
 
-	public function __construct() {
+	public function __construct()
+	{
 	}
 
-	public static function min_max_living_area($iso) {
+	public static function min_max_living_area($iso)
+	{
 		$units = WP_SweepBright_Query::list_units(get_field('estate')['id'], false, false)['results'];
 		$result = false;
 		$results = [];
@@ -40,7 +43,8 @@ class WP_SweepBright_Query {
 		return $result;
 	}
 
-	public static function min_max_price($iso) {
+	public static function min_max_price($iso)
+	{
 		$units = WP_SweepBright_Query::list_units(get_field('estate')['id'], false, false)['results'];
 		$result = false;
 		$results = [];
@@ -64,7 +68,8 @@ class WP_SweepBright_Query {
 		return $result;
 	}
 
-	public static function format_unit($unit) {
+	public static function format_unit($unit)
+	{
 		switch ($unit) {
 			case 'sq_ft':
 				$unit = 'ft²';
@@ -82,13 +87,15 @@ class WP_SweepBright_Query {
 		return $unit;
 	}
 
-	public static function format_number($number, $iso) {
+	public static function format_number($number, $iso)
+	{
 		$format = new \NumberFormatter($iso, \NumberFormatter::DECIMAL);
 		$output = $format->format($number);
 		return $output;
 	}
 
-	public static function get_the_size($iso, $type) {
+	public static function get_the_size($iso, $type)
+	{
 		$size = '';
 
 		if ($type === 'plot_area') {
@@ -105,40 +112,47 @@ class WP_SweepBright_Query {
 		return $size;
 	}
 
-	public static function get_the_price($iso) {
+	public static function get_the_price($iso)
+	{
 		$price = '';
 
 		if (!get_field('price')['hidden']) {
 			if (get_field('price')['custom_price']) {
-			 	$price = get_field('price')['custom_price'];
-		 	} else {
+				$price = get_field('price')['custom_price'];
+			} else {
 				$formatter = new \NumberFormatter($iso, \NumberFormatter::CURRENCY);
 				$formatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, 0);
 				$formatter->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 0);
 				$formatter->setAttribute(NumberFormatter::DECIMAL_ALWAYS_SHOWN, 0);
 				$price = $formatter->formatCurrency(get_field('price')['amount'], get_field('price')['currency']);
-		 	}
+			}
 		} else {
 			$price = false;
 		}
 		return $price;
 	}
 
-	public static function filter_hide_units($filters) {
+	public static function filter_hide_units($filters)
+	{
 		array_push($filters, [
-			'relation' => 'AND',
+			'relation' => 'OR',
 			[
 				'key' => 'estate_project_id',
 				'value' => '',
 				'compare' => '='
+			],
+			[
+				'key' => 'estate_project_id',
+				'compare' => 'NOT EXISTS'
 			]
 		]);
 		return $filters;
 	}
 
-	public static function filter_negotiation($params, $filters) {
+	public static function filter_negotiation($params, $filters)
+	{
 		if (isset($params['filters']['negotiation']) && $params['filters']['negotiation']) {
-			switch($params['filters']['negotiation']) {
+			switch ($params['filters']['negotiation']) {
 				case 'sale':
 					array_push($filters, [
 						'relation' => 'AND',
@@ -166,7 +180,8 @@ class WP_SweepBright_Query {
 		return $filters;
 	}
 
-	public static function filter_category($params, $filters) {
+	public static function filter_category($params, $filters)
+	{
 		if (isset($params['filters']['category']) && count($params['filters']['category']) > 0) {
 			array_push($filters, [
 				'relation' => 'AND',
@@ -180,7 +195,8 @@ class WP_SweepBright_Query {
 		return $filters;
 	}
 
-	public static function filter_price($params, $filters) {
+	public static function filter_price($params, $filters)
+	{
 		if (isset($params['filters']['price']) && $params['filters']['price']['min']) {
 			array_push($filters, [
 				'relation' => 'AND',
@@ -207,7 +223,8 @@ class WP_SweepBright_Query {
 		return $filters;
 	}
 
-	public static function filter_plot_area($params, $filters) {
+	public static function filter_plot_area($params, $filters)
+	{
 		if (isset($params['filters']['plot_area']) && $params['filters']['plot_area']['min']) {
 			array_push($filters, [
 				'relation' => 'AND',
@@ -234,7 +251,8 @@ class WP_SweepBright_Query {
 		return $filters;
 	}
 
-	public static function filter_liveable_area($params, $filters) {
+	public static function filter_liveable_area($params, $filters)
+	{
 		if (isset($params['filters']['liveable_area']) && $params['filters']['liveable_area']['min']) {
 			array_push($filters, [
 				'relation' => 'AND',
@@ -261,7 +279,8 @@ class WP_SweepBright_Query {
 		return $filters;
 	}
 
-	public static function filter_geolocation($params, $filters) {
+	public static function filter_geolocation($params, $filters)
+	{
 		if (isset($params['filters']['location']) && $params['filters']['location']['lat'] && $params['filters']['location']['lng']) {
 			$geopoint = new GeoPoint($params['filters']['location']['lat'], $params['filters']['location']['lng']);
 			$boundingBox = $geopoint->boundingBox(intval(WP_SweepBright_Helpers::settings_form()['geo_distance']), 'km');
@@ -283,14 +302,16 @@ class WP_SweepBright_Query {
 		return $filters;
 	}
 
-	public static function order_by_date($params, $order_by) {
+	public static function order_by_date($params, $order_by)
+	{
 		if (isset($params['sort']) && $params['sort']['orderBy'] === 'date') {
 			$order_by['order_by'] = 'date';
 		}
 		return $order_by;
 	}
 
-	public static function order_by_price($params, $order_by) {
+	public static function order_by_price($params, $order_by)
+	{
 		if (isset($params['sort']) && $params['sort']['orderBy'] === 'price') {
 			$order_by['order_by'] = 'meta_value_num';
 			$order_by['meta_key'] = 'price_amount';
@@ -298,7 +319,8 @@ class WP_SweepBright_Query {
 		return $order_by;
 	}
 
-	public static function order_by_relevance($params, $order_by, $filters) {
+	public static function order_by_relevance($params, $order_by, $filters)
+	{
 		if (isset($params['sort']) && $params['sort']['orderBy'] === 'relevance') {
 			$filters[] = [
 				'relation' => 'AND',
@@ -366,7 +388,8 @@ class WP_SweepBright_Query {
 		];
 	}
 
-	public static function list($params) {
+	public static function list($params)
+	{
 		// Default filters
 		$filters = [];
 
@@ -454,11 +477,12 @@ class WP_SweepBright_Query {
 		if (isset($params['ids'])) {
 			$results = $posts;
 		}
-		
+
 		return $results;
 	}
 
-	public static function list_units($project_id, $is_paged, $page) {
+	public static function list_units($project_id, $is_paged, $page)
+	{
 		if ($is_paged) {
 			$posts_per_page = 10;
 			$paged = $page;
@@ -497,9 +521,8 @@ class WP_SweepBright_Query {
 		}
 		return [
 			'totalPages' => $query->max_num_pages,
-      'totalPosts' => $query->found_posts,
+			'totalPosts' => $query->found_posts,
 			'results' => $results
 		];
 	}
-
 }
