@@ -6,12 +6,15 @@
  * @package FieldEstateUpdate
  */
 
-class FieldEstateUpdate {
+class FieldEstateUpdate
+{
 
-	public function __construct() {
-	}
+  public function __construct()
+  {
+  }
 
-	public static function update($estate, $post_id) {
+  public static function update($estate, $post_id)
+  {
     update_field('estate', [
       'estate_id' => $estate['id'],
     ], $post_id);
@@ -36,13 +39,17 @@ class FieldEstateUpdate {
       ],
     ], $post_id);
 
-		update_field('estate', [
-      'is_project' => $estate['is_project'],
-    ], $post_id);
+    if ($estate['is_project']) {
+      update_field('estate', [
+        'is_project' => $estate['is_project'],
+      ], $post_id);
+    }
 
-		update_field('estate', [
-      'project_id' => $estate['project_id'],
-    ], $post_id);
+    if ($estate['project_id']) {
+      update_field('estate', [
+        'project_id' => $estate['project_id'],
+      ], $post_id);
+    }
 
     if (count($estate['properties'] > 0)) {
       $properties = [];
@@ -56,6 +63,5 @@ class FieldEstateUpdate {
         'properties' => $properties,
       ], $post_id);
     }
-	}
-
+  }
 }

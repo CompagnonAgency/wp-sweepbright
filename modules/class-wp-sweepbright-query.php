@@ -135,12 +135,7 @@ class WP_SweepBright_Query
 	public static function filter_hide_units($filters)
 	{
 		array_push($filters, [
-			'relation' => 'OR',
-			[
-				'key' => 'estate_project_id',
-				'value' => '',
-				'compare' => '='
-			],
+			'relation' => 'AND',
 			[
 				'key' => 'estate_project_id',
 				'compare' => 'NOT EXISTS'
