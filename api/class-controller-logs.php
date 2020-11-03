@@ -39,7 +39,7 @@ class WP_SweepBright_Controller_Logs {
     $last_updated = false;
 
     // Get last updated
-    if ($logs[0]['status'] === 'Cache completed') {
+    if ($logs[0]['status'] === 'Sync completed') {
       $synchronization = true;
     }
 

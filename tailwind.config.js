@@ -29,6 +29,18 @@ module.exports = {
       xl: '1280px',
     },
     extend: {
+      gray: {
+        50: '#F4F4F4',
+        100: '#F1F1F1',
+        200: '#C7C7C7',
+        300: '#A5A5A5',
+        400: '#616161',
+        500: '#1D1D1D',
+        600: '#1A1A1A',
+        700: '#111111',
+        800: '#0D0D0D',
+        900: '#090909',
+      },
       opacity: {
         15: '.15',
       },
@@ -49,7 +61,7 @@ module.exports = {
   },
   purge: {
     // Learn more on https://tailwindcss.com/docs/controlling-file-size/#removing-unused-css
-    enabled: 'production' === process.env.NODE_ENV,
+    enabled: process.env.NODE_ENV === 'production',
     content: [
       './admin/**/*.php',
       './admin/vue-components/**/*.vue',

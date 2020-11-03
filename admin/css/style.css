@@ -5,3 +5,6 @@
 @tailwind components;
 /* purgecss end ignore */
 @tailwind utilities;
+
+/* Vendor */
+@import "./wysiwyg"

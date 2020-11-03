@@ -7,7 +7,7 @@
           class="inline-block mr-6 text-base font-semibold"
         >
           <i class="mr-1 text-gray-500 dashicons dashicons-admin-multisite"></i>
-          SweepBright for WordPress
+          SweepBright for WordPress PRO
         </router-link>
         <ul class="flex space-x-8 text-base">
           <li>

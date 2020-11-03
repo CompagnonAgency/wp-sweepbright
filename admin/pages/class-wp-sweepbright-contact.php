@@ -9,53 +9,62 @@
  * @package    WP_SweepBright_Contact
  */
 
-class WP_SweepBright_Contact {
+class WP_SweepBright_Contact
+{
 
-	public function __construct() {
+	public function __construct()
+	{
 		$this->register_shortcode();
 		$this->verify_recaptcha();
 
 		add_action('wp_footer', 'add_recaptcha_to_footer');
-		function add_recaptcha_to_footer() {
+		function add_recaptcha_to_footer()
+		{
 			WP_SweepBright_Contact::add_recaptcha();
 		}
 	}
 
-	public static function add_recaptcha() {
+	public static function add_recaptcha()
+	{
 		$script = '';
-		$script .= '<script id="wp-sweepbright-recaptcha-load" src="https://www.google.com/recaptcha/api.js?render='. WP_SweepBright_Helpers::settings_form()['recaptcha_site_key'] .'"></script>';
+		$script .= '<script id="wp-sweepbright-recaptcha-load" src="https://www.google.com/recaptcha/api.js?render=' . WP_SweepBright_Helpers::settings_form()['recaptcha_site_key'] . '"></script>';
 		$script .= '<script id="wp-sweepbright-recaptcha-exec">';
 		$script .= 'grecaptcha.ready(function () {';
-		$script .= '	grecaptcha.execute(\''. WP_SweepBright_Helpers::settings_form()['recaptcha_site_key'] .'\', { action: \'contact\' }).then(function (token) {';
+		$script .= '	grecaptcha.execute(\'' . WP_SweepBright_Helpers::settings_form()['recaptcha_site_key'] . '\', { action: \'contact\' }).then(function (token) {';
 		$script .= '		window.WPContactRecaptcha = token;';
-		$script .= '		var recaptchaResponse = document.getElementById(\'recaptchaResponse\');';
-		$script .= '		recaptchaResponse.value = token;';
+		$script .= '		if (document.getElementById(\'recaptchaResponse\')) {';
+		$script .= '			var recaptchaResponse = document.getElementById(\'recaptchaResponse\');';
+		$script .= '			recaptchaResponse.value = token;';
+		$script .= '		}';
 		$script .= '	});';
 		$script .= '});';
 		$script .= '</script>';
 		echo $script;
 	}
 
-	public function verify_recaptcha() {
+	public function verify_recaptcha()
+	{
 		if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['recaptcha_response'])) {
 			$recaptcha_url = 'https://www.google.com/recaptcha/api/siteverify';
 			$recaptcha_secret = WP_SweepBright_Helpers::settings_form()['recaptcha_secret_key'];
 			$recaptcha_response = $_POST['recaptcha_response'];
-	
+
 			$recaptcha = file_get_contents($recaptcha_url . '?secret=' . $recaptcha_secret . '&response=' . $recaptcha_response);
 			$recaptcha = json_decode($recaptcha);
-	
+
 			if ($recaptcha->success) {
 				$this->submit_estate_form();
 				$this->submit_general_form();
 			} else {
-				echo 'Kon bericht niet versturen.';
+				$this->emit_event('wp_contact_estate_error');
 			}
 		}
 	}
 
-	public function register_shortcode() {
-		function contact_estate_shortcode() {
+	public function register_shortcode()
+	{
+		function contact_estate_shortcode()
+		{
 			$form = "";
 			$form .= "<form name=\"contact-estate\" method=\"post\" action=\"\">";
 			$form .= stripslashes(WP_SweepBright_Helpers::contact_form()['contact_request_estate_form']);
@@ -64,7 +73,8 @@ class WP_SweepBright_Contact {
 		}
 		add_shortcode('contact-request-estate', 'contact_estate_shortcode');
 
-		function contact_general_shortcode() {
+		function contact_general_shortcode()
+		{
 			$form = "";
 			$form .= "<form name=\"contact-general\" method=\"post\" action=\"\">";
 			$form .= stripslashes(WP_SweepBright_Helpers::contact_form()['contact_request_general_form']);
@@ -74,13 +84,15 @@ class WP_SweepBright_Contact {
 		add_shortcode('contact-request-general', 'contact_general_shortcode');
 	}
 
-	public function validate_input($data) {
+	public function validate_input($data)
+	{
 		$data = trim($data);
 		return $data;
 	}
 
-	public function emit_event($event) {
-		add_action('wp_head', function() use ($event) {
+	public function emit_event($event)
+	{
+		add_action('wp_head', function () use ($event) {
 			echo "
 			<script type=\"text/javascript\">
 			// Create the event.
@@ -96,7 +108,8 @@ class WP_SweepBright_Contact {
 		});
 	}
 
-	public function parse_template($template, $form) {
+	public function parse_template($template, $form)
+	{
 		$output = str_replace('[title]', $form['title'], $template);
 		$output = str_replace('[first_name]', $form['first_name'], $output);
 		$output = str_replace('[last_name]', $form['last_name'], $output);
@@ -106,12 +119,13 @@ class WP_SweepBright_Contact {
 		return $output;
 	}
 
-	public function autorespond($form) {
+	public function autorespond($form)
+	{
 		$to = WP_SweepBright_Helpers::contact_form()['autoresponder']['to'];
 		$subject = $this->parse_template(WP_SweepBright_Helpers::contact_form()['autoresponder']['subject'], $form);
 		$body = $this->parse_template(WP_SweepBright_Helpers::contact_form()['autoresponder']['message'], $form);
 		$headers = [
-			'From: '. get_bloginfo('name') . ' <' .get_option('admin_email') . '>',
+			'From: ' . get_bloginfo('name') . ' <' . get_option('admin_email') . '>',
 			'Reply-To: ' . $form['first_name'] . ' ' . $form['last_name'] . ' <' . $form['email'] . '>',
 		];
 		if (WP_SweepBright_Helpers::contact_form()['autoresponder']['cc']) {
@@ -125,8 +139,9 @@ class WP_SweepBright_Contact {
 		wp_mail($to, $subject, $body, $headers);
 	}
 
-	public function submit_estate_form() {
-		if(isset($_POST['submit-contact-estate']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
+	public function submit_estate_form()
+	{
+		if (isset($_POST['submit-contact-estate']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
 			$locale = $GLOBALS['wp_sweepbright_config']['default_locale'];
 			$id = get_field('estate', get_the_ID())['id'];
 			$form = [
@@ -140,8 +155,8 @@ class WP_SweepBright_Contact {
 			];
 
 			$estate_url = WP_SweepBright_Controller_Hook::get_client()->request('POST', "estates/$id/contacts", [
-	      'verify' => false,
-	      'json' => [
+				'verify' => false,
+				'json' => [
 					'first_name' => $form['first_name'],
 					'last_name' => $form['last_name'],
 					'email' => $form['email'],
@@ -149,15 +164,16 @@ class WP_SweepBright_Contact {
 					'message' => $form['message'],
 					'locale' => $form['locale'],
 				],
-	    ]);
+			]);
 
 			$this->autorespond($form);
 			$this->emit_event('wp_contact_estate_sent');
 		}
 	}
 
-	public function submit_general_form() {
-		if(isset($_POST['submit-contact-general']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
+	public function submit_general_form()
+	{
+		if (isset($_POST['submit-contact-general']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
 			$locale = $GLOBALS['wp_sweepbright_config']['default_locale'];
 			$form = [
 				'title' => '-',
@@ -216,8 +232,8 @@ class WP_SweepBright_Contact {
 			}
 
 			$estate_url = WP_SweepBright_Controller_Hook::get_client()->request('POST', "contacts", [
-	      'verify' => false,
-	      'json' => [
+				'verify' => false,
+				'json' => [
 					'first_name' => $form['first_name'],
 					'last_name' => $form['last_name'],
 					'email' => $form['email'],
@@ -238,12 +254,11 @@ class WP_SweepBright_Contact {
 						'postal_codes' => $form['postal_codes'],
 					]
 				],
-	    ]);
+			]);
 
 
 			$this->autorespond($form);
 			$this->emit_event('wp_contact_estate_sent');
 		}
 	}
-
 }

@@ -6,23 +6,6 @@
       v-if="refreshNotification"
     >
       <p>Properties refreshed successfully.</p>
-      <button
-        type="button"
-        class="notice-dismiss"
-        @click="refreshNotification = false"
-      ></button>
-    </div>
-
-    <div
-      class="mx-0 mb-4 notice notice-success is-dismissible"
-      v-if="cacheNotification"
-    >
-      <p>Cache has been cleared successfully.</p>
-      <button
-        type="button"
-        class="notice-dismiss"
-        @click="cacheNotification = false"
-      ></button>
     </div>
 
     <!-- Statistics -->
@@ -53,7 +36,7 @@
         >
           <i class="dashicons dashicons-building"></i> Total properties
         </p>
-        <p class="text-2xl font-light">{{ estatesFiltered.length }}</p>
+        <p class="text-2xl font-light">{{ totalPosts }}</p>
       </div>
 
       <div class="flex-1 p-5 bg-white rounded shadow-sm">
@@ -83,14 +66,13 @@
         <i class="mt-1 dashicons dashicons-update"></i>
         Refresh list
       </a>
-      <a href="#" class="button action" @click.prevent="clearCache()">
-        <i class="mt-1 dashicons dashicons-trash"></i>
-        Clear cache
-      </a>
     </div>
 
     <!-- Overview table -->
-    <table class="mb-4 wp-list-table widefat striped table-view-list pages">
+    <table
+      class="mb-4 wp-list-table widefat striped table-view-list pages"
+      data-sweepbright-list
+    >
       <thead>
         <tr>
           <th scope="col" class="manage-column column-title column-primary">
@@ -112,7 +94,9 @@
         <tr v-for="estate in estates" :key="estate.uid">
           <td class="flex items-center" data-colname="Property">
             <a href="#" class="inline-block">
-              <router-link :to="{ name: 'edit', params: { id: estate.id } }">
+              <router-link
+                :to="{ name: 'edit', params: { id: estate.meta.estate.id } }"
+              >
                 <img
                   width="50"
                   height="50"
@@ -123,7 +107,7 @@
             </a>
             <div class="ml-3">
               <router-link
-                :to="{ name: 'edit', params: { id: estate.id } }"
+                :to="{ name: 'edit', params: { id: estate.meta.estate.id } }"
                 class="font-semibold text-blue-500"
                 >{{ estate.meta.estate.title[language] }}</router-link
               >
@@ -178,12 +162,13 @@
     <div v-if="estates.length > 0" class="flex justify-end my-5">
       <paginate
         v-model="activePage"
+        :page-range="5"
         :page-count="totalPages"
-        :click-handler="paginate"
+        :click-handler="$sweepBrightPaginate"
         :prev-link-class="'prev-page button'"
         :next-link-class="'next-page button'"
         :container-class="'flex items-center space-x-3'"
-        :page-link-class="'focus:outline-none'"
+        :page-link-class="'focus:outline-none focus:shadow-none'"
         :page-class="'inline-block text-gray-700'"
         :active-class="'font-medium bg-gray-300 py-1 px-2 rounded text-white border border-gray-500'"
         :prev-text="'&larr; Back'"
@@ -207,7 +192,7 @@ export default {
   computed: {
     activePage: {
       get() {
-        return this.currentPage + 1;
+        return this.request.page;
       },
       set() {},
     },
@@ -215,14 +200,41 @@ export default {
   data() {
     return {
       refreshNotification: false,
-      cacheNotification: false,
       estates: [],
-      estatesFiltered: [],
+      totalPages: 0,
+      totalPosts: 0,
+      request: {
+        page: 1,
+        sort: {
+          order: "desc", // desc, asc
+          orderBy: "date", // relevance, price, date
+        },
+        recent: false,
+        filters: {
+          negotiation: false, // sale, let
+          category: [], // see API docs `type`
+          price: {
+            min: false,
+            max: false,
+          },
+          plot_area: {
+            min: false,
+            max: false,
+          },
+          liveable_area: {
+            min: false,
+            max: false,
+          },
+          location: {
+            lat: false,
+            lng: false,
+          },
+        },
+      },
       logs: [],
       logsLoaded: false,
       language: window.sweepbrightLanguage,
       currentPage: 0,
-      totalPages: 0,
       postsPerPage: 10,
     };
   },
@@ -247,56 +259,58 @@ export default {
       });
       return estates;
     },
-    filterQuery() {
-      this.estates = this.estatesFiltered;
-      this.setTotalPages();
-    },
-    navigate() {
-      this.filterQuery();
-
-      const paged = this.estates.slice(
-        this.currentPage * this.postsPerPage,
-        this.currentPage * this.postsPerPage + this.postsPerPage
-      );
-
-      this.estates = this.generateUid(paged);
-    },
-    setTotalPages() {
-      this.totalPages = Math.ceil(this.estates.length / this.postsPerPage);
-    },
-    paginate(page) {
-      this.currentPage = page - 1;
-      this.navigate();
-      $("html, body").animate({ scrollTop: 0 }, 200);
-    },
-    getEstates() {
-      axios.get("/wp-json/v1/sweepbright/list").then((response) => {
-        this.estates = this.generateUid(response.data.data);
-        this.estatesFiltered = this.generateUid(response.data.data);
-        this.setTotalPages();
-        this.navigate();
-      });
-    },
     getLogs() {
       axios.get("/wp-json/v1/sweepbright/logs").then((response) => {
         this.logs = response.data;
         this.logsLoaded = true;
       });
     },
-    clearCache() {
-      axios.get("/wp-json/v1/sweepbright/cache").then(() => {
-        this.getEstates();
-        this.cacheNotification = true;
-      });
-    },
     refresh() {
       this.refreshNotification = true;
+      this.getEstates();
+
+      setTimeout(() => {
+        this.refreshNotification = false;
+      }, 3000);
+    },
+    getEstates(params) {
+      axios
+        .post("/wp-json/v1/sweepbright/list", this.request)
+        .then((response) => {
+          if (response.data.estates && response.data.estates.length > 0) {
+            this.estates = this.generateUid(response.data.estates);
+          }
+          this.totalPages = response.data.totalPages;
+          this.totalPosts = response.data.totalPosts;
+          if (params && params.scrollTop) {
+            $("html, body").animate(
+              {
+                scrollTop: $("[data-sweepbright-list]").offset().top,
+              },
+              200
+            );
+          }
+        });
+    },
+    $sweepBrightPaginate(page) {
+      this.request.page = page;
+      window.location.hash = page;
+      this.getEstates({
+        scrollTop: true,
+      });
+    },
+    $sweepBrightInit() {
+      if (window.location.hash) {
+        this.request.page = parseInt(window.location.hash.substring(2), 10);
+      }
       this.getEstates();
     },
   },
   mounted() {
-    this.getEstates();
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
     this.getLogs();
+    this.$sweepBrightInit();
 
     this.counterInterval = setInterval(() => {
       this.getLogs();

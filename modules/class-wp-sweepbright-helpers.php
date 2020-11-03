@@ -9,11 +9,13 @@
  * @package    WP_SweepBright_Helpers
  */
 
-class WP_SweepBright_Helpers {
+class WP_SweepBright_Helpers
+{
 
-	public function __construct() {
+	public function __construct()
+	{
 		// Get HTTP or HTTPS protocol
-		$protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === 0 ? 'https://' : 'http://';
+		$protocol = stripos($_SERVER['SERVER_PROTOCOL'], 'https') === 0 ? 'https://' : 'http://';
 
 		// Get the host
 		if (isset($_SERVER['HTTP_HOST'])) {
@@ -25,10 +27,10 @@ class WP_SweepBright_Helpers {
 		// Config
 		$GLOBALS['wp_sweepbright_config'] = [
 			'base_uri_dev' => $host . '/wp-json/v1/sweepbright/',
-		  'base_uri_prod' => 'https://website.sweepbright.com/api/',
+			'base_uri_prod' => 'https://website.sweepbright.com/api/',
 			'api_version' => WP_SweepBright_Helpers::settings_form()['api_version'],
-		  'client_id' => WP_SweepBright_Helpers::settings_form()['client_id'],
-		  'client_secret' => WP_SweepBright_Helpers::settings_form()['client_secret'],
+			'client_id' => WP_SweepBright_Helpers::settings_form()['client_id'],
+			'client_secret' => WP_SweepBright_Helpers::settings_form()['client_secret'],
 			'default_locale' => WP_SweepBright_Helpers::settings_form()['default_language'],
 			'max_per_page' => WP_SweepBright_Helpers::settings_form()['max_per_page'],
 			'recent_total' => WP_SweepBright_Helpers::settings_form()['recent_total'],
@@ -51,38 +53,27 @@ class WP_SweepBright_Helpers {
 
 		// Save global settings
 		$this->save_global_settings();
-
-		// Register list shortcode
-		$this->register_shortcodes();
 	}
 
-	public function register_shortcodes() {
-		function config_shortcode() {
-			$str = '';
-			$str .= '<script>';
-			$str .= 'window.sweepbrightPostsPerPage = '. WP_SweepBright_Helpers::settings_form()['max_per_page'] .';';
-			$str .= 'window.sweepbrightGeoDistance = '. WP_SweepBright_Helpers::settings_form()['geo_distance'] .';';
-			$str .= '</script>';
-			return $str;
-		}
-		add_shortcode('sweepbright-config', 'config_shortcode');
-	}
-
-	public function cleanup_logs() {
-		function activate_pruning( $should_we_prune ){
+	public function cleanup_logs()
+	{
+		function activate_pruning($should_we_prune)
+		{
 			return true;
 		}
-		add_filter( 'wp_logging_should_we_prune', 'activate_pruning', 10 );
+		add_filter('wp_logging_should_we_prune', 'activate_pruning', 10);
 
-		$scheduled = wp_next_scheduled( 'wp_logging_prune_routine' );
-		if ( $scheduled == false ){
-			wp_schedule_event( time(), 'hourly', 'wp_logging_prune_routine' );
+		$scheduled = wp_next_scheduled('wp_logging_prune_routine');
+		if ($scheduled == false) {
+			wp_schedule_event(time(), 'hourly', 'wp_logging_prune_routine');
 		}
 	}
 
-	public function onboarding() {
-		if(!get_option('wp_sweepbright_settings')) {
-			function wp_sweepbright_onboarding_notice(){
+	public function onboarding()
+	{
+		if (!get_option('wp_sweepbright_settings')) {
+			function wp_sweepbright_onboarding_notice()
+			{
 				echo '<div class="notice notice-warning">
 				<p><strong>Welcome to WP-SweepBright</strong> | Before you get started, please enter your SweepBright API credentials in the settings. You can do this right <a href="/wp-admin/admin.php?page=wp-sweepbright-settings">here</a>.</p>
 				</div>';
@@ -91,93 +82,10 @@ class WP_SweepBright_Helpers {
 		}
 	}
 
-	public static function cached_query($args) {
-		$key = serialize($args);
-		if (!$query = wp_cache_get($key)) {
-			$query = new WP_Query($args);
-			wp_cache_set($key, $query, '', 3600);
-		}
-		return $query;
-	}
-
-	public static function store_cache() {
-		$loop = WP_SweepBright_Helpers::cached_query([
-			'post_status' => 'publish',
-			'nopaging' => true,
-			'no_found_rows' => true,
-			'update_post_meta_cache' => false, 
-			'update_post_term_cache' => false,
-			'post_type' => 'sweepbright_estates',
-			'fields' => 'ids'
-		]);
-
-		$loop = WP_SweepBright_Helpers::render_json($loop, [
-			'ajax' => true,
-			'persistent' => true,
-		]);
-	}
-
-	public static function render_json($loop, $params) {
-		$estates = [
-			'data' => [],
-		];
-		$query = $loop->get_posts();
-
-		// Build query
-		foreach ($query as $item) {
-			if ((!get_field('estate', $item)['is_project'] && !get_field('estate', $item)['project_id']) ||
-				get_field('estate', $item)['is_project']) {
-				$estates['data'][] = [
-					'id' => $item,
-					'permalink' => get_the_permalink($item),
-					'date' => get_the_time('U', $item),
-					'meta' => get_fields($item),
-				];
-			}
-		}
-
-		// Don't encode JSON when called from a REST route
-		if (isset($params['ajax'])) {
-      $loop = $estates;
-      
-			// Store to cache
-			if (isset($params['persistent']) && $params['persistent']) {
-				$fp = fopen(plugin_dir_path( __DIR__ ). 'cache/cache.json', 'w');
-				fwrite($fp, json_encode($loop));
-				fclose($fp);
-			}
-		} else {
-			$loop = json_encode($estates);
-		}
-		return $loop;
-	}
-
-	public function schedule_publishing() {
-		/* @return $data
-		'post_url' => get_post_permalink($post_id),
-		'post_id' => $post_id,
-		'estate' => $estate,
-		'estate_id' => $estate['id']
-		*/
-		function cache_estates($params) {
-			WP_SweepBright_Helpers::log([
-				'estate_title' => $params['data']['estate']['description_title'][$params['locale']],
-				'post_id' => $params['data']['post_id'],
-				'action' => $params['data']['action'],
-				'status' => 'Cache started',
-				'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
-			]);
-			WP_SweepBright_Helpers::store_cache();
-			WP_SweepBright_Helpers::log([
-				'estate_title' => $params['data']['estate']['description_title'][$params['locale']],
-				'post_id' => $params['data']['post_id'],
-				'action' => $params['data']['action'],
-				'status' => 'Cache completed',
-				'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
-			]);
-		}
-
-		function publish_estate($data) {
+	public function schedule_publishing()
+	{
+		function publish_estate($data)
+		{
 			$locale = $GLOBALS['wp_sweepbright_config']['default_locale'];
 
 			// LOG START
@@ -189,36 +97,37 @@ class WP_SweepBright_Helpers {
 				'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
 			]);
 
-		  // Update all of the data to the custom fields
-		  if(!is_numeric($data['post_id'])) {
-		    return false;
-		  } else {
+			// Update all of the data to the custom fields
+			if (!is_numeric($data['post_id'])) {
+				return false;
+			} else {
 				WP_SweepBright_Controller_Hook::update_fields($data['estate'], $data['post_id']);
 			}
-			
-			// Set the estate URL in SweepBright
-			WP_SweepBright_Controller_Hook::set_estate_url($data['estate_id'], get_permalink($data['post_id']));
+
+			// Set the estate URL in SweepBright (not for units)
+			if (!$data['estate']['project_id']) {
+				WP_SweepBright_Controller_Hook::set_estate_url($data['estate_id'], get_permalink($data['post_id']));
+			}
 
 			// LOG END
 			WP_SweepBright_Helpers::log([
 				'estate_title' => $data['estate']['description_title'][$locale],
 				'post_id' => $data['post_id'],
 				'action' => $data['action'],
-				'status' => 'Completed',
+				'status' => 'Sync completed',
 				'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
 			]);
 			$params = [
 				'data' => $data,
 				'locale' => $locale
 			];
-			wp_schedule_single_event(time(), 'schedule_cache', [$params]);
 			spawn_cron();
 		}
 		add_action('schedule_estate', 'publish_estate');
-		add_action('schedule_cache', 'cache_estates');
 	}
 
-	public static function isLocalhost() {
+	public static function isLocalhost()
+	{
 		$local = false;
 		if (in_array($_SERVER['REMOTE_ADDR'], ['127.0.0.1', '::1']) || getenv('ENV') === 'staging') {
 			$local = true;
@@ -226,23 +135,30 @@ class WP_SweepBright_Helpers {
 		return $local;
 	}
 
-	public static function get_post_ID_from_estate($id) {
-	  $query = new WP_Query(array(
-	    'post_type' => 'sweepbright_estates',
-	    'showposts' => 1,
-	    'meta_query' => [
-	      'relation' => 'AND',
-	      [
-	        'key' => 'estate_id',
-	        'value' => $id,
-	        'compare' => 'LIKE'
-	      ],
-	    ],
-	  ));
-	  return $query->posts[0]->ID;
+	public static function get_project()
+	{
+		return WP_SweepBright_Helpers::get_post_ID_from_estate(get_field('estate')['project_id']);
 	}
 
-	public static function log($args) {
+	public static function get_post_ID_from_estate($id)
+	{
+		$query = new WP_Query(array(
+			'post_type' => 'sweepbright_estates',
+			'showposts' => 1,
+			'meta_query' => [
+				'relation' => 'AND',
+				[
+					'key' => 'estate_id',
+					'value' => $id,
+					'compare' => 'LIKE'
+				],
+			],
+		));
+		return $query->posts[0]->ID;
+	}
+
+	public static function log($args)
+	{
 		$log_data = array(
 			'post_title' 	=> $args['estate_title'],
 			'post_content' 	=>  '',
@@ -259,58 +175,60 @@ class WP_SweepBright_Helpers {
 		WP_Logging::insert_log($log_data, $log_meta);
 	}
 
-	public static function insert_attachment_from_url($url, $post_id = null) {
+	public static function insert_attachment_from_url($url, $post_id = null)
+	{
 		// Get the path to the upload directory.
 		$wp_upload_dir = wp_upload_dir();
 
-	  // Filename
-	  $file_name = preg_replace('/\?.*/', '', $url);
-	  $ext = '.' . pathinfo($file_name, PATHINFO_EXTENSION);
-	  $file_name = $wp_upload_dir['path'] . '/asset_' . uniqid() . $ext;
-	  $fp = fopen($file_name, 'w');
+		// Filename
+		$file_name = preg_replace('/\?.*/', '', $url);
+		$ext = '.' . pathinfo($file_name, PATHINFO_EXTENSION);
+		$file_name = $wp_upload_dir['path'] . '/asset_' . uniqid() . $ext;
+		$fp = fopen($file_name, 'w');
 
-	  // Options
-	  set_time_limit(0);
-	  $options = [
-	    CURLOPT_FILE => $fp,
-	    CURLOPT_TIMEOUT =>  28800,
-	    CURLOPT_URL => $url,
-	  ];
+		// Options
+		set_time_limit(0);
+		$options = [
+			CURLOPT_FILE => $fp,
+			CURLOPT_TIMEOUT =>  28800,
+			CURLOPT_URL => $url,
+		];
 
-	  // Download file
-	  $ch = curl_init();
-	  curl_setopt_array($ch, $options);
-	  curl_exec($ch);
-	  curl_close($ch);
-	  fclose($fp);
+		// Download file
+		$ch = curl_init();
+		curl_setopt_array($ch, $options);
+		curl_exec($ch);
+		curl_close($ch);
+		fclose($fp);
 
-	  // Check the type of file. We'll use this as the 'post_mime_type'.
-	  $filetype = wp_check_filetype(basename($file_name), null);
+		// Check the type of file. We'll use this as the 'post_mime_type'.
+		$filetype = wp_check_filetype(basename($file_name), null);
 
-	  // Prepare an array of post data for the attachment.
-	  $attachment = [
-	    'guid' => $wp_upload_dir['url'] . '/' . basename($file_name),
-	    'post_mime_type' => $filetype['type'],
-	    'post_title' => preg_replace( '/\.[^.]+$/', '', basename($file_name)),
-	    'post_content' => '',
-	    'post_status' => 'inherit'
-	  ];
+		// Prepare an array of post data for the attachment.
+		$attachment = [
+			'guid' => $wp_upload_dir['url'] . '/' . basename($file_name),
+			'post_mime_type' => $filetype['type'],
+			'post_title' => preg_replace('/\.[^.]+$/', '', basename($file_name)),
+			'post_content' => '',
+			'post_status' => 'inherit'
+		];
 
-	  // Insert the attachment.
-	  $attach_id = wp_insert_attachment($attachment, $file_name, $post_id);
+		// Insert the attachment.
+		$attach_id = wp_insert_attachment($attachment, $file_name, $post_id);
 
-	  // Make sure that this file is included, as wp_generate_attachment_metadata() depends on it.
-	  require_once(ABSPATH . 'wp-admin/includes/image.php');
+		// Make sure that this file is included, as wp_generate_attachment_metadata() depends on it.
+		require_once(ABSPATH . 'wp-admin/includes/image.php');
 
-	  // Generate the metadata for the attachment, and update the database record.
-	  $attach_data = wp_generate_attachment_metadata($attach_id, $file_name);
-	  wp_update_attachment_metadata($attach_id, $attach_data);
+		// Generate the metadata for the attachment, and update the database record.
+		$attach_data = wp_generate_attachment_metadata($attach_id, $file_name);
+		wp_update_attachment_metadata($attach_id, $attach_data);
 
-	  // Return attachment id
-	  return $attach_id;
+		// Return attachment id
+		return $attach_id;
 	}
 
-	public static function contact_form() {
+	public static function contact_form()
+	{
 		$locale = explode('_', get_locale())[0];
 
 		// Estate
@@ -373,8 +291,9 @@ class WP_SweepBright_Helpers {
 		return $data;
 	}
 
-	public function save_contact_settings() {
-		if(isset($_POST['submit-contact-settings']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
+	public function save_contact_settings()
+	{
+		if (isset($_POST['submit-contact-settings']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
 			$data = [
 				'contact_request_estate_form' => stripslashes($_POST['contact_request_estate_form']),
 				'contact_request_general_form' => stripslashes($_POST['contact_request_general_form']),
@@ -392,7 +311,8 @@ class WP_SweepBright_Helpers {
 				add_option('wp_sweepbright_contact', $data);
 			}
 
-			function save_contact_notice(){
+			function save_contact_notice()
+			{
 				echo '<div class="notice notice-success is-dismissible">
 				<p>Contact settings saved successfully.</p>
 				</div>';
@@ -401,7 +321,8 @@ class WP_SweepBright_Helpers {
 		}
 	}
 
-	public static function settings_form() {
+	public static function settings_form()
+	{
 		if (get_option('wp_sweepbright_settings')) {
 			$data = get_option('wp_sweepbright_settings');
 		} else {
@@ -421,8 +342,9 @@ class WP_SweepBright_Helpers {
 		return $data;
 	}
 
-	public function save_global_settings() {
-		if(isset($_POST['submit-global-settings']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
+	public function save_global_settings()
+	{
+		if (isset($_POST['submit-global-settings']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
 			$data = [
 				'client_id' => $_POST['client_id'],
 				'client_secret' => $_POST['client_secret'],
@@ -444,7 +366,8 @@ class WP_SweepBright_Helpers {
 
 			flush_rewrite_rules();
 
-			function save_settings_notice(){
+			function save_settings_notice()
+			{
 				echo '<div class="notice notice-success is-dismissible">
 				<p>Settings saved successfully.</p>
 				</div>';
@@ -452,5 +375,4 @@ class WP_SweepBright_Helpers {
 			add_action('admin_notices', 'save_settings_notice');
 		}
 	}
-
 }

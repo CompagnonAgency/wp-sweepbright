@@ -6,18 +6,21 @@
  * @package FieldAmenities
  */
 
-class FieldAmenities {
+class FieldAmenities
+{
 
-	public function __construct() {
+	public function __construct()
+	{
 	}
 
-	public static function retrieve() {
-    return [
-      'key' => 'amenities',
-      'name' => 'amenities',
-      'label' => 'Amenities',
-      'layout' => 'row',
-      'type' => 'group',
+	public static function retrieve()
+	{
+		return [
+			'key' => 'amenities',
+			'name' => 'amenities',
+			'label' => 'Amenities',
+			'layout' => 'row',
+			'type' => 'group',
 			'sub_fields' => [
 				[
 					'key'    => 'amenity',
@@ -75,7 +78,6 @@ class FieldAmenities {
 					]
 				],
 			],
-    ];
+		];
 	}
-
 }

@@ -1,7 +1,6 @@
 // wp-sweepbright-public.js
 import axios from 'axios';
 import $ from 'jquery';
-import Vue from 'vue';
 import Paginate from 'vuejs-paginate';
 
 export default {
@@ -12,7 +11,7 @@ export default {
       computed: {
         activePage: {
           get() {
-            return this.currentPage + 1;
+            return this.request.page;
           },
           set() {
           },
@@ -22,11 +21,35 @@ export default {
         return {
           isLoading: false,
           estates: [],
-          estatesFiltered: [],
-          currentPage: 0,
           totalPages: 0,
-          postsPerPage: window.sweepbrightPostsPerPage,
-          geoDistance: window.sweepbrightGeoDistance,
+          request: {
+            page: 1,
+            sort: {
+              order: 'desc', // desc, asc
+              orderBy: 'relevance', // relevance, price, date
+            },
+            recent: false,
+            filters: {
+              negotiation: false, // sale, let
+              category: [], // see API docs `type`
+              price: {
+                min: false,
+                max: false,
+              },
+              plot_area: {
+                min: false,
+                max: false,
+              },
+              liveable_area: {
+                min: false,
+                max: false,
+              },
+              location: {
+                lat: false,
+                lng: false,
+              },
+            },
+          },
         };
       },
       methods: {
@@ -50,56 +73,42 @@ export default {
           });
           return estates;
         },
-        setTotalPages() {
-          this.totalPages = Math.ceil(this.estates.length / this.postsPerPage);
-        },
-        filterQuery() {
-          this.estates = this.estatesFiltered;
-
-          // @TODO: Filters & sorting | use params e.g. { filter: [ date: true, ... ] }
-          this.setTotalPages();
-        },
-        navigate() {
+        getEstates(params) {
           this.isLoading = true;
-          this.filterQuery();
-
-          const paged = this.estates.slice(
-            this.currentPage * this.postsPerPage,
-            (this.currentPage * this.postsPerPage) + this.postsPerPage,
-          );
-
-          this.estates = this.generateUid(paged);
-
-          $('html, body').animate({
-            scrollTop: 0,
-          }, 200, () => {
-            this.isLoading = false;
-          });
-        },
-        checkHash() {
-          if (window.location.hash) {
-            this.currentPage = parseInt(window.location.hash.substr(1), 10) - 1;
-          } else {
-            this.currentPage = 0;
-          }
-          this.navigate();
-        },
-        $sweepBrightPaginate(page) {
-          this.currentPage = page - 1;
-          window.location.hash = page;
-        },
-        $sweepBrightList() {
-          this.isLoading = true;
-          axios.get('/wp-json/v1/sweepbright/list').then((response) => {
-            this.estatesFiltered = this.generateUid(response.data.data);
-            this.estates = this.generateUid(response.data.data);
-            this.setTotalPages();
-            this.checkHash();
+          axios.post('/wp-json/v1/sweepbright/list', this.request).then((response) => {
+            if (response.data.estates && response.data.estates.length > 0) {
+              this.estates = this.generateUid(response.data.estates);
+            }
+            this.totalPages = response.data.totalPages;
             const event = new Event('loadedEstates');
             window.dispatchEvent(event);
             this.isLoading = false;
+
+            if (params && params.scrollTop) {
+              $('html, body').animate({
+                scrollTop: $('[data-sweepbright-list]').offset().top - 100,
+              }, 200);
+            }
           });
-          window.addEventListener('hashchange', this.checkHash, false);
+        },
+        $sweepBrightPaginate(page) {
+          this.request.page = page;
+          window.location.hash = page;
+          this.getEstates({
+            scrollTop: true,
+          });
+        },
+        $sweepBrightInit(params) {
+          if (window.location.hash) {
+            this.request.page = parseInt(window.location.hash.substr(1), 10);
+          }
+          if (params && params.recent) {
+            this.request.recent = params.recent;
+          }
+          if (params && params.category) {
+            this.request.filters.category = params.category;
+          }
+          this.getEstates();
         },
       },
     });

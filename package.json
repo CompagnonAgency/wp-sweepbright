@@ -43,6 +43,7 @@
     "vue-hot-reload-api": "^2.3.4",
     "vue-moment": "^4.1.0",
     "vue-router": "^3.4.5",
+    "vue-wysiwyg": "^1.7.2",
     "vuejs-paginate": "^2.1.0"
   },
   "browserslist": [

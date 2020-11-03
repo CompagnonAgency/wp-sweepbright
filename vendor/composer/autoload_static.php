@@ -92,11 +92,22 @@ class ComposerStaticInit87b5d6ac9dfd7201e6e6d47beebb1164
         ),
     );
 
+    public static $prefixesPsr0 = array (
+        'A' => 
+        array (
+            'AnthonyMartin' => 
+            array (
+                0 => __DIR__ . '/..' . '/anthonymartin/geo-location/src',
+            ),
+        ),
+    );
+
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit87b5d6ac9dfd7201e6e6d47beebb1164::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit87b5d6ac9dfd7201e6e6d47beebb1164::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit87b5d6ac9dfd7201e6e6d47beebb1164::$prefixesPsr0;
 
         }, null, ClassLoader::class);
     }

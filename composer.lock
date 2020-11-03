@@ -4,8 +4,61 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fd89fe7b52400bebc84b0f927b15d149",
+    "content-hash": "384c40730ec1c9c33e8b54d0091fa6bc",
     "packages": [
+        {
+            "name": "anthonymartin/geo-location",
+            "version": "v2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/anthonymartin/GeoLocation-PHP.git",
+                "reference": "e92d153c8ab97116ab1342826b74c64c3302b81d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/anthonymartin/GeoLocation-PHP/zipball/e92d153c8ab97116ab1342826b74c64c3302b81d",
+                "reference": "e92d153c8ab97116ab1342826b74c64c3302b81d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7"
+            },
+            "type": "class",
+            "autoload": {
+                "psr-0": {
+                    "AnthonyMartin": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Anthony Martin",
+                    "email": "anthony@replaycreative.com",
+                    "homepage": "http://replaycreative.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Powerful GeoCoding library: Retrieve bounding box coordinates, distances between geopoints, point in polygon, get longitude and latitude from addresses and more with GeoLocation for PHP",
+            "homepage": "https://github.com/anthonymartin/GeoLocation-PHP",
+            "keywords": [
+                "bounding box coordinates",
+                "bounding coordinates",
+                "distances",
+                "geocode",
+                "geocoding",
+                "geolocation",
+                "latitude",
+                "longitude",
+                "point in polygon"
+            ],
+            "time": "2019-09-18T19:00:37+00:00"
+        },
         {
             "name": "brick/math",
             "version": "0.8.15",

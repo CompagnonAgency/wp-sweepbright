@@ -23,8 +23,8 @@ class WP_SweepBright_Controller_Estate {
 	  // Output
 		return rest_ensure_response([
 			"id" => $estate_id,
-	    "is_project" => true,
-	    "project_id" => "staging-0000-0000-0000-0000006",
+	    "is_project" => false,
+	    "project_id" => "",
 	    "type" => "house",
 	    "sub_type" => "condo",
 	    "negotiation" => "sale",
@@ -38,7 +38,7 @@ class WP_SweepBright_Controller_Estate {
 	    "description_title" => [
 	      "en" => "",
 	      "fr" => "",
-	      "nl" => "Baasrode"
+	      "nl" => "Zonhoven"
 	    ],
 	    "living_rooms" => 1,
 	    "kitchens" => 1,
@@ -175,7 +175,7 @@ class WP_SweepBright_Controller_Estate {
 	        "id" => "1234-5678-9012",
 	        "filename" => "my-image.jpeg",
 	        "description" => "My image",
-	        "url" => "https://ipon-nv.be/sites/default/files/styles/realisation_detail/public/06722963_1_0.jpg",
+	        "url" => "https://www.s3a.be/wp-content/uploads/2014/03/S3A-nieuwbouw-woning-Schiplaken-01-850x550.jpg",
 	        "url_expires_on" => "2017-01-01T12:12:12+00:00",
 	        "ordinal" => 1
 	      ],
@@ -183,7 +183,7 @@ class WP_SweepBright_Controller_Estate {
 	        "id" => "1234-5678-9012",
 	        "filename" => "my-image.jpeg",
 	        "description" => "My image",
-	        "url" => "https://ipon-nv.be/sites/default/files/06648235_1_2.jpg",
+	        "url" => "https://cf.bstatic.com/images/hotel/max1280x900/217/217392260.jpg",
 	        "url_expires_on" => "2017-01-01T12:12:12+00:00",
 	        "ordinal" => 1
 	      ],
@@ -303,10 +303,6 @@ class WP_SweepBright_Controller_Estate {
 	    "settings" => [
 	      "reference" => "internal reference"
 	    ],
-	    "properties" => [
-				"staging-0000-0000-0000-0000003",
-				"staging-0000-0000-0000-0000004",
-			]
 		]);
 	}
 

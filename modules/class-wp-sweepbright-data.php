@@ -99,6 +99,9 @@ class WP_SweepBright_Data {
 			require_once plugin_dir_path( __DIR__ ). 'modules/fields/class-office.php';
 			require_once plugin_dir_path( __DIR__ ). 'modules/fields/class-occupancy.php';
 			require_once plugin_dir_path( __DIR__ ). 'modules/fields/class-orientation.php';
+			require_once plugin_dir_path( __DIR__ ). 'modules/fields/class-regulations.php';
+			require_once plugin_dir_path( __DIR__ ). 'modules/fields/class-legal.php';
+			require_once plugin_dir_path( __DIR__ ). 'modules/fields/class-property.php';
 			require_once plugin_dir_path( __DIR__ ). 'modules/fields/class-custom.php';
 
 			// Merge fields into one group
@@ -124,6 +127,9 @@ class WP_SweepBright_Data {
 				[FieldOffice::retrieve()],
 				[FieldOccupancy::retrieve()],
 				[FieldOrientation::retrieve()],
+				[FieldRegulations::retrieve()],
+				[FieldLegal::retrieve()],
+				[FieldProperty::retrieve()],
 				[FieldCustom::retrieve()],
 			);
 

@@ -39,6 +39,32 @@ class FieldPrice {
 					'ui' => true,
 				],
 				[
+					'key'    => 'price_costs',
+					'label'  => 'Price costs',
+					'name'   => 'price_costs',
+					'type' => 'group',
+		      'sub_fields' => [
+						[
+							'key'    => 'price_costs_en',
+							'label'  => 'English',
+							'name'   => 'en',
+							'type'   => 'text',
+						],
+						[
+							'key'    => 'price_costs_fr',
+							'label'  => 'French',
+							'name'   => 'fr',
+							'type'   => 'text',
+						],
+						[
+							'key'    => 'price_costs_nl',
+							'label'  => 'Dutch',
+							'name'   => 'nl',
+							'type'   => 'text',
+						]
+					],
+				],
+				[
 					'key'    => 'custom_price',
 					'label'  => 'Custom price',
 					'name'   => 'custom_price',

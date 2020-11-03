@@ -49,7 +49,7 @@ class FieldEstateUpdate {
       foreach ($estate['properties'] as $property) {
         $properties[] = [
           'acf_fc_layout' => 'property_layout',
-          'property_item' => $property,
+          'property_item' => $property['project_id'],
         ];
       }
       update_field('estate', [
