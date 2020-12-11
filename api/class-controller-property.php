@@ -8,12 +8,15 @@
  * @package    WP_SweepBright_Controller_Property
  */
 
-class WP_SweepBright_Controller_Property {
+class WP_SweepBright_Controller_Property
+{
 
-	public function __construct() {
-	}
+  public function __construct()
+  {
+  }
 
-	public function init($data) {
+  public function init($data)
+  {
     $estate = [];
 
     $args = [
@@ -21,18 +24,18 @@ class WP_SweepBright_Controller_Property {
       'post_type' => 'sweepbright_estates',
       'fields' => 'ids',
       'meta_query' => [
-				'relation' => 'AND',
-				[
-					'key' => 'estate_id',
-					'value' => $data['estate_id'],
-					'compare' => '='
-				]
-			],
+        'relation' => 'AND',
+        [
+          'key' => 'estate_id',
+          'value' => $data['estate_id'],
+          'compare' => '='
+        ]
+      ],
     ];
 
     $loop = new WP_Query($args);
     $query = $loop->get_posts();
-    
+
     foreach ($query as $item) {
       $estate[] = [
         'id' => $item,
@@ -40,12 +43,13 @@ class WP_SweepBright_Controller_Property {
         'date' => get_the_time('U', $item),
         'meta' => get_fields($item),
       ];
-		}
+    }
 
     return rest_ensure_response($estate);
   }
-  
-  public function save($data) {
+
+  public function save($data)
+  {
     $id = WP_SweepBright_Helpers::get_post_ID_from_estate($data['estate_id']);
 
     // Save tag
@@ -120,10 +124,17 @@ class WP_SweepBright_Controller_Property {
       'STATUS_CODE' => http_response_code(200),
     ]);
   }
-  
-  public function units($data) {
+
+  public function units($data)
+  {
     $project_id = get_field('estate', $data['estate_id'])['id'];
-    $units = WP_SweepBright_Query::list_units($project_id, false, false);
+    $units = WP_SweepBright_Query::list_units([
+      'project_id' => $project_id,
+      'ignore_self' => false,
+      'is_paged' => false,
+      'page' => false,
+    ]);
+
     $result = [
       'totalPages' => $units['totalPages'],
       'totalPosts' => $units['totalPosts'],
@@ -132,9 +143,16 @@ class WP_SweepBright_Controller_Property {
     return rest_ensure_response($result);
   }
 
-  public function units_paged($data) {
+  public function units_paged($data)
+  {
     $project_id = get_field('estate', $data['estate_id'])['id'];
-    $units = WP_SweepBright_Query::list_units($project_id, true, $data['page']);
+    $units = WP_SweepBright_Query::list_units([
+      'project_id' => $project_id,
+      'ignore_self' => false,
+      'is_paged' => true,
+      'page' => $data['page'],
+    ]);
+
     $result = [
       'totalPages' => $units['totalPages'],
       'totalPosts' => $units['totalPosts'],
@@ -142,5 +160,4 @@ class WP_SweepBright_Controller_Property {
     ];
     return rest_ensure_response($result);
   }
-
 }

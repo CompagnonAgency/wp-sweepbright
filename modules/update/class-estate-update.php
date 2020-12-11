@@ -51,17 +51,19 @@ class FieldEstateUpdate
       ], $post_id);
     }
 
-    if (count($estate['properties'] > 0)) {
-      $properties = [];
-      foreach ($estate['properties'] as $property) {
-        $properties[] = [
-          'acf_fc_layout' => 'property_layout',
-          'property_item' => $property['project_id'],
-        ];
+    if (isset($estate['properties']) && is_countable($estate['properties'])) {
+      if (count($estate['properties'] > 0)) {
+        $properties = [];
+        foreach ($estate['properties'] as $property) {
+          $properties[] = [
+            'acf_fc_layout' => 'property_layout',
+            'property_item' => $property['id'],
+          ];
+        }
+        update_field('estate', [
+          'properties' => $properties,
+        ], $post_id);
       }
-      update_field('estate', [
-        'properties' => $properties,
-      ], $post_id);
     }
   }
 }

@@ -79,14 +79,14 @@ class WP_SweepBright_Controller_Hook
 				$estate = $this->get_estate($estate_id);
 				$cron = $this->add_estate($estate);
 				$cron['action'] = 'add';
-				$this->async_publish_estate($cron);
+				$this->schedule_estate($cron);
 
 				// Child properties
 				if (isset($estate['properties']) && count($estate['properties']) > 0) {
 					foreach ($estate['properties'] as $key => $property) {
 						$cron = $this->add_estate($property);
-						$cron['action'] = 'add';
-						$this->async_publish_estate($cron);
+						$cron['action'] = 'add_unit';
+						$this->schedule_estate($cron);
 					}
 				}
 				break;
@@ -94,14 +94,25 @@ class WP_SweepBright_Controller_Hook
 				$estate = $this->get_estate($estate_id);
 				$cron = $this->edit_estate($estate);
 				$cron['action'] = 'update';
-				$this->async_publish_estate($cron);
+				$this->schedule_estate($cron);
+
+				// Clean up archived child properties
+				if ($estate['properties'] && count($estate['properties']) > 0) {
+					WP_SweepBright_Query::archive_units($estate['id'], $estate['properties']);
+				}
 
 				// Child properties
 				if ($estate['properties'] && count($estate['properties']) > 0) {
 					foreach ($estate['properties'] as $key => $property) {
-						$cron = $this->edit_estate($property);
-						$cron['action'] = 'update';
-						$this->async_publish_estate($cron);
+						if (WP_SweepBright_Query::estate_exists($property['id'])) {
+							$cron = $this->edit_estate($property);
+							$cron['action'] = 'update_unit';
+							$this->schedule_estate($cron);
+						} else {
+							$cron = $this->add_estate($property);
+							$cron['action'] = 'add_unit';
+							$this->schedule_estate($cron);
+						}
 					}
 				}
 				break;
@@ -180,14 +191,85 @@ class WP_SweepBright_Controller_Hook
 		return $post;
 	}
 
-	public function async_publish_estate($estate)
+	public function schedule_estate($job)
 	{
-		// Schedule single event (cron)
+		// Default locale
 		$locale = $GLOBALS['wp_sweepbright_config']['default_locale'];
 
-		wp_schedule_single_event(time() + 1, 'schedule_estate', [$estate]);
+		if (WP_SweepBright_Helpers::isLocalhost()) {
+			$client = [
+				'base_uri' => $GLOBALS['wp_sweepbright_config']['base_uri_api_dev'],
+			];
+		} else {
+			$client = [
+				'base_uri' => $GLOBALS['wp_sweepbright_config']['base_uri_api_prod'],
+			];
+		}
+		$client = new Client($client);
+		$siteURL = 'http' . (empty($_SERVER['HTTPS']) ? '' : 's') . '://' . $_SERVER['HTTP_HOST'] . '/';
 
-		spawn_cron();
+		$data = [
+			'customer' => get_bloginfo('name'),
+			'api_url' => $siteURL . 'wp-json/v1/sweepbright/',
+			'estate_id' => $job['estate']['id'],
+			'estate_title' => $job['estate']['description_title'][$locale],
+			'action' => $job['action'],
+			'completed' => false,
+			'estate' => $job,
+		];
+
+		if ($job['estate']['is_project']) {
+			$data['is_project'] = true;
+		}
+
+		if ($job['estate']['project_id']) {
+			$data['is_unit'] = true;
+			$data['estate_project_id'] = $job['estate']['project_id'];
+		}
+
+		$client->request('POST', 'schedule', [
+			'json' => $data,
+		]);
+	}
+
+	public function publish_estate($data)
+	{
+		$locale = $GLOBALS['wp_sweepbright_config']['default_locale'];
+
+		// LOG START
+		WP_SweepBright_Helpers::log([
+			'estate_title' => $data['estate']['description_title'][$locale],
+			'post_id' => $data['post_id'],
+			'action' => $data['action'],
+			'status' => 'Started',
+			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+		]);
+
+		// Update all of the data to the custom fields
+		if (!is_numeric($data['post_id'])) {
+			return false;
+		} else {
+			WP_SweepBright_Controller_Hook::update_fields($data['estate'], $data['post_id']);
+		}
+
+		// Set the estate URL in SweepBright (not for units)
+		if (empty($data['estate']['project_id']) || !$data['estate']['project_id']) {
+			WP_SweepBright_Controller_Hook::set_estate_url($data['estate_id'], get_permalink($data['post_id']));
+		}
+
+		// LOG END
+		WP_SweepBright_Helpers::log([
+			'estate_title' => $data['estate']['description_title'][$locale],
+			'post_id' => $data['post_id'],
+			'action' => $data['action'],
+			'status' => 'Sync completed',
+			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+		]);
+
+		// Output
+		return rest_ensure_response([
+			'STATUS_CODE' => http_response_code(200),
+		]);
 	}
 
 	public static function set_estate_url($estate_id, $url)

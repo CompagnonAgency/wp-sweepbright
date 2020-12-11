@@ -18,25 +18,132 @@ class WP_SweepBright_Query
 	{
 	}
 
+	public static function estate_exists($estate_id)
+	{
+		$exists = false;
+		$query = new WP_Query([
+			'posts_per_page' => 1,
+			'post_status' => 'publish',
+			'post_type' => 'sweepbright_estates',
+			'fields' => 'ids',
+			'meta_query' => [
+				'relation' => 'AND',
+				[
+					'key' => 'estate_id',
+					'value' => $estate_id,
+					'compare' => '='
+				]
+			],
+		]);
+		$posts = $query->posts;
+		if (count($posts) > 0) {
+			$exists = true;
+		}
+		return $exists;
+	}
+
+	public static function archive_units($estate_id, $units)
+	{
+		$properties = [];
+		foreach ($units as $unit) {
+			$properties[] = $unit['id'];
+		}
+
+		$loop = new WP_Query([
+			'posts_per_page' => -1,
+			'post_status' => 'publish',
+			'post_type' => 'sweepbright_estates',
+			'fields' => 'ids',
+			'meta_query'	=> [
+				'relation'		=> 'AND',
+				[
+					'key' => 'estate_project_id',
+					'value' => $estate_id,
+					'compare' => '=',
+				],
+				[
+					'key' => 'estate_id',
+					'value' => $properties,
+					'compare' => 'NOT IN',
+				]
+			],
+		]);
+		$query = $loop->get_posts();
+
+		if ($query) {
+			foreach ($query as $item) {
+				wp_delete_post($item, true);
+			}
+		}
+		return true;
+	}
+
 	public static function min_max_living_area($iso)
 	{
-		$units = WP_SweepBright_Query::list_units(get_field('estate')['id'], false, false)['results'];
+		$units = WP_SweepBright_Query::list_units([
+			'project_id' => get_field('estate')['id'],
+			'ignore_self' => false,
+			'is_paged' => false,
+			'page' => false,
+		])['results'];
 		$result = false;
 		$results = [];
+
+		$sizeUnit = get_field('sizes', $units[0]['id'])['liveable_area']['unit'];
 
 		foreach ($units as $unit) {
 			if (get_field('sizes', $unit['id'])['liveable_area']['size']) {
 				$results[] = floatval(get_field('sizes', $unit['id'])['liveable_area']['size']);
 			}
 		}
-		if (count($results) === 2) {
+		if (count($results) >= 2) {
 			$result = [
-				'min' => WP_SweepBright_Query::format_number(min($results), $iso),
-				'max' => WP_SweepBright_Query::format_number(max($results), $iso),
+				'min' => WP_SweepBright_Query::format_number(min($results), $iso) . WP_SweepBright_Query::format_unit($sizeUnit),
+				'max' => WP_SweepBright_Query::format_number(max($results), $iso) . WP_SweepBright_Query::format_unit($sizeUnit),
 			];
 		} else if (count($results) === 1) {
 			$result = [
-				'min' => WP_SweepBright_Query::format_number($results[0], $iso),
+				'min' => WP_SweepBright_Query::format_number($results[0], $iso) . WP_SweepBright_Query::format_unit($sizeUnit),
+				'max' => false,
+			];
+		}
+		return $result;
+	}
+
+	public static function min_max_plot_area($iso)
+	{
+		$units = WP_SweepBright_Query::list_units([
+			'project_id' => get_field('estate')['id'],
+			'ignore_self' => false,
+			'is_paged' => false,
+			'page' => false,
+		])['results'];
+		$result = false;
+		$results = [];
+
+		if ($iso === 'nl_BE') {
+			$sizeUnit = 'sq_m';
+		} else {
+			$sizeUnit = get_field('sizes', $units[0]['id'])['plot_area']['unit'];
+		}
+
+		foreach ($units as $unit) {
+			if (get_field('sizes', $unit['id'])['plot_area']['size']) {
+				if ($iso === 'nl_BE') {
+					$results[] = floatval(get_field('sizes', $unit['id'])['plot_area']['size'] * 100);
+				} else {
+					$results[] = floatval(get_field('sizes', $unit['id'])['plot_area']['size']);
+				}
+			}
+		}
+		if (count($results) >= 2) {
+			$result = [
+				'min' => WP_SweepBright_Query::format_number(min($results), $iso) . WP_SweepBright_Query::format_unit($sizeUnit),
+				'max' => WP_SweepBright_Query::format_number(max($results), $iso) . WP_SweepBright_Query::format_unit($sizeUnit),
+			];
+		} else if (count($results) === 1) {
+			$result = [
+				'min' => WP_SweepBright_Query::format_number($results[0], $iso) . WP_SweepBright_Query::format_unit($sizeUnit),
 				'max' => false,
 			];
 		}
@@ -45,7 +152,12 @@ class WP_SweepBright_Query
 
 	public static function min_max_price($iso)
 	{
-		$units = WP_SweepBright_Query::list_units(get_field('estate')['id'], false, false)['results'];
+		$units = WP_SweepBright_Query::list_units([
+			'project_id' => get_field('estate')['id'],
+			'ignore_self' => false,
+			'is_paged' => false,
+			'page' => false,
+		])['results'];
 		$result = false;
 		$results = [];
 
@@ -54,7 +166,7 @@ class WP_SweepBright_Query
 				$results[] = floatval(get_field('price', $unit['id'])['amount']);
 			}
 		}
-		if (count($results) === 2) {
+		if (count($results) >= 2) {
 			$result = [
 				'min' => WP_SweepBright_Query::format_number(min($results), $iso),
 				'max' => WP_SweepBright_Query::format_number(max($results), $iso),
@@ -139,6 +251,19 @@ class WP_SweepBright_Query
 			[
 				'key' => 'estate_project_id',
 				'compare' => 'NOT EXISTS'
+			]
+		]);
+		return $filters;
+	}
+
+	public static function filter_hide_prospects($filters)
+	{
+		array_push($filters, [
+			'relation' => 'AND',
+			[
+				'key' => 'estate_status',
+				'value' => 'prospect',
+				'compare' => '!='
 			]
 		]);
 		return $filters;
@@ -402,6 +527,7 @@ class WP_SweepBright_Query
 
 		// Filter: applied by default
 		$filters = WP_SweepBright_Query::filter_hide_units($filters);
+		$filters = WP_SweepBright_Query::filter_hide_prospects($filters);
 
 		// Filter: negotiation
 		$filters = WP_SweepBright_Query::filter_negotiation($params, $filters);
@@ -476,18 +602,25 @@ class WP_SweepBright_Query
 		return $results;
 	}
 
-	public static function list_units($project_id, $is_paged, $page)
+	public static function list_units($params)
 	{
-		if ($is_paged) {
+		if ($params['is_paged']) {
 			$posts_per_page = 10;
-			$paged = $page;
+			$paged = $params['page'];
 		} else {
 			$posts_per_page = -1;
 			$paged = false;
 		}
 
+		if ($params['ignore_self']) {
+			$post_not_in = [$params['ignore_self']];
+		} else {
+			$post_not_in = [];
+		}
+
 		$results = [];
 		$query = new WP_Query([
+			'post__not_in' => $post_not_in,
 			'posts_per_page' => $posts_per_page,
 			'paged' => $paged,
 			'post_status' => 'publish',
@@ -500,8 +633,13 @@ class WP_SweepBright_Query
 				'relation' => 'AND',
 				[
 					'key' => 'estate_project_id',
-					'value' => $project_id,
+					'value' => $params['project_id'],
 					'compare' => '='
+				],
+				[
+					'key' => 'estate_status',
+					'value' => 'prospect',
+					'compare' => '!='
 				]
 			],
 		]);

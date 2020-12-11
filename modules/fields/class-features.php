@@ -6,18 +6,21 @@
  * @package FieldFeatures
  */
 
-class FieldFeatures {
+class FieldFeatures
+{
 
-	public function __construct() {
+	public function __construct()
+	{
 	}
 
-	public static function retrieve() {
-    return [
-      'key' => 'features',
-      'name' => 'features',
-      'label' => 'Features',
-      'layout' => 'row',
-      'type' => 'group',
+	public static function retrieve()
+	{
+		return [
+			'key' => 'features',
+			'name' => 'features',
+			'label' => 'Features',
+			'layout' => 'row',
+			'type' => 'group',
 			'sub_fields' => [
 				[
 					'key' => 'rent_period',
@@ -234,7 +237,6 @@ class FieldFeatures {
 					],
 				],
 			],
-    ];
+		];
 	}
-
 }

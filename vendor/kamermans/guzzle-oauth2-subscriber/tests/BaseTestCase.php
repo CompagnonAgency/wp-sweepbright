@@ -7,7 +7,11 @@ use GuzzleHttp\Post\PostBody;
 use GuzzleHttp\Message\Request;
 use GuzzleHttp\Psr7\Request as Psr7Request;
 
-class BaseTestCase extends \PHPUnit_Framework_TestCase
+if (!class_exists('\PHPUnit\Framework\TestCase')) {
+    require_once __DIR__.'/PHPUniteNamespaceShim.php';
+}
+
+class BaseTestCase extends \PHPUnit\Framework\TestCase
 {
     protected function createRequest($method, $uri, $options=[])
     {
@@ -70,4 +74,5 @@ class BaseTestCase extends \PHPUnit_Framework_TestCase
 
         return $request;
     }
+
 }

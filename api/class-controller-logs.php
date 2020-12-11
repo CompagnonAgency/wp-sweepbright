@@ -8,16 +8,19 @@
  * @package    WP_SweepBright_Controller_Logs
  */
 
-class WP_SweepBright_Controller_Logs {
+class WP_SweepBright_Controller_Logs
+{
 
-	public function __construct() {
-	}
+  public function __construct()
+  {
+  }
 
-	public function init() {
+  public function init()
+  {
     // Get logs
     $logs = [];
 
-    $args = array(  
+    $args = array(
       'post_type' => 'wp_log', // wp_log_type
       'post_status' => 'publish',
       'posts_per_page'   => -1,
@@ -25,7 +28,7 @@ class WP_SweepBright_Controller_Logs {
     $loop = new WP_Query($args);
     $posts = $loop->get_posts();
 
-		foreach ($posts as $log) {
+    foreach ($posts as $log) {
       $logs[] = [
         'id' => $log->ID,
         'date' => get_the_time('c', $log->ID),
@@ -55,6 +58,5 @@ class WP_SweepBright_Controller_Logs {
       'LAST_UPDATED' => $last_updated,
       'STATUS_CODE' => http_response_code(200),
     ]);
-	}
-
+  }
 }

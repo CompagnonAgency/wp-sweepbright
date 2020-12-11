@@ -6,35 +6,37 @@
  * @package FieldBuildingUpdate
  */
 
-class FieldBuildingUpdate {
+class FieldBuildingUpdate
+{
 
-	public function __construct() {
+	public function __construct()
+	{
 	}
 
-	public static function update($estate, $post_id) {
-    update_field('building', [
-      'renovation' => [
+	public static function update($estate, $post_id)
+	{
+		update_field('building', [
+			'renovation' => [
 				'renovation_year' => $estate['building']['renovation']['year']
 			],
-    ], $post_id);
+		], $post_id);
 
 		update_field('building', [
-      'renovation' => [
+			'renovation' => [
 				'renovation_description' => $estate['building']['renovation']['description']
 			],
-    ], $post_id);
+		], $post_id);
 
 		update_field('building', [
-      'construction' => [
-				'construction_year' => $estate['building']['renovation']['year']
+			'construction' => [
+				'construction_year' => $estate['building']['construction']['year']
 			],
-    ], $post_id);
+		], $post_id);
 
 		update_field('building', [
-      'construction' => [
-				'construction_architect' => $estate['building']['renovation']['description']
+			'construction' => [
+				'construction_architect' => $estate['building']['construction']['architect']
 			],
-    ], $post_id);
+		], $post_id);
 	}
-
 }

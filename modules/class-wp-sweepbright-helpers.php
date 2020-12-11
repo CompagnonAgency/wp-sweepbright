@@ -9,6 +9,8 @@
  * @package    WP_SweepBright_Helpers
  */
 
+use \Gumlet\ImageResize;
+
 class WP_SweepBright_Helpers
 {
 
@@ -28,6 +30,8 @@ class WP_SweepBright_Helpers
 		$GLOBALS['wp_sweepbright_config'] = [
 			'base_uri_dev' => $host . '/wp-json/v1/sweepbright/',
 			'base_uri_prod' => 'https://website.sweepbright.com/api/',
+			'base_uri_api_dev' => 'http://localhost:4000/api/',
+			'base_uri_api_prod' => 'https://wp-sweepbright-manager.herokuapp.com/api/',
 			'api_version' => WP_SweepBright_Helpers::settings_form()['api_version'],
 			'client_id' => WP_SweepBright_Helpers::settings_form()['client_id'],
 			'client_secret' => WP_SweepBright_Helpers::settings_form()['client_secret'],
@@ -39,34 +43,14 @@ class WP_SweepBright_Helpers
 			'recaptcha_secret_key' => WP_SweepBright_Helpers::settings_form()['recaptcha_secret_key'],
 		];
 
-		// Cleanup logs
-		$this->cleanup_logs();
-
 		// Show warning that you need to add settings
 		$this->onboarding();
-
-		// Schedule publishing events
-		$this->schedule_publishing();
 
 		// Save contact settings
 		$this->save_contact_settings();
 
 		// Save global settings
 		$this->save_global_settings();
-	}
-
-	public function cleanup_logs()
-	{
-		function activate_pruning($should_we_prune)
-		{
-			return true;
-		}
-		add_filter('wp_logging_should_we_prune', 'activate_pruning', 10);
-
-		$scheduled = wp_next_scheduled('wp_logging_prune_routine');
-		if ($scheduled == false) {
-			wp_schedule_event(time(), 'hourly', 'wp_logging_prune_routine');
-		}
 	}
 
 	public function onboarding()
@@ -80,50 +64,6 @@ class WP_SweepBright_Helpers
 			}
 			add_action('admin_notices', 'wp_sweepbright_onboarding_notice');
 		}
-	}
-
-	public function schedule_publishing()
-	{
-		function publish_estate($data)
-		{
-			$locale = $GLOBALS['wp_sweepbright_config']['default_locale'];
-
-			// LOG START
-			WP_SweepBright_Helpers::log([
-				'estate_title' => $data['estate']['description_title'][$locale],
-				'post_id' => $data['post_id'],
-				'action' => $data['action'],
-				'status' => 'Started',
-				'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
-			]);
-
-			// Update all of the data to the custom fields
-			if (!is_numeric($data['post_id'])) {
-				return false;
-			} else {
-				WP_SweepBright_Controller_Hook::update_fields($data['estate'], $data['post_id']);
-			}
-
-			// Set the estate URL in SweepBright (not for units)
-			if (!$data['estate']['project_id']) {
-				WP_SweepBright_Controller_Hook::set_estate_url($data['estate_id'], get_permalink($data['post_id']));
-			}
-
-			// LOG END
-			WP_SweepBright_Helpers::log([
-				'estate_title' => $data['estate']['description_title'][$locale],
-				'post_id' => $data['post_id'],
-				'action' => $data['action'],
-				'status' => 'Sync completed',
-				'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
-			]);
-			$params = [
-				'data' => $data,
-				'locale' => $locale
-			];
-			spawn_cron();
-		}
-		add_action('schedule_estate', 'publish_estate');
 	}
 
 	public static function isLocalhost()
@@ -144,13 +84,12 @@ class WP_SweepBright_Helpers
 	{
 		$query = new WP_Query(array(
 			'post_type' => 'sweepbright_estates',
-			'showposts' => 1,
 			'meta_query' => [
 				'relation' => 'AND',
 				[
 					'key' => 'estate_id',
 					'value' => $id,
-					'compare' => 'LIKE'
+					'compare' => '='
 				],
 			],
 		));
@@ -175,31 +114,39 @@ class WP_SweepBright_Helpers
 		WP_Logging::insert_log($log_data, $log_meta);
 	}
 
-	public static function insert_attachment_from_url($url, $post_id = null)
+	public static function insert_attachment_from_url($file, $post_id = null)
 	{
+		// Unique ID
+		$id = uniqid();
+
 		// Get the path to the upload directory.
 		$wp_upload_dir = wp_upload_dir();
 
-		// Filename
-		$file_name = preg_replace('/\?.*/', '', $url);
-		$ext = '.' . pathinfo($file_name, PATHINFO_EXTENSION);
-		$file_name = $wp_upload_dir['path'] . '/asset_' . uniqid() . $ext;
+		// Download file
+		$ext = pathinfo($file['url'])["extension"];
+		$ext = strtok($ext, '?');
+		$file_name = $wp_upload_dir['path'] . '/asset_' . $id . '.' . $ext;
 		$fp = fopen($file_name, 'w');
 
-		// Options
 		set_time_limit(0);
 		$options = [
 			CURLOPT_FILE => $fp,
 			CURLOPT_TIMEOUT =>  28800,
-			CURLOPT_URL => $url,
+			CURLOPT_CONNECTTIMEOUT => 28800,
+			CURLOPT_URL => $file['url'],
 		];
-
-		// Download file
 		$ch = curl_init();
 		curl_setopt_array($ch, $options);
 		curl_exec($ch);
 		curl_close($ch);
 		fclose($fp);
+
+		// Resize file
+		if ($ext === 'jpg' || $ext === 'JPG' || $ext === 'JPEG' || $ext === 'png' || $ext === 'PNG' || $ext === 'gif' || $ext === 'GIF') {
+			$image = new ImageResize($file_name);
+			$image->resizeToWidth(1920);
+			$image->save($file_name);
+		}
 
 		// Check the type of file. We'll use this as the 'post_mime_type'.
 		$filetype = wp_check_filetype(basename($file_name), null);

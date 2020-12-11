@@ -13,15 +13,17 @@ class WP_SweepBright_Router
 
 	public function __construct()
 	{
-		// The hooks should be available at all times,
-		// So it can be loaded by a cron job
-		require_once plugin_dir_path(__DIR__) . 'api/class-controller-hook.php';
-
 		// REST routes
 		add_action('rest_api_init', function () {
 			register_rest_route('v1/sweepbright', '/hook', array(
 				'methods' => 'POST',
 				'callback' => __CLASS__ . '::hook',
+				'permission_callback' => '__return_true',
+			));
+
+			register_rest_route('v1/sweepbright', '/publish', array(
+				'methods' => 'POST',
+				'callback' => __CLASS__ . '::publish',
 				'permission_callback' => '__return_true',
 			));
 
@@ -83,8 +85,16 @@ class WP_SweepBright_Router
 
 	public static function hook($data)
 	{
+		require_once plugin_dir_path(__DIR__) . 'api/class-controller-hook.php';
 		$wp_sweepbright_controller_hook = new WP_SweepBright_Controller_Hook();
 		return $wp_sweepbright_controller_hook->init($data);
+	}
+
+	public static function publish($data)
+	{
+		require_once plugin_dir_path(__DIR__) . 'api/class-controller-hook.php';
+		$wp_sweepbright_controller_hook = new WP_SweepBright_Controller_Hook();
+		return $wp_sweepbright_controller_hook->publish_estate($data);
 	}
 
 	public static function estate($data)

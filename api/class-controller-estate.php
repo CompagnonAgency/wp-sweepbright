@@ -27,7 +27,7 @@ class WP_SweepBright_Controller_Estate
 		return rest_ensure_response([
 			"id" => $estate_id,
 			"is_project" => false,
-			"project_id" => "staging-0000-0000-0000-0000003",
+			"project_id" => false,
 			"type" => "house",
 			"sub_type" => "condo",
 			"negotiation" => "sale",
@@ -36,12 +36,12 @@ class WP_SweepBright_Controller_Estate
 			"description" => [
 				"en" => "",
 				"fr" => "",
-				"nl" => "In het West-Vlaamse Ruiselede, rustig gelegen halfweg Tielt en Aalter, realiseert IPON een nieuwe verkaveling nabij de Poekestraat. In een volgende fase worden op de loten 17, 18 en 19 drie woningen in landelijke stijl aangeboden."
+				"nl" => "In het West-Vlaamse Wingene, rustig gelegen halfweg Wingene en Oostkamp bevind zich dit pand."
 			],
 			"description_title" => [
 				"en" => "",
 				"fr" => "",
-				"nl" => "Zonhoven"
+				"nl" => "Test property"
 			],
 			"living_rooms" => 1,
 			"kitchens" => 1,
