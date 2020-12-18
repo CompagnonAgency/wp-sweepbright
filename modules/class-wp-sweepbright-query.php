@@ -569,6 +569,9 @@ class WP_SweepBright_Query
 		]);
 
 		// Count totals
+		if (empty($params['page'])) {
+			$params['page'] = 1;
+		}
 		$max_per_page = WP_SweepBright_Helpers::settings_form()['max_per_page'];
 		$total_posts = count($results['estates']);
 		$total_pages = ceil($total_posts / $max_per_page);
