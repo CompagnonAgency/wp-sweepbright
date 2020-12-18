@@ -120,6 +120,11 @@ class WP_SweepBright_Controller_Property
       ], $id);
     }
 
+    // Update cache
+    FileSystemCache::$cacheDir = WP_PLUGIN_DIR . '/wp-sweepbright/db/' . WP_SweepBright_Query::slugify(get_bloginfo('name'));
+    $key = FileSystemCache::generateCacheKey('estates');
+    FileSystemCache::invalidate($key);
+
     return rest_ensure_response([
       'STATUS_CODE' => http_response_code(200),
     ]);
