@@ -6,5 +6,8 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'FileSystemCache' => $vendorDir . '/jdorn/file-system-cache/lib/FileSystemCache.php',
+    'FileSystemCacheKey' => $vendorDir . '/jdorn/file-system-cache/lib/FileSystemCache.php',
+    'FileSystemCacheValue' => $vendorDir . '/jdorn/file-system-cache/lib/FileSystemCache.php',
     'Normalizer' => $vendorDir . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
 );

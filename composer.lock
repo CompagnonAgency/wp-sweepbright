@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "624a40b8baf0664c2a4399da7ea4ea9b",
+    "content-hash": "c33bb3c29476b5af5acba21b750ab20a",
     "packages": [
         {
             "name": "anthonymartin/geo-location",
@@ -396,6 +396,53 @@
             "time": "2020-09-30T07:37:11+00:00"
         },
         {
+            "name": "jdorn/file-system-cache",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jdorn/FileSystemCache.git",
+                "reference": "08f33ff840ec4728a0bd28e4d68d97635584952e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jdorn/FileSystemCache/zipball/08f33ff840ec4728a0bd28e4d68d97635584952e",
+                "reference": "08f33ff840ec4728a0bd28e4d68d97635584952e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "lib"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL"
+            ],
+            "authors": [
+                {
+                    "name": "Jeremy Dorn",
+                    "email": "jeremy@jeremydorn.com",
+                    "homepage": "http://jeremydorn.com/"
+                }
+            ],
+            "description": "an easy way to cache data in the file system",
+            "homepage": "https://github.com/jdorn/FileSystemCache/",
+            "keywords": [
+                "cache",
+                "file system"
+            ],
+            "time": "2013-07-05T13:28:27+00:00"
+        },
+        {
             "name": "kamermans/guzzle-oauth2-subscriber",
             "version": "v1.0.8",
             "source": {
@@ -564,6 +611,47 @@
             ],
             "description": "A PHP port of adamwdraper/Numeral-js",
             "time": "2016-10-17T01:01:05+00:00"
+        },
+        {
+            "name": "sultann/wp-query-builder",
+            "version": "v1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sultann/wp-query-builder.git",
+                "reference": "2710ae36d33edd4c10dca7290a2e43125243af79"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sultann/wp-query-builder/zipball/2710ae36d33edd4c10dca7290a2e43125243af79",
+                "reference": "2710ae36d33edd4c10dca7290a2e43125243af79",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PluginEver\\QueryBuilder\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "MD Sultan Nasir Uddin",
+                    "email": "manikdrmc@gmail.com"
+                }
+            ],
+            "description": "WP Query Builder is a lightweight and efficient SQL Query Builder based on wpdb for WordPress. It supports complicated query generation.",
+            "keywords": [
+                "database",
+                "query builder",
+                "wordpress"
+            ],
+            "time": "2020-06-14T15:12:46+00:00"
         },
         {
             "name": "symfony/polyfill-intl-idn",
@@ -765,11 +853,14 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "jdorn/file-system-cache": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
         "php": ">=7.0.0"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }

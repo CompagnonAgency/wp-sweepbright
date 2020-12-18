@@ -266,6 +266,11 @@ class WP_SweepBright_Controller_Hook
 			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
 		]);
 
+		// Update cache
+		FileSystemCache::$cacheDir = WP_PLUGIN_DIR . '/wp-sweepbright/db/' . WP_SweepBright_Query::slugify(get_bloginfo('name'));
+		$key = FileSystemCache::generateCacheKey('estates');
+		FileSystemCache::invalidate($key);
+
 		// Output
 		return rest_ensure_response([
 			'STATUS_CODE' => http_response_code(200),
@@ -297,6 +302,10 @@ class WP_SweepBright_Controller_Hook
 			'status' => 'Sync completed',
 			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
 		]);
+		// Update cache
+		FileSystemCache::$cacheDir = WP_PLUGIN_DIR . '/wp-sweepbright/db/' . WP_SweepBright_Query::slugify(get_bloginfo('name'));
+		$key = FileSystemCache::generateCacheKey('estates');
+		FileSystemCache::invalidate($key);
 		return true;
 	}
 

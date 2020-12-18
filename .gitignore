@@ -6,5 +6,6 @@ node_modules/
 logs
 .cache
 ./node_modules
-cache/*
-!cache/.keep
+
+db/*
+!db/.keep

@@ -8,7 +8,6 @@
  * @package    WP_SweepBright_Query
  */
 
-use Brick\Money\Money;
 use AnthonyMartin\GeoLocation\GeoPoint;
 
 class WP_SweepBright_Query
@@ -17,7 +16,6 @@ class WP_SweepBright_Query
 	public function __construct()
 	{
 	}
-
 	public static function estate_exists($estate_id)
 	{
 		$exists = false;
@@ -244,360 +242,353 @@ class WP_SweepBright_Query
 		return $price;
 	}
 
-	public static function filter_hide_units($filters)
+	public static function filter_hide_units($args)
 	{
-		array_push($filters, [
-			'relation' => 'AND',
-			[
-				'key' => 'estate_project_id',
-				'compare' => 'NOT EXISTS'
-			]
-		]);
-		return $filters;
+		return $args['posts'] = array_filter($args['posts'], function ($estate) {
+			return !$estate['meta']['estate']['project_id'];
+		}, ARRAY_FILTER_USE_BOTH);
 	}
 
-	public static function filter_hide_prospects($filters)
+	public static function filter_hide_prospects($args)
 	{
-		array_push($filters, [
-			'relation' => 'AND',
-			[
-				'key' => 'estate_status',
-				'value' => 'prospect',
-				'compare' => '!='
-			]
-		]);
-		return $filters;
+		return $args['posts'] = array_filter($args['posts'], function ($estate) {
+			return !$estate['meta']['features']['negotiation'] !== 'prospect';
+		}, ARRAY_FILTER_USE_BOTH);
 	}
 
-	public static function filter_negotiation($params, $filters)
+	public static function filter_negotiation($args)
 	{
-		if (isset($params['filters']['negotiation']) && $params['filters']['negotiation']) {
-			switch ($params['filters']['negotiation']) {
+		if (isset($args['params']['filters']['negotiation'])) {
+			switch ($args['params']['filters']['negotiation']) {
 				case 'sale':
-					array_push($filters, [
-						'relation' => 'AND',
-						[
-							'key' => 'features_negotiation',
-							'value' => 'sale',
-							'compare' => '='
-						]
-					]);
+					$args['posts'] = array_filter($args['posts'], function ($estate) {
+						return $estate['meta']['features']['negotiation'] == 'sale';
+					}, ARRAY_FILTER_USE_BOTH);
 					break;
 				case 'let':
-					array_push($filters, [
-						'relation' => 'AND',
-						[
-							'key' => 'features_negotiation',
-							'value' => 'let',
-							'compare' => '='
-						]
-					]);
+					$args['posts'] = array_filter($args['posts'], function ($estate) {
+						return $estate['meta']['features']['negotiation'] == 'let';
+					}, ARRAY_FILTER_USE_BOTH);
 					break;
 				default:
 					break;
 			}
 		}
-		return $filters;
+		return $args['posts'];
 	}
 
-	public static function filter_category($params, $filters)
+	public static function filter_category($args)
 	{
-		if (isset($params['filters']['category']) && count($params['filters']['category']) > 0) {
-			array_push($filters, [
-				'relation' => 'AND',
-				[
-					'key' => 'features_type',
-					'value' => $params['filters']['category'],
-					'compare' => 'IN'
-				]
-			]);
+		if (
+			isset($args['params']['filters']['category']) &&
+			count($args['params']['filters']['category']) > 0
+		) {
+			$args['posts'] = array_filter($args['posts'], function ($estate) use ($args) {
+				return in_array($estate['meta']['features']['type'], $args['params']['filters']['category']);
+			}, ARRAY_FILTER_USE_BOTH);
 		}
-		return $filters;
+		return $args['posts'];
 	}
 
-	public static function filter_price($params, $filters)
+	public static function filter_price($args)
 	{
-		if (isset($params['filters']['price']) && $params['filters']['price']['min']) {
-			array_push($filters, [
-				'relation' => 'AND',
-				[
-					'type' => 'NUMERIC',
-					'key' => 'price_amount',
-					'value' => $params['filters']['price']['min'],
-					'compare' => '>='
-				]
-			]);
-		}
+		if (
+			isset($args['params']['filters']['price']) &&
+			is_numeric($args['params']['filters']['price']['min']) &&
+			is_numeric($args['params']['filters']['price']['max'])
+		) {
+			$params = [
+				'min' => $args['params']['filters']['price']['min'],
+				'max' => $args['params']['filters']['price']['max']
+			];
 
-		if (isset($params['filters']['price']) && $params['filters']['price']['max']) {
-			array_push($filters, [
-				'relation' => 'AND',
-				[
-					'type' => 'NUMERIC',
-					'key' => 'price_amount',
-					'value' => $params['filters']['price']['max'],
-					'compare' => '<='
-				]
-			]);
+			if ($params['min'] === 0) {
+				$params['min'] = 1;
+			}
+
+			$args['posts'] = array_filter($args['posts'], function ($estate) use ($params) {
+				return empty($estate['meta']['price']['amount']) || ((intval($estate['meta']['price']['amount']) > $params['min']) && (intval($estate['meta']['price']['amount']) <= $params['max']));
+			}, ARRAY_FILTER_USE_BOTH);
 		}
-		return $filters;
+		return $args['posts'];
 	}
 
-	public static function filter_plot_area($params, $filters)
+	public static function filter_plot_area($args)
 	{
-		if (isset($params['filters']['plot_area']) && $params['filters']['plot_area']['min']) {
-			array_push($filters, [
-				'relation' => 'AND',
-				[
-					'type' => 'NUMERIC',
-					'key' => 'sizes_plot_area_size',
-					'value' => $params['filters']['plot_area']['min'],
-					'compare' => '>='
-				]
-			]);
-		}
+		if (
+			isset($args['params']['filters']['plot_area']) &&
+			is_numeric($args['params']['filters']['plot_area']['min']) &&
+			is_numeric($args['params']['filters']['plot_area']['max'])
+		) {
+			$params = [
+				'min' => $args['params']['filters']['plot_area']['min'],
+				'max' => $args['params']['filters']['plot_area']['max']
+			];
 
-		if (isset($params['filters']['plot_area']) && $params['filters']['plot_area']['max']) {
-			array_push($filters, [
-				'relation' => 'AND',
-				[
-					'type' => 'NUMERIC',
-					'key' => 'sizes_plot_area_size',
-					'value' => $params['filters']['plot_area']['max'],
-					'compare' => '<='
-				]
-			]);
+			if ($params['min'] === 0) {
+				$params['min'] = 1;
+			}
+
+			$args['posts'] = array_filter($args['posts'], function ($estate) use ($params) {
+				if (isset($estate['meta']['sizes']['plot_area']['size'])) {
+					$size = intval($estate['meta']['sizes']['plot_area']['size']);
+
+					if ($estate['meta']['sizes']['plot_area']['unit'] === 'are') {
+						$size = $size * 100;
+					}
+				} else {
+					$size = false;
+				}
+
+				return empty($estate['meta']['sizes']['plot_area']['size']) || !$size || (($size > $params['min']) && ($size <= $params['max']));
+			}, ARRAY_FILTER_USE_BOTH);
 		}
-		return $filters;
+		return $args['posts'];
 	}
 
-	public static function filter_liveable_area($params, $filters)
+	public static function filter_liveable_area($args)
 	{
-		if (isset($params['filters']['liveable_area']) && $params['filters']['liveable_area']['min']) {
-			array_push($filters, [
-				'relation' => 'AND',
-				[
-					'type' => 'NUMERIC',
-					'key' => 'sizes_liveable_area_size',
-					'value' => $params['filters']['liveable_area']['min'],
-					'compare' => '>='
-				]
-			]);
-		}
+		if (
+			isset($args['params']['filters']['liveable_area']) &&
+			is_numeric($args['params']['filters']['liveable_area']['min']) &&
+			is_numeric($args['params']['filters']['liveable_area']['max'])
+		) {
+			$params = [
+				'min' => $args['params']['filters']['liveable_area']['min'],
+				'max' => $args['params']['filters']['liveable_area']['max']
+			];
 
-		if (isset($params['filters']['liveable_area']) && $params['filters']['liveable_area']['max']) {
-			array_push($filters, [
-				'relation' => 'AND',
-				[
-					'type' => 'NUMERIC',
-					'key' => 'sizes_liveable_area_size',
-					'value' => $params['filters']['liveable_area']['max'],
-					'compare' => '<='
-				]
-			]);
+			if ($params['min'] === 0) {
+				$params['min'] = 1;
+			}
+
+			$args['posts'] = array_filter($args['posts'], function ($estate) use ($params) {
+				if (isset($estate['meta']['sizes']['liveable_area']['size'])) {
+					$size = intval($estate['meta']['sizes']['liveable_area']['size']);
+
+					if ($estate['meta']['sizes']['liveable_area']['unit'] === 'are') {
+						$size = $size * 100;
+					}
+				} else {
+					$size = false;
+				}
+
+				return empty($estate['meta']['sizes']['liveable_area']['size']) || !$size || (($size > $params['min']) && ($size <= $params['max']));
+			}, ARRAY_FILTER_USE_BOTH);
 		}
-		return $filters;
+		return $args['posts'];
 	}
 
-	public static function filter_geolocation($params, $filters)
+	public static function filter_geolocation($args)
 	{
-		if (isset($params['filters']['location']) && $params['filters']['location']['lat'] && $params['filters']['location']['lng']) {
-			$geopoint = new GeoPoint($params['filters']['location']['lat'], $params['filters']['location']['lng']);
+		if (
+			isset($args['params']['filters']['location']) &&
+			$args['params']['filters']['location']['lat'] &&
+			$args['params']['filters']['location']['lng']
+		) {
+			$geopoint = new GeoPoint($args['params']['filters']['location']['lat'], $args['params']['filters']['location']['lng']);
 			$boundingBox = $geopoint->boundingBox(intval(WP_SweepBright_Helpers::settings_form()['geo_distance']), 'km');
 
-			array_push($filters, [
-				'relation' => 'AND',
-				[
-					'key' => 'location_latitude',
-					'value' => [$boundingBox->getMinLatitude(), $boundingBox->getMaxLatitude()],
-					'compare' => 'BETWEEN',
-				],
-				[
-					'key' => 'location_longitude',
-					'value' => [$boundingBox->getMinLongitude(), $boundingBox->getMaxLongitude()],
-					'compare' => 'BETWEEN',
-				]
-			]);
+			$args['posts'] = array_filter($args['posts'], function ($estate) use ($boundingBox) {
+				return (($estate['meta']['location']['latitude'] > $boundingBox->getMinLatitude()) && ($estate['meta']['location']['latitude'] <= $boundingBox->getMaxLatitude())) &&
+					(($estate['meta']['location']['longitude'] > $boundingBox->getMinLongitude()) && ($estate['meta']['location']['longitude'] <= $boundingBox->getMaxLongitude()));
+			}, ARRAY_FILTER_USE_BOTH);
 		}
-		return $filters;
+		return $args['posts'];
 	}
 
-	public static function order_by_date($params, $order_by)
+	public static function order_by_date($args)
 	{
-		if (isset($params['sort']) && $params['sort']['orderBy'] === 'date') {
-			$order_by['order_by'] = 'date';
+		if (isset($args['params']['sort']) && $args['params']['sort']['orderBy'] === 'date') {
+			usort($args['posts'], function ($a, $b) use ($args) {
+				$order = $b['date'] - $a['date'];
+				if ($args['params']['sort']['order'] === 'asc') {
+					$order = $a['date'] - $b['date'];
+				}
+				return $order;
+			});
 		}
-		return $order_by;
+		return $args['posts'];
 	}
 
-	public static function order_by_price($params, $order_by)
+	public static function order_by_price($args)
 	{
-		if (isset($params['sort']) && $params['sort']['orderBy'] === 'price') {
-			$order_by['order_by'] = 'meta_value_num';
-			$order_by['meta_key'] = 'price_amount';
+		if (isset($args['params']['sort']) && $args['params']['sort']['orderBy'] === 'price') {
+			usort($args['posts'], function ($a, $b) use ($args) {
+				$order = floatval($b['meta']['price']['amount']) - floatval($a['meta']['price']['amount']);
+				if ($args['params']['sort']['order'] === 'asc') {
+					$order = floatval($a['meta']['price']['amount']) - floatval($b['meta']['price']['amount']);
+				}
+				return $order;
+			});
 		}
-		return $order_by;
+		return $args['posts'];
 	}
 
-	public static function order_by_relevance($params, $order_by, $filters)
+	public static function negotiationValue($value)
 	{
-		if (isset($params['sort']) && $params['sort']['orderBy'] === 'relevance') {
-			$filters[] = [
-				'relation' => 'AND',
-				[
-					'relation' => 'OR',
-					'query_sale' => [
-						'key' => 'features_negotiation',
-						'value' => 'sale',
-					],
-					'query_let' => [
-						'key' => 'features_negotiation',
-						'value' => 'let',
-					],
-				],
-				[
-					'relation' => 'OR',
-					'query_rented' => [
-						'key' => 'estate_status',
-						'value' => 'rented',
-					],
-					'query_sold' => [
-						'key' => 'estate_status',
-						'value' => 'sold',
-					],
-					'query_option' => [
-						'key' => 'estate_status',
-						'value' => 'option',
-					],
-					'query_available' => [
-						'key' => 'estate_status',
-						'value' => 'available',
-					],
-				],
-				[
-					'relation' => 'OR',
-					'query_open_home_disabled' => [
-						'key' => 'open_homes_open_home_date',
-						'compare' => 'NOT EXISTS',
-					],
-					'query_open_home_enabled' => [
-						'key' => 'open_homes_open_home_date',
-						'compare' => 'EXISTS',
-					],
-				]
-			];
-
-			$order_by['order_by'] = [
-				'query_open_home_disabled' => 'DESC',
-				'query_open_home_enabled' => 'ASC',
-
-				'query_rented' => 'ASC',
-				'query_sold' => 'ASC',
-				'query_option' => 'ASC',
-				'query_available' => 'DESC',
-
-				'query_sale' => 'DESC',
-				'query_let' => 'ASC',
-
-				'date' => 'DESC',
-			];
+		switch ($value) {
+			case 'sale':
+				return 0;
+			case 'let':
+				return 1;
 		}
-		return [
-			'filters' => $filters,
-			'order_by' => $order_by
-		];
+		return $value;
+	}
+
+	public static function statusValue($value)
+	{
+		switch ($value) {
+			case 'available':
+				return 0;
+			case 'option':
+				return 1;
+			case 'sold':
+				return 2;
+			case 'rented':
+				return 3;
+		}
+		return $value;
+	}
+
+	public static function order_by_relevance($args)
+	{
+		if ((isset($args['params']['sort']) && $args['params']['sort']['orderBy'] === 'relevance') || $args['params']['recent']) {
+			usort($args['posts'], function ($a, $b) {
+				return ($b['date'] <=> $a['date']) * 2 +
+					(WP_SweepBright_Query::negotiationValue($a['meta']['features']['negotiation']) <=> WP_SweepBright_Query::negotiationValue($b['meta']['features']['negotiation'])) * 4 +
+					(WP_SweepBright_Query::statusValue($a['meta']['estate']['status']) <=> WP_SweepBright_Query::statusValue($b['meta']['estate']['status'])) * 6 +
+					($b['meta']['open_homes']['hasOpenHome'] <=> $a['meta']['open_homes']['hasOpenHome']) * 1000;
+			});
+		}
+		return $args['posts'];
+	}
+
+	public static function slugify($string)
+	{
+		return strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $string), '-'));
 	}
 
 	public static function list($params)
 	{
-		// Default filters
-		$filters = [];
+		// Query
+		$query = \PluginEver\QueryBuilder\Query::init();
+		$posts = $query->select('ID')
+			->from('posts')
+			->where('post_type', 'sweepbright_estates')
+			->group_by('ID')
+			->andWhere('post_status', 'publish');
+		$posts = $posts->get();
 
-		// Default sort
-		$order_by = [
-			'order_by' => 'date',
-			'meta_key' => false,
-		];
+		// Cache `$results['estates']`
+		FileSystemCache::$cacheDir = WP_PLUGIN_DIR . '/wp-sweepbright/db/' . WP_SweepBright_Query::slugify(get_bloginfo('name'));
+		$key = FileSystemCache::generateCacheKey('estates');
+		$cache = FileSystemCache::retrieve($key);
 
-		// Recent posts
-		if ($params['recent'] && empty($params['sort'])) {
-			$params['sort']['order'] = 'desc';
-			$params['sort']['orderBy'] = 'relevance';
+		// Formatted object
+		if ($cache) {
+			error_log('cache retrieved');
+			$results['estates'] = $cache;
+		} else {
+			error_log('cache stored');
+			foreach ($posts as $post) {
+				$results['estates'][] = [
+					'id' => $post->ID,
+					'permalink' => get_the_permalink($post->ID),
+					'date' => get_the_time('U', $post->ID),
+					'meta' => get_fields($post->ID),
+				];
+			}
+			FileSystemCache::store($key, $results['estates']);
 		}
 
-		// Filter: applied by default
-		$filters = WP_SweepBright_Query::filter_hide_units($filters);
-		$filters = WP_SweepBright_Query::filter_hide_prospects($filters);
+		// Filter: hide prospects
+		$results['estates'] = WP_SweepBright_Query::filter_hide_prospects([
+			'posts' => $results['estates'],
+			'params' => $params,
+		]);
+
+		// Filter: hide units
+		$results['estates'] = WP_SweepBright_Query::filter_hide_units([
+			'posts' => $results['estates'],
+			'params' => $params,
+		]);
 
 		// Filter: negotiation
-		$filters = WP_SweepBright_Query::filter_negotiation($params, $filters);
+		$results['estates'] = WP_SweepBright_Query::filter_negotiation([
+			'posts' => $results['estates'],
+			'params' => $params,
+		]);
 
 		// Filter: category
-		$filters = WP_SweepBright_Query::filter_category($params, $filters);
+		$results['estates'] = WP_SweepBright_Query::filter_category([
+			'posts' => $results['estates'],
+			'params' => $params,
+		]);
 
 		// Filter: price
-		$filters = WP_SweepBright_Query::filter_price($params, $filters);
+		$results['estates'] = WP_SweepBright_Query::filter_price([
+			'posts' => $results['estates'],
+			'params' => $params,
+		]);
 
-		// Filter: plot_area
-		$filters = WP_SweepBright_Query::filter_plot_area($params, $filters);
+		// Filter: plot area
+		$results['estates'] = WP_SweepBright_Query::filter_plot_area([
+			'posts' => $results['estates'],
+			'params' => $params,
+		]);
 
-		// Filter: liveable_area
-		$filters = WP_SweepBright_Query::filter_liveable_area($params, $filters);
+		// Filter: liveable area
+		$results['estates'] = WP_SweepBright_Query::filter_liveable_area([
+			'posts' => $results['estates'],
+			'params' => $params,
+		]);
 
 		// Filter: geolocation
-		$filters = WP_SweepBright_Query::filter_geolocation($params, $filters);
-
-		// Order: date
-		$order_by = WP_SweepBright_Query::order_by_date($params, $order_by);
-
-		// Order: price
-		$order_by = WP_SweepBright_Query::order_by_price($params, $order_by);
-
-		// Order: relevance 
-		$filters = WP_SweepBright_Query::order_by_relevance($params, $order_by, $filters)['filters'];
-		$order_by = WP_SweepBright_Query::order_by_relevance($params, $order_by, $filters)['order_by'];
-
-		// Recent posts
-		if ($params['recent']) {
-			$postsPerPage = $params['recent'];
-			$paged = 1;
-		} else {
-			$postsPerPage = WP_SweepBright_Helpers::settings_form()['max_per_page'];
-			$paged = $params['page'];
-		}
-
-		// WP Query
-		$query = new WP_Query([
-			'posts_per_page' => $postsPerPage,
-			'paged' => $paged,
-			'post_status' => 'publish',
-			'post_type' => 'sweepbright_estates',
-			'fields' => 'ids',
-			'meta_key' => $order_by['meta_key'],
-			'meta_query' => $filters,
-			'order' => $params['sort']['order'],
-			'orderby' => $order_by['order_by'],
+		$results['estates'] = WP_SweepBright_Query::filter_geolocation([
+			'posts' => $results['estates'],
+			'params' => $params,
 		]);
-		$posts = $query->posts;
 
-		// Build array with the ACF custom fields
-		$results = [
-			'totalPages' => $query->max_num_pages,
-			'totalPosts' => $query->found_posts,
-		];
+		// Order relevance
+		$results['estates'] = WP_SweepBright_Query::order_by_relevance([
+			'posts' => $results['estates'],
+			'params' => $params,
+		]);
 
-		foreach ($posts as $post) {
-			$results['estates'][] = [
-				'id' => $post,
-				'permalink' => get_the_permalink($post),
-				'date' => get_the_time('U', $post),
-				'meta' => get_fields($post),
-			];
+		// Order date
+		$results['estates'] = WP_SweepBright_Query::order_by_date([
+			'posts' => $results['estates'],
+			'params' => $params,
+		]);
+
+		// Order price
+		$results['estates'] = WP_SweepBright_Query::order_by_price([
+			'posts' => $results['estates'],
+			'params' => $params,
+		]);
+
+		// Count totals
+		$max_per_page = WP_SweepBright_Helpers::settings_form()['max_per_page'];
+		$total_posts = count($results['estates']);
+		$total_pages = ceil($total_posts / $max_per_page);
+		$offset = ($params['page'] * $max_per_page) - $max_per_page;
+
+		// Set totals
+		$results['totalPages'] = $total_pages;
+		$results['totalPosts'] = $total_posts;
+
+		// Pagination
+		if ($params['recent']) {
+			$results['estates'] = array_slice($results['estates'], $offset, $params['recent']);
+		} else if (!$params['showAll'] && !$params['recent']) {
+			if ($total_posts > $max_per_page) {
+				$results['estates'] = array_slice($results['estates'], $offset, $max_per_page);
+			}
 		}
 
-		if (isset($params['ids'])) {
-			$results = $posts;
-		}
+		// Reset array keys
+		$results['estates'] = array_values($results['estates']);
 
 		return $results;
 	}

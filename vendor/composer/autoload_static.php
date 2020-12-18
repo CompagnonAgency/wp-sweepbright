@@ -31,6 +31,7 @@ class ComposerStaticInit87b5d6ac9dfd7201e6e6d47beebb1164
         'P' => 
         array (
             'Psr\\Http\\Message\\' => 17,
+            'PluginEver\\QueryBuilder\\' => 24,
         ),
         'G' => 
         array (
@@ -71,6 +72,10 @@ class ComposerStaticInit87b5d6ac9dfd7201e6e6d47beebb1164
         array (
             0 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
+        'PluginEver\\QueryBuilder\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/sultann/wp-query-builder/src',
+        ),
         'GuzzleHttp\\Psr7\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
@@ -108,6 +113,9 @@ class ComposerStaticInit87b5d6ac9dfd7201e6e6d47beebb1164
     );
 
     public static $classMap = array (
+        'FileSystemCache' => __DIR__ . '/..' . '/jdorn/file-system-cache/lib/FileSystemCache.php',
+        'FileSystemCacheKey' => __DIR__ . '/..' . '/jdorn/file-system-cache/lib/FileSystemCache.php',
+        'FileSystemCacheValue' => __DIR__ . '/..' . '/jdorn/file-system-cache/lib/FileSystemCache.php',
         'Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
     );
 
