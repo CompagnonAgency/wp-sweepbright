@@ -94,11 +94,12 @@ export default {
             if (params && params.callback) {
               params.callback();
             }
-
-            if (document.querySelector('[data-sweepbright-list]')) {
-              $('html, body').animate({
-                scrollTop: $('[data-sweepbright-list]').offset().top - 100,
-              }, 200);
+            if (window.location.hash) {
+              if (document.querySelector('[data-sweepbright-list]')) {
+                $('html, body').animate({
+                  scrollTop: $('[data-sweepbright-list]').offset().top - 100,
+                }, 200);
+              }
             }
           });
         },
