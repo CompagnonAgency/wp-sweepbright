@@ -1,25 +1,15 @@
-# WP SweepBright
+# WP SweepBright PRO
+
+**Note ⚠️** as of version 1.4.0 a license is required in order to use this plugin.
+
+The license allows you to make use of our publication scheduling server, which automatically manages SweepBright publications.
 
 ## Requirements
 
 - PHP >= 7.1.0
 - ACF PRO
+- WP SweepBright License
 
-### Contact form validation
+## Documentation
 
-The following Javascript event is emitted when a message has been sent successfully to SweepBright.
-You can use an event listener for this event to show a notification or validation message.
-
-`wp_contact_estate_sent`, `wp_contact_general_sent`
-
-### Custom permalinks
-
-https://nl.wordpress.org/plugins/custom-post-type-permalinks/
-
-### CLI
-
-show cron list using `$ wp cron event list`
-
-### Usage
-
-Todo
+We're currently working on a detailed README. For more information in the meantime, please contact us at info[at]compagnon.agency.
