@@ -27,8 +27,8 @@ class WP_SweepBright_Contact
 	public static function add_recaptcha()
 	{
 		$script = '';
-		$script .= '<script id="wp-sweepbright-recaptcha-load" src="https://www.google.com/recaptcha/api.js?render=' . WP_SweepBright_Helpers::settings_form()['recaptcha_site_key'] . '"></script>';
-		$script .= '<script id="wp-sweepbright-recaptcha-exec">';
+		$script .= '<script type="text/javascript" id="wp-sweepbright-recaptcha-load" src="https://www.google.com/recaptcha/api.js?render=' . WP_SweepBright_Helpers::settings_form()['recaptcha_site_key'] . '"></script>';
+		$script .= '<script type="text/javascript" id="wp-sweepbright-recaptcha-exec">';
 		$script .= 'grecaptcha.ready(function () {';
 		$script .= '	grecaptcha.execute(\'' . WP_SweepBright_Helpers::settings_form()['recaptcha_site_key'] . '\', { action: \'contact\' }).then(function (token) {';
 		$script .= '		window.WPContactRecaptcha = token;';
@@ -51,6 +51,9 @@ class WP_SweepBright_Contact
 
 			$recaptcha = file_get_contents($recaptcha_url . '?secret=' . $recaptcha_secret . '&response=' . $recaptcha_response);
 			$recaptcha = json_decode($recaptcha);
+
+			error_log($recaptcha_response);
+			error_log(print_r($recaptcha, true));
 
 			if ($recaptcha->success) {
 				$this->submit_estate_form();
@@ -142,7 +145,6 @@ class WP_SweepBright_Contact
 	public function submit_estate_form()
 	{
 		if (isset($_POST['submit-contact-estate']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
-			$locale = $GLOBALS['wp_sweepbright_config']['default_locale'];
 			$id = get_field('estate', get_the_ID())['id'];
 			$form = [
 				'title' => get_the_title(),
@@ -154,7 +156,8 @@ class WP_SweepBright_Contact
 				'locale' => $this->validate_input($_POST['locale']),
 			];
 
-			$estate_url = WP_SweepBright_Controller_Hook::get_client()->request('POST', "estates/$id/contacts", [
+			require_once $_SERVER['DOCUMENT_ROOT'] . '/wp-content/plugins/wp-sweepbright/api/class-controller-hook.php';
+			WP_SweepBright_Controller_Hook::get_client()->request('POST', "estates/$id/contacts", [
 				'verify' => false,
 				'json' => [
 					'first_name' => $form['first_name'],
@@ -174,7 +177,6 @@ class WP_SweepBright_Contact
 	public function submit_general_form()
 	{
 		if (isset($_POST['submit-contact-general']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
-			$locale = $GLOBALS['wp_sweepbright_config']['default_locale'];
 			$form = [
 				'title' => '-',
 				'first_name' => $this->validate_input($_POST['first_name']),
@@ -231,7 +233,8 @@ class WP_SweepBright_Contact
 				$form['postal_codes'] = [];
 			}
 
-			$estate_url = WP_SweepBright_Controller_Hook::get_client()->request('POST', "contacts", [
+			require_once $_SERVER['DOCUMENT_ROOT'] . '/wp-content/plugins/wp-sweepbright/api/class-controller-hook.php';
+			WP_SweepBright_Controller_Hook::get_client()->request('POST', "contacts", [
 				'verify' => false,
 				'json' => [
 					'first_name' => $form['first_name'],
