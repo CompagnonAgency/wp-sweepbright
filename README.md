@@ -6,7 +6,7 @@
 
 ### 1.1. Requirements
 
-- PHP 7.1+
+- PHP 7.3+
 - [Advanced Custom Fields PRO](https://www.advancedcustomfields.com/pro/)
 - Yearly license (€99,00 annually, per website).
 
