@@ -29,7 +29,7 @@ class FieldFeaturesUpdate
 
 		// Images
 		if (isset($estate['images']) && is_countable($estate['images'])) {
-			if (count($estate['images'] > 0)) {
+			if (count($estate['images'])  > 0) {
 				$images = [];
 				foreach ($estate['images'] as $key => $image) {
 					$images[] = WP_SweepBright_Helpers::insert_attachment_from_url($image, $post_id);
@@ -42,7 +42,7 @@ class FieldFeaturesUpdate
 
 		// Documents
 		if (isset($estate['documents']) && is_countable($estate['documents'])) {
-			if (count($estate['documents'] > 0)) {
+			if (count($estate['documents']) > 0) {
 				$documents = [];
 				foreach ($estate['documents'] as $key => $document) {
 					if (!$document['description']) {
@@ -65,7 +65,7 @@ class FieldFeaturesUpdate
 
 		// Plans
 		if (isset($estate['plans']) && is_countable($estate['plans'])) {
-			if (count($estate['plans'] > 0)) {
+			if (count($estate['plans']) > 0) {
 				$plans = [];
 				foreach ($estate['plans'] as $key => $plan) {
 					if (!$plan['description']) {

@@ -6,5 +6,11 @@
 /* purgecss end ignore */
 @tailwind utilities;
 
+/* Modules */
+@import "./button";
+@import "./form";
+@import "./tooltip";
+@import "./dialog";
+
 /* Vendor */
-@import "./wysiwyg"
+@import "./wysiwyg";

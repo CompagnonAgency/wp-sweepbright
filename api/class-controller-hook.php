@@ -25,6 +25,12 @@ class WP_SweepBright_Controller_Hook
 		$event = $data['event'];
 		$estate_id = $data['estate_id'];
 
+		WP_SweepBright_Helpers::status([
+			'message' => 'Publication started...',
+			'status' => 'running',
+			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+		]);
+
 		// Event listener
 		$this->event_listener($event, $estate_id);
 
@@ -227,6 +233,12 @@ class WP_SweepBright_Controller_Hook
 			$data['estate_project_id'] = $job['estate']['project_id'];
 		}
 
+		WP_SweepBright_Helpers::status([
+			'message' => 'Creating schedule...',
+			'status' => 'running',
+			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+		]);
+
 		$client->request('POST', 'schedule', [
 			'json' => $data,
 		]);
@@ -236,40 +248,52 @@ class WP_SweepBright_Controller_Hook
 	{
 		$locale = $GLOBALS['wp_sweepbright_config']['default_locale'];
 
-		// LOG START
-		WP_SweepBright_Helpers::log([
-			'estate_title' => $data['estate']['description_title'][$locale],
-			'post_id' => $data['post_id'],
-			'action' => $data['action'],
-			'status' => 'Started',
-			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
-		]);
-
 		// Update all of the data to the custom fields
-		if (!is_numeric($data['post_id'])) {
-			return false;
-		} else {
+		if (is_numeric($data['post_id'])) {
+			WP_SweepBright_Helpers::status([
+				'message' => 'Updating fields...',
+				'status' => 'running',
+				'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+			]);
 			WP_SweepBright_Controller_Hook::update_fields($data['estate'], $data['post_id']);
+
+			// Set the estate URL in SweepBright (not for units)
+			if (empty($data['estate']['project_id']) || !$data['estate']['project_id']) {
+				WP_SweepBright_Helpers::status([
+					'message' => 'Setting estate URL...',
+					'status' => 'running',
+					'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+				]);
+				WP_SweepBright_Controller_Hook::set_estate_url($data['estate_id'], get_permalink($data['post_id']));
+			}
+
+			// Log
+			WP_SweepBright_Helpers::status([
+				'message' => 'Updating cache...',
+				'status' => 'running',
+				'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+			]);
+
+			// Update cache
+			FileSystemCache::$cacheDir = WP_PLUGIN_DIR . '/wp-sweepbright/db/' . WP_SweepBright_Query::slugify(get_bloginfo('name'));
+			$key = FileSystemCache::generateCacheKey('estates');
+			FileSystemCache::invalidate($key);
+
+			// Log
+			WP_SweepBright_Helpers::status([
+				'message' => 'Publication completed.',
+				'status' => 'completed',
+				'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+			]);
+
+			WP_SweepBright_Helpers::log([
+				'post_id' => $data['post_id'],
+				'title' => $data['estate']['description_title'][$locale],
+				'message' => 'Property has been been published.',
+				'action' => 'publish',
+				'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+			]);
 		}
-
-		// Set the estate URL in SweepBright (not for units)
-		if (empty($data['estate']['project_id']) || !$data['estate']['project_id']) {
-			WP_SweepBright_Controller_Hook::set_estate_url($data['estate_id'], get_permalink($data['post_id']));
-		}
-
-		// LOG END
-		WP_SweepBright_Helpers::log([
-			'estate_title' => $data['estate']['description_title'][$locale],
-			'post_id' => $data['post_id'],
-			'action' => $data['action'],
-			'status' => 'Sync completed',
-			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
-		]);
-
-		// Update cache
-		FileSystemCache::$cacheDir = WP_PLUGIN_DIR . '/wp-sweepbright/db/' . WP_SweepBright_Query::slugify(get_bloginfo('name'));
-		$key = FileSystemCache::generateCacheKey('estates');
-		FileSystemCache::invalidate($key);
 
 		// Output
 		return rest_ensure_response([
@@ -293,15 +317,18 @@ class WP_SweepBright_Controller_Hook
 	public function delete_estate($estate_id)
 	{
 		$id = WP_SweepBright_Helpers::get_post_ID_from_estate($estate_id);
+
+		// Log
 		$locale = $GLOBALS['wp_sweepbright_config']['default_locale'];
-		wp_delete_post($id, true);
 		WP_SweepBright_Helpers::log([
-			'estate_title' => '-',
 			'post_id' => $id,
-			'action' => 'delete',
-			'status' => 'Sync completed',
+			'title' => get_field('estate', $id)['description_title'][$locale],
+			'message' => 'Property has been been deleted.',
+			'action' => 'delete_estate',
 			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
 		]);
+		wp_delete_post($id, true);
+
 		// Update cache
 		FileSystemCache::$cacheDir = WP_PLUGIN_DIR . '/wp-sweepbright/db/' . WP_SweepBright_Query::slugify(get_bloginfo('name'));
 		$key = FileSystemCache::generateCacheKey('estates');
@@ -369,30 +396,156 @@ class WP_SweepBright_Controller_Hook
 		require_once plugin_dir_path(__DIR__) . 'modules/update/class-orientation-update.php';
 
 		// Run updates
+		WP_SweepBright_Helpers::status([
+			'message' => 'Updating estate...',
+			'status' => 'running',
+			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+		]);
 		FieldEstateUpdate::update($estate, $post_id);
+		WP_SweepBright_Helpers::status([
+			'message' => 'Updating open homes...',
+			'status' => 'running',
+			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+		]);
 		FieldOpenHomesUpdate::update($estate, $post_id);
+		WP_SweepBright_Helpers::status([
+			'message' => 'Updating price...',
+			'status' => 'running',
+			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+		]);
 		FieldPriceUpdate::update($estate, $post_id);
+		WP_SweepBright_Helpers::status([
+			'message' => 'Updating location...',
+			'status' => 'running',
+			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+		]);
 		FieldLocationUpdate::update($estate, $post_id);
+		WP_SweepBright_Helpers::status([
+			'message' => 'Updating features...',
+			'status' => 'running',
+			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+		]);
 		FieldFeaturesUpdate::update($estate, $post_id);
+		WP_SweepBright_Helpers::status([
+			'message' => 'Updating facilities...',
+			'status' => 'running',
+			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+		]);
 		FieldFacilitiesUpdate::update($estate, $post_id);
+		WP_SweepBright_Helpers::status([
+			'message' => 'Updating rooms...',
+			'status' => 'running',
+			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+		]);
 		FieldRoomsUpdate::update($estate, $post_id);
+		WP_SweepBright_Helpers::status([
+			'message' => 'Updating conditions...',
+			'status' => 'running',
+			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+		]);
 		FieldConditionsUpdate::update($estate, $post_id);
+		WP_SweepBright_Helpers::status([
+			'message' => 'Updating building...',
+			'status' => 'running',
+			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+		]);
 		FieldBuildingUpdate::update($estate, $post_id);
+		WP_SweepBright_Helpers::status([
+			'message' => 'Updating sizes...',
+			'status' => 'running',
+			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+		]);
 		FieldSizesUpdate::update($estate, $post_id);
+		WP_SweepBright_Helpers::status([
+			'message' => 'Updating energy...',
+			'status' => 'running',
+			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+		]);
 		FieldEnergyUpdate::update($estate, $post_id);
+		WP_SweepBright_Helpers::status([
+			'message' => 'Updating ecology...',
+			'status' => 'running',
+			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+		]);
 		FieldEcologyUpdate::update($estate, $post_id);
+		WP_SweepBright_Helpers::status([
+			'message' => 'Updating security...',
+			'status' => 'running',
+			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+		]);
 		FieldSecurityUpdate::update($estate, $post_id);
+		WP_SweepBright_Helpers::status([
+			'message' => 'Updating heating & cooling...',
+			'status' => 'running',
+			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+		]);
 		FieldHeatingCoolingUpdate::update($estate, $post_id);
+		WP_SweepBright_Helpers::status([
+			'message' => 'Updating comfort...',
+			'status' => 'running',
+			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+		]);
 		FieldComfortUpdate::update($estate, $post_id);
+		WP_SweepBright_Helpers::status([
+			'message' => 'Updating regulations...',
+			'status' => 'running',
+			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+		]);
 		FieldRegulationsUpdate::update($estate, $post_id);
+		WP_SweepBright_Helpers::status([
+			'message' => 'Updating legal...',
+			'status' => 'running',
+			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+		]);
 		FieldLegalUpdate::update($estate, $post_id);
+		WP_SweepBright_Helpers::status([
+			'message' => 'Updating property...',
+			'status' => 'running',
+			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+		]);
 		FieldPropertyUpdate::update($estate, $post_id);
+		WP_SweepBright_Helpers::status([
+			'message' => 'Updating amenities...',
+			'status' => 'running',
+			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+		]);
 		FieldAmenitiesUpdate::update($estate, $post_id);
+		WP_SweepBright_Helpers::status([
+			'message' => 'Updating vendors...',
+			'status' => 'running',
+			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+		]);
 		FieldVendorsUpdate::update($estate, $post_id);
+		WP_SweepBright_Helpers::status([
+			'message' => 'Updating negotiator...',
+			'status' => 'running',
+			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+		]);
 		FieldNegotiatorUpdate::update($estate, $post_id);
+		WP_SweepBright_Helpers::status([
+			'message' => 'Updating office...',
+			'status' => 'running',
+			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+		]);
 		FieldOfficeUpdate::update($estate, $post_id);
+		WP_SweepBright_Helpers::status([
+			'message' => 'Updating occupancy...',
+			'status' => 'running',
+			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+		]);
 		FieldOccupancyUpdate::update($estate, $post_id);
+		WP_SweepBright_Helpers::status([
+			'message' => 'Updating orientation...',
+			'status' => 'running',
+			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+		]);
 		FieldOrientationUpdate::update($estate, $post_id);
+
+		WP_SweepBright_Helpers::status([
+			'message' => 'Saving changes...',
+			'status' => 'running',
+			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+		]);
 
 		// Update WordPress status to "published"
 		wp_update_post([

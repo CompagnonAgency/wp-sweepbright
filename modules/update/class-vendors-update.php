@@ -16,7 +16,7 @@ class FieldVendorsUpdate
 	public static function update($estate, $post_id)
 	{
 		if (isset($estate['vendors']) && is_countable($estate['vendors'])) {
-			if (count($estate['vendors'] > 0)) {
+			if (count($estate['vendors']) > 0) {
 				$vendors = [];
 				foreach ($estate['vendors'] as $key =>  $vendor) {
 					$vendors[] = [

@@ -1,0 +1,39 @@
+{
+  "name": "Call to action",
+  "id": "cta",
+  "icon": "fad fa-mouse-pointer",
+  "category": "cta",
+  "fields": [
+    {
+      "name": "Title",
+      "id": "title",
+      "type": "text",
+      "default": "Get in touch"
+    },
+    {
+      "name": "Slogan",
+      "id": "slogan",
+      "type": "text",
+      "default": "Let us know what you are looking for and we will help you find your ideal home as soon as possible."
+    },
+    {
+      "name": "Button label",
+      "id": "button_label",
+      "type": "text",
+      "default": "Contact us"
+    },
+    {
+      "name": "Button link",
+      "id": "button_link",
+      "type": "page_select",
+      "sync": true,
+      "default": [
+        {
+          "id": 0,
+          "slug": "home",
+          "order": 0
+        }
+      ]
+    }
+  ]
+}

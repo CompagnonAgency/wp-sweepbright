@@ -205,6 +205,10 @@ class FieldFeatures
 					'disabled' => 0,
 					'allow_null' => 1,
 					'choices' => [
+						'semi_detached' => 'Semi-detached',
+						'detached' => 'Detached',
+						'terraced' => 'Terraced',
+						'bungalow' => 'Bungalow',
 						'condo' => 'Condo',
 						'loft' => 'Loft',
 						'duplex' => 'Duplex',

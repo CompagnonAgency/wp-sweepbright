@@ -13,9 +13,9 @@
         "kamermans/guzzle-oauth2-subscriber": "^1.0",
         "brick/money": "^0.4.5",
         "stillat/numeral.php": "^2.0",
-        "gumlet/php-image-resize": "1.9.*",
         "anthonymartin/geo-location": "^2.0",
         "sultann/wp-query-builder": "^1.0",
-        "jdorn/file-system-cache": "dev-master"
+        "jdorn/file-system-cache": "dev-master",
+        "fakerphp/faker": "^1.13"
     }
 }

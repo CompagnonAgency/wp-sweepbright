@@ -9,8 +9,6 @@
  * @package    WP_SweepBright_Helpers
  */
 
-use \Gumlet\ImageResize;
-
 class WP_SweepBright_Helpers
 {
 
@@ -96,22 +94,19 @@ class WP_SweepBright_Helpers
 		return $query->posts[0]->ID;
 	}
 
+	public static function status($data)
+	{
+		if (get_option('wp_sweepbright_publish_status')) {
+			update_option('wp_sweepbright_publish_status', $data);
+		} else {
+			add_option('wp_sweepbright_publish_status', $data);
+		}
+	}
+
 	public static function log($args)
 	{
-		$log_data = array(
-			'post_title' 	=> $args['estate_title'],
-			'post_content' 	=>  '',
-			'post_parent'	=> $args['post_id'],
-			'log_type'		=> 'wp_sweepbright_logs'
-		);
-
-		$log_meta = array(
-			'wp_sweepbright_action' => $args['action'],
-			'wp_sweepbright_status' => $args['status'],
-			'wp_sweepbright_date	' => $args['date'],
-		);
-
-		WP_Logging::insert_log($log_data, $log_meta);
+		// TODO: LOG to database
+		error_log(print_r($args, true));
 	}
 
 	public static function insert_attachment_from_url($file, $post_id = null)
@@ -140,13 +135,6 @@ class WP_SweepBright_Helpers
 		curl_exec($ch);
 		curl_close($ch);
 		fclose($fp);
-
-		// Resize file
-		if ($ext === 'jpg' || $ext === 'JPG' || $ext === 'JPEG' || $ext === 'png' || $ext === 'PNG' || $ext === 'gif' || $ext === 'GIF') {
-			$image = new ImageResize($file_name);
-			$image->resizeToWidth(1920);
-			$image->save($file_name);
-		}
 
 		// Check the type of file. We'll use this as the 'post_mime_type'.
 		$filetype = wp_check_filetype(basename($file_name), null);

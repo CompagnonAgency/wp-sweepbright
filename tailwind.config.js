@@ -4,9 +4,9 @@ module.exports = {
     display: ['responsive', 'hover', 'focus', 'active', 'group-hover'],
     width: ['responsive', 'hover', 'focus', 'active', 'group-hover'],
     backgroundColor: ['responsive', 'hover', 'focus', 'active', 'group-hover'],
-    borderWidth: ['responsive', 'last', 'hover', 'focus'],
-    padding: ['responsive', 'last', 'hover', 'focus'],
-    margin: ['responsive', 'last', 'hover', 'focus'],
+    borderWidth: ['responsive', 'last', 'first', 'hover', 'focus'],
+    padding: ['responsive', 'last', 'first', 'hover', 'focus'],
+    margin: ['responsive', 'last', 'first', 'hover', 'focus'],
   },
   theme: {
     fontFamily: {

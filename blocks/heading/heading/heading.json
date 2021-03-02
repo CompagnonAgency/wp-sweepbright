@@ -1,0 +1,14 @@
+{
+  "name": "Heading",
+  "id": "heading",
+  "icon": "fas fa-heading",
+  "category": "heading",
+  "fields": [
+    {
+      "name": "Title",
+      "id": "title",
+      "type": "text",
+      "default": "Discover our properties"
+    }
+  ]
+}

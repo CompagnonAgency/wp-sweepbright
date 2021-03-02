@@ -1,0 +1,26 @@
+{
+  "name": "MailChimp Subscribe",
+  "id": "mailchimp",
+  "icon": "fab fa-mailchimp",
+  "category": "cta",
+  "fields": [
+    {
+      "name": "Title",
+      "id": "title",
+      "type": "text",
+      "default": "Subscribe to our newsletter"
+    },
+    {
+      "name": "Input placeholder",
+      "id": "input_placeholder",
+      "type": "text",
+      "default": "Email address"
+    },
+    {
+      "name": "Button label",
+      "id": "button_label",
+      "type": "text",
+      "default": "Subscribe"
+    }
+  ]
+}

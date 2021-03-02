@@ -1,0 +1,47 @@
+/* Form group */
+.form-group {
+  @apply mb-6;
+}
+
+.form-group:last-child {
+  @apply mb-0;
+}
+
+
+/* Inputs */
+label {
+  @apply block font-semibold text-sm mb-2;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="phone"],
+select,
+textarea {
+  @apply appearance-none text-base w-full py-1 px-2 transition duration-200 outline-none;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="phone"]:focus,
+select:focus,
+textarea:focus {
+  @apply outline-none shadow-outline;
+}
+
+input[type="text"].input-heading {
+  @apply border-transparent px-2 pl-8 shadow-none text-gray-800;
+}
+
+input[type="text"].input-heading:disabled {
+  @apply text-gray-600;
+}
+
+input[type="text"].input-heading:focus {
+  @apply border-blue-500;
+}
+
+textarea {
+  min-height: 200px;
+  resize: vertical;
+}

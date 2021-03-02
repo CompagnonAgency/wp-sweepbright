@@ -52,7 +52,7 @@ class FieldEstateUpdate
     }
 
     if (isset($estate['properties']) && is_countable($estate['properties'])) {
-      if (count($estate['properties'] > 0)) {
+      if (count($estate['properties']) > 0) {
         $properties = [];
         foreach ($estate['properties'] as $property) {
           $properties[] = [

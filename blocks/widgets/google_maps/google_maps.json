@@ -1,0 +1,29 @@
+{
+  "name": "Google Maps",
+  "id": "google_maps",
+  "icon": "fad fa-map-marked-alt",
+  "category": "widgets",
+  "fields": [
+    {
+      "name": "Latitude",
+      "id": "latitude",
+      "type": "number",
+      "sync": true,
+      "default": 51.2095617
+    },
+    {
+      "name": "Longitude",
+      "id": "longitude",
+      "type": "number",
+      "sync": true,
+      "default": 3.2274774
+    },
+    {
+      "name": "Zoom",
+      "id": "zoom",
+      "type": "number",
+      "sync": true,
+      "default": 15
+    }
+  ]
+}

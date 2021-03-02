@@ -16,7 +16,7 @@ class FieldRoomsUpdate
 	public static function update($estate, $post_id)
 	{
 		if (isset($estate['rooms']) && is_countable($estate['rooms'])) {
-			if (count($estate['rooms'] > 0)) {
+			if (count($estate['rooms']) > 0) {
 				$rooms = [];
 				foreach ($estate['rooms'] as $key => $room) {
 					$rooms[] = [

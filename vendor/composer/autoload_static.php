@@ -40,6 +40,10 @@ class ComposerStaticInit87b5d6ac9dfd7201e6e6d47beebb1164
             'GuzzleHttp\\' => 11,
             'Gumlet\\' => 7,
         ),
+        'F' => 
+        array (
+            'Faker\\' => 6,
+        ),
         'B' => 
         array (
             'Brick\\Money\\' => 12,
@@ -91,6 +95,10 @@ class ComposerStaticInit87b5d6ac9dfd7201e6e6d47beebb1164
         'Gumlet\\' => 
         array (
             0 => __DIR__ . '/..' . '/gumlet/php-image-resize/lib',
+        ),
+        'Faker\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/fakerphp/faker/src/Faker',
         ),
         'Brick\\Money\\' => 
         array (

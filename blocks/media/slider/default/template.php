@@ -1,0 +1,3 @@
+<div>
+  Slider default
+</div>

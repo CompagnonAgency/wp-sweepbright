@@ -23,7 +23,8 @@
  * @subpackage WP_SweepBright/includes
  * @author     Falko Joseph <falko@compagnon.agency>
  */
-class WP_SweepBright {
+class WP_SweepBright
+{
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -57,11 +58,12 @@ class WP_SweepBright {
 	 * Load the dependencies, define the locale, and set the hooks for the admin area and
 	 * the public-facing side of the site.
 	 */
-	public function __construct() {
-		if ( defined( 'WP_SWEEPBRIGHT_VERSION' ) ) {
+	public function __construct()
+	{
+		if (defined('WP_SWEEPBRIGHT_VERSION')) {
 			$this->version = WP_SWEEPBRIGHT_VERSION;
 		} else {
-			$this->version = '0.9.0';
+			$this->version = '2.0.0';
 		}
 		$this->plugin_name = 'wp-sweepbright';
 
@@ -69,7 +71,6 @@ class WP_SweepBright {
 		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
-
 	}
 
 	/**
@@ -87,38 +88,35 @@ class WP_SweepBright {
 	 *
 	 * @access   private
 	 */
-	private function load_dependencies() {
+	private function load_dependencies()
+	{
 		// Composer
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'vendor/autoload.php';
-
-		// WP Logging
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wp-logging.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'vendor/autoload.php';
 
 		/**
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wp-sweepbright-loader.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-wp-sweepbright-loader.php';
 
 		/**
 		 * The class responsible for defining internationalization functionality
 		 * of the plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wp-sweepbright-i18n.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-wp-sweepbright-i18n.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-wp-sweepbright-admin.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-wp-sweepbright-admin.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-wp-sweepbright-public.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-wp-sweepbright-public.php';
 
 		$this->loader = new WP_SweepBright_Loader();
-
 	}
 
 	/**
@@ -129,12 +127,12 @@ class WP_SweepBright {
 	 *
 	 * @access   private
 	 */
-	private function set_locale() {
+	private function set_locale()
+	{
 
 		$plugin_i18n = new WP_SweepBright_i18n();
 
-		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
-
+		$this->loader->add_action('plugins_loaded', $plugin_i18n, 'load_plugin_textdomain');
 	}
 
 	/**
@@ -143,33 +141,37 @@ class WP_SweepBright {
 	 *
 	 * @access   private
 	 */
-	private function define_admin_hooks() {
+	private function define_admin_hooks()
+	{
 
-		$plugin_admin = new WP_SweepBright_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin = new WP_SweepBright_Admin($this->get_plugin_name(), $this->get_version());
 
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
+		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
 
 		// Load geo
-		$this->loader->add_action( 'init', $plugin_admin, 'load_wp_sweepbright_geo' );
+		$this->loader->add_action('init', $plugin_admin, 'load_wp_sweepbright_geo');
 
 		// Load helpers
-		$this->loader->add_action( 'init', $plugin_admin, 'load_wp_sweepbright_helpers' );
+		$this->loader->add_action('init', $plugin_admin, 'load_wp_sweepbright_helpers');
 
 		// Load data
-		$this->loader->add_action( 'init', $plugin_admin, 'load_wp_sweepbright_data' );
+		$this->loader->add_action('init', $plugin_admin, 'load_wp_sweepbright_data');
 
 		// Load query
-		$this->loader->add_action( 'init', $plugin_admin, 'load_wp_sweepbright_query' );
+		$this->loader->add_action('init', $plugin_admin, 'load_wp_sweepbright_query');
 
 		// Load contact
-		$this->loader->add_action( 'wp', $plugin_admin, 'load_wp_sweepbright_contact' );
+		$this->loader->add_action('wp', $plugin_admin, 'load_wp_sweepbright_contact');
+
+		// Load pages
+		$this->loader->add_action('init', $plugin_admin, 'load_wp_sweepbright_pages');
 
 		// Load router
-		$this->loader->add_action( 'init', $plugin_admin, 'load_wp_sweepbright_router' );
+		$this->loader->add_action('init', $plugin_admin, 'load_wp_sweepbright_router');
 
 		// Hooks into admin_menu hook to add custom page
-    $this->loader->add_action( 'admin_menu', $plugin_admin, 'add_admin_page' );
+		$this->loader->add_action('admin_menu', $plugin_admin, 'add_admin_page');
 	}
 
 	/**
@@ -178,19 +180,20 @@ class WP_SweepBright {
 	 *
 	 * @access   private
 	 */
-	private function define_public_hooks() {
+	private function define_public_hooks()
+	{
 
-		$plugin_public = new WP_SweepBright_Public( $this->get_plugin_name(), $this->get_version() );
+		$plugin_public = new WP_SweepBright_Public($this->get_plugin_name(), $this->get_version());
 
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-
+		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
+		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
 	}
 
 	/**
 	 * Run the loader to execute all of the hooks with WordPress.
 	 */
-	public function run() {
+	public function run()
+	{
 		$this->loader->run();
 	}
 
@@ -200,7 +203,8 @@ class WP_SweepBright {
 	 *
 	 * @return    string    The name of the plugin.
 	 */
-	public function get_plugin_name() {
+	public function get_plugin_name()
+	{
 		return $this->plugin_name;
 	}
 
@@ -209,7 +213,8 @@ class WP_SweepBright {
 	 *
 	 * @return    WP_SweepBright_Loader    Orchestrates the hooks of the plugin.
 	 */
-	public function get_loader() {
+	public function get_loader()
+	{
 		return $this->loader;
 	}
 
@@ -218,8 +223,8 @@ class WP_SweepBright {
 	 *
 	 * @return    string    The version number of the plugin.
 	 */
-	public function get_version() {
+	public function get_version()
+	{
 		return $this->version;
 	}
-
 }

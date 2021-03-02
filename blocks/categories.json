@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Layout",
+    "value": "layout"
+  },
+  {
+    "name": "Banner",
+    "value": "banner"
+  },
+  {
+    "name": "Call to action",
+    "value": "cta"
+  },
+  {
+    "name": "SweepBright",
+    "value": "sweepbright"
+  },
+  {
+    "name": "Text",
+    "value": "text"
+  },
+  {
+    "name": "Media",
+    "value": "media"
+  },
+  {
+    "name": "Heading",
+    "value": "heading"
+  },
+  {
+    "name": "Forms",
+    "value": "forms"
+  },
+  {
+    "name": "Widgets",
+    "value": "widgets"
+  }
+]

@@ -13,20 +13,9 @@ class WP_SweepBright_Data
 
 	public function __construct()
 	{
-		$this->create_logs();
 		$this->create_estates_custom_post_type();
 		$this->acf_disable_fields();
 		$this->acf_add_fields();
-	}
-
-	public function create_logs()
-	{
-		function add_log_types($types)
-		{
-			$types[] = 'wp_sweepbright_logs';
-			return $types;
-		}
-		add_filter('wp_log_types', 'add_log_types');
 	}
 
 	public function create_estates_custom_post_type()
@@ -167,7 +156,7 @@ class WP_SweepBright_Data
 			function save_settings_notice()
 			{
 				echo '<div class="notice notice-error is-dismissible">
-				<p>SweepBright for WordPress requires <strong>Advanced Custom Fields PRO</strong> which is not installed. Please, <a href="https://www.advancedcustomfields.com/pro/" target="_blank">install</a> this dependecy first.</p>
+				<p>SweepBright for WordPress requires <strong>Advanced Custom Fields PRO</strong> which is not installed. Also, please make sure to fill in the license key. Please, <a href="https://www.advancedcustomfields.com/pro/" target="_blank">install</a> this dependecy first.</p>
 				</div>';
 			}
 			add_action('admin_notices', 'save_settings_notice');

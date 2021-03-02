@@ -1,0 +1,41 @@
+/* 
+ * Buttons
+ * ---------------------------------------------------------------------------*/
+
+/* Button */
+.btn,
+.dg-btn {
+  @apply appearance-none relative inline-block px-4 py-3 text-center text-sm font-medium transition duration-200 cursor-pointer rounded shadow-sm border;
+}
+
+.btn:focus,
+.dg-btn:focus {
+  @apply outline-none;
+}
+
+/* Default */
+.btn-default:hover,
+.dg-btn--cancel:hover {
+  @apply border-gray-400 text-blue-500;
+}
+
+.btn-default:active,
+.dg-btn--cancel:active {
+  @apply border-gray-500;
+}
+
+/* Primary */
+.btn-primary,
+.dg-btn--ok {
+  @apply text-white bg-blue-500 border-blue-600 border-opacity-50;
+}
+
+.btn-primary:hover,
+.dg-btn--ok:hover {
+  @apply bg-blue-400;
+}
+
+.btn-primary:active,
+.dg-btn--ok:active {
+  @apply bg-blue-600;
+}

@@ -17,6 +17,7 @@ return array(
     'GuzzleHttp\\Promise\\' => array($vendorDir . '/guzzlehttp/promises/src'),
     'GuzzleHttp\\' => array($vendorDir . '/guzzlehttp/guzzle/src'),
     'Gumlet\\' => array($vendorDir . '/gumlet/php-image-resize/lib'),
+    'Faker\\' => array($vendorDir . '/fakerphp/faker/src/Faker'),
     'Brick\\Money\\' => array($vendorDir . '/brick/money/src'),
     'Brick\\Math\\' => array($vendorDir . '/brick/math/src'),
 );

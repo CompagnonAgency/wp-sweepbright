@@ -80,6 +80,54 @@ class WP_SweepBright_Router
 				'callback' => __CLASS__ . '::save_property',
 				'permission_callback' => '__return_true',
 			));
+
+			register_rest_route('v1/sweepbright', '/pages/settings', array(
+				'methods' => 'GET',
+				'callback' => __CLASS__ . '::pages_settings',
+				'permission_callback' => '__return_true',
+			));
+
+			register_rest_route('v1/sweepbright', '/pages/setup', array(
+				'methods' => 'POST',
+				'callback' => __CLASS__ . '::pages_setup',
+				'permission_callback' => '__return_true',
+			));
+
+			register_rest_route('v1/sweepbright', '/pages/list', array(
+				'methods' => 'GET',
+				'callback' => __CLASS__ . '::pages_list',
+				'permission_callback' => '__return_true',
+			));
+
+			register_rest_route('v1/sweepbright', '/pages/delete', array(
+				'methods' => 'POST',
+				'callback' => __CLASS__ . '::pages_delete',
+				'permission_callback' => '__return_true',
+			));
+
+			register_rest_route('v1/sweepbright', '/pages/(?P<id>[^/]+)', array(
+				'methods' => 'GET',
+				'callback' => __CLASS__ . '::pages_data',
+				'permission_callback' => '__return_true',
+			));
+
+			register_rest_route('v1/sweepbright', '/pages/save', array(
+				'methods' => 'POST',
+				'callback' => __CLASS__ . '::pages_save',
+				'permission_callback' => '__return_true',
+			));
+
+			register_rest_route('v1/sweepbright', '/theme/save', array(
+				'methods' => 'POST',
+				'callback' => __CLASS__ . '::pages_theme_save',
+				'permission_callback' => '__return_true',
+			));
+
+			register_rest_route('v1/sweepbright', '/theme', array(
+				'methods' => 'GET',
+				'callback' => __CLASS__ . '::pages_theme_data',
+				'permission_callback' => '__return_true',
+			));
 		});
 	}
 
@@ -143,22 +191,24 @@ class WP_SweepBright_Router
 	{
 		$estate_id = $data['estate_id'];
 
+		// Log
 		WP_SweepBright_Helpers::log([
-			'estate_title' => get_the_title(WP_SweepBright_Helpers::get_post_ID_from_estate($estate_id)),
-			'post_id' => $estate_id,
+			'post_id' => WP_SweepBright_Helpers::get_post_ID_from_estate($estate_id),
+			'title' => 'Contact request [Estate]',
+			'message' => 'Contact request has been sent for:' . get_the_title(WP_SweepBright_Helpers::get_post_ID_from_estate($estate_id)),
 			'action' => 'contact_request_estate',
-			'status' => 'Received',
 			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
 		]);
 	}
 
 	public static function contact_request_general($data)
 	{
+		// Log
 		WP_SweepBright_Helpers::log([
-			'estate_title' => '-',
 			'post_id' => false,
+			'title' => 'Contact request [General]',
+			'message' => 'General contact request has been sent.',
 			'action' => 'contact_request_general',
-			'status' => 'Received',
 			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
 		]);
 	}
@@ -167,5 +217,51 @@ class WP_SweepBright_Router
 	{
 		header('Content-Type: application/json');
 		return WP_SweepBright_Query::list($data);
+	}
+
+	public static function pages_settings()
+	{
+		$wp_sweepbright_controller_pages = new WP_SweepBright_Controller_Pages();
+		return $wp_sweepbright_controller_pages->settings();
+	}
+
+	public static function pages_list()
+	{
+		$wp_sweepbright_controller_pages = new WP_SweepBright_Controller_Pages();
+		return $wp_sweepbright_controller_pages->list();
+	}
+
+	public static function pages_delete($data)
+	{
+		$wp_sweepbright_controller_pages = new WP_SweepBright_Controller_Pages();
+		return $wp_sweepbright_controller_pages->delete($data);
+	}
+
+	public static function pages_setup($data)
+	{
+		$wp_sweepbright_controller_pages = new WP_SweepBright_Controller_Pages();
+		return $wp_sweepbright_controller_pages->setup($data);
+	}
+
+	public static function pages_save($data)
+	{
+		$wp_sweepbright_controller_pages = new WP_SweepBright_Controller_Pages();
+		return $wp_sweepbright_controller_pages->save($data);
+	}
+
+	public static function pages_data($data)
+	{
+		return WP_SweepBright_Controller_Pages::data($data);
+	}
+
+	public static function pages_theme_save($data)
+	{
+		$wp_sweepbright_controller_pages = new WP_SweepBright_Controller_Pages();
+		return $wp_sweepbright_controller_pages->theme_save($data);
+	}
+
+	public static function pages_theme_data()
+	{
+		return WP_SweepBright_Controller_Pages::theme_data();
 	}
 }

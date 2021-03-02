@@ -6,12 +6,15 @@
  * @package FieldProperty
  */
 
-class FieldProperty {
+class FieldProperty
+{
 
-	public function __construct() {
-	}
+  public function __construct()
+  {
+  }
 
-	public static function retrieve() {
+  public static function retrieve()
+  {
     return [
       'key' => 'property_and_land',
       'name' => 'property_and_land',
@@ -19,18 +22,18 @@ class FieldProperty {
       'layout' => 'row',
       'type' => 'group',
       'sub_fields' => [
-				[
-					'key'    => 'purchased_year',
-					'label'  => 'Purchased year',
-					'name'   => 'purchased_year',
-					'type'   => 'text',
-				],
-				[
-					'key'    => 'cadastral_income',
-					'label'  => 'Cadastral income',
-					'name'   => 'cadastral_income',
-					'type'   => 'number',
-				],
+        [
+          'key'    => 'purchased_year',
+          'label'  => 'Purchased year',
+          'name'   => 'purchased_year',
+          'type'   => 'text',
+        ],
+        [
+          'key'    => 'cadastral_income',
+          'label'  => 'Cadastral income',
+          'name'   => 'cadastral_income',
+          'type'   => 'number',
+        ],
         [
           'key' => 'flood_risk',
           'label' => 'Flood risk',
@@ -39,14 +42,14 @@ class FieldProperty {
           'default_value' => '',
           'readonly' => 0,
           'disabled' => 0,
-					'allow_null' => 1,
+          'allow_null' => 1,
           'choices' => [
             'no_flood_risk_area' => 'No flood risk area',
-            'potential_flood_sensitive_area' => 'Potential flood sensitive_area',
-            'effective_flood_sensitive_area' => 'Effective flood sensitive_area',
+            'potential_flood_sensitive_area' => 'Potential flood sensitive area',
+            'effective_flood_sensitive_area' => 'Effective flood sensitive area',
           ],
-				],
-				[
+        ],
+        [
           'key' => 'land_use_designation',
           'label' => 'Land use designation',
           'name' => 'land_use_designation',
@@ -54,11 +57,11 @@ class FieldProperty {
           'default_value' => '',
           'readonly' => 0,
           'disabled' => 0,
-					'allow_null' => 1,
+          'allow_null' => 1,
           'choices' => [
             'residential' => 'Residential',
             'mixed_residential' => 'Mixed residential',
-						'industrial' => 'Industrial',
+            'industrial' => 'Industrial',
             'recreational' => 'Recreational',
             'park' => 'Park',
             'area_with_economical_activity' => 'Area with economical activity',
@@ -74,6 +77,5 @@ class FieldProperty {
         ],
       ],
     ];
-	}
-
+  }
 }

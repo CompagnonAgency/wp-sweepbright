@@ -1,0 +1,42 @@
+{
+  "name": "Navigation",
+  "id": "navigation",
+  "icon": "fad fa-link",
+  "category": "layout",
+  "type": "navigation",
+  "fields": [
+    {
+      "name": "Links",
+      "id": "links",
+      "type": "page_select_multiple",
+      "sync": true,
+      "default": [
+        {
+          "id": 0,
+          "slug": "home",
+          "order": 0
+        },
+        {
+          "id": 1,
+          "slug": "buy",
+          "order": 1
+        },
+        {
+          "id": 2,
+          "slug": "services",
+          "order": 2
+        },
+        {
+          "id": 3,
+          "slug": "about",
+          "order": 3
+        },
+        {
+          "id": 4,
+          "slug": "contact",
+          "order": 4
+        }
+      ]
+    }
+  ]
+}

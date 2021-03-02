@@ -32,8 +32,9 @@ class FieldNegotiatorUpdate
     ], $post_id);
 
     if ($estate['negotiator']['photo_url']) {
+      $estate['negotiator']['url'] = $estate['negotiator']['photo_url'];
       update_field('negotiator', [
-        'negotiator_photo' => WP_SweepBright_Helpers::insert_attachment_from_url($estate['negotiator']['photo_url'], $post_id),
+        'negotiator_photo' => WP_SweepBright_Helpers::insert_attachment_from_url($estate['negotiator'], $post_id),
       ], $post_id);
     }
   }

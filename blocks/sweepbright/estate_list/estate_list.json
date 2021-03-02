@@ -1,0 +1,59 @@
+{
+  "name": "Estate - list",
+  "id": "estate_list",
+  "icon": "fad fa-sort-size-up",
+  "category": "sweepbright",
+  "fields": [
+    {
+      "name": "Search country",
+      "id": "search_country",
+      "type": "select",
+      "default": "be",
+      "sync": true,
+      "options": {
+        "be": "Belgium",
+        "fr": "France",
+        "uk": "United Kingdom",
+        "nl": "Netherlands"
+      }
+    },
+    {
+      "name": "Locale",
+      "id": "locale",
+      "type": "locale",
+      "sync": true,
+      "default": {
+        "nl": {
+          "type": {
+            "apartment": "Appartement",
+            "commercial": "Commercieel",
+            "house": "Huis",
+            "land": "Grond",
+            "office": "Kantoor",
+            "parking": "Parking"
+          }
+        },
+        "fr": {
+          "type": {
+            "apartment": "Appartement",
+            "commercial": "Commerce",
+            "house": "Maison",
+            "land": "Terrain",
+            "office": "Bureau",
+            "parking": "Parking"
+          }
+        },
+        "en": {
+          "type": {
+            "apartment": "Apartment",
+            "commercial": "Commercial",
+            "house": "House",
+            "land": "Land",
+            "office": "Office",
+            "parking": "Parking"
+          }
+        }
+      }
+    }
+  ]
+}
