@@ -81,4 +81,4 @@ Copyright (C) Compagnon Agency - All Rights Reserved.
 - Unauthorized copying of this plugin, via any medium is strictly prohibited
 - This product may not be redistributed
 
-[[https://compagnon.agency/wp-content/themes/compagnon/assets/img/sweepbright.png | width=150px | alt=Compagnon SweepBright Certified Partner]]
+![](https://compagnon.agency/wp-content/themes/compagnon/assets/img/sweepbright.png | width=150)
