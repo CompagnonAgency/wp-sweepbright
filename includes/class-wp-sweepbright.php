@@ -162,7 +162,7 @@ class WP_SweepBright
 		$this->loader->add_action('init', $plugin_admin, 'load_wp_sweepbright_query');
 
 		// Load hook
-		$this->loader->add_action('wp', $plugin_admin, 'load_wp_sweepbright_hook');
+		$this->loader->add_action('init', $plugin_admin, 'load_wp_sweepbright_hook');
 
 		// Load contact
 		$this->loader->add_action('wp', $plugin_admin, 'load_wp_sweepbright_contact');
