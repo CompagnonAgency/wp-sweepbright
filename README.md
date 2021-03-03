@@ -6,7 +6,7 @@
 
 ### 1.1. Requirements
 
-- PHP 7.1+
+- PHP 7.3+
 - [Advanced Custom Fields PRO](https://www.advancedcustomfields.com/pro/)
 - Yearly license (€99,00 annually, per website).
 
@@ -81,4 +81,4 @@ Copyright (C) Compagnon Agency - All Rights Reserved.
 - Unauthorized copying of this plugin, via any medium is strictly prohibited
 - This product may not be redistributed
 
-[[https://compagnon.agency/wp-content/themes/compagnon/assets/img/sweepbright.png | width=150px | alt=Compagnon SweepBright Certified Partner]]
+<img src="https://compagnon.agency/wp-content/themes/compagnon/assets/img/sweepbright.png" width="150">
