@@ -133,14 +133,12 @@ class WP_SweepBright_Router
 
 	public static function hook($data)
 	{
-		require_once plugin_dir_path(__DIR__) . 'api/class-controller-hook.php';
 		$wp_sweepbright_controller_hook = new WP_SweepBright_Controller_Hook();
 		return $wp_sweepbright_controller_hook->init($data);
 	}
 
 	public static function publish($data)
 	{
-		require_once plugin_dir_path(__DIR__) . 'api/class-controller-hook.php';
 		$wp_sweepbright_controller_hook = new WP_SweepBright_Controller_Hook();
 		return $wp_sweepbright_controller_hook->publish_estate($data);
 	}

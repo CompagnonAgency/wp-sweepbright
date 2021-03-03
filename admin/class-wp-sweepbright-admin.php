@@ -109,6 +109,16 @@ class WP_SweepBright_Admin
 	}
 
 	/**
+	 * Load the hook.
+	 */
+	public function load_wp_sweepbright_hook()
+	{
+		require_once plugin_dir_path(__DIR__) . 'api/class-controller-hook.php';
+		$wp_sweepbright_controller_hook = new WP_SweepBright_Controller_Hook();
+	}
+
+
+	/**
 	 * Load the contact form.
 	 */
 	public function load_wp_sweepbright_contact()

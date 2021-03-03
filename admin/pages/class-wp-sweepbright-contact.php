@@ -92,17 +92,20 @@ class WP_SweepBright_Contact
 
 	public function emit_event($event)
 	{
+		var_dump($event);
 		add_action('wp_head', function () use ($event) {
 			echo "
 			<script type=\"text/javascript\">
-			// Create the event.
-			var sb_event = document.createEvent('Event');
+  		setTimeout(() => {
+				// Create the event.
+				var sb_event = document.createEvent('Event');
 
-			// Define that the event name is 'build'.
-			sb_event.initEvent('$event', true, true);
+				// Define that the event name is 'build'.
+				sb_event.initEvent('$event', true, true);
 
-			// target can be any Element or other EventTarget.
-			document.dispatchEvent(sb_event);
+				// target can be any Element or other EventTarget.
+				document.dispatchEvent(sb_event);
+		  }, 500);
 			</script>
 			";
 		});
@@ -154,7 +157,7 @@ class WP_SweepBright_Contact
 				'locale' => $this->validate_input($_POST['locale']),
 			];
 
-			$estate_url = WP_SweepBright_Controller_Hook::get_client()->request('POST', "estates/$id/contacts", [
+			WP_SweepBright_Controller_Hook::get_client()->request('POST', "estates/$id/contacts", [
 				'verify' => false,
 				'json' => [
 					'first_name' => $form['first_name'],
@@ -231,7 +234,7 @@ class WP_SweepBright_Contact
 				$form['postal_codes'] = [];
 			}
 
-			$estate_url = WP_SweepBright_Controller_Hook::get_client()->request('POST', "contacts", [
+			WP_SweepBright_Controller_Hook::get_client()->request('POST', "contacts", [
 				'verify' => false,
 				'json' => [
 					'first_name' => $form['first_name'],
