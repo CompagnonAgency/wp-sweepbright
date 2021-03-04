@@ -9,6 +9,7 @@
 ### 1.1. Requirements
 
 - PHP 7.3+
+- Dedicated, managed or fast WordPress hosting (ability to resize & crop large image files 10MB+)
 - [Advanced Custom Fields PRO](https://www.advancedcustomfields.com/pro/)
 - Yearly license (€99,00 annually, per website).
 
