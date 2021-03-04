@@ -1,5 +1,7 @@
 # WP SweepBright PRO
 
+<img src="https://compagnon.agency/wp-content/themes/compagnon/assets/img/sweepbright.png" width="150">
+
 3rd party WordPress plugin for SweepBright.
 
 ## 1. Introduction
@@ -51,7 +53,7 @@ Whenever a publication is scheduled in SweepBright it will first connect to our 
 - Dedicated webhook server
 - Support via e-mail
 
-### 2.4. What's the price / additional costs?
+### 2.3. What's the price / additional costs?
 
 > €99,00 annually, per website.
 
@@ -60,11 +62,11 @@ For regular use or less than 15 publications per day on average, there are no ad
 
 If you're running a high traffic real estate website, please contact [sales](info@compagnon.agency) for our large business & enterprise solutions.
 
-### 2.5. How to obtain a license?
+### 2.4. How to obtain a license?
 
 In order to retrieve your license, please contact [sales](info@compagnon.agency).
 
-### 2.6. Free trial
+### 2.5. Free trial
 
 When purchasing a license you have a free trial of two weeks. Within this period you're able to cancel your license at any time without costs.
 
@@ -75,10 +77,3 @@ Our product is provided “as is” without warranty of any kind, expressed or i
 ## 4. Copyright
 
 Copyright (C) Compagnon Agency - All Rights Reserved.
-
-- You may not claim intellectual or exclusive ownership rights to our product
-- This product and all of its contents are intellectual property of Compagnon Agency
-- Unauthorized copying of this plugin, via any medium is strictly prohibited
-- This product may not be redistributed
-
-<img src="https://compagnon.agency/wp-content/themes/compagnon/assets/img/sweepbright.png" width="150">
