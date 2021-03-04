@@ -33,7 +33,8 @@
 8. [Filtering properties](8.-filtering-properties)
 9. [Multilanguage](9.-multilanguage)
 10. [License](license)
-11. [Terms & Conditions](terms-&-conditions)
+11. [Support](support)
+12. [Terms & Conditions](terms-&-conditions)
 
 ## 2. License
 
