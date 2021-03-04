@@ -62,11 +62,11 @@ Whenever a publication is scheduled in SweepBright it will first connect to our 
 Additional costs may occur depending on your usage of our webhook server.
 For regular use or less than 15 publications per day on average, there are no additional costs.
 
-If you're running a high traffic real estate website, please contact [sales](info@compagnon.agency) for our large business & enterprise solutions.
+If you're running a high traffic real estate website, please contact [sales](mailto:info@compagnon.agency) for our large business & enterprise solutions.
 
 ### 2.4. How to obtain a license?
 
-In order to retrieve your license, please contact [sales](info@compagnon.agency).
+In order to retrieve your license, please contact [sales](mailto:info@compagnon.agency).
 
 ### 2.5. Free trial
 
