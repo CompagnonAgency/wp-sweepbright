@@ -23,18 +23,18 @@
 
 ### 1.3. Table of Contents
 
-1. [Changelog](1.-changelog)
-2. [Installation](2.-installation)
-3. [Dashboard](3.-dashboard)
-4. [Settings](4.-settings)
-5. [Publishing in SweepBright](5.-publishing-in-sweepbright)
-6. [Retrieving data](6.-retrieving-data)
-7. [Helpers](7.-helpers)
-8. [Filtering properties](8.-filtering-properties)
-9. [Multilanguage](9.-multilanguage)
-10. [License](license)
-11. [Support](support)
-12. [Terms & Conditions](terms-&-conditions)
+1. [Changelog](https://github.com/CompagnonAgency/wp-sweepbright/wiki/1.-Changelog)
+2. [Installation](https://github.com/CompagnonAgency/wp-sweepbright/wiki/2.-Installation)
+3. [Dashboard](https://github.com/CompagnonAgency/wp-sweepbright/wiki/3.-Dashboard)
+4. [Settings](https://github.com/CompagnonAgency/wp-sweepbright/wiki/4.-Settings)
+5. [Publishing in SweepBright](https://github.com/CompagnonAgency/wp-sweepbright/wiki/5.-Publishing-in-SweepBright)
+6. [Retrieving data](https://github.com/CompagnonAgency/wp-sweepbright/wiki/6.-Retrieving-data)
+7. [Helpers](https://github.com/CompagnonAgency/wp-sweepbright/wiki/7.-Helpers)
+8. [Filtering properties](https://github.com/CompagnonAgency/wp-sweepbright/wiki/8.-Filtering-properties)
+9. [Multilanguage](https://github.com/CompagnonAgency/wp-sweepbright/wiki/9.-Multilanguage)
+10. [License](https://github.com/CompagnonAgency/wp-sweepbright/wiki/License)
+11. [Support](https://github.com/CompagnonAgency/wp-sweepbright/wiki/Support)
+12. [Terms & Conditions](https://github.com/CompagnonAgency/wp-sweepbright/wiki/Terms-&-Conditions)
 
 ## 2. License
 
