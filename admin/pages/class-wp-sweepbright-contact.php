@@ -92,7 +92,6 @@ class WP_SweepBright_Contact
 
 	public function emit_event($event)
 	{
-		var_dump($event);
 		add_action('wp_head', function () use ($event) {
 			echo "
 			<script type=\"text/javascript\">
