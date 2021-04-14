@@ -432,7 +432,7 @@ class WP_SweepBright_Query
 
 	public static function filter_bedrooms($args)
 	{
-		if (isset($args['params']['filters']['bedrooms'])) {
+		if (isset($args['params']['filters']['facilities']['bedrooms'])) {
 			$params = [
 				'min' => $args['params']['filters']['facilities']['bedrooms']['min'],
 				'max' => $args['params']['filters']['facilities']['bedrooms']['max']
