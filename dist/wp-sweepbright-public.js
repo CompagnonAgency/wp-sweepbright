@@ -13007,10 +13007,10 @@ var _default = {
           this.isLoading = true;
 
           _axios.default.post('/wp-json/v1/sweepbright/list', this.request).then(function (response) {
-            if (!params.mapMode) {
-              _this2.storeEstates(params, response);
-            } else {
+            if (params && params.mapMode) {
               _this2.storeMarkers(response);
+            } else {
+              _this2.storeEstates(params, response);
             }
           });
         },
@@ -13128,7 +13128,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63171" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64508" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

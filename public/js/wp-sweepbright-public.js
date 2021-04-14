@@ -196,10 +196,10 @@ export default {
           this.isLoading = true;
 
           axios.post('/wp-json/v1/sweepbright/list', this.request).then((response) => {
-            if (!params.mapMode) {
-              this.storeEstates(params, response);
-            } else {
+            if (params && params.mapMode) {
               this.storeMarkers(response);
+            } else {
+              this.storeEstates(params, response);
             }
           });
         },

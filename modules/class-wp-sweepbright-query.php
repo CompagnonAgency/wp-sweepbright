@@ -399,66 +399,70 @@ class WP_SweepBright_Query
 
 	public static function filter_price($args)
 	{
-		$params = [
-			'min' => $args['params']['filters']['price']['min'],
-			'max' => $args['params']['filters']['price']['max']
-		];
+		if (isset($args['params']['filters']['price'])) {
+			$params = [
+				'min' => $args['params']['filters']['price']['min'],
+				'max' => $args['params']['filters']['price']['max']
+			];
 
-		if ($params['min'] === 0) {
-			$params['min'] = 1;
-		}
+			if ($params['min'] === 0) {
+				$params['min'] = 1;
+			}
 
-		if (isset($params['min']) && is_numeric($params['min']) && isset($params['max']) && is_numeric($params['max'])) {
-			$args['posts'] = array_filter($args['posts'], function ($estate) use ($params) {
-				return empty($estate['meta']['price']['amount']) || ((intval($estate['meta']['price']['amount']) >= $params['min']) && (intval($estate['meta']['price']['amount']) <= $params['max']));
-			}, ARRAY_FILTER_USE_BOTH);
-		}
+			if (isset($params['min']) && is_numeric($params['min']) && isset($params['max']) && is_numeric($params['max'])) {
+				$args['posts'] = array_filter($args['posts'], function ($estate) use ($params) {
+					return empty($estate['meta']['price']['amount']) || ((intval($estate['meta']['price']['amount']) >= $params['min']) && (intval($estate['meta']['price']['amount']) <= $params['max']));
+				}, ARRAY_FILTER_USE_BOTH);
+			}
 
-		if (empty($params['min']) && is_numeric($params['max']) && isset($params['max'])) {
-			$args['posts'] = array_filter($args['posts'], function ($estate) use ($params) {
-				return empty($estate['meta']['price']['amount']) || ((intval($estate['meta']['price']['amount']) <= $params['max']));
-			}, ARRAY_FILTER_USE_BOTH);
-		}
+			if (empty($params['min']) && is_numeric($params['max']) && isset($params['max'])) {
+				$args['posts'] = array_filter($args['posts'], function ($estate) use ($params) {
+					return empty($estate['meta']['price']['amount']) || ((intval($estate['meta']['price']['amount']) <= $params['max']));
+				}, ARRAY_FILTER_USE_BOTH);
+			}
 
-		if (empty($params['max']) && is_numeric($params['min']) && isset($params['min'])) {
-			$args['posts'] = array_filter($args['posts'], function ($estate) use ($params) {
-				return empty($estate['meta']['price']['amount']) || ((intval($estate['meta']['price']['amount']) >= $params['min']));
-			}, ARRAY_FILTER_USE_BOTH);
+			if (empty($params['max']) && is_numeric($params['min']) && isset($params['min'])) {
+				$args['posts'] = array_filter($args['posts'], function ($estate) use ($params) {
+					return empty($estate['meta']['price']['amount']) || ((intval($estate['meta']['price']['amount']) >= $params['min']));
+				}, ARRAY_FILTER_USE_BOTH);
+			}
 		}
 		return $args['posts'];
 	}
 
 	public static function filter_bedrooms($args)
 	{
-		$params = [
-			'min' => $args['params']['filters']['facilities']['bedrooms']['min'],
-			'max' => $args['params']['filters']['facilities']['bedrooms']['max']
-		];
+		if (isset($args['params']['filters']['bedrooms'])) {
+			$params = [
+				'min' => $args['params']['filters']['facilities']['bedrooms']['min'],
+				'max' => $args['params']['filters']['facilities']['bedrooms']['max']
+			];
 
-		if ($params['min'] === 0) {
-			$params['min'] = false;
-		}
+			if ($params['min'] === 0) {
+				$params['min'] = false;
+			}
 
-		if ($params['max'] === 0) {
-			$params['max'] = false;
-		}
+			if ($params['max'] === 0) {
+				$params['max'] = false;
+			}
 
-		if (isset($params['min']) && is_numeric($params['min']) && isset($params['max']) && is_numeric($params['max'])) {
-			$args['posts'] = array_filter($args['posts'], function ($estate) use ($params) {
-				return empty($estate['meta']['facilities']['bedrooms']) || ((intval($estate['meta']['facilities']['bedrooms']) >= $params['min']) && (intval($estate['meta']['facilities']['bedrooms']) <= $params['max']));
-			}, ARRAY_FILTER_USE_BOTH);
-		}
+			if (isset($params['min']) && is_numeric($params['min']) && isset($params['max']) && is_numeric($params['max'])) {
+				$args['posts'] = array_filter($args['posts'], function ($estate) use ($params) {
+					return empty($estate['meta']['facilities']['bedrooms']) || ((intval($estate['meta']['facilities']['bedrooms']) >= $params['min']) && (intval($estate['meta']['facilities']['bedrooms']) <= $params['max']));
+				}, ARRAY_FILTER_USE_BOTH);
+			}
 
-		if (empty($params['min']) && is_numeric($params['max']) && isset($params['max'])) {
-			$args['posts'] = array_filter($args['posts'], function ($estate) use ($params) {
-				return empty($estate['meta']['facilities']['bedrooms']) || ((intval($estate['meta']['facilities']['bedrooms']) <= $params['max']));
-			}, ARRAY_FILTER_USE_BOTH);
-		}
+			if (empty($params['min']) && is_numeric($params['max']) && isset($params['max'])) {
+				$args['posts'] = array_filter($args['posts'], function ($estate) use ($params) {
+					return empty($estate['meta']['facilities']['bedrooms']) || ((intval($estate['meta']['facilities']['bedrooms']) <= $params['max']));
+				}, ARRAY_FILTER_USE_BOTH);
+			}
 
-		if (empty($params['max']) && is_numeric($params['min']) && isset($params['min'])) {
-			$args['posts'] = array_filter($args['posts'], function ($estate) use ($params) {
-				return empty($estate['meta']['facilities']['bedrooms']) || ((intval($estate['meta']['facilities']['bedrooms']) >= $params['min']));
-			}, ARRAY_FILTER_USE_BOTH);
+			if (empty($params['max']) && is_numeric($params['min']) && isset($params['min'])) {
+				$args['posts'] = array_filter($args['posts'], function ($estate) use ($params) {
+					return empty($estate['meta']['facilities']['bedrooms']) || ((intval($estate['meta']['facilities']['bedrooms']) >= $params['min']));
+				}, ARRAY_FILTER_USE_BOTH);
+			}
 		}
 		return $args['posts'];
 	}
