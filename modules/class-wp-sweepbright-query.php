@@ -760,7 +760,7 @@ class WP_SweepBright_Query
 		}
 		$max_per_page = WP_SweepBright_Helpers::settings_form()['max_per_page'];
 		$total_posts = count($results['estates']);
-		$total_pages = ceil($total_posts / $max_per_page);
+		$total_pages = abs(ceil($total_posts / $max_per_page));
 		$offset = ($params['page'] * $max_per_page) - $max_per_page;
 
 		// Set totals
