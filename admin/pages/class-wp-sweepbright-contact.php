@@ -113,6 +113,7 @@ class WP_SweepBright_Contact
 	public function parse_template($template, $form)
 	{
 		$output = str_replace('[title]', $form['title'], $template);
+		$output = str_replace('[url]', $form['url'], $template);
 		$output = str_replace('[first_name]', $form['first_name'], $output);
 		$output = str_replace('[last_name]', $form['last_name'], $output);
 		$output = str_replace('[email]', $form['email'], $output);
@@ -148,6 +149,7 @@ class WP_SweepBright_Contact
 			$id = get_field('estate', get_the_ID())['id'];
 			$form = [
 				'title' => get_the_title(),
+				'url' => get_the_permalink(),
 				'first_name' => $this->validate_input($_POST['first_name']),
 				'last_name' => $this->validate_input($_POST['last_name']),
 				'email' => $this->validate_input($_POST['email']),
@@ -179,6 +181,7 @@ class WP_SweepBright_Contact
 			$locale = $GLOBALS['wp_sweepbright_config']['default_locale'];
 			$form = [
 				'title' => '-',
+				'url' => '-',
 				'first_name' => $this->validate_input($_POST['first_name']),
 				'last_name' => $this->validate_input($_POST['last_name']),
 				'email' => $this->validate_input($_POST['email']),

@@ -71,8 +71,8 @@
           </th>
           <td>
             <p>
-              Available tags: <kbd>[title]</kbd>, <kbd>[first_name]</kbd>, <kbd>[last_name]</kbd>, <kbd>[email]</kbd>, <kbd>[phone]</kbd>, <kbd>[message]</kbd>.<br>
-              <kbd>[title]</kbd> is only available for estate contact requests.
+              Available tags: <kbd>[title]</kbd>, <kbd>[url]</kbd>, <kbd>[first_name]</kbd>, <kbd>[last_name]</kbd>, <kbd>[email]</kbd>, <kbd>[phone]</kbd>, <kbd>[message]</kbd>.<br>
+              <kbd>[title]</kbd>, <kbd>[url]</kbd> are only available for estate contact requests.
             </p>
             <br>
             <input required name="mail_subject" type="text" id="mail_subject" value="<?= WP_SweepBright_Helpers::contact_form()['autoresponder']['subject']; ?>" class="regular-text ltr">
@@ -84,8 +84,8 @@
           </th>
           <td>
             <p>
-              Available tags: <kbd>[title]</kbd>, <kbd>[first_name]</kbd>, <kbd>[last_name]</kbd>, <kbd>[email]</kbd>, <kbd>[phone]</kbd>, <kbd>[message]</kbd>.<br>
-              <kbd>[title]</kbd> is only available for estate contact requests.
+              Available tags: <kbd>[title]</kbd>, <kbd>[url]</kbd>, <kbd>[first_name]</kbd>, <kbd>[last_name]</kbd>, <kbd>[email]</kbd>, <kbd>[phone]</kbd>, <kbd>[message]</kbd>.<br>
+              <kbd>[title]</kbd>, <kbd>[url]</kbd> are only available for estate contact requests.
             </p>
             <br>
             <textarea name="mail_message" required id="mail_message" rows="10" class="widefat textarea code"><?= WP_SweepBright_Helpers::contact_form()['autoresponder']['message']; ?></textarea>
@@ -101,4 +101,4 @@
   </form>
 </div>
 
-<?php require_once(plugin_dir_path( __FILE__ ). 'components/footer.php'); ?>
+<?php require_once(plugin_dir_path(__FILE__) . 'components/footer.php'); ?>

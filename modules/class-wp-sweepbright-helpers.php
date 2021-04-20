@@ -154,9 +154,16 @@ class WP_SweepBright_Helpers
 		// Make sure that this file is included, as wp_generate_attachment_metadata() depends on it.
 		require_once(ABSPATH . 'wp-admin/includes/image.php');
 
-		// Generate the metadata for the attachment, and update the database record.
-		$attach_data = wp_generate_attachment_metadata($attach_id, $file_name);
-		wp_update_attachment_metadata($attach_id, $attach_data);
+		// Resize the large image
+		$image = wp_get_image_editor($file_name);
+
+		if (!is_wp_error($image)) {
+			$image->resize(1920, 1920, false);
+			$image->save($file_name);
+		}
+
+		// And finally assign featured image to post
+		set_post_thumbnail($post_id, $attach_id);
 
 		// Return attachment id
 		return $attach_id;

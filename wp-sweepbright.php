@@ -10,7 +10,7 @@
  * Author: Compagnon Agency
  * Author URI: https://compagnon.agency/
  * Text Domain: wp-sweepbright
- * Version: 1.6.7
+ * Version: 1.7.0
  */
 
 // If this file is called directly, abort.
@@ -23,7 +23,7 @@ if (!defined('WPINC')) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define('WP_SWEEPBRIGHT_VERSION', '1.6.7');
+define('WP_SWEEPBRIGHT_VERSION', '1.7.0');
 
 /**
  * The code that runs during plugin activation.
@@ -74,6 +74,44 @@ add_filter('template_include', function ($template) {
 
   return $template;
 });
+
+
+/**
+ * Programmatically set SEO meta description
+ */
+function ag_yoast_seo_fb_share_descriptions($desc)
+{
+  global $post;
+
+  if (($post && $post->post_type === 'sweepbright_estates')) {
+    if (get_field('estate', $post->ID)['description']['fr']) {
+      $default_description = get_field('estate', $post->ID)['description']['fr'];
+    }
+    if (get_field('estate', $post->ID)['description']['nl']) {
+      $default_description = get_field('estate', $post->ID)['description']['nl'];
+    }
+    if (get_field('estate', $post->ID)['description']['en']) {
+      $default_description = get_field('estate', $post->ID)['description']['en'];
+    }
+    $desc = wp_trim_words($default_description, 25);
+  }
+  return $desc;
+}
+add_filter('wpseo_opengraph_desc', 'ag_yoast_seo_fb_share_descriptions');
+
+/**
+ * Programmatically set SEO meta image
+ */
+function ag_yoast_seo_fb_share_images($img)
+{
+  global $post;
+
+  if (($post && $post->post_type === 'sweepbright_estates')) {
+    $img = get_field('features', $post->ID)['images'][0]['sizes']['large'];
+  }
+  return $img;
+}
+add_filter('wpseo_opengraph_image', 'ag_yoast_seo_fb_share_images', 10, 1);
 
 /**
  * Redirect estates that are no longer available.
