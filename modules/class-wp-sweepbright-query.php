@@ -355,6 +355,17 @@ class WP_SweepBright_Query
 		return $args['posts'];
 	}
 
+	public static function filter_agent($args)
+	{
+		if (isset($args['params']['filters']['agent'])) {
+			$args['posts'] = array_filter($args['posts'], function ($estate) use ($args) {
+				return $estate['meta']['negotiator']['email'] === $args['params']['filters']['agent'];
+			}, ARRAY_FILTER_USE_BOTH);
+		}
+
+		return $args['posts'];
+	}
+
 	public static function filter_new_home($args)
 	{
 		if (isset($args['params']['filters']['new_home'])) {
@@ -678,6 +689,13 @@ class WP_SweepBright_Query
 
 		// Filter: status
 		$results['estates'] = WP_SweepBright_Query::filter_status([
+			'posts' => $results['estates'],
+			'params' => $params,
+		]);
+
+
+		// Filter: agent
+		$results['estates'] = WP_SweepBright_Query::filter_agent([
 			'posts' => $results['estates'],
 			'params' => $params,
 		]);
