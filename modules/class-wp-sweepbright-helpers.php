@@ -226,7 +226,7 @@ class WP_SweepBright_Helpers
 					'to' => get_option('admin_email'),
 					'cc' => '',
 					'subject' => "New contact request | [first_name] [last_name]",
-					'message' => "You have received a new contact request via the website.<br>\nVisit your SweepBright account for more information.<br><br>\n\n<strong>Property:</strong> [title]<br>\n<strong>Name:</strong> [first_name] [last_name]<br>\n<strong>Email address:</strong> [email]<br>\n<strong>Phone:</strong> [phone]<br><br>\n\n<strong>Message:</strong><br>\n[message]",
+					'message' => "You have received a new contact request via the website.<br>\nVisit your SweepBright account for more information.<br><br>\n\n<strong>Property:</strong> [title]<br>\n<strong>Link:</strong> [url]<br>\n<strong>Name:</strong> [first_name] [last_name]<br>\n<strong>Email address:</strong> [email]<br>\n<strong>Phone:</strong> [phone]<br><br>\n\n<strong>Message:</strong><br>\n[message]",
 				]
 			];
 		}

@@ -113,7 +113,7 @@ class WP_SweepBright_Contact
 	public function parse_template($template, $form)
 	{
 		$output = str_replace('[title]', $form['title'], $template);
-		$output = str_replace('[url]', $form['url'], $template);
+		$output = str_replace('[url]', $form['url'], $output);
 		$output = str_replace('[first_name]', $form['first_name'], $output);
 		$output = str_replace('[last_name]', $form['last_name'], $output);
 		$output = str_replace('[email]', $form['email'], $output);
@@ -145,11 +145,10 @@ class WP_SweepBright_Contact
 	public function submit_estate_form()
 	{
 		if (isset($_POST['submit-contact-estate']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
-			$locale = $GLOBALS['wp_sweepbright_config']['default_locale'];
 			$id = get_field('estate', get_the_ID())['id'];
 			$form = [
 				'title' => get_the_title(),
-				'url' => get_the_permalink(),
+				'url' => '<a href="' . get_the_permalink() . '">View property</a>',
 				'first_name' => $this->validate_input($_POST['first_name']),
 				'last_name' => $this->validate_input($_POST['last_name']),
 				'email' => $this->validate_input($_POST['email']),
@@ -178,7 +177,6 @@ class WP_SweepBright_Contact
 	public function submit_general_form()
 	{
 		if (isset($_POST['submit-contact-general']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
-			$locale = $GLOBALS['wp_sweepbright_config']['default_locale'];
 			$form = [
 				'title' => '-',
 				'url' => '-',
