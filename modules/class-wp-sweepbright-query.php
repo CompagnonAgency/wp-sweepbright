@@ -343,6 +343,11 @@ class WP_SweepBright_Query
 						return $estate['meta']['estate']['status'] == 'option';
 					}, ARRAY_FILTER_USE_BOTH);
 					break;
+				case 'sold_stc':
+					$args['posts'] = array_filter($args['posts'], function ($estate) {
+						return $estate['meta']['estate']['status'] == 'option';
+					}, ARRAY_FILTER_USE_BOTH);
+					break;
 				case 'under_contract':
 					$args['posts'] = array_filter($args['posts'], function ($estate) {
 						return $estate['meta']['estate']['status'] == 'under_contract';
