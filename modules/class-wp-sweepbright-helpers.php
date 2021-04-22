@@ -9,9 +9,12 @@
  * @package    WP_SweepBright_Helpers
  */
 
+use Selective\ImageType\ImageTypeDetector;
+use Selective\ImageType\Provider\RasterProvider;
+use SplFileObject;
+
 class WP_SweepBright_Helpers
 {
-
 	public function __construct()
 	{
 		// Get HTTP or HTTPS protocol
@@ -149,21 +152,41 @@ class WP_SweepBright_Helpers
 		];
 
 		// Insert the attachment.
-		$attach_id = wp_insert_attachment($attachment, $file_name, $post_id);
+		$attach_id = false;
+		$is_heic = false;
+		$is_image = false;
 
-		// Make sure that this file is included, as wp_generate_attachment_metadata() depends on it.
-		require_once(ABSPATH . 'wp-admin/includes/image.php');
+		// Detect images
+		if ($ext === 'jpg' || $ext === 'JPG' || $ext === 'jpeg' || $ext === 'JPEG' || $ext === 'png' || $ext === 'PNG' || $ext === 'gif' || $ext === 'GIF') {
+			$is_image = true;
 
-		// Resize the large image
-		$image = wp_get_image_editor($file_name);
+			// Detect HEIC
+			$file = new SplFileObject($file_name);
+			$detector = new ImageTypeDetector();
+			$detector->addProvider(new RasterProvider());
+			$imageType = $detector->getImageTypeFromFile($file);
 
-		if (!is_wp_error($image)) {
-			$image->resize(1920, 1920, false);
-			$image->save($file_name);
+			if ($imageType->getMimeType() === 'image/heic' || $imageType->getMimeType() === 'image/heif') {
+				$is_heic = true;
+			}
 		}
 
-		// And finally assign featured image to post
-		set_post_thumbnail($post_id, $attach_id);
+		if (!$is_heic) {
+			$attach_id = wp_insert_attachment($attachment, $file_name, $post_id);
+
+			if ($is_image) {
+				// Make sure that this file is included, as wp_generate_attachment_metadata() depends on it.
+				require_once(ABSPATH . 'wp-admin/includes/image.php');
+
+				// Resize the large image.
+				$image = wp_get_image_editor($file_name);
+
+				if (!is_wp_error($image)) {
+					$image->resize(1920, 1920, false);
+					$image->save($file_name);
+				}
+			}
+		}
 
 		// Return attachment id
 		return $attach_id;

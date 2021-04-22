@@ -27,6 +27,7 @@ class ComposerStaticInit87b5d6ac9dfd7201e6e6d47beebb1164
             'Symfony\\Polyfill\\Intl\\Normalizer\\' => 33,
             'Symfony\\Polyfill\\Intl\\Idn\\' => 26,
             'Stillat\\Numeral\\' => 16,
+            'Selective\\ImageType\\' => 20,
         ),
         'P' => 
         array (
@@ -71,6 +72,10 @@ class ComposerStaticInit87b5d6ac9dfd7201e6e6d47beebb1164
         'Stillat\\Numeral\\' => 
         array (
             0 => __DIR__ . '/..' . '/stillat/numeral.php/src',
+        ),
+        'Selective\\ImageType\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/selective/image-type/src',
         ),
         'Psr\\Http\\Message\\' => 
         array (

@@ -11,6 +11,7 @@ return array(
     'Symfony\\Polyfill\\Intl\\Normalizer\\' => array($vendorDir . '/symfony/polyfill-intl-normalizer'),
     'Symfony\\Polyfill\\Intl\\Idn\\' => array($vendorDir . '/symfony/polyfill-intl-idn'),
     'Stillat\\Numeral\\' => array($vendorDir . '/stillat/numeral.php/src'),
+    'Selective\\ImageType\\' => array($vendorDir . '/selective/image-type/src'),
     'Psr\\Http\\Message\\' => array($vendorDir . '/psr/http-message/src'),
     'PluginEver\\QueryBuilder\\' => array($vendorDir . '/sultann/wp-query-builder/src'),
     'GuzzleHttp\\Psr7\\' => array($vendorDir . '/guzzlehttp/psr7/src'),

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "21c633dce543f6759e93d21a10364a24",
+    "content-hash": "71b48b894ba2a81ce5405b5a8dbafdd2",
     "packages": [
         {
             "name": "anthonymartin/geo-location",
@@ -620,6 +620,48 @@
             ],
             "description": "A polyfill for getallheaders.",
             "time": "2019-03-08T08:55:37+00:00"
+        },
+        {
+            "name": "selective/image-type",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/selective-php/image-type.git",
+                "reference": "4937ec5418f542a23b3c6a603062fa57e33a9bc1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/selective-php/image-type/zipball/4937ec5418f542a23b3c6a603062fa57e33a9bc1",
+                "reference": "4937ec5418f542a23b3c6a603062fa57e33a9bc1",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1"
+            },
+            "require-dev": {
+                "overtrue/phplint": "^1.1",
+                "phpstan/phpstan-shim": "^0.11",
+                "phpunit/phpunit": "^7",
+                "squizlabs/php_codesniffer": "^3.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Selective\\ImageType\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Image type detection",
+            "homepage": "https://github.com/selective-php/image-type",
+            "keywords": [
+                "format",
+                "image",
+                "type"
+            ],
+            "time": "2019-09-03T20:31:27+00:00"
         },
         {
             "name": "stillat/numeral.php",

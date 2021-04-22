@@ -16,6 +16,7 @@
         "anthonymartin/geo-location": "^2.0",
         "sultann/wp-query-builder": "^1.0",
         "jdorn/file-system-cache": "dev-master",
-        "fakerphp/faker": "^1.13"
+        "fakerphp/faker": "^1.13",
+        "selective/image-type": "^1.0"
     }
 }

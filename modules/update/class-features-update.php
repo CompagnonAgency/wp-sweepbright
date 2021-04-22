@@ -41,7 +41,11 @@ class FieldFeaturesUpdate
             'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
           ]);
 
-          $images[] = WP_SweepBright_Helpers::insert_attachment_from_url($image, $post_id);
+          $uploaded_image = WP_SweepBright_Helpers::insert_attachment_from_url($image, $post_id);
+
+          if ($uploaded_image) {
+            $images[] = $uploaded_image;
+          }
         }
         update_field('features', [
           'images' => $images,
