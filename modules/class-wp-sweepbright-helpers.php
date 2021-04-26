@@ -11,7 +11,6 @@
 
 use Selective\ImageType\ImageTypeDetector;
 use Selective\ImageType\Provider\RasterProvider;
-use SplFileObject;
 
 class WP_SweepBright_Helpers
 {
