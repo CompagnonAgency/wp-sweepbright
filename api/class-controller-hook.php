@@ -275,9 +275,8 @@ class WP_SweepBright_Controller_Hook
 			]);
 
 			// Update cache
-			FileSystemCache::$cacheDir = WP_PLUGIN_DIR . '/wp-sweepbright/db/' . WP_SweepBright_Query::slugify(get_bloginfo('name'));
-			$key = FileSystemCache::generateCacheKey('estates');
-			FileSystemCache::invalidate($key);
+			FileSystemCache::$cacheDir = WP_PLUGIN_DIR . '/wp-sweepbright/db';
+			FileSystemCache::invalidateGroup(WP_SweepBright_Query::slugify(get_bloginfo('name')));
 
 			// Log
 			WP_SweepBright_Helpers::status([
@@ -319,20 +318,16 @@ class WP_SweepBright_Controller_Hook
 		$id = WP_SweepBright_Helpers::get_post_ID_from_estate($estate_id);
 
 		// Log
-		$locale = $GLOBALS['wp_sweepbright_config']['default_locale'];
-		WP_SweepBright_Helpers::log([
-			'post_id' => $id,
-			'title' => get_field('estate', $id)['description_title'][$locale],
-			'message' => 'Property has been been deleted.',
-			'action' => 'delete_estate',
+		WP_SweepBright_Helpers::status([
+			'message' => 'Publication deleted.',
+			'status' => 'completed',
 			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
 		]);
 		wp_delete_post($id, true);
 
 		// Update cache
-		FileSystemCache::$cacheDir = WP_PLUGIN_DIR . '/wp-sweepbright/db/' . WP_SweepBright_Query::slugify(get_bloginfo('name'));
-		$key = FileSystemCache::generateCacheKey('estates');
-		FileSystemCache::invalidate($key);
+		FileSystemCache::$cacheDir = WP_PLUGIN_DIR . '/wp-sweepbright/db';
+		FileSystemCache::invalidateGroup(WP_SweepBright_Query::slugify(get_bloginfo('name')));
 		return true;
 	}
 

@@ -652,26 +652,55 @@ class WP_SweepBright_Query
 			->andWhere('post_status', 'publish');
 		$posts = $posts->get();
 
-		// Cache `$results['estates']`
-		FileSystemCache::$cacheDir = WP_PLUGIN_DIR . '/wp-sweepbright/db/' . WP_SweepBright_Query::slugify(get_bloginfo('name'));
-		$key = FileSystemCache::generateCacheKey('estates');
-		$cache = FileSystemCache::retrieve($key);
+		// Set cache directory
+		FileSystemCache::$cacheDir = WP_PLUGIN_DIR . '/wp-sweepbright/db';
 
-		// Formatted object
-		if ($cache) {
+		// Separate cache per 100 properties
+		$results['estates'] = [];
+		$id_arr = [];
+		$key_arr = [];
+		$cache_arr = [];
+		$count = 0;
+
+		foreach ($posts as $post) {
+			// Create post array
+			$id_arr[] = $post->ID;
+			// Create cache key
+			$key_arr[] = FileSystemCache::generateCacheKey('estates_' . $count, WP_SweepBright_Query::slugify(get_bloginfo('name')));
+			$cache_arr[] = FileSystemCache::retrieve($key_arr[$count]);
+
+			// Update count
+			$count++;
+		}
+		$post_chunks = array_chunk($id_arr, 100);
+
+		// Load cache
+		if ($cache_arr[count($post_chunks) - 1]) {
 			error_log('cache retrieved');
-			$results['estates'] = $cache;
+			foreach ($cache_arr as $cache_chunk) {
+				foreach ($cache_chunk as $cache_item) {
+					$results['estates'][] = $cache_item;
+				}
+			}
 		} else {
 			error_log('cache stored');
-			foreach ($posts as $post) {
-				$results['estates'][] = [
-					'id' => $post->ID,
-					'permalink' => get_the_permalink($post->ID),
-					'date' => get_the_time('U', $post->ID),
-					'meta' => get_fields($post->ID),
-				];
+			$tmp_count = 0;
+			foreach ($post_chunks as $post_chunk) {
+				$posts_cache = [];
+				foreach ($post_chunk as $post_id) {
+					// Create post array
+					$post_item = [
+						'id' => $post->ID,
+						'permalink' => get_the_permalink($post_id),
+						'date' => get_the_time('U', $post_id),
+						'meta' => get_fields($post_id),
+					];
+					$posts_cache[] = $post_item;
+					$results['estates'][] = $post_item;
+				}
+				FileSystemCache::store($key_arr[$tmp_count], $posts_cache);
+				$tmp_count++;
 			}
-			FileSystemCache::store($key, $results['estates']);
 		}
 
 		// Filter: hide prospects
