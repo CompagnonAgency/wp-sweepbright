@@ -161,6 +161,9 @@ export default {
           } else {
             this.estates = [];
           }
+          this.totalPages = response.data.totalPages;
+          this.totalPosts = response.data.totalPosts;
+
           const event = new Event('loadedEstates');
           window.dispatchEvent(event);
           this.isLoading = false;
@@ -219,8 +222,10 @@ export default {
           if (window.location.hash) {
             this.request.page = parseInt(window.location.hash.substr(1), 10);
           }
-          if (params && params.page && !this.request.recent) {
+          if (params && params.page) {
             this.request.page = params.page;
+          }
+          if (params && params.page && !this.request.recent) {
             window.location.hash = params.page;
           }
           if (params && params.recent) {
