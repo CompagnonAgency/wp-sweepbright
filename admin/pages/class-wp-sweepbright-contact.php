@@ -182,6 +182,7 @@ class WP_SweepBright_Contact
 			$form = [
 				'title' => '-',
 				'url' => '-',
+				'address' => '-',
 				'first_name' => $this->validate_input($_POST['first_name']),
 				'last_name' => $this->validate_input($_POST['last_name']),
 				'email' => $this->validate_input($_POST['email']),
