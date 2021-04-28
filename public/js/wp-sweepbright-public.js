@@ -219,7 +219,7 @@ export default {
           if (window.location.hash) {
             this.request.page = parseInt(window.location.hash.substr(1), 10);
           }
-          if (params && params.page) {
+          if (params && params.page && !this.request.recent) {
             this.request.page = params.page;
             window.location.hash = params.page;
           }
