@@ -113,6 +113,7 @@ class WP_SweepBright_Contact
 	public function parse_template($template, $form)
 	{
 		$output = str_replace('[title]', $form['title'], $template);
+		$output = str_replace('[address]', $form['address'], $template);
 		$output = str_replace('[url]', $form['url'], $output);
 		$output = str_replace('[first_name]', $form['first_name'], $output);
 		$output = str_replace('[last_name]', $form['last_name'], $output);
@@ -149,6 +150,7 @@ class WP_SweepBright_Contact
 			$form = [
 				'title' => get_the_title(),
 				'url' => '<a href="' . get_the_permalink() . '">View property</a>',
+				'address' => get_field('location')['formatted_agency'],
 				'first_name' => $this->validate_input($_POST['first_name']),
 				'last_name' => $this->validate_input($_POST['last_name']),
 				'email' => $this->validate_input($_POST['email']),
