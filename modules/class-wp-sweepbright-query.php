@@ -678,8 +678,10 @@ class WP_SweepBright_Query
 		if ($cache_arr[count($post_chunks) - 1]) {
 			error_log('cache retrieved');
 			foreach ($cache_arr as $cache_chunk) {
-				foreach ($cache_chunk as $cache_item) {
-					$results['estates'][] = $cache_item;
+				if (is_array($cache_chunk)) {
+					foreach ($cache_chunk as $cache_item) {
+						$results['estates'][] = $cache_item;
+					}
 				}
 			}
 		} else {
