@@ -829,6 +829,7 @@ class WP_SweepBright_Query
 			foreach ($results['estates'] as $estate) {
 				$markers[] = [
 					'id' => $estate["id"],
+					'status' => $estate["meta"]["estate"]["status"],
 					'permalink' => $estate["permalink"],
 					'title' => $estate["meta"]["estate"]["title"],
 					'location' => $estate["meta"]["location"],
