@@ -628,9 +628,9 @@ class WP_SweepBright_Query
 		if ((isset($args['params']['sort']) && $args['params']['sort']['orderBy'] === 'relevance') || $args['params']['recent']) {
 			usort($args['posts'], function ($a, $b) {
 				return ($b['date'] <=> $a['date']) * 2 +
-					(WP_SweepBright_Query::negotiationValue($a['meta']['features']['negotiation']) <=> WP_SweepBright_Query::negotiationValue($b['meta']['features']['negotiation'])) * 10000 +
-					(WP_SweepBright_Query::statusValue($a['meta']['estate']['status']) <=> WP_SweepBright_Query::statusValue($b['meta']['estate']['status'])) * 15000 +
-					($b['meta']['open_homes']['hasOpenHome'] <=> $a['meta']['open_homes']['hasOpenHome']) * 20000;
+					(WP_SweepBright_Query::negotiationValue($a['meta']['features']['negotiation']) <=> WP_SweepBright_Query::negotiationValue($b['meta']['features']['negotiation'])) * 100 +
+					(WP_SweepBright_Query::statusValue($a['meta']['estate']['status']) <=> WP_SweepBright_Query::statusValue($b['meta']['estate']['status'])) * 500 +
+					($b['meta']['open_homes']['hasOpenHome'] <=> $a['meta']['open_homes']['hasOpenHome']) * 1000;
 			});
 		}
 		return $args['posts'];
