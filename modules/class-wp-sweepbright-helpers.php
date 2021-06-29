@@ -157,27 +157,34 @@ class WP_SweepBright_Helpers
 
 		// Detect images
 		if ($ext === 'jpg' || $ext === 'JPG' || $ext === 'jpeg' || $ext === 'JPEG' || $ext === 'png' || $ext === 'PNG' || $ext === 'gif' || $ext === 'GIF') {
-			$is_image = true;
-
 			// Detect HEIC
 			$file = new SplFileObject($file_name);
 			$detector = new ImageTypeDetector();
 			$detector->addProvider(new RasterProvider());
-			$imageType = $detector->getImageTypeFromFile($file);
 
-			if ($imageType->getMimeType() === 'image/heic' || $imageType->getMimeType() === 'image/heif') {
+			try {
+				$is_image = true;
+				$imageType = $detector->getImageTypeFromFile($file);
+
+				if ($imageType->getMimeType() === 'image/heic' || $imageType->getMimeType() === 'image/heif') {
+					$is_heic = true;
+				}
+			} catch (Exception $e) {
 				$is_heic = true;
+				error_log(print_r('Prevented incorrect file from running `getImageTypeFromFile()`', true));
+				error_log(print_r($e, true));
 			}
 		}
 
 		if (!$is_heic) {
+			// Allow uploading PDFs
 			$attach_id = wp_insert_attachment($attachment, $file_name, $post_id);
 
+			// Resize images
 			if ($is_image) {
 				// Make sure that this file is included, as wp_generate_attachment_metadata() depends on it.
 				require_once(ABSPATH . 'wp-admin/includes/image.php');
 
-				// Resize the large image.
 				$image = wp_get_image_editor($file_name);
 
 				if (!is_wp_error($image)) {
