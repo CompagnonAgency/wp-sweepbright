@@ -1,6 +1,7 @@
 <template>
   <input
     type="number"
+    class="w-full"
     :value="inputData(field, col)"
     @change="updateData($event, col, field)"
   />
@@ -17,10 +18,6 @@ export default {
   methods: {
     inputData(field, activeCol) {
       let data = this.col.data[field.sync ? "default" : this.lang][field.id];
-
-      if (!this.col.data.default[field.id]) {
-        this.col.data.default = {};
-      }
 
       if (!data) {
         data = field.default;

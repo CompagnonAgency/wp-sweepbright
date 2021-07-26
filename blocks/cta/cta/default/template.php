@@ -1,16 +1,26 @@
-<div class="py-20 text-white bg-gray-900 <?= $args['theme']['rounded']; ?>">
-  <div class="w-10/12 mx-auto text-center">
-    <p class="mb-4 text-3xl font-light lg:text-5xl font-secondary"><?= WP_SweepBright_Controller_Pages::get($component, $args['column']['data'])['title']; ?></p>
-    <p class="max-w-lg mx-auto mb-8"><?= WP_SweepBright_Controller_Pages::get($component, $args['column']['data'])['slogan']; ?></p>
-    <?php
-    $link = WP_SweepBright_Controller_Pages::get_page(
-      $component,
-      WP_SweepBright_Controller_Pages::get($component, $args['column']['data'])['button_link'],
-      ['single' => true]
-    )["url"];
-    ?>
-    <a href="<?= $link; ?>" class="btn bg-primary">
-      <?= WP_SweepBright_Controller_Pages::get($component, $args['column']['data'])['button_label']; ?>
+<div class="inline-block max-w-3xl">
+  <div class="post">
+    <h2><?= WP_Wrapper::get('title', $component, $args); ?></h2>
+  </div>
+
+  <?php if (WP_Wrapper::get('slogan', $component, $args)) : ?>
+    <div class="mt-6">
+      <p class="inline-block max-w-lg">
+        <?= WP_Wrapper::get('slogan', $component, $args); ?>
+      </p>
+    </div>
+  <?php endif; ?>
+
+  <?php
+  $link = WP_Wrapper::page(
+    $component,
+    WP_Wrapper::get('button_link', $component, $args),
+    ['single' => true]
+  )["url"];
+  ?>
+  <div class="mt-7">
+    <a href="<?= $link; ?>" class="btn btn-primary">
+      <?= WP_Wrapper::get('button_label', $component, $args); ?>
     </a>
   </div>
 </div>

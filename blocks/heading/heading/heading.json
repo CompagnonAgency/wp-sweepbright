@@ -9,6 +9,17 @@
       "id": "title",
       "type": "text",
       "default": "Discover our properties"
+    },
+    {
+      "name": "Border",
+      "id": "border",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "Disable",
+        "enable": "Enable"
+      }
     }
   ]
 }

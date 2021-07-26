@@ -18,11 +18,7 @@ export default {
     inputData(field, activeCol) {
       let data = this.col.data[field.sync ? "default" : this.lang][field.id];
 
-      if (!this.col.data.default[field.id]) {
-        this.col.data.default = {};
-      }
-
-      if (!data) {
+      if (!data && !field.allow_empty) {
         data = field.default;
 
         if (field.sync) {

@@ -1,0 +1,32 @@
+{
+  "name": "Estate - documents",
+  "id": "estate-documents",
+  "icon": "fad fa-folders",
+  "category": "sweepbright",
+  "type": "estate",
+  "fields": [
+    {
+      "name": "Locale",
+      "id": "locale",
+      "type": "locale",
+      "sync": true,
+      "default": {
+        "nl": {
+          "heading": "Plannen en documenten",
+          "plans": "Plannen",
+          "documents": "Documenten"
+        },
+        "fr": {
+          "heading": "Plans et documents",
+          "plans": "Plans",
+          "documents": "Documents"
+        },
+        "en": {
+          "heading": "Plans and documents",
+          "plans": "Plans",
+          "documents": "Documents"
+        }
+      }
+    }
+  ]
+}

@@ -6,53 +6,56 @@
  * @package FieldEstate
  */
 
-class FieldEstate {
+class FieldEstate
+{
 
-	public function __construct() {
+	public function __construct()
+	{
 	}
 
-	public static function retrieve() {
-    return [
-      'key' => 'estate',
-      'name' => 'estate',
-      'label' => 'Estate',
-      'layout' => 'row',
-      'type' => 'group',
-      'sub_fields' => [
-        [
-          'key' => 'estate_id',
-          'label' => 'ID',
-          'name' => 'id',
-          'type' => 'text',
-          'default_value' => '',
-          'readonly' => 0,
-          'disabled' => 0,
-        ],
-        [
-          'key' => 'estate_status',
-          'label' => 'Status',
-          'name' => 'status',
-          'type' => 'select',
-          'default_value' => '',
-          'readonly' => 0,
-          'disabled' => 0,
+	public static function retrieve()
+	{
+		return [
+			'key' => 'estate',
+			'name' => 'estate',
+			'label' => 'Estate',
+			'layout' => 'row',
+			'type' => 'group',
+			'sub_fields' => [
+				[
+					'key' => 'estate_id',
+					'label' => 'ID',
+					'name' => 'id',
+					'type' => 'text',
+					'default_value' => '',
+					'readonly' => 0,
+					'disabled' => 0,
+				],
+				[
+					'key' => 'estate_status',
+					'label' => 'Status',
+					'name' => 'status',
+					'type' => 'select',
+					'default_value' => '',
+					'readonly' => 0,
+					'disabled' => 0,
 					'allow_null' => 1,
-          'choices' => [
-            'option' => 'Option',
-            'rented' => 'Rented',
-            'sold' => 'Sold',
-            'available' => 'Available',
-            'prospect' => 'Prospect',
-            'bid' => 'Bid',
-            'under_contract' => 'Under contract',
-          ],
-        ],
+					'choices' => [
+						'option' => 'Option',
+						'rented' => 'Rented',
+						'sold' => 'Sold',
+						'available' => 'Available',
+						'prospect' => 'Prospect',
+						'bid' => 'Bid',
+						'under_contract' => 'Under contract',
+					],
+				],
 				[
 					'key' => 'estate_title',
 					'label' => 'Title',
-		      'name' => 'title',
-		      'type' => 'group',
-		      'sub_fields' => [
+					'name' => 'title',
+					'type' => 'group',
+					'sub_fields' => [
 						[
 							'key'    => 'estate_title_en',
 							'label'  => 'English',
@@ -76,9 +79,9 @@ class FieldEstate {
 				[
 					'key' => 'estate_description',
 					'label' => 'Description',
-		      'name' => 'description',
-		      'type' => 'group',
-		      'sub_fields' => [
+					'name' => 'description',
+					'type' => 'group',
+					'sub_fields' => [
 						[
 							'key'    => 'estate_description_en',
 							'label'  => 'English',
@@ -120,9 +123,9 @@ class FieldEstate {
 					'label'  => 'Project ID',
 					'name'   => 'project_id',
 					'type' => 'text',
-          'default_value' => '',
-          'readonly' => 0,
-          'disabled' => 0,
+					'default_value' => '',
+					'readonly' => 0,
+					'disabled' => 0,
 				],
 				[
 					'key'    => 'properties',
@@ -138,17 +141,16 @@ class FieldEstate {
 							'display'       => 'block',
 							'sub_fields'    => [
 								[
-                  'key'    => 'property_item',
-                  'label'  => 'Property item',
-                  'name'   => 'property_item',
-                  'type'   => 'text',
+									'key'    => 'property_item',
+									'label'  => 'Property item',
+									'name'   => 'property_item',
+									'type'   => 'text',
 								],
 							],
 						],
 					]
 				],
-      ],
-    ];
+			],
+		];
 	}
-
 }

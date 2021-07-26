@@ -5,37 +5,112 @@
   "category": "layout",
   "fields": [
     {
-      "name": "Links",
-      "id": "links",
+      "name": "Small logo",
+      "id": "small_logo",
+      "type": "upload_single",
+      "default": "/wp-content/plugins/wp-sweepbright/public/images/logo-small.png"
+    },
+    {
+      "name": "Sitemap",
+      "id": "sitemap",
       "type": "page_select_multiple",
+      "default": []
+    },
+    {
+      "name": "Location",
+      "id": "location",
+      "type": "wysiwyg",
+      "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>"
+    },
+    {
+      "name": "Email",
+      "id": "email",
+      "type": "text",
+      "allow_empty": "true",
+      "sync": true
+    },
+    {
+      "name": "Phone",
+      "id": "phone",
+      "type": "text",
+      "allow_empty": "true",
+      "sync": true
+    },
+    {
+      "name": "Facebook",
+      "id": "facebook",
+      "type": "text",
+      "allow_empty": "true",
+      "sync": true
+    },
+    {
+      "name": "Instagram",
+      "id": "instagram",
+      "type": "text",
+      "allow_empty": "true",
+      "sync": true
+    },
+    {
+      "name": "Legal pages",
+      "id": "legal_pages",
+      "type": "page_select_multiple",
+      "default": []
+    },
+    {
+      "name": "Show CIB label",
+      "id": "cib_label",
+      "type": "select",
+      "default": "",
       "sync": true,
-      "default": [
-        {
-          "id": 0,
-          "slug": "home",
-          "order": 0
+      "options": {
+        "": "Disabled",
+        "enabled": "Enabled"
+      }
+    },
+    {
+      "name": "Show BIV label",
+      "id": "biv_label",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "Disabled",
+        "enabled": "Enabled"
+      }
+    },
+    {
+      "name": "BIV description",
+      "id": "biv_description",
+      "type": "wysiwyg",
+      "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>",
+      "condition": {
+        "biv_label": [
+          "enabled"
+        ]
+      }
+    },
+    {
+      "name": "Locale",
+      "id": "locale",
+      "type": "locale",
+      "sync": true,
+      "default": {
+        "nl": {
+          "sitemap": "Sitemap",
+          "contact_us": "Contacteer ons",
+          "follow": "Volg"
         },
-        {
-          "id": 1,
-          "slug": "buy",
-          "order": 1
+        "fr": {
+          "sitemap": "Plan du site",
+          "contact_us": "Contactez-nous",
+          "follow": "Suivez"
         },
-        {
-          "id": 2,
-          "slug": "services",
-          "order": 2
-        },
-        {
-          "id": 3,
-          "slug": "about",
-          "order": 3
-        },
-        {
-          "id": 4,
-          "slug": "contact",
-          "order": 4
+        "en": {
+          "sitemap": "Sitemap",
+          "contact_us": "Contact us",
+          "follow": "Follow"
         }
-      ]
+      }
     }
   ]
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-5">
+  <div class="pt-1 mb-5">
     <loading
       :active.sync="isLoading"
       :can-cancel="false"
@@ -20,7 +20,7 @@
             <tbody>
               <tr>
                 <th scope="row">
-                  <label for="color_primary">Primary color</label>
+                  <label for="color_primary">Primary</label>
                 </th>
                 <td>
                   <input
@@ -34,7 +34,7 @@
               </tr>
               <tr>
                 <th scope="row">
-                  <label for="color_secondary">Secondary color</label>
+                  <label for="color_secondary">Secondary</label>
                 </th>
                 <td>
                   <input
@@ -44,6 +44,156 @@
                     id="color_secondary"
                     class="w-10 regular-text ltr"
                   />
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">
+                  <label for="color_dark">Dark</label>
+                </th>
+                <td>
+                  <input
+                    required
+                    v-model="theme.color_dark"
+                    type="color"
+                    id="color_dark"
+                    class="w-10 regular-text ltr"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">
+                  <label for="color_secondary">Light</label>
+                </th>
+                <td>
+                  <input
+                    required
+                    v-model="theme.color_light"
+                    type="color"
+                    id="color_secondary"
+                    class="w-10 regular-text ltr"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">
+                  <label for="color_text_dark">Text - default</label>
+                </th>
+                <td>
+                  <input
+                    required
+                    v-model="theme.color_text_dark"
+                    type="color"
+                    id="color_text_dark"
+                    class="w-10 regular-text ltr"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">
+                  <label for="color_text_light">Text - light</label>
+                </th>
+                <td>
+                  <input
+                    required
+                    v-model="theme.color_text_light"
+                    type="color"
+                    id="color_text_light"
+                    class="w-10 regular-text ltr"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <hr class="mb-8" />
+
+        <div class="mb-5">
+          <h2 class="mb-1 text-2xl">Style</h2>
+          <table class="form-table" role="presentation">
+            <tbody>
+              <tr>
+                <th scope="row">
+                  <label for="style">Rounded corners</label>
+                </th>
+                <td>
+                  <select
+                    id="style"
+                    class="w-auto regular-text ltr"
+                    v-model="theme.style"
+                  >
+                    <option value="classic">Classic</option>
+                    <option value="playful">Playful</option>
+                    <option value="modern">Modern</option>
+                  </select>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <hr class="mb-8" />
+
+        <div class="mb-5">
+          <h2 class="mb-1 text-2xl">Buttons</h2>
+          <table class="form-table" role="presentation">
+            <tbody>
+              <tr>
+                <th scope="row">
+                  <label for="button_color">Color</label>
+                </th>
+                <td>
+                  <input
+                    required
+                    v-model="theme.button_color"
+                    type="color"
+                    id="button_color"
+                    class="w-10 regular-text ltr"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">
+                  <label for="style">Style</label>
+                </th>
+                <td>
+                  <select
+                    id="style"
+                    class="w-auto regular-text ltr"
+                    v-model="theme.button_style"
+                  >
+                    <option value="normal">Normal</option>
+                    <option value="uppercase">Uppercase</option>
+                    <option value="lowercase">Lowercase</option>
+                    <option value="raised">Raised</option>
+                  </select>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <hr class="mb-8" />
+
+        <div class="mb-5">
+          <h2 class="mb-1 text-2xl">Forms</h2>
+          <table class="form-table" role="presentation">
+            <tbody>
+              <tr>
+                <th scope="row">
+                  <label for="style">Style</label>
+                </th>
+                <td>
+                  <select
+                    id="style"
+                    class="w-auto regular-text ltr"
+                    v-model="theme.form_style"
+                  >
+                    <option value="border_thick">Border (thick)</option>
+                    <option value="border_thin">Border (thin)</option>
+                    <option value="line">Line</option>
+                    <option value="filled">Filled</option>
+                  </select>
                 </td>
               </tr>
             </tbody>
@@ -101,56 +251,6 @@
             </tbody>
           </table>
         </div>
-
-        <hr class="mb-8" />
-
-        <div class="mb-5 last:mb-0">
-          <h2 class="mb-1 text-2xl">Style</h2>
-          <table class="form-table" role="presentation">
-            <tbody>
-              <tr>
-                <th scope="row">
-                  <label for="style">Rounded corners</label>
-                </th>
-                <td>
-                  <select
-                    id="style"
-                    class="w-auto regular-text ltr"
-                    v-model="theme.style"
-                  >
-                    <option value="classic">Classic</option>
-                    <option value="playful">Playful</option>
-                    <option value="modern">Modern</option>
-                  </select>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <hr class="mb-8" />
-
-        <div class="mb-5 last:mb-0">
-          <h2 class="mb-1 text-2xl">Logo</h2>
-          <table class="form-table" role="presentation">
-            <tbody>
-              <tr>
-                <th scope="row">
-                  <label for="logo">Upload logo</label>
-                </th>
-                <td>
-                  <input
-                    v-model="theme.logo"
-                    required
-                    type="text"
-                    id="logo"
-                    class="max-w-lg regular-text ltr"
-                  />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       </form>
     </div>
 
@@ -183,29 +283,9 @@ export default {
       font_secondary: "Merriweather",
       fonts: [
         {
-          name: "Open Sans",
-          value: "Open+Sans",
-          weights: [300, 400, 600, 700],
-        },
-        {
-          name: "Work Sans",
-          value: "Work+Sans",
-          weights: [200, 300, 400, 500, 600],
-        },
-        {
-          name: "Roboto",
-          value: "Roboto",
-          weights: [100, 300, 400, 500, 700],
-        },
-        {
-          name: "Poppins",
-          value: "Poppins",
-          weights: [100, 200, 300, 400, 500, 600],
-        },
-        {
-          name: "Nunito",
-          value: "Nunito",
-          weights: [200, 300, 400, 600, 700],
+          name: "Montserrat",
+          value: "Montserrat",
+          weights: [300, 400, 500, 600],
         },
         {
           name: "Quicksand",
@@ -213,54 +293,34 @@ export default {
           weights: [300, 400, 500, 600, 700],
         },
         {
-          name: "Dosis",
-          value: "Dosis",
-          weights: [200, 300, 400, 500, 600, 700],
+          name: "DM Sans",
+          value: "DM+Sans",
+          weights: [300, 400, 500, 600, 700],
         },
         {
-          name: "Asap",
-          value: "Asap",
-          weights: [400, 500, 600],
+          name: "Manrope",
+          value: "Manrope",
+          weights: [300, 400, 500, 600, 700],
         },
         {
-          name: "Baloo Paaji 2",
-          value: "Baloo+Paaji+2",
-          weights: [400, 500, 600, 700],
+          name: "Inter",
+          value: "Inter",
+          weights: [300, 400, 500, 600, 700],
         },
         {
-          name: "Roboto Slab",
-          value: "Roboto+Slab",
-          weights: [100, 200, 300, 400, 500, 600],
+          name: "Red Hat Display",
+          value: "Red+Hat+Display",
+          weights: [300, 400, 500, 600, 700],
+        },
+        {
+          name: "IBM Plex Sans",
+          value: "IBM+Plex+Sans",
+          weights: [300, 400, 500, 600, 700],
         },
         {
           name: "Source Serif Pro",
           value: "Source+Serif+Pro",
-          weights: [200, 300, 400, 600],
-        },
-        {
-          name: "Merriweather",
-          value: "Merriweather",
-          weights: [300, 400, 700],
-        },
-        {
-          name: "Bitter",
-          value: "Bitter",
-          weights: [100, 200, 300, 400, 500, 600],
-        },
-        {
-          name: "Martel",
-          value: "Martel",
-          weights: [200, 300, 400, 600, 700],
-        },
-        {
-          name: "Cormorant Garamond",
-          value: "Cormorant+Garamond",
-          weights: [300, 400, 500, 600, 700],
-        },
-        {
-          name: "Taviraj",
-          value: "Taviraj",
-          weights: [100, 200, 300, 400, 500, 600],
+          weights: [300, 400, 600],
         },
       ],
       theme: false,
@@ -275,8 +335,7 @@ export default {
         data: {
           theme: this.theme,
         },
-      }).then((response) => {
-        console.log(response);
+      }).then(() => {
         this.isLoading = false;
       });
     },
@@ -305,7 +364,6 @@ export default {
     },
   },
   mounted() {
-    // load defaults
     this.getTheme();
   },
 };

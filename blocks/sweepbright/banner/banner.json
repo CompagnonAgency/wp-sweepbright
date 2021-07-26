@@ -16,8 +16,7 @@
     {
       "name": "Image",
       "id": "image",
-      "type": "text",
-      "sync": true,
+      "type": "upload_single",
       "default": "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2250&q=80"
     },
     {
@@ -46,16 +45,15 @@
       "default": "Buy or rent?"
     },
     {
-      "name": "Search dropdown: Buy",
-      "id": "buy",
-      "type": "text",
-      "default": "Buy"
-    },
-    {
-      "name": "Search dropdown: Rent",
-      "id": "rent",
-      "type": "text",
-      "default": "Rent"
+      "name": "Dropdown filter",
+      "id": "dropdown_filter",
+      "type": "select",
+      "default": "negotiation",
+      "sync": true,
+      "options": {
+        "negotiation": "Buy / rent",
+        "none": "None"
+      }
     },
     {
       "name": "Search button",
@@ -67,14 +65,27 @@
       "name": "Destination page",
       "id": "destination_page",
       "type": "page_select",
+      "default": []
+    },
+    {
+      "name": "Locale",
+      "id": "locale",
+      "type": "locale",
       "sync": true,
-      "default": [
-        {
-          "id": 0,
-          "slug": "home",
-          "order": 0
+      "default": {
+        "nl": {
+          "buy": "Kopen",
+          "rent": "Huren"
+        },
+        "fr": {
+          "buy": "Acheter",
+          "rent": "Louer"
+        },
+        "en": {
+          "buy": "Buy",
+          "rent": "Rent"
         }
-      ]
+      }
     }
   ]
 }

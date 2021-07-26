@@ -1,0 +1,116 @@
+{
+  "name": "Features",
+  "id": "features",
+  "icon": "fad fa-list",
+  "category": "data",
+  "fields": [
+    {
+      "name": "Features per row",
+      "id": "features_per_row",
+      "type": "range",
+      "default": 3,
+      "min": 1,
+      "max": 6,
+      "sync": true
+    },
+    {
+      "name": "Gap",
+      "id": "gap",
+      "type": "select",
+      "default": "5",
+      "sync": true,
+      "options": {
+        "5": "Small",
+        "10": "Medium",
+        "20": "Large",
+        "32": "XL"
+      }
+    },
+    {
+      "name": "Border radius",
+      "id": "border_radius",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "None",
+        "rounded": "Small",
+        "rounded-lg": "Large",
+        "rounded-xl": "XL"
+      }
+    },
+    {
+      "name": "Background color",
+      "id": "background_color",
+      "type": "select",
+      "default": "bg-white",
+      "sync": true,
+      "options": {
+        "bg-white": "White",
+        "bg-light": "Light",
+        "bg-dark": "Dark",
+        "bg-primary": "Primary",
+        "bg-secondary": "Secondary"
+      }
+    },
+    {
+      "name": "Features",
+      "id": "feature_group",
+      "type": "group",
+      "subfields": [
+        {
+          "name": "Icon",
+          "id": "icon",
+          "type": "upload_single",
+          "default": ""
+        },
+        {
+          "name": "Title",
+          "id": "title",
+          "type": "text",
+          "default": "Lorem ipsum"
+        },
+        {
+          "name": "Description",
+          "id": "description",
+          "type": "wysiwyg",
+          "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+        },
+        {
+          "name": "Button",
+          "id": "button",
+          "type": "select",
+          "default": "",
+          "sync": true,
+          "options": {
+            "": "Disabled",
+            "enabled": "Enabled"
+          }
+        },
+        {
+          "name": "Button label",
+          "id": "button_label",
+          "type": "text",
+          "default": "More info",
+          "condition": {
+            "button": [
+              "enabled"
+            ]
+          }
+        },
+        {
+          "name": "Button link",
+          "id": "button_link",
+          "type": "page_select",
+          "default": [],
+          "condition": {
+            "button": [
+              "enabled"
+            ]
+          }
+        }
+      ],
+      "default": []
+    }
+  ]
+}

@@ -11,9 +11,9 @@
 ?>
 
 <script>
-window.sweepbrightLanguage = '<?= WP_SweepBright_Helpers::settings_form()['default_language'] ?>';
+  window.sweepbrightLanguage = '<?= WP_SweepBright_Helpers::settings_form()['default_language'] ?>';
 </script>
 
 <div id="sweepbright-properties"></div>
 
-<?php require_once(plugin_dir_path( __FILE__ ). 'components/footer.php'); ?>
+<?php require_once(plugin_dir_path(__FILE__) . 'components/footer.php'); ?>

@@ -6,37 +6,56 @@
   "type": "navigation",
   "fields": [
     {
+      "name": "Small logo",
+      "id": "small_logo",
+      "type": "upload_single",
+      "default": "/wp-content/plugins/wp-sweepbright/public/images/logo-small.png"
+    },
+    {
+      "name": "Large logo",
+      "id": "large_logo",
+      "type": "upload_single",
+      "default": "/wp-content/plugins/wp-sweepbright/public/images/logo-large.png"
+    },
+    {
       "name": "Links",
       "id": "links",
       "type": "page_select_multiple",
+      "default": []
+    },
+    {
+      "name": "Call to action",
+      "id": "call_to_action",
+      "type": "select",
+      "default": "false",
       "sync": true,
-      "default": [
-        {
-          "id": 0,
-          "slug": "home",
-          "order": 0
-        },
-        {
-          "id": 1,
-          "slug": "buy",
-          "order": 1
-        },
-        {
-          "id": 2,
-          "slug": "services",
-          "order": 2
-        },
-        {
-          "id": 3,
-          "slug": "about",
-          "order": 3
-        },
-        {
-          "id": 4,
-          "slug": "contact",
-          "order": 4
-        }
-      ]
+      "options": {
+        "false": "Disable",
+        "true": "Enable"
+      }
+    },
+    {
+      "name": "Button label",
+      "id": "button_label",
+      "type": "text",
+      "default": "",
+      "allow_empty": true,
+      "condition": {
+        "call_to_action": [
+          "true"
+        ]
+      }
+    },
+    {
+      "name": "Button link",
+      "id": "button_link",
+      "type": "page_select",
+      "default": [],
+      "condition": {
+        "call_to_action": [
+          "true"
+        ]
+      }
     }
   ]
 }

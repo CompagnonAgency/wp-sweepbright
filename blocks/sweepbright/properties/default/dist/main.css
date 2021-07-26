@@ -1,0 +1,183 @@
+.estate-card-default .glide {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.estate-card-default .glide * {
+  box-sizing: inherit;
+}
+
+.estate-card-default .glide__track {
+  overflow: hidden;
+}
+
+.estate-card-default .glide__slides {
+  position: relative;
+  width: 100%;
+  list-style: none;
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+  transform-style: preserve-3d;
+  touch-action: pan-Y;
+  overflow: hidden;
+  padding: 0;
+  white-space: nowrap;
+  display: flex;
+  flex-wrap: nowrap;
+  will-change: transform;
+}
+
+.estate-card-default .glide__slides--dragging {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.estate-card-default .glide__slide {
+  width: 100%;
+  height: 100%;
+  flex-shrink: 0;
+  white-space: normal;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.estate-card-default .glide__slide a {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.estate-card-default .glide__arrows {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.estate-card-default .glide__bullets {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.estate-card-default .glide--rtl {
+  direction: rtl;
+}
+
+.vue-map-container {
+  position: relative;
+}
+
+.vue-map-container .vue-map {
+  left: 0; right: 0; top: 0; bottom: 0;
+  position: absolute;
+}
+.vue-map-hidden {
+  display: none;
+}
+.vue-street-view-pano-container {
+  position: relative;
+}
+
+.vue-street-view-pano-container .vue-street-view-pano {
+  left: 0; right: 0; top: 0; bottom: 0;
+  position: absolute;
+}
+.vld-shown {
+  overflow: hidden;
+}
+
+.vld-overlay {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  align-items: center;
+  display: none;
+  justify-content: center;
+  overflow: hidden;
+  z-index: 9999;
+}
+
+.vld-overlay.is-active {
+  display: flex;
+}
+
+.vld-overlay.is-full-page {
+  z-index: 9999;
+  position: fixed;
+}
+
+.vld-overlay .vld-background {
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  background: #fff;
+  opacity: 0.5;
+}
+
+.vld-overlay .vld-icon, .vld-parent {
+  position: relative;
+}
+
+
+.vue-map-container {
+  position: absolute;
+}
+
+.gm-style .gm-style-iw-d {
+  overflow: hidden !important;
+}
+
+.gm-style .gm-style-iw-c {
+  padding: 0;
+  background-color: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  font-size: 1rem;
+}
+
+.gm-style .gm-style-iw-c button {
+  display: none !important;
+}
+
+.gm-style .gm-style-iw-t::after {
+  margin-top: -2px !important;
+  background: black;
+  box-shadow: none !important;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition-property: all;
+  transition-duration: 200ms;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+  --transform-translate-x: 0;
+  --transform-translate-y: 0;
+  --transform-rotate: 0;
+  --transform-skew-x: 0;
+  --transform-skew-y: 0;
+  --transform-scale-x: 1;
+  --transform-scale-y: 1;
+  transform: translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y)) rotate(var(--transform-rotate)) skewX(var(--transform-skew-x)) skewY(var(--transform-skew-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y));
+  --transform-translate-y: 0.25rem;
+}
+
+/*# sourceMappingURL=dist/main.css.map */

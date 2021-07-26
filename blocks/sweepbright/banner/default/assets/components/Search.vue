@@ -1,15 +1,25 @@
 <template>
   <div
     v-click-outside="closeSuggest"
-    class="flex flex-col w-full p-2 mx-auto mt-16 transition-all duration-300 bg-white border-2 shadow-md lg:max-w-2xl lg:flex-row lg:items-center"
+    class="inline-flex flex-col w-full transition-all duration-300  form-input lg:max-w-2xl lg:flex-row lg:items-center"
     :class="`${theme.rounded} lg:${theme.rounded_lg} ${
-      config.geosuggest.focus ? 'border-primary' : 'border-gray-300'
+      config.geosuggest.focus ? 'border-primary' : ''
+    } ${
+      theme.form_style !== 'line' && theme.form_style !== 'filled'
+        ? 'shadow-md'
+        : 'border-white border-opacity-40'
     }`"
   >
     <div class="relative z-20 flex-1">
       <input
         type="text"
-        class="px-5 font-semibold text-center placeholder-gray-400 bg-transparent border-none lg:text-left"
+        class="w-full pb-3 font-medium text-center placeholder-opacity-50 bg-transparent border-none  lg:pb-0 lg:text-left"
+        :class="[
+          theme.form_style === 'filled' || theme.form_style === 'line'
+            ? 'text-white placeholder-white'
+            : 'placeholder-black',
+          theme.form_style !== 'line' ? 'px-5' : '',
+        ]"
         :placeholder="data.search_placeholder"
         v-model="store.search"
         @input="openSuggest"
@@ -30,12 +40,12 @@
             :class="`${theme.rounded}`"
             v-if="suggestions.length && config.geosuggest.open"
           >
-            <ul class="font-medium divide-y divide-gray-100">
+            <ul class="font-medium text-left divide-y divide-gray-100">
               <li
                 v-for="(suggestion, index) in suggestions"
                 :key="index"
                 @click="setSuggestion(suggestion)"
-                class="px-3 py-2 transition duration-200 cursor-pointer hover:bg-gray-100"
+                class="px-3 py-2 transition duration-200 cursor-pointer  hover:bg-gray-100"
               >
                 {{ suggestion.description }}
               </li>
@@ -46,16 +56,24 @@
     </div>
 
     <div
-      class="relative z-10 justify-center flex-shrink-0 py-3 mb-5 border-t border-b lg:mr-5 lg:mb-0 lg:border-0 lg:py-0 lg:justify-start"
+      class="relative z-10 justify-center flex-shrink-0 py-3 mb-5 border-t border-b  lg:mr-5 lg:mb-0 lg:border-0 lg:py-0 lg:justify-start"
+      v-if="data.dropdown_filter === 'negotiation'"
     >
       <div
-        class="flex items-center justify-center w-full h-full font-semibold text-gray-700 cursor-pointer select-none"
+        class="flex items-center justify-center w-full h-full font-medium text-gray-700 cursor-pointer select-none "
         @click="
           config.negotiation.open = !config.negotiation.open;
           config.geosuggest.open = false;
         "
       >
-        <p class="flex-shrink-0">
+        <p
+          class="flex-shrink-0"
+          :class="
+            theme.form_style === 'filled' || theme.form_style === 'line'
+              ? 'text-white'
+              : ''
+          "
+        >
           <template v-if="store.negotiation">
             {{
               config.negotiation.dropdown.find(
@@ -71,11 +89,11 @@
       </div>
 
       <div
-        class="absolute top-0 left-0 w-full overflow-hidden bg-white border border-gray-200 shadow-md lg:w-32 mt-9"
+        class="absolute top-0 left-0 w-full overflow-hidden bg-white border border-gray-200 shadow-md  lg:w-32 mt-9"
         :class="`${theme.rounded}`"
         v-if="config.negotiation.open"
       >
-        <ul class="font-medium divide-y divide-gray-100">
+        <ul class="font-medium text-left divide-y divide-gray-100">
           <li
             v-for="(dropdown, index) in config.negotiation.dropdown"
             :key="index"
@@ -83,7 +101,7 @@
               store.negotiation = dropdown.value;
               config.negotiation.open = false;
             "
-            class="px-3 py-2 transition duration-200 cursor-pointer hover:bg-gray-100"
+            class="px-3 py-2 transition duration-200 cursor-pointer  hover:bg-gray-100"
           >
             {{ dropdown.label }}
           </li>
@@ -91,7 +109,7 @@
       </div>
     </div>
 
-    <button class="flex-shrink-0 btn bg-primary" @click="search">
+    <button class="flex-shrink-0 btn btn-primary" @click="search">
       <i class="mr-1 fal fa-search"></i>
       {{ data.search_button }}
     </button>
@@ -112,6 +130,7 @@ export default {
   },
   data() {
     return {
+      lang: window.lang,
       theme: window.theme,
       data: window[this.component],
       config: {
@@ -178,11 +197,11 @@ export default {
     setDropdown() {
       this.config.negotiation.dropdown = [
         {
-          label: this.data.buy,
+          label: this.data.locale[this.lang].buy,
           value: "sale",
         },
         {
-          label: this.data.rent,
+          label: this.data.locale[this.lang].rent,
           value: "let",
         },
       ];

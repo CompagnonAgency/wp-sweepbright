@@ -23914,6 +23914,24 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var _default = {
   props: ["component"],
   components: {
@@ -23924,6 +23942,7 @@ var _default = {
   },
   data: function data() {
     return {
+      lang: window.lang,
       theme: window.theme,
       data: window[this.component],
       config: {
@@ -23990,10 +24009,10 @@ var _default = {
     },
     setDropdown: function setDropdown() {
       this.config.negotiation.dropdown = [{
-        label: this.data.buy,
+        label: this.data.locale[this.lang].buy,
         value: "sale"
       }, {
-        label: this.data.rent,
+        label: this.data.locale[this.lang].rent,
         value: "let"
       }];
     }
@@ -24028,13 +24047,17 @@ exports.default = _default;
         }
       ],
       staticClass:
-        "flex flex-col w-full p-2 mx-auto mt-16 transition-all duration-300 bg-white border-2 shadow-md lg:max-w-2xl lg:flex-row lg:items-center",
+        "inline-flex flex-col w-full transition-all duration-300  form-input lg:max-w-2xl lg:flex-row lg:items-center",
       class:
         _vm.theme.rounded +
         " lg:" +
         _vm.theme.rounded_lg +
         " " +
-        (_vm.config.geosuggest.focus ? "border-primary" : "border-gray-300")
+        (_vm.config.geosuggest.focus ? "border-primary" : "") +
+        " " +
+        (_vm.theme.form_style !== "line" && _vm.theme.form_style !== "filled"
+          ? "shadow-md"
+          : "border-white border-opacity-40")
     },
     [
       _c(
@@ -24051,7 +24074,14 @@ exports.default = _default;
               }
             ],
             staticClass:
-              "px-5 font-semibold text-center placeholder-gray-400 bg-transparent border-none lg:text-left",
+              "w-full pb-3 font-medium text-center placeholder-opacity-50 bg-transparent border-none  lg:pb-0 lg:text-left",
+            class: [
+              _vm.theme.form_style === "filled" ||
+              _vm.theme.form_style === "line"
+                ? "text-white placeholder-white"
+                : "placeholder-black",
+              _vm.theme.form_style !== "line" ? "px-5" : ""
+            ],
             attrs: { type: "text", placeholder: _vm.data.search_placeholder },
             domProps: { value: _vm.store.search },
             on: {
@@ -24103,7 +24133,7 @@ exports.default = _default;
                               "ul",
                               {
                                 staticClass:
-                                  "font-medium divide-y divide-gray-100"
+                                  "font-medium text-left divide-y divide-gray-100"
                               },
                               _vm._l(suggestions, function(suggestion, index) {
                                 return _c(
@@ -24111,7 +24141,7 @@ exports.default = _default;
                                   {
                                     key: index,
                                     staticClass:
-                                      "px-3 py-2 transition duration-200 cursor-pointer hover:bg-gray-100",
+                                      "px-3 py-2 transition duration-200 cursor-pointer  hover:bg-gray-100",
                                     on: {
                                       click: function($event) {
                                         return _vm.setSuggestion(suggestion)
@@ -24141,112 +24171,124 @@ exports.default = _default;
         1
       ),
       _vm._v(" "),
-      _c(
-        "div",
-        {
-          staticClass:
-            "relative z-10 justify-center flex-shrink-0 py-3 mb-5 border-t border-b lg:mr-5 lg:mb-0 lg:border-0 lg:py-0 lg:justify-start"
-        },
-        [
-          _c(
+      _vm.data.dropdown_filter === "negotiation"
+        ? _c(
             "div",
             {
               staticClass:
-                "flex items-center justify-center w-full h-full font-semibold text-gray-700 cursor-pointer select-none",
-              on: {
-                click: function($event) {
-                  _vm.config.negotiation.open = !_vm.config.negotiation.open
-                  _vm.config.geosuggest.open = false
-                }
-              }
+                "relative z-10 justify-center flex-shrink-0 py-3 mb-5 border-t border-b  lg:mr-5 lg:mb-0 lg:border-0 lg:py-0 lg:justify-start"
             },
             [
               _c(
-                "p",
-                { staticClass: "flex-shrink-0" },
-                [
-                  _vm.store.negotiation
-                    ? [
-                        _vm._v(
-                          "\n          " +
-                            _vm._s(
-                              _vm.config.negotiation.dropdown.find(function(
-                                obj
-                              ) {
-                                return obj.value === _vm.store.negotiation
-                              }).label
-                            ) +
-                            "\n        "
-                        )
-                      ]
-                    : [
-                        _vm._v(
-                          "\n          " +
-                            _vm._s(_vm.data.search_dropdown) +
-                            "\n        "
-                        )
-                      ]
-                ],
-                2
-              ),
-              _vm._v(" "),
-              _c("i", {
-                staticClass:
-                  "mt-1 ml-2 text-base text-gray-400 far fa-chevron-down"
-              })
-            ]
-          ),
-          _vm._v(" "),
-          _vm.config.negotiation.open
-            ? _c(
                 "div",
                 {
                   staticClass:
-                    "absolute top-0 left-0 w-full overflow-hidden bg-white border border-gray-200 shadow-md lg:w-32 mt-9",
-                  class: "" + _vm.theme.rounded
+                    "flex items-center justify-center w-full h-full font-medium text-gray-700 cursor-pointer select-none ",
+                  on: {
+                    click: function($event) {
+                      _vm.config.negotiation.open = !_vm.config.negotiation.open
+                      _vm.config.geosuggest.open = false
+                    }
+                  }
                 },
                 [
                   _c(
-                    "ul",
-                    { staticClass: "font-medium divide-y divide-gray-100" },
-                    _vm._l(_vm.config.negotiation.dropdown, function(
-                      dropdown,
-                      index
-                    ) {
-                      return _c(
-                        "li",
-                        {
-                          key: index,
-                          staticClass:
-                            "px-3 py-2 transition duration-200 cursor-pointer hover:bg-gray-100",
-                          on: {
-                            click: function($event) {
-                              _vm.store.negotiation = dropdown.value
-                              _vm.config.negotiation.open = false
-                            }
-                          }
-                        },
-                        [
-                          _vm._v(
-                            "\n          " +
-                              _vm._s(dropdown.label) +
-                              "\n        "
-                          )
-                        ]
-                      )
-                    }),
-                    0
-                  )
+                    "p",
+                    {
+                      staticClass: "flex-shrink-0",
+                      class:
+                        _vm.theme.form_style === "filled" ||
+                        _vm.theme.form_style === "line"
+                          ? "text-white"
+                          : ""
+                    },
+                    [
+                      _vm.store.negotiation
+                        ? [
+                            _vm._v(
+                              "\n          " +
+                                _vm._s(
+                                  _vm.config.negotiation.dropdown.find(function(
+                                    obj
+                                  ) {
+                                    return obj.value === _vm.store.negotiation
+                                  }).label
+                                ) +
+                                "\n        "
+                            )
+                          ]
+                        : [
+                            _vm._v(
+                              "\n          " +
+                                _vm._s(_vm.data.search_dropdown) +
+                                "\n        "
+                            )
+                          ]
+                    ],
+                    2
+                  ),
+                  _vm._v(" "),
+                  _c("i", {
+                    staticClass:
+                      "mt-1 ml-2 text-base text-gray-400 far fa-chevron-down"
+                  })
                 ]
-              )
-            : _vm._e()
-        ]
-      ),
+              ),
+              _vm._v(" "),
+              _vm.config.negotiation.open
+                ? _c(
+                    "div",
+                    {
+                      staticClass:
+                        "absolute top-0 left-0 w-full overflow-hidden bg-white border border-gray-200 shadow-md  lg:w-32 mt-9",
+                      class: "" + _vm.theme.rounded
+                    },
+                    [
+                      _c(
+                        "ul",
+                        {
+                          staticClass:
+                            "font-medium text-left divide-y divide-gray-100"
+                        },
+                        _vm._l(_vm.config.negotiation.dropdown, function(
+                          dropdown,
+                          index
+                        ) {
+                          return _c(
+                            "li",
+                            {
+                              key: index,
+                              staticClass:
+                                "px-3 py-2 transition duration-200 cursor-pointer  hover:bg-gray-100",
+                              on: {
+                                click: function($event) {
+                                  _vm.store.negotiation = dropdown.value
+                                  _vm.config.negotiation.open = false
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n          " +
+                                  _vm._s(dropdown.label) +
+                                  "\n        "
+                              )
+                            ]
+                          )
+                        }),
+                        0
+                      )
+                    ]
+                  )
+                : _vm._e()
+            ]
+          )
+        : _vm._e(),
       _vm._v(" "),
       _c(
         "button",
         {
-          staticClass: "flex-shrink-0 btn bg-primary",
+          staticClass: "flex-shrink-0 btn btn-primary",
           on: { click: _vm.search }
         },
         [
@@ -24339,7 +24381,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60679" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58969" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

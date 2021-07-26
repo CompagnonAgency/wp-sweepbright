@@ -12,7 +12,7 @@
       color="#fff"
     ></loading>
 
-    <div class="mb-5 text-right">
+    <div class="mb-5 text-right" v-if="user_roles.includes('administrator')">
       <button
         class="btn btn-primary"
         @click.prevent="
@@ -29,7 +29,7 @@
       v-if="pages.length > 0"
     >
       <div
-        class="px-4 py-2 font-medium text-gray-600 bg-gray-200 border-b border-gray-400"
+        class="px-4 py-2 font-medium text-gray-600 bg-gray-200 border-b border-gray-400 "
       >
         <ul class="flex">
           <li class="w-10/12">Title</li>
@@ -38,21 +38,21 @@
       </div>
       <div class="bg-white">
         <ul
-          class="flex items-center px-4 py-5 transition duration-200 border-b last:border-0 hover:bg-gray-100"
+          class="flex items-center px-4 py-5 transition duration-200 border-b  last:border-0 hover:bg-gray-100"
           v-for="(page, index) in pages"
           :key="index"
         >
           <li class="w-10/12">
             <router-link
               :to="{ name: 'editor', params: { id: page.id } }"
-              class="inline-flex items-center text-base font-semibold transition duration-200 focus:shadow-none hover:text-blue-500 group"
+              class="inline-flex items-center text-base font-semibold transition duration-200  focus:shadow-none hover:text-blue-500 group"
             >
               <i
-                class="w-6 text-lg text-gray-500 far fa-file-alt"
+                class="w-6 text-lg text-gray-500 fad fa-file-alt"
                 v-if="!page.locked"
               ></i>
               <i
-                class="w-6 text-lg text-gray-500 far fa-lock-alt"
+                class="w-6 text-lg text-gray-500 fad fa-lock-alt"
                 v-if="page.locked"
               ></i>
               <span>{{ page.title }}</span>
@@ -76,6 +76,12 @@
             >
               Base
             </p>
+            <p
+              class="ml-6 text-sm text-gray-500"
+              v-if="page.template === '404'"
+            >
+              404
+            </p>
           </li>
           <li class="w-2/12 text-right">
             <ul class="flex items-center justify-end space-x-5 text-xl">
@@ -83,19 +89,19 @@
                 <router-link
                   :to="{ name: 'editor', params: { id: page.id } }"
                   v-tooltip="{ content: 'Edit' }"
-                  class="text-gray-500 transition duration-200 hover:text-green-500 focus:shadow-none focus:text-gray-500"
+                  class="text-gray-500 transition duration-200  hover:text-green-500 focus:shadow-none focus:text-gray-500"
                 >
-                  <i class="far fa-edit"></i>
+                  <i class="fad fa-edit"></i>
                 </router-link>
               </li>
-              <li v-if="!page.locked">
+              <li v-if="!page.locked && user_roles.includes('administrator')">
                 <a
                   href="#"
                   @click="deletePage(page.id)"
                   v-tooltip="{ content: 'Delete' }"
-                  class="text-gray-500 transition duration-200 hover:text-red-500 focus:shadow-none focus:text-gray-500"
+                  class="text-gray-500 transition duration-200  hover:text-red-500 focus:shadow-none focus:text-gray-500"
                 >
-                  <i class="far fa-trash"></i>
+                  <i class="fad fa-trash"></i>
                 </a>
               </li>
             </ul>
@@ -118,14 +124,9 @@ export default {
   computed: {},
   data() {
     return {
+      user_roles: window.wp_user_roles,
       isLoading: false,
       defaultPages: [
-        {
-          id: "base",
-          title: "Base layout",
-          locked: true,
-          template: "base",
-        },
         {
           id: "estate-default",
           title: "Estate - default",
@@ -144,17 +145,46 @@ export default {
           locked: true,
           template: "estate",
         },
+        {
+          id: "404",
+          title: "404 - Page not found",
+          locked: true,
+          template: "404",
+        },
       ],
       pages: [],
+      settings: false,
     };
   },
   methods: {
+    getSettings() {
+      this.isLoading = true;
+      axios({
+        method: "get",
+        url: "/wp-json/v1/sweepbright/pages/settings",
+      }).then((response) => {
+        this.settings = response.data.DATA;
+        this.isLoading = false;
+        this.getPages();
+      });
+    },
     getPages() {
       this.isLoading = true;
       axios({
         method: "get",
         url: "/wp-json/v1/sweepbright/pages/list/",
       }).then((response) => {
+        this.pages = this.defaultPages;
+
+        if (this.user_roles.includes("administrator")) {
+          this.pages.push({
+            id: "base",
+            title: "Base layout",
+            locked: true,
+            template: "base",
+          });
+        }
+
         response.data.PAGES.forEach((page) => {
           let locked = false;
 
@@ -162,14 +192,24 @@ export default {
             locked = true;
           }
 
-          this.pages = this.defaultPages;
+          if (page.post_name === "favorites") {
+            locked = true;
+          }
 
-          this.pages.push({
+          let data = {
             id: page.ID,
             title: page.post_title,
             template: "page",
             locked: locked,
-          });
+          };
+
+          if (page.post_name === "favorites") {
+            if (this.settings.favorites) {
+              this.pages.push(data);
+            }
+          } else {
+            this.pages.push(data);
+          }
         });
 
         this.sortPages();
@@ -201,7 +241,7 @@ export default {
     },
   },
   mounted() {
-    this.getPages();
+    this.getSettings();
   },
 };
 </script>

@@ -169,6 +169,24 @@
       <option class="level-0" value="v1" <?= WP_SweepBright_Helpers::settings_form()['api_version'] === 'v1' ? 'selected' : ''; ?>>v1 (unstable)</option>
     </select>
 
+    <h2 class="title">Pages Bèta</h2>
+    <p>
+      <em>Create beautiful & powerful SweepBright websites by drag & drop.</em>
+    </p>
+    <p>
+      Please note that this feature is currently under development, and should <strong>not</strong> be used in self-hosted production environments.<br>
+      As of this moment we do not offer third party support yet. If you're interested in learning more about this feature, please <a href="mailto:benjamin@compagnon.agency">contact sales</a>.
+    </p>
+    <p>
+      Pages Bèta will ask you to overwrite all of your existing pages, which may result in permanent data loss.<br>
+      We strongly recommend to only use this plugin when starting on a new project.
+    </p>
+
+    <div>
+      <input type="checkbox" id="enable_pages" name="enable_pages" value="1" <?= WP_SweepBright_Helpers::setting('enable_pages') == 1 ? 'checked' : ''; ?> />
+      <label for="enable_pages"> <strong>Enable Pages Bèta</strong></label><br>
+    </div>
+
     <p class="submit">
       <input type="submit" name="submit-global-settings" class="button button-primary" value="Save settings">
     </p>

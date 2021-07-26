@@ -1,0 +1,271 @@
+{
+  "name": "Properties - listing",
+  "id": "properties",
+  "icon": "fad fa-house-signal",
+  "category": "sweepbright",
+  "fields": [
+    {
+      "name": "Mode",
+      "id": "mode",
+      "type": "select",
+      "default": "filter",
+      "sync": true,
+      "options": {
+        "filter": "Filter",
+        "recent": "Recent",
+        "favorites": "Favorites"
+      }
+    },
+    {
+      "name": "Filter",
+      "id": "filter",
+      "type": "select",
+      "default": "all",
+      "sync": true,
+      "options": {
+        "all": "Show all",
+        "sale": "Only for sale",
+        "let": "Only for rent",
+        "projects": "Projects (for sale)",
+        "sale_non_projects": "Non-projects (for sale)"
+      }
+    },
+    {
+      "name": "Max results per page",
+      "id": "max_results_per_page",
+      "type": "range",
+      "default": 9,
+      "min": 0,
+      "max": 20,
+      "sync": true,
+      "condition": {
+        "mode": [
+          "filter"
+        ]
+      }
+    },
+    {
+      "name": "Results per row",
+      "id": "results_per_row",
+      "type": "range",
+      "default": 3,
+      "min": 1,
+      "max": 6,
+      "sync": true
+    },
+    {
+      "name": "Geolocation distance (km)",
+      "id": "geo_distance",
+      "type": "range",
+      "default": 10,
+      "min": 0,
+      "max": 100,
+      "sync": true,
+      "condition": {
+        "mode": [
+          "filter"
+        ]
+      }
+    },
+    {
+      "name": "Card style",
+      "id": "card_style",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "Dark",
+        "light": "Light"
+      }
+    },
+    {
+      "name": "Card border radius",
+      "id": "card_border_radius",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "None",
+        "rounded": "Small",
+        "rounded-lg": "Large",
+        "rounded-xl": "XL"
+      }
+    },
+    {
+      "name": "Empty state - Call to action",
+      "id": "empty_button",
+      "type": "select",
+      "default": "false",
+      "sync": true,
+      "options": {
+        "false": "Disable",
+        "true": "Enable"
+      }
+    },
+    {
+      "name": "Button label",
+      "id": "button_label",
+      "type": "text",
+      "default": "Contact us",
+      "condition": {
+        "empty_button": [
+          "true"
+        ]
+      }
+    },
+    {
+      "name": "Button link",
+      "id": "button_link",
+      "type": "page_select",
+      "default": [],
+      "condition": {
+        "empty_button": [
+          "true"
+        ]
+      }
+    },
+    {
+      "name": "Locale",
+      "id": "locale",
+      "type": "locale",
+      "sync": true,
+      "default": {
+        "nl": {
+          "type": {
+            "categories": "Categorieën",
+            "all_categories": "Alle categorieën",
+            "apartment": "Appartement",
+            "commercial": "Commercieel",
+            "house": "Huis",
+            "land": "Grond",
+            "office": "Kantoor",
+            "parking": "Parking"
+          },
+          "negotiation": {
+            "let": "Te huur",
+            "sale": "Te koop"
+          },
+          "sort": {
+            "label": "Sorteren",
+            "relevance": "Relevantie",
+            "price_asc": "Prijs ↑",
+            "price_desc": "Prijs ↓",
+            "date_asc": "Datum ↑",
+            "date_desc": "Datum ↓"
+          },
+          "status": {
+            "prospect": "Prospect",
+            "available": "Beschikbaar",
+            "option": "In optie",
+            "under_contract": "Onder contract",
+            "Bid": "Geboden",
+            "sold": "Verkocht",
+            "rented": "Verhuurd"
+          },
+          "properties": "Panden",
+          "open_home": "Opendeur",
+          "no_results": "Het spijt ons, maar we konden geen panden vinden die aan uw criteria voldoen.",
+          "no_favorites": "Je hebt nog geen favorieten aan je lijst toegevoegd.",
+          "clear_filters": "Wis filters",
+          "empty": {
+            "title": "Deze woning is niet meer beschikbaar.",
+            "description": "Dit pand is helaas niet meer beschikbaar, maar wij helpen u graag verder op weg.",
+            "close": "Sluiten"
+          },
+          "back": "Vorige",
+          "next": "Volgende"
+        },
+        "fr": {
+          "type": {
+            "categories": "Catégories",
+            "all_categories": "Toutes catégories",
+            "apartment": "Appartement",
+            "commercial": "Commerce",
+            "house": "Maison",
+            "land": "Terrain",
+            "office": "Bureau",
+            "parking": "Parking"
+          },
+          "negotiation": {
+            "let": "A louer",
+            "sale": "À vendre"
+          },
+          "sort": {
+            "label": "Trier par",
+            "relevance": "Pertinence",
+            "price_asc": "Prix ↑",
+            "price_desc": "Prix ↓",
+            "date_asc": "Date ↑",
+            "date_desc": "Date ↓"
+          },
+          "status": {
+            "prospect": "Prospect",
+            "available": "Disponible",
+            "option": "Option",
+            "under_contract": "Sous contrat",
+            "Bid": "Enchère",
+            "sold": "Vendu",
+            "rented": "Loué"
+          },
+          "properties": "Propriétés",
+          "open_home": "Porte ouverte",
+          "no_results": "Nous sommes désolés, mais nous n'avons trouvé aucune propriété correspondant à vos critères.",
+          "no_favorites": "Vous n'avez pas encore ajouté de favoris à votre liste.",
+          "clear_filters": "Effacer les filtres",
+          "empty": {
+            "title": "Cette propriété n'est plus disponible.",
+            "description": "Malheureusement, cette propriété n'est plus disponible, mais nous sommes heureux de vous aider sur votre chemin.",
+            "close": "Fermer"
+          },
+          "back": "Précédent",
+          "next": "suivante"
+        },
+        "en": {
+          "type": {
+            "categories": "Categories",
+            "all_categories": "All categories",
+            "apartment": "Apartment",
+            "commercial": "Commercial",
+            "house": "House",
+            "land": "Land",
+            "office": "Office",
+            "parking": "Parking"
+          },
+          "sort": {
+            "label": "Sort by",
+            "relevance": "Relevance",
+            "price_asc": "Price ↑",
+            "price_desc": "Price ↓",
+            "date_asc": "Date ↑",
+            "date_desc": "Date ↓"
+          },
+          "negotiation": {
+            "let": "For rent",
+            "sale": "For sale"
+          },
+          "status": {
+            "prospect": "Prospect",
+            "available": "Available",
+            "option": "Option",
+            "under_contract": "Under contract",
+            "Bid": "Bid",
+            "sold": "Sold",
+            "rented": "Rented"
+          },
+          "properties": "Properties",
+          "open_home": "Open home",
+          "no_results": "We're sorry but we couldn't find any properties that match your criteria.",
+          "no_favorites": "You haven't added any favorites to your list yet.",
+          "clear_filters": "Clear filters",
+          "empty": {
+            "title": "This property is no longer available.",
+            "description": "Unfortunately, this property is no longer available, but we are happy to help you on your way.",
+            "close": "Close"
+          },
+          "back": "Back",
+          "next": "Next"
+        }
+      }
+    }
+  ]
+}

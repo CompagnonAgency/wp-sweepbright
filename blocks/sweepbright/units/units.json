@@ -1,0 +1,106 @@
+{
+  "name": "Units",
+  "id": "units",
+  "icon": "fad fa-building",
+  "category": "sweepbright",
+  "fields": [
+    {
+      "name": "Units per page",
+      "id": "units_per_page",
+      "type": "range",
+      "default": 10,
+      "min": 1,
+      "max": 20,
+      "sync": true
+    },
+    {
+      "name": "Locale",
+      "id": "locale",
+      "type": "locale",
+      "sync": true,
+      "default": {
+        "nl": {
+          "heading": "Units",
+          "pagination": {
+            "nextLabel": "Volgende",
+            "prevLabel": "Vorige",
+            "rowsPerPageLabel": "Rijen per pagina",
+            "ofLabel": "van",
+            "pageLabel": "Pagina",
+            "allLabel": "Alles"
+          },
+          "negotiation": {
+            "sale": "Te koop",
+            "option": "In optie",
+            "sold": "Verkocht",
+            "rented": "Verhuurd"
+          },
+          "labels": {
+            "price": "Prijs",
+            "status": "Status",
+            "unit": "Unit",
+            "apartment": "Appartement",
+            "living_area": "Bewoonbare opp.",
+            "plot_area": "Grondoppervlakte",
+            "terrace_area": "Terras",
+            "bedrooms": "Slaapkamers"
+          }
+        },
+        "fr": {
+          "heading": "Units",
+          "pagination": {
+            "nextLabel": "Suivant",
+            "prevLabel": "Précédent",
+            "rowsPerPageLabel": "Lignes par page",
+            "ofLabel": "de",
+            "pageLabel": "Page",
+            "allLabel": "Tout"
+          },
+          "negotiation": {
+            "sale": "À vendre",
+            "option": "En option",
+            "sold": "Vendu",
+            "rented": "Loué"
+          },
+          "labels": {
+            "price": "Price",
+            "status": "Status",
+            "unit": "Unit",
+            "apartment": "Appartement",
+            "living_area": "Pièce à vivre",
+            "plot_area": "Surface au sol",
+            "terrace_area": "Terrasse",
+            "bedrooms": "Chambres a coucher"
+          }
+        },
+        "en": {
+          "heading": "Units",
+          "pagination": {
+            "nextLabel": "Next",
+            "prevLabel": "Previous",
+            "rowsPerPageLabel": "Rows per page",
+            "ofLabel": "from",
+            "pageLabel": "Page",
+            "allLabel": "All"
+          },
+          "negotiation": {
+            "sale": "For sale",
+            "option": "In option",
+            "sold": "Sold",
+            "rented": "Rented"
+          },
+          "labels": {
+            "price": "Price",
+            "status": "Status",
+            "unit": "Unit",
+            "apartment": "Apartment",
+            "living_area": "Living area",
+            "plot_area": "Ground area",
+            "terrace_area": "Terrace",
+            "bedrooms": "Bedrooms"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -9,11 +9,11 @@
       </p>
       <p class="flex items-center text-base text-gray-700">
         <template v-if="pageDefault.settings.locked">
-          <i class="w-6 mr-1 text-lg text-gray-500 far fa-lock-alt"></i>
+          <i class="w-6 text-lg text-gray-500 fad fa-lock-alt"></i>
           Locked
         </template>
         <template v-else>
-          <i class="w-6 mr-1 text-lg text-gray-500 far fa-edit"></i>
+          <i class="w-6 text-lg text-gray-500 fad fa-edit"></i>
           Editable
         </template>
       </p>
@@ -23,6 +23,7 @@
         Template
       </p>
       <p class="text-base text-gray-700">
+        <i class="w-5 text-lg text-gray-500 fad fa-file"></i>
         <template v-if="pageDefault.settings.template === 'estate'"
           >Estate</template
         >
@@ -32,59 +33,53 @@
         <template v-if="pageDefault.settings.template === 'base'"
           >Base</template
         >
+        <template v-if="pageDefault.settings.template === '404'">404</template>
       </p>
     </div>
-    <template v-if="navigation">
-      <div class="p-5 border-b border-gray-400 last:border-0">
-        <p
-          class="mb-3 text-xs font-medium tracking-wide text-gray-600 uppercase"
-        >
-          Navigation
-        </p>
-        <p class="text-base text-gray-700">
-          {{ components.find((obj) => obj.id === navigation).name }}
-        </p>
-      </div>
-    </template>
     <template v-if="pageDefault.settings.template === 'default'">
-      <div class="p-5 py-3 font-medium bg-gray-200 border-b border-gray-400">
-        Information
-      </div>
-      <div class="p-5 border-b border-gray-400 last:border-0">
-        <p
-          class="mb-3 text-xs font-medium tracking-wide text-gray-600 uppercase"
-        >
-          Slug
-        </p>
-        <input type="text" @change="setSlug" v-model="pageDefault.slug" />
-      </div>
-      <div class="p-5 py-3 font-medium bg-gray-200 border-b border-gray-400">
-        SEO
-      </div>
-      <div class="p-5 border-b border-gray-400 last:border-0">
-        <p
-          class="mb-3 text-xs font-medium tracking-wide text-gray-600 uppercase"
-        >
-          Title
-        </p>
-        <input
-          type="text"
-          @change="setSettings"
-          v-model="pageDefault.settings.seo.title[lang]"
-        />
-      </div>
-      <div class="p-5 border-b border-gray-400 last:border-0">
-        <p
-          class="mb-3 text-xs font-medium tracking-wide text-gray-600 uppercase"
-        >
-          Description
-        </p>
-        <input
-          type="text"
-          @change="setSettings"
-          v-model="pageDefault.settings.seo.description[lang]"
-        />
-      </div>
+      <template v-if="user_roles.includes('administrator')">
+        <div class="p-5 py-3 font-medium bg-gray-200 border-b border-gray-400">
+          Information
+        </div>
+        <div class="p-5 border-b border-gray-400 last:border-0">
+          <p
+            class="mb-3 text-xs font-medium tracking-wide text-gray-600 uppercase "
+          >
+            Slug
+          </p>
+          <input type="text" @change="setSlug" v-model="pageDefault.slug" />
+        </div>
+      </template>
+
+      <template v-if="user_roles.includes('administrator')">
+        <div class="p-5 py-3 font-medium bg-gray-200 border-b border-gray-400">
+          SEO
+        </div>
+        <div class="p-5 border-b border-gray-400 last:border-0">
+          <p
+            class="mb-3 text-xs font-medium tracking-wide text-gray-600 uppercase "
+          >
+            Title
+          </p>
+          <input
+            type="text"
+            @change="setSettings"
+            v-model="pageDefault.settings.seo.title[lang]"
+          />
+        </div>
+        <div class="p-5 border-b border-gray-400 last:border-0">
+          <p
+            class="mb-3 text-xs font-medium tracking-wide text-gray-600 uppercase "
+          >
+            Description
+          </p>
+          <input
+            type="text"
+            @change="setSettings"
+            v-model="pageDefault.settings.seo.description[lang]"
+          />
+        </div>
+      </template>
     </template>
   </div>
 </template>
@@ -98,6 +93,7 @@ export default {
   computed: {},
   data() {
     return {
+      user_roles: window.wp_user_roles,
       pageDefault: this.page,
     };
   },

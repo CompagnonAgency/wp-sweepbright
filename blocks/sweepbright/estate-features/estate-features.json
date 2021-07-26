@@ -1,0 +1,53 @@
+{
+  "name": "Estate - features",
+  "id": "estate-features",
+  "icon": "fad fa-ballot-check",
+  "category": "sweepbright",
+  "type": "estate",
+  "fields": [
+    {
+      "name": "Features per row",
+      "id": "max_rows",
+      "type": "range",
+      "default": 2,
+      "min": 2,
+      "max": 6,
+      "sync": true
+    },
+    {
+      "name": "Locale",
+      "id": "locale",
+      "type": "locale",
+      "sync": true,
+      "default": {
+        "nl": {
+          "bedrooms": "Slaapkamers",
+          "bathrooms": "Badkamers",
+          "toilets": "WC's",
+          "parking": "Parking",
+          "available": "Aanwezig",
+          "walk_in_closet": "Dressing",
+          "fireplace": "Openhaard"
+        },
+        "fr": {
+          "bedrooms": "Chambres a coucher",
+          "bathrooms": "Salles de bain",
+          "toilets": "Toilettes",
+          "parking": "Parking",
+          "available": "Présent",
+          "walk_in_closet": "Dressing",
+          "fireplace": "Cheminée"
+        },
+        "en": {
+          "bedrooms": "Bedrooms",
+          "bathrooms": "Bathrooms",
+          "toilets": "Toilets",
+          "parking": "Parking",
+          "available": "Available",
+          "walk_in_closet": "Dressing",
+          "fireplace": "Fireplace"
+        }
+      }
+    }
+  ]
+}

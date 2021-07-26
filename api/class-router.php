@@ -87,6 +87,12 @@ class WP_SweepBright_Router
 				'permission_callback' => '__return_true',
 			));
 
+			register_rest_route('v1/sweepbright', '/pages/settings/save', array(
+				'methods' => 'POST',
+				'callback' => __CLASS__ . '::pages_settings_save',
+				'permission_callback' => '__return_true',
+			));
+
 			register_rest_route('v1/sweepbright', '/pages/setup', array(
 				'methods' => 'POST',
 				'callback' => __CLASS__ . '::pages_setup',
@@ -126,6 +132,19 @@ class WP_SweepBright_Router
 			register_rest_route('v1/sweepbright', '/theme', array(
 				'methods' => 'GET',
 				'callback' => __CLASS__ . '::pages_theme_data',
+				'permission_callback' => '__return_true',
+			));
+
+
+			register_rest_route('v1/sweepbright', '/favorites', array(
+				'methods' => 'GET',
+				'callback' => __CLASS__ . '::favorites_list',
+				'permission_callback' => '__return_true',
+			));
+
+			register_rest_route('v1/sweepbright', '/favorites/update', array(
+				'methods' => 'POST',
+				'callback' => __CLASS__ . '::favorites_update',
 				'permission_callback' => '__return_true',
 			));
 		});
@@ -223,6 +242,12 @@ class WP_SweepBright_Router
 		return $wp_sweepbright_controller_pages->settings();
 	}
 
+	public static function pages_settings_save($data)
+	{
+		$wp_sweepbright_controller_pages = new WP_SweepBright_Controller_Pages();
+		return $wp_sweepbright_controller_pages->save_settings($data);
+	}
+
 	public static function pages_list()
 	{
 		$wp_sweepbright_controller_pages = new WP_SweepBright_Controller_Pages();
@@ -261,5 +286,17 @@ class WP_SweepBright_Router
 	public static function pages_theme_data()
 	{
 		return WP_SweepBright_Controller_Pages::theme_data();
+	}
+
+	public static function favorites_list()
+	{
+		$wp_sweepbright_controller_pages = new WP_SweepBright_Controller_Pages();
+		return $wp_sweepbright_controller_pages->favorites_list();
+	}
+
+	public static function favorites_update($data)
+	{
+		$wp_sweepbright_controller_pages = new WP_SweepBright_Controller_Pages();
+		return $wp_sweepbright_controller_pages->favorites_update($data);
 	}
 }

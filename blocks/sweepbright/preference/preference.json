@@ -3,5 +3,172 @@
   "id": "preference",
   "icon": "fad fa-search",
   "category": "sweepbright",
-  "fields": []
+  "fields": [
+    {
+      "name": "Country",
+      "id": "country",
+      "type": "select",
+      "default": "BE",
+      "sync": true,
+      "options": {
+        "BE": "Belgium",
+        "FR": "France",
+        "UK": "United Kingdom"
+      }
+    },
+    {
+      "name": "Currency",
+      "id": "currency",
+      "type": "select",
+      "default": "€",
+      "sync": true,
+      "options": {
+        "€": "Euro",
+        "£": "Pound"
+      }
+    },
+    {
+      "name": "Locale",
+      "id": "locale",
+      "type": "locale",
+      "sync": true,
+      "default": {
+        "nl": {
+          "heading": {
+            "contact": "Contactgegevens",
+            "preferences": "Voorkeuren"
+          },
+          "first_name": "Voornaam",
+          "last_name": "Achternaam",
+          "email": "Email",
+          "phone": "Telefoonnummer",
+          "message": "Extra informatie",
+          "postal_codes": "Postcodes",
+          "postal_codes_placeholder": "Bvb. 8000, 8310, 8200",
+          "postal_codes_help": "Gebruik een komma voor meerdere postcodes.",
+          "country": "Land",
+          "negotiation": "Wilt u kopen of huren?",
+          "types": "Type woning",
+          "min_price": "Minimum prijs",
+          "max_price": "Maximum prijs",
+          "min_rooms": "Minimum aantal kamers",
+          "send_message": "Verzend uw voorkeuren",
+          "dropdowns": {
+            "negotiation": {
+              "let": "Huren",
+              "sale": "Kopen"
+            },
+            "types": {
+              "apartment": "Appartement",
+              "house": "Huis",
+              "land": "Grond",
+              "office": "Kantoor",
+              "commercial": "Commercieel",
+              "parking": "Parking"
+            }
+          },
+          "flash": {
+            "success": {
+              "title": "Bedankt voor uw aanvraag",
+              "description": "We nemen zo snel mogelijk contact met u op."
+            },
+            "error": {
+              "title": "Onze excuses, er liep iets mis.",
+              "description": "Probeer nog eens opnieuw, of neem contact met ons op via e-mail."
+            }
+          }
+        },
+        "fr": {
+          "heading": {
+            "contact": "Détails du contact",
+            "preferences": "Préférences"
+          },
+          "first_name": "Prénom",
+          "last_name": "Nom de famille",
+          "email": "Email",
+          "phone": "Numéro de téléphone",
+          "message": "Informations supplémentaires",
+          "postal_codes": "Codes postaux",
+          "postal_codes_placeholder": "Ex. 75001, 75020, 75116",
+          "postal_codes_help": "Utilisez une virgule pour plusieurs codes postaux.",
+          "country": "Pays",
+          "negotiation": "Voulez-vous acheter ou louer?",
+          "types": "Type de maison",
+          "min_price": "Prix minimum",
+          "max_price": "Prix maximum",
+          "min_rooms": "Nombre minimum de chambres",
+          "send_message": "Soumettez vos préférences",
+          "dropdowns": {
+            "negotiation": {
+              "let": "Louer",
+              "sale": "Acheter"
+            },
+            "types": {
+              "apartment": "Appartement",
+              "house": "Maison",
+              "land": "Terre",
+              "office": "Bureau",
+              "commercial": "Commercial",
+              "parking": "Parking"
+            }
+          },
+          "flash": {
+            "success": {
+              "title": "Merci pour votre demande",
+              "description": "Nous vous contacterons dans les plus brefs"
+            },
+            "error": {
+              "title": "Nous sommes désolés, quelque chose s'est mal passé.",
+              "description": "Veuillez réessayer ou contactez-nous par e-mail."
+            }
+          }
+        },
+        "en": {
+          "heading": {
+            "contact": "Contact details",
+            "preferences": "Preferences"
+          },
+          "first_name": "First name",
+          "last_name": "Last name",
+          "email": "Email",
+          "phone": "Phone number",
+          "message": "Extra information",
+          "postal_codes": "Postal Codes",
+          "postal_codes_placeholder": "E.g. PO16 7GZ, GU16 7HF, L1 8JQ",
+          "postal_codes_help": "Use a comma for multiple zip codes.",
+          "country": "Country",
+          "negotiation": "Do you want to buy or rent?",
+          "types": "House type",
+          "min_price": "Minimum price",
+          "max_price": "Maximum price",
+          "min_rooms": "Minimum number of rooms",
+          "send_message": "Send your preferences",
+          "dropdowns": {
+            "negotiation": {
+              "let": "Huren",
+              "sale": "Kopen"
+            },
+            "types": {
+              "apartment": "Apartment",
+              "house": "House",
+              "land": "Land",
+              "office": "Office",
+              "commercial": "Commercial",
+              "parking": "Parking"
+            }
+          },
+          "flash": {
+            "success": {
+              "title": "Thank you for your request",
+              "description": "We will contact you as soon as possible."
+            },
+            "error": {
+              "title": "We're sorry, something went wrong.",
+              "description": "Please try again, or contact us via email."
+            }
+          }
+        }
+      }
+    }
+  ]
 }

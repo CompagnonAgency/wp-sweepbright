@@ -1,0 +1,29 @@
+{
+  "name": "Testimonials",
+  "id": "testimonials",
+  "icon": "fad fa-quote-left",
+  "category": "data",
+  "fields": [
+    {
+      "name": "Testimonials",
+      "id": "testimonials",
+      "type": "group",
+      "subfields": [
+        {
+          "name": "Description",
+          "id": "description",
+          "type": "wysiwyg",
+          "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+        },
+        {
+          "name": "Title",
+          "id": "title",
+          "type": "text",
+          "default": "",
+          "allow_empty": "true"
+        }
+      ],
+      "default": []
+    }
+  ]
+}

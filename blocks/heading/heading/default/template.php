@@ -1,3 +1,6 @@
-<div>
-  <p class="text-5xl font-thin lg:text-7xl font-secondary"><?= WP_SweepBright_Controller_Pages::get($component, $args['column']['data'])['title']; ?></p>
+<div class="inline-block post">
+  <h2><?= WP_Wrapper::get('title', $component, $args); ?></h2>
+  <?php if (WP_Wrapper::get('border', $component, $args)) : ?>
+    <div class="inline-block w-40 h-px mt-4 bg-gray-300"></div>
+  <?php endif; ?>
 </div>
