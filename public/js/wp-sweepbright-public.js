@@ -39,6 +39,7 @@ export default {
               status: false, // available, sold, option, under_contract, rented
               new_home: false, // new, used
               negotiation: false, // sale, let, projects, sale_non_projects
+              agent: false, // [email_1@mail.com, email_2@mail.com, ...]
               category: [], // see API docs `type`
               subcategory: [], // see API docs `type`
               facilities: {
