@@ -1,0 +1,74 @@
+{
+  "name": "Estate - contact",
+  "id": "estate-contact",
+  "icon": "fad fa-envelope-open-text",
+  "category": "sweepbright",
+  "type": "estate",
+  "fields": [
+    {
+      "name": "Locale",
+      "id": "locale",
+      "type": "locale",
+      "sync": true,
+      "default": {
+        "nl": {
+          "heading": "Interesse in dit pand?",
+          "first_name": "Voornaam",
+          "last_name": "Achternaam",
+          "email": "Email",
+          "phone": "Telefoonnummer",
+          "message": "Uw bericht",
+          "send_message": "Stuur uw bericht",
+          "flash": {
+            "success": {
+              "title": "Bedankt voor uw aanvraag",
+              "description": "We nemen zo snel mogelijk contact met u op."
+            },
+            "error": {
+              "title": "Onze excuses, er liep iets mis.",
+              "description": "Probeer nog eens opnieuw, of neem contact met ons op via e-mail."
+            }
+          }
+        },
+        "fr": {
+          "heading": "Cette propriété vous intéresse?",
+          "first_name": "Prénom",
+          "last_name": "Nom de famille",
+          "email": "Email",
+          "phone": "Numéro de téléphone",
+          "message": "Votre message",
+          "send_message": "Envoyez votre message",
+          "flash": {
+            "success": {
+              "title": "Merci pour votre demande",
+              "description": "Nous vous contacterons dans les plus brefs"
+            },
+            "error": {
+              "title": "Nous sommes désolés, quelque chose s'est mal passé.",
+              "description": "Veuillez réessayer ou contactez-nous par e-mail."
+            }
+          }
+        },
+        "en": {
+          "heading": "Interested in this property?",
+          "first_name": "First name",
+          "last_name": "Last name",
+          "email": "Email",
+          "phone": "Phone number",
+          "message": "Your message",
+          "send_message": "Send your message",
+          "flash": {
+            "success": {
+              "title": "Thank you for your request",
+              "description": "We will contact you as soon as possible."
+            },
+            "error": {
+              "title": "We're sorry, something went wrong.",
+              "description": "Please try again, or contact us via email."
+            }
+          }
+        }
+      }
+    }
+  ]
+}

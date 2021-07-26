@@ -1,0 +1,56 @@
+{
+  "name": "Estate - energy",
+  "id": "estate-energy",
+  "icon": "fad fa-plug",
+  "category": "sweepbright",
+  "type": "estate",
+  "fields": [
+    {
+      "name": "Sizes per row",
+      "id": "max_rows",
+      "type": "range",
+      "default": 2,
+      "min": 2,
+      "max": 6,
+      "sync": true
+    },
+    {
+      "name": "Locale",
+      "id": "locale",
+      "type": "locale",
+      "sync": true,
+      "default": {
+        "nl": {
+          "heading": "Energiescore",
+          "gas": "Aardgas",
+          "solar_panels": "Zonnepanelen",
+          "central_heating": "Centrale verwarming",
+          "electricity": "Electriciteit",
+          "double_glazing": "Dubbel glas",
+          "airco": "Air conditioning",
+          "available": "Aanwezig"
+        },
+        "fr": {
+          "heading": "Score énergétique",
+          "gas": "Gaz naturel",
+          "solar_panels": "Panneaux solaires",
+          "central_heating": "Chauffage central",
+          "electricity": "Électricité",
+          "double_glazing": "Verre double",
+          "airco": "Climatisation",
+          "available": "Présent"
+        },
+        "en": {
+          "heading": "Energy score",
+          "gas": "Natural gas",
+          "solar_panels": "Solar panels",
+          "central_heating": "Chauffage central",
+          "electricity": "Electricity",
+          "double_glazing": "Double glazing",
+          "airco": "Air conditioning",
+          "available": "Available"
+        }
+      }
+    }
+  ]
+}

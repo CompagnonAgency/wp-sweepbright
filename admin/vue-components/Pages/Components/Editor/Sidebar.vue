@@ -4,8 +4,10 @@
       <Column
         :components="components"
         :activeCol="activeCol"
+        :pageSelect="pageSelect"
         :fields="fields"
         :categories="categories"
+        :page="page"
         :pages="pages"
         :lang="lang"
         :navigation="navigation"
@@ -44,6 +46,7 @@ export default {
     "lang",
     "navigation",
     "pages",
+    "pageSelect",
   ],
   components: {
     Column,

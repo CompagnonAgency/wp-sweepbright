@@ -45,3 +45,12 @@ textarea {
   min-height: 200px;
   resize: vertical;
 }
+
+input[type="file"] {
+  display: none;
+}
+
+.wp-core-ui .attachment .landscape img,
+.attachment-info .thumbnail img {
+  border: none;
+}

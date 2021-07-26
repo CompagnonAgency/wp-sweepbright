@@ -10,7 +10,7 @@
  * Author: Compagnon Agency
  * Author URI: https://compagnon.agency/
  * Text Domain: wp-sweepbright
- * Version: 1.7.9
+ * Version: 1.8.0
  */
 
 // If this file is called directly, abort.
@@ -23,7 +23,7 @@ if (!defined('WPINC')) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define('WP_SWEEPBRIGHT_VERSION', '1.7.9');
+define('WP_SWEEPBRIGHT_VERSION', '1.8.0');
 
 /**
  * The code that runs during plugin activation.
@@ -102,16 +102,16 @@ add_filter('wpseo_opengraph_desc', 'ag_yoast_seo_fb_share_descriptions');
 /**
  * Programmatically set SEO meta image
  */
-function ag_yoast_seo_fb_share_images($img)
+function add_images($object)
 {
   global $post;
 
   if (($post && $post->post_type === 'sweepbright_estates')) {
-    $img = get_field('features', $post->ID)['images'][0]['sizes']['large'];
+    $image = get_field('features', $post->ID)['images'][0]['sizes']['large'];
+    $object->add_image($image);
   }
-  return $img;
 }
-add_filter('wpseo_opengraph_image', 'ag_yoast_seo_fb_share_images', 10, 1);
+add_action('wpseo_add_opengraph_images', 'add_images');
 
 /**
  * Redirect estates that are no longer available.
@@ -121,7 +121,7 @@ function redirect_pand()
   global $post;
   global $wp_query;
 
-  if (($post && $post->post_type === 'sweepbright_estates') && WP_SweepBright_Helpers::setting('unavailable_properties') === 'hidden') {
+  if (($post && $post->post_type === 'sweepbright_estates')) {
     // Redirect projects & estates
     if (get_field('estate', $post->ID)['status'] !== 'available') {
       $wp_query->set_404();

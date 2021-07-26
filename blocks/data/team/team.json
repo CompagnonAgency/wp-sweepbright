@@ -1,0 +1,106 @@
+{
+  "name": "Team members",
+  "id": "team",
+  "icon": "fad fa-users",
+  "category": "data",
+  "fields": [
+    {
+      "name": "Members per row",
+      "id": "members_per_row",
+      "type": "range",
+      "default": 3,
+      "min": 1,
+      "max": 6,
+      "sync": true
+    },
+    {
+      "name": "Alignment",
+      "id": "alignment",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "Left",
+        "text-center": "Center",
+        "text-right": "Right"
+      }
+    },
+    {
+      "name": "Border radius",
+      "id": "border_radius",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "None",
+        "rounded": "Small",
+        "rounded-lg": "Large",
+        "rounded-xl": "XL",
+        "rounded-full": "Full"
+      }
+    },
+    {
+      "name": "Aspect ratio",
+      "id": "aspect_ratio",
+      "type": "select",
+      "default": "5/6",
+      "sync": true,
+      "options": {
+        "square": "Square",
+        "4/3": "Photo",
+        "5/6": "Vertical (regular)",
+        "2/3": "Vertical (tall)",
+        "16/9": "Horizontal (widescreen)",
+        "21/9": "Horizontal (cinema)"
+      }
+    },
+    {
+      "name": "Team members",
+      "id": "people",
+      "type": "group",
+      "subfields": [
+        {
+          "name": "Profile",
+          "id": "profile",
+          "type": "upload_single",
+          "default": "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=668&q=80"
+        },
+        {
+          "name": "First name",
+          "id": "first_name",
+          "type": "text",
+          "default": "Jane",
+          "sync": true
+        },
+        {
+          "name": "Last name",
+          "id": "last_name",
+          "type": "text",
+          "default": "Doe",
+          "sync": true
+        },
+        {
+          "name": "Tagline",
+          "id": "tagline",
+          "type": "text",
+          "allow_empty": "true"
+        },
+        {
+          "name": "Phone",
+          "id": "phone",
+          "type": "text",
+          "allow_empty": "true",
+          "sync": true
+        },
+        {
+          "name": "Email",
+          "id": "email",
+          "type": "text",
+          "allow_empty": "true",
+          "sync": true
+        }
+      ],
+      "default": []
+    }
+  ]
+}

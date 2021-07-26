@@ -79,6 +79,15 @@ class WP_SweepBright_Query
 
 	public static function min_max_living_area($iso)
 	{
+		// Easier formatting, used by the editor which uses single language codes
+		if ($iso === 'nl') {
+			$iso = 'nl_NL';
+		} else if ($iso === 'fr') {
+			$iso = 'fr_FR';
+		} else if ($iso === 'en') {
+			$iso = 'en_GB';
+		}
+
 		$units = WP_SweepBright_Query::list_units([
 			'project_id' => get_field('estate')['id'],
 			'ignore_self' => false,
@@ -111,6 +120,15 @@ class WP_SweepBright_Query
 
 	public static function min_max_plot_area($iso)
 	{
+		// Easier formatting, used by the editor which uses single language codes
+		if ($iso === 'nl') {
+			$iso = 'nl_NL';
+		} else if ($iso === 'fr') {
+			$iso = 'fr_FR';
+		} else if ($iso === 'en') {
+			$iso = 'en_GB';
+		}
+
 		$units = WP_SweepBright_Query::list_units([
 			'project_id' => get_field('estate')['id'],
 			'ignore_self' => false,
@@ -149,8 +167,17 @@ class WP_SweepBright_Query
 		return $result;
 	}
 
-	public static function min_max_price($iso = false, $project_id = false)
+	public static function min_max_price($iso = false, $project_id = false, $is_currency = false)
 	{
+		// Easier formatting, used by the editor which uses single language codes
+		if ($iso === 'nl') {
+			$iso = 'nl_NL';
+		} else if ($iso === 'fr') {
+			$iso = 'fr_FR';
+		} else if ($iso === 'en') {
+			$iso = 'en_GB';
+		}
+
 		if ($project_id) {
 			$id = $project_id;
 		} else {
@@ -172,9 +199,12 @@ class WP_SweepBright_Query
 			}
 		}
 		if (count($results) >= 2) {
-			if ($iso) {
+			if ($iso && !$is_currency) {
 				$min = WP_SweepBright_Query::format_number(min($results), $iso);
 				$max = WP_SweepBright_Query::format_number(max($results), $iso);
+			} else if ($is_currency) {
+				$min = WP_SweepBright_Query::format_price(min($results), $iso);
+				$max = WP_SweepBright_Query::format_price(max($results), $iso);
 			} else {
 				$min = min($results);
 				$max = max($results);
@@ -185,8 +215,10 @@ class WP_SweepBright_Query
 				'max' => $max,
 			];
 		} else if (count($results) === 1) {
-			if ($iso) {
+			if ($iso && !$is_currency) {
 				$min = WP_SweepBright_Query::format_number($results[0], $iso);
+			} else if ($is_currency) {
+				$min = WP_SweepBright_Query::format_price($results[0], $iso);
 			} else {
 				$min = $results[0];
 			}
@@ -220,6 +252,15 @@ class WP_SweepBright_Query
 
 	public static function format_number($number, $iso)
 	{
+		// Easier formatting, used by the editor which uses single language codes
+		if ($iso === 'nl') {
+			$iso = 'nl_NL';
+		} else if ($iso === 'fr') {
+			$iso = 'fr_FR';
+		} else if ($iso === 'en') {
+			$iso = 'en_GB';
+		}
+
 		$format = new \NumberFormatter($iso, \NumberFormatter::DECIMAL);
 		$output = $format->format($number);
 		return $output;
@@ -227,6 +268,15 @@ class WP_SweepBright_Query
 
 	public static function get_the_size($iso, $type)
 	{
+		// Easier formatting, used by the editor which uses single language codes
+		if ($iso === 'nl') {
+			$iso = 'nl_NL';
+		} else if ($iso === 'fr') {
+			$iso = 'fr_FR';
+		} else if ($iso === 'en') {
+			$iso = 'en_GB';
+		}
+
 		$size = '';
 
 		if ($type === 'plot_area') {
@@ -243,9 +293,42 @@ class WP_SweepBright_Query
 		return $size;
 	}
 
+	public static function format_price($val, $iso)
+	{
+		// Easier formatting, used by the editor which uses single language codes
+		if ($iso === 'nl') {
+			$iso = 'nl_NL';
+		} else if ($iso === 'fr') {
+			$iso = 'fr_FR';
+		} else if ($iso === 'en') {
+			$iso = 'en_GB';
+		}
+
+		$formatter = new \NumberFormatter($iso, \NumberFormatter::CURRENCY);
+		$formatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, 0);
+		$formatter->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 0);
+		$formatter->setAttribute(NumberFormatter::DECIMAL_ALWAYS_SHOWN, 0);
+		$price = $formatter->formatCurrency($val, get_field('price')['currency']);
+
+		if ($iso === 'en_GB') {
+			$price = substr($price, 0, -3);
+		}
+
+		return $price;
+	}
+
 	public static function get_the_price($iso)
 	{
 		$price = '';
+
+		// Easier formatting, used by the editor which uses single language codes
+		if ($iso === 'nl') {
+			$iso = 'nl_NL';
+		} else if ($iso === 'fr') {
+			$iso = 'fr_FR';
+		} else if ($iso === 'en') {
+			$iso = 'en_GB';
+		}
 
 		if (!get_field('price')['hidden']) {
 			if (get_field('price')['custom_price']) {
@@ -256,6 +339,10 @@ class WP_SweepBright_Query
 				$formatter->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 0);
 				$formatter->setAttribute(NumberFormatter::DECIMAL_ALWAYS_SHOWN, 0);
 				$price = $formatter->formatCurrency(get_field('price')['amount'], get_field('price')['currency']);
+
+				if ($iso === 'en_GB') {
+					$price = substr($price, 0, -3);
+				}
 			}
 		} else {
 			$price = false;
@@ -273,6 +360,22 @@ class WP_SweepBright_Query
 
 		return $args['posts'];
 	}
+
+	public static function filter_favorites($args)
+	{
+		if (isset($args['params']['favorites']) && $args['params']['favorites']) {
+			if (isset($_COOKIE['favorites']) && json_decode($_COOKIE['favorites'], true)) {
+				$args['posts'] = array_filter($args['posts'], function ($estate) {
+					return in_array($estate['id'], json_decode($_COOKIE['favorites'], true));
+				}, ARRAY_FILTER_USE_BOTH);
+			} else {
+				$args['posts'] = [];
+			}
+		}
+
+		return $args['posts'];
+	}
+
 
 	public static function filter_hide_units($args)
 	{
@@ -696,7 +799,7 @@ class WP_SweepBright_Query
 				foreach ($post_chunk as $post_id) {
 					// Create post array
 					$post_item = [
-						'id' => $post->ID,
+						'id' => $post_id,
 						'permalink' => get_the_permalink($post_id),
 						'date' => get_the_time('U', $post_id),
 						'meta' => get_fields($post_id),
@@ -708,6 +811,12 @@ class WP_SweepBright_Query
 				$tmp_count++;
 			}
 		}
+
+		// Filter: show favorites
+		$results['estates'] = WP_SweepBright_Query::filter_favorites([
+			'posts' => $results['estates'],
+			'params' => $params,
+		]);
 
 		// Filter: hide prospects
 		$results['estates'] = WP_SweepBright_Query::filter_hide_prospects([
@@ -816,7 +925,15 @@ class WP_SweepBright_Query
 		if (empty($params['page'])) {
 			$params['page'] = 1;
 		}
-		$max_per_page = WP_SweepBright_Helpers::settings_form()['max_per_page'];
+
+		// Max per page
+		if (isset($params['maxPerPage']) && $params['maxPerPage']) {
+			$max_per_page = $params['maxPerPage'];
+		} else {
+			$max_per_page = WP_SweepBright_Helpers::settings_form()['max_per_page'];
+		}
+
+		// Totals
 		$total_posts = count($results['estates']);
 		$total_pages = abs(ceil($total_posts / $max_per_page));
 		$offset = ($params['page'] * $max_per_page) - $max_per_page;

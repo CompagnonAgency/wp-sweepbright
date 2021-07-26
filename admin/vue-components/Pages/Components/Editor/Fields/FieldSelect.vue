@@ -1,12 +1,10 @@
 <template>
-  <select
-    :value="inputData(field, col)"
-    @change="updateData($event, col, field)"
-  >
+  <select @change="updateData($event, col, field)">
     <option
       v-for="(option, index) in field.options"
       :key="index"
       :value="index"
+      :selected="index === inputData(field, col)"
     >
       {{ option }}
     </option>
@@ -24,10 +22,6 @@ export default {
   methods: {
     inputData(field, activeCol) {
       let data = this.col.data[field.sync ? "default" : this.lang][field.id];
-
-      if (!this.col.data.default[field.id]) {
-        this.col.data.default = {};
-      }
 
       if (!data) {
         data = field.default;
@@ -49,7 +43,6 @@ export default {
       } else {
         col.data["default"][field.id] = data;
       }
-      console.log(col);
       this.$forceUpdate();
     },
   },

@@ -1,0 +1,151 @@
+{
+  "name": "Properties - filter",
+  "id": "filter",
+  "icon": "fad fa-filter",
+  "category": "sweepbright",
+  "fields": [
+    {
+      "name": "Heading",
+      "id": "heading",
+      "type": "text",
+      "default": "View our properties"
+    },
+    {
+      "name": "Filters",
+      "id": "filters",
+      "type": "select",
+      "default": "all",
+      "sync": true,
+      "options": {
+        "all": "Show all",
+        "minimal": "Minimal"
+      }
+    },
+    {
+      "name": "Search placeholder",
+      "id": "search_placeholder",
+      "type": "text",
+      "default": "Enter your location"
+    },
+    {
+      "name": "Search country",
+      "id": "search_country",
+      "type": "select",
+      "default": "be",
+      "sync": true,
+      "options": {
+        "be": "Belgium",
+        "fr": "France",
+        "uk": "United Kingdom",
+        "nl": "Netherlands"
+      }
+    },
+    {
+      "name": "Locale",
+      "id": "locale",
+      "type": "locale",
+      "sync": true,
+      "default": {
+        "nl": {
+          "type": {
+            "categories": "Categorieën",
+            "all_categories": "Alle categorieën",
+            "apartment": "Appartement",
+            "commercial": "Commercieel",
+            "house": "Huis",
+            "land": "Grond",
+            "office": "Kantoor",
+            "parking": "Parking"
+          },
+          "negotiation": {
+            "let": "Te huur",
+            "sale": "Te koop"
+          },
+          "filters": {
+            "negotiation": {
+              "placeholder": "Kopen of huren?",
+              "label": "Kopen & huren",
+              "sale": "Kopen",
+              "let": "Huren"
+            },
+            "price": {
+              "placeholder": "Prijs",
+              "label": "Prijs in"
+            },
+            "sizes": {
+              "placeholder": "Oppervlakte",
+              "plot_area_label": "Grond opp.",
+              "liveable_area_label": "Bewoonbare opp."
+            }
+          }
+        },
+        "fr": {
+          "type": {
+            "categories": "Catégories",
+            "all_categories": "Toutes catégories",
+            "apartment": "Appartement",
+            "commercial": "Commerce",
+            "house": "Maison",
+            "land": "Terrain",
+            "office": "Bureau",
+            "parking": "Parking"
+          },
+          "negotiation": {
+            "let": "A louer",
+            "sale": "À vendre"
+          },
+          "filters": {
+            "negotiation": {
+              "placeholder": "Acheter ou louer?",
+              "label": "Acheter et louer",
+              "sale": "Acheter",
+              "let": "Louer"
+            },
+            "price": {
+              "placeholder": "Prix",
+              "label": "Prix ​​en"
+            },
+            "sizes": {
+              "placeholder": "Surface",
+              "plot_area_label": "Surface du sol",
+              "liveable_area_label": "Surface habitable"
+            }
+          }
+        },
+        "en": {
+          "type": {
+            "categories": "Categories",
+            "all_categories": "All categories",
+            "apartment": "Apartment",
+            "commercial": "Commercial",
+            "house": "House",
+            "land": "Land",
+            "office": "Office",
+            "parking": "Parking"
+          },
+          "negotiation": {
+            "let": "For rent",
+            "sale": "For sale"
+          },
+          "filters": {
+            "negotiation": {
+              "placeholder": "Buy or rent?",
+              "label": "Buy & rent",
+              "sale": "Buy",
+              "let": "Rent"
+            },
+            "price": {
+              "placeholder": "Price",
+              "label": "Price in"
+            },
+            "sizes": {
+              "placeholder": "Size",
+              "plot_area_label": "Plot area",
+              "liveable_area_label": "Liveable area"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

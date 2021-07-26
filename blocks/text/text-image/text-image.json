@@ -1,0 +1,51 @@
+{
+  "name": "Text + image",
+  "id": "text-image",
+  "icon": "fad fa-image-polaroid",
+  "category": "text",
+  "fields": [
+    {
+      "name": "Image",
+      "id": "image",
+      "type": "upload_single",
+      "default": "https://images.unsplash.com/photo-1554995207-c18c203602cb?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2850&q=80"
+    },
+    {
+      "name": "Textarea",
+      "id": "textarea",
+      "type": "wysiwyg",
+      "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>"
+    },
+    {
+      "name": "Button label",
+      "id": "button_label",
+      "type": "text",
+      "default": "Contact us"
+    },
+    {
+      "name": "Button link",
+      "id": "button_link",
+      "type": "page_select",
+      "default": []
+    },
+    {
+      "name": "Background pattern",
+      "id": "background_pattern",
+      "type": "upload_single",
+      "default": ""
+    },
+    {
+      "name": "Border radius",
+      "id": "border_radius",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "None",
+        "rounded": "Small",
+        "rounded-lg": "Large",
+        "rounded-xl": "XL"
+      }
+    }
+  ]
+}

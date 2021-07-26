@@ -1,0 +1,121 @@
+/* 
+ * Navigation
+________________________________________________________________________ */
+
+.js-navigation {
+  transform: translate3d(0,0,0);
+  transition-property: all;
+  transition-duration: 300ms;
+}
+
+.js-navigation.is-hidden {
+  --transform-translate-x: 0;
+  --transform-translate-y: 0;
+  --transform-rotate: 0;
+  --transform-skew-x: 0;
+  --transform-skew-y: 0;
+  --transform-scale-x: 1;
+  --transform-scale-y: 1;
+  transform: translateX(var(--transform-translate-x)) translateY(var(--transform-translate-y)) rotate(var(--transform-rotate)) skewX(var(--transform-skew-x)) skewY(var(--transform-skew-y)) scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y));
+  --transform-translate-y: -100%;
+}
+
+.js-navigation.is-detached {
+  position: fixed;
+  --bg-opacity: 1;
+  background-color: #fff;
+  background-color: rgba(255, 255, 255, var(--bg-opacity));
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.js-navigation.is-attached {
+  position: fixed;
+  background-color: transparent;
+}
+
+.js-navigation.is-attached.is-animated {
+  -webkit-animation: detach 1000ms forwards cubic-bezier(0.5, 0, 0, 1);
+          animation: detach 1000ms forwards cubic-bezier(0.5, 0, 0, 1);
+}
+
+.js-navigation-logo.is-visible {
+  opacity: 0;
+  -webkit-animation: showLogo 300ms forwards cubic-bezier(0.5, 0, 0, 1);
+          animation: showLogo 300ms forwards cubic-bezier(0.5, 0, 0, 1);
+}
+
+.js-navigation-logo.is-hidden {
+  -webkit-animation: hideLogo 300ms forwards cubic-bezier(0.5, 0, 0, 1);
+          animation: hideLogo 300ms forwards cubic-bezier(0.5, 0, 0, 1);
+}
+
+@-webkit-keyframes showLogo {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes showLogo {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes hideLogo {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes hideLogo {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
+@-webkit-keyframes detach {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes detach {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+
+/*# sourceMappingURL=dist/main.css.map */

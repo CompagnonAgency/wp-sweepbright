@@ -1,0 +1,43 @@
+{
+  "name": "Estate - heading",
+  "id": "estate-heading",
+  "icon": "fad fa-sign",
+  "category": "sweepbright",
+  "type": "estate",
+  "fields": [
+    {
+      "name": "Slider navigation",
+      "id": "slider_navigation",
+      "type": "select",
+      "default": "false",
+      "sync": true,
+      "options": {
+        "false": "Disable",
+        "true": "Enable"
+      }
+    },
+    {
+      "name": "Breadcrumb parent",
+      "id": "breadcrumb_parent",
+      "type": "page_select",
+      "default": []
+    },
+    {
+      "name": "Locale",
+      "id": "locale",
+      "type": "locale",
+      "sync": true,
+      "default": {
+        "nl": {
+          "all_units": "Toon alle units"
+        },
+        "fr": {
+          "all_units": "Afficher toutes les unités"
+        },
+        "en": {
+          "all_units": "Show all units"
+        }
+      }
+    }
+  ]
+}

@@ -11,9 +11,6 @@ $wp_default_base = array(
       'items_align' => 'items-start',
       'mobile_direction' => 'flex-col',
       'margin_bottom' => 'mb-0',
-      'padding' => 'p-0',
-      'background' => false,
-      'background_color' => '',
     ),
     'columns' =>
     array(
@@ -50,9 +47,6 @@ $wp_default_base = array(
       'items_align' => 'items-start',
       'mobile_direction' => 'flex-col',
       'margin_bottom' => 'mb-20',
-      'padding' => 'p-0',
-      'background' => false,
-      'background_color' => '',
     ),
     'columns' =>
     array(
@@ -88,9 +82,6 @@ $wp_default_base = array(
       'items_align' => 'items-start',
       'mobile_direction' => 'flex-col',
       'margin_bottom' => 'mb-0',
-      'padding' => 'p-0',
-      'background' => false,
-      'background_color' => '',
     ),
     'columns' =>
     array(

@@ -170,6 +170,9 @@ class WP_SweepBright
 		// Load pages
 		$this->loader->add_action('init', $plugin_admin, 'load_wp_sweepbright_pages');
 
+		// Load wrapper
+		$this->loader->add_action('init', $plugin_admin, 'load_wp_sweepbright_wrapper');
+
 		// Load router
 		$this->loader->add_action('init', $plugin_admin, 'load_wp_sweepbright_router');
 

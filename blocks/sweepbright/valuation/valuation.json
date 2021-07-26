@@ -3,5 +3,116 @@
   "id": "valuation",
   "icon": "fad fa-user-tie",
   "category": "sweepbright",
-  "fields": []
+  "fields": [
+    {
+      "name": "Send to",
+      "id": "send_to",
+      "type": "text",
+      "default": "info@example.com"
+    },
+    {
+      "name": "Message subject",
+      "id": "contact_subject",
+      "type": "text",
+      "default": "New valuation request | [first_name] [last_name]"
+    },
+    {
+      "name": "Message body",
+      "id": "contact_body",
+      "type": "wysiwyg",
+      "default": "<p>You have received a new valuation request via the website.</p><br><br><p><strong>Name:</strong> [first_name] [last_name]</p><p><strong>Email:</strong> [email]</p><p><strong>Phone:</strong> [phone]</p><p><strong>Street:</strong> [street]</p><p><strong>City:</strong> [city]</p><br><br><p><strong>Message:</strong><p><br><p>[message]</p>"
+    },
+    {
+      "name": "Autoreply subject",
+      "id": "autoreply_subject",
+      "type": "text",
+      "default": "Thank you for your valuation request, [first_name]!"
+    },
+    {
+      "name": "Autoreply body",
+      "id": "autoreply_body",
+      "type": "wysiwyg",
+      "default": "<p>Thank you for your valuation request.</p><p>We will contact you as soon as possible.</p><br><br><p>With best regards</p>"
+    },
+    {
+      "name": "Locale",
+      "id": "locale",
+      "type": "locale",
+      "sync": true,
+      "default": {
+        "nl": {
+          "heading": {
+            "contact": "Contactgegevens",
+            "address": "Adresgegevens"
+          },
+          "first_name": "Voornaam",
+          "last_name": "Achternaam",
+          "email": "Email",
+          "phone": "Telefoonnummer",
+          "message": "Extra informatie",
+          "street": "Straatnaam en huisnummer",
+          "city": "Stad",
+          "send_message": "Verzend uw aanvraag",
+          "flash": {
+            "success": {
+              "title": "Bedankt voor uw aanvraag",
+              "description": "We nemen zo snel mogelijk contact met u op."
+            },
+            "error": {
+              "title": "Onze excuses, er liep iets mis.",
+              "description": "Probeer nog eens opnieuw, of neem contact met ons op via e-mail."
+            }
+          }
+        },
+        "fr": {
+          "heading": {
+            "contact": "Contactgegevens",
+            "address": "Données d'adresse"
+          },
+          "first_name": "Prénom",
+          "last_name": "Nom de famille",
+          "email": "Email",
+          "phone": "Numéro de téléphone",
+          "message": "Informations supplémentaires",
+          "street": "Nom de la rue et numéro de la maison",
+          "city": "Ville",
+          "send_message": "Soumettez votre demande",
+          "flash": {
+            "success": {
+              "title": "Merci pour votre demande",
+              "description": "Nous vous contacterons dans les plus brefs"
+            },
+            "error": {
+              "title": "Nous sommes désolés, quelque chose s'est mal passé.",
+              "description": "Veuillez réessayer ou contactez-nous par e-mail."
+            }
+          }
+        },
+        "en": {
+          "heading": {
+            "contact": "Contactgegevens",
+            "address": "Address details"
+          },
+          "first_name": "First name",
+          "last_name": "Last name",
+          "email": "Email",
+          "phone": "Phone number",
+          "message": "Extra information",
+          "street": "Street name and house number",
+          "city": "City",
+          "send_message": "Submit your inquiry",
+          "flash": {
+            "success": {
+              "title": "Thank you for your request",
+              "description": "We will contact you as soon as possible."
+            },
+            "error": {
+              "title": "We're sorry, something went wrong.",
+              "description": "Please try again, or contact us via email."
+            }
+          }
+        }
+      }
+    }
+  ]
 }

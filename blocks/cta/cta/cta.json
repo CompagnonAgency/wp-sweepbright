@@ -14,7 +14,7 @@
       "name": "Slogan",
       "id": "slogan",
       "type": "text",
-      "default": "Let us know what you are looking for and we will help you find your ideal home as soon as possible."
+      "allow_empty": true
     },
     {
       "name": "Button label",
@@ -26,14 +26,7 @@
       "name": "Button link",
       "id": "button_link",
       "type": "page_select",
-      "sync": true,
-      "default": [
-        {
-          "id": 0,
-          "slug": "home",
-          "order": 0
-        }
-      ]
+      "default": []
     }
   ]
 }

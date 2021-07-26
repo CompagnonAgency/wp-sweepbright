@@ -162,6 +162,15 @@ class WP_SweepBright_Admin
 		$wp_sweepbright_controller_pages = new WP_SweepBright_Controller_Pages();
 	}
 
+	/**
+	 * Load the wrapper API.
+	 */
+	public function load_wp_sweepbright_wrapper()
+	{
+		require_once plugin_dir_path(__DIR__) . 'api/class-controller-wrapper.php';
+		$wp_sweepbright_controller_wrapper = new WP_Wrapper();
+	}
+
 
 	/**
 	 * Load the API router.
@@ -200,18 +209,17 @@ class WP_SweepBright_Admin
 			array($this, 'load_admin_properties'),
 		);
 
-		/*
-		// Pages
-		add_submenu_page(
-			$this->plugin_name . '-properties',
-			'Pages',
-			'Pages',
-			'publish_pages',
-			$this->plugin_name . '-pages',
-			array($this, 'load_admin_pages'),
-		);
-		*/
-
+		if (WP_SweepBright_Helpers::setting('enable_pages') == 1) {
+			// Pages
+			add_submenu_page(
+				$this->plugin_name . '-properties',
+				'Pages',
+				'Pages',
+				'publish_pages',
+				$this->plugin_name . '-pages',
+				array($this, 'load_admin_pages'),
+			);
+		}
 		// Database
 		add_submenu_page(
 			$this->plugin_name . '-properties',

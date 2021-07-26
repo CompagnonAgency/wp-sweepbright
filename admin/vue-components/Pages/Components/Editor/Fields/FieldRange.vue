@@ -5,6 +5,7 @@
       type="range"
       :min="field.min"
       :max="field.max"
+      :step="field.step"
       :value="inputData(field, col)"
       @change="updateData($event, col, field)"
     />
@@ -32,10 +33,6 @@ export default {
     },
     inputData(field, activeCol) {
       let data = this.col.data[field.sync ? "default" : this.lang][field.id];
-
-      if (!this.col.data.default[field.id]) {
-        this.col.data.default = {};
-      }
 
       if (!data) {
         data = field.default;

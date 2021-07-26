@@ -9,28 +9,24 @@
         <div
           class="flex items-center p-3 cursor-pointer hover:bg-gray-200"
           v-for="page in col.data.default[field.id]"
-          :key="page.order"
+          :key="page.uuid"
         >
           <i class="mr-3 text-lg text-gray-500 cursor-move far fa-bars"></i>
           <p class="flex-1 text-base font-medium text-gray-700">
-            <template v-if="pages.find((obj) => obj.post_name === page.slug)">
-              {{ pages.find((obj) => obj.post_name === page.slug).post_title }}
+            <template v-if="pages.find((obj) => obj.ID === page.id)">
+              {{ pages.find((obj) => obj.ID === page.id).post_title }}
             </template>
             <template v-else>[Page removed]</template>
           </p>
           <i
             v-tooltip="{ content: 'Remove page' }"
-            @click="deletePage(field, page.order)"
+            @click="deletePage(field, page.uuid)"
             class="ml-3 text-lg text-red-500 far fa-trash"
           ></i>
         </div>
       </draggable>
     </div>
-    <select
-      class="mb-5"
-      v-model="defaultFields.page_select_multiple.active"
-      @change="setFields"
-    >
+    <select class="mb-5" v-model="defaultFields.active" @change="setFields">
       <option
         v-for="(page, index) in pages"
         :key="index"
@@ -50,15 +46,14 @@ import draggable from "vuedraggable";
 import bus from "../../../../../js/pages/bus.js";
 
 export default {
-  props: ["pages", "activeCol", "fields", "field"],
+  props: ["pages", "col", "pageSelect", "field"],
   components: {
     draggable,
   },
   computed: {},
   data() {
     return {
-      defaultFields: this.fields,
-      col: this.activeCol,
+      defaultFields: this.pageSelect,
     };
   },
   methods: {
@@ -67,12 +62,15 @@ export default {
         col,
         field,
       });
+      this.$forceUpdate();
     },
-    deletePage(field, order) {
+    deletePage(field, id) {
       bus.$emit("deletePage", {
         field,
-        order,
+        id,
+        col: this.col,
       });
+      this.$forceUpdate();
     },
     setFields() {
       bus.$emit("setFields", this.defaultFields);
@@ -82,8 +80,11 @@ export default {
         $event,
         data,
       });
+      this.$forceUpdate();
     },
   },
-  mounted() {},
+  mounted() {
+    this.$forceUpdate();
+  },
 };
 </script>

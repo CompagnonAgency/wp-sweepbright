@@ -1,0 +1,42 @@
+{
+  "name": "wp-sweepbright-estate-slider",
+  "version": "1.0.0",
+  "description": "Estate Slider Block",
+  "repository": "https://github.com/CompagnonAgency/project-x",
+  "main": ".eslintrc.js",
+  "scripts": {
+    "dev": "parcel watch assets/main.js --public-url dist",
+    "build": "parcel build assets/main.js --public-url dist"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.14.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-html": "^6.1.1",
+    "eslint-plugin-import": "^2.22.1",
+    "parcel-bundler": "^1.12.4",
+    "postcss-modules": "^2.0.0",
+    "stylelint": "^13.5.0",
+    "stylelint-config-recommended": "^3.0.0",
+    "stylelint-order": "^4.0.0"
+  },
+  "dependencies": {
+    "@fullhuman/postcss-purgecss": "^2.2.0",
+    "@glidejs/glide": "^3.4.1",
+    "@neojp/tailwindcss-aspect-ratio-utilities": "^1.0.0",
+    "autoprefixer": "^9.8.0",
+    "css": "^2.2.4",
+    "glightbox": "^3.0.8",
+    "jquery": "^3.5.1",
+    "parcel": "^2.0.0-nightly.463",
+    "postcss-import": "^12.0.1",
+    "postcss-preset-env": "^6.7.0",
+    "tailwindcss": "^1.4.6"
+  },
+  "browserslist": [
+    "defaults"
+  ]
+}

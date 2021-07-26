@@ -9,6 +9,8 @@
  * @package    WP_SweepBright_Contact
  */
 
+session_start();
+
 class WP_SweepBright_Contact
 {
 
@@ -55,8 +57,9 @@ class WP_SweepBright_Contact
 			if ($recaptcha->success) {
 				$this->submit_estate_form();
 				$this->submit_general_form();
+				$this->submit_valuation_form();
 			} else {
-				$this->emit_event('wp_contact_estate_error');
+				$this->emit_event('wp_contact_estate_error', $recaptcha);
 			}
 		}
 	}
@@ -90,17 +93,17 @@ class WP_SweepBright_Contact
 		return $data;
 	}
 
-	public function emit_event($event)
+	public function emit_event($event, $message = false)
 	{
-		add_action('wp_head', function () use ($event) {
+		add_action('wp_head', function () use ($event, $message) {
 			echo "
 			<script type=\"text/javascript\">
   		setTimeout(() => {
 				// Create the event.
-				var sb_event = document.createEvent('Event');
+				var sb_event = document.createEvent('CustomEvent');
 
 				// Define that the event name is 'build'.
-				sb_event.initEvent('$event', true, true);
+				sb_event.initCustomEvent('$event', true, true, { message: " . json_encode($message) . " });
 
 				// target can be any Element or other EventTarget.
 				document.dispatchEvent(sb_event);
@@ -120,6 +123,8 @@ class WP_SweepBright_Contact
 		$output = str_replace('[email]', $form['email'], $output);
 		$output = str_replace('[phone]', $form['phone'], $output);
 		$output = str_replace('[message]', $form['message'], $output);
+		$output = str_replace('[street]', $form['street'], $output);
+		$output = str_replace('[city]', $form['city'], $output);
 		return $output;
 	}
 
@@ -141,6 +146,33 @@ class WP_SweepBright_Contact
 		}
 		$headers[] = 'Content-Type: text/html; charset=UTF-8';
 		wp_mail($to, $subject, $body, $headers);
+	}
+
+	public function mail_form($form)
+	{
+		// Send to admin
+		$to = $_SESSION["send_to"];
+		if (!$_SESSION["send_to"] || empty($_SESSION["send_to"])) {
+			$to = get_option('admin_email');
+		}
+		$subject = $this->parse_template($_SESSION["contact_subject"], $form);
+		$body = $this->parse_template($_SESSION["contact_body"], $form);
+		$headers = [
+			'From: ' . get_bloginfo('name') . ' <' . $form['email'] . '>',
+			'Reply-To: ' . $form['first_name'] . ' ' . $form['last_name'] . ' <' . $form['email'] . '>',
+		];
+		$headers[] = 'Content-Type: text/html; charset=UTF-8';
+		wp_mail($to, $subject, $body, $headers);
+
+		// Auto respond
+		$subject = $this->parse_template($_SESSION["autoreply_subject"], $form);
+		$body = $this->parse_template($_SESSION["autoreply_body"], $form);
+		$headers = [
+			'From: ' . get_bloginfo('name') . ' <' . $to . '>',
+			'Reply-To: ' . get_bloginfo('name') . ' <' . $to . '>',
+		];
+		$headers[] = 'Content-Type: text/html; charset=UTF-8';
+		wp_mail($form['email'], $subject, $body, $headers);
 	}
 
 	public function submit_estate_form()
@@ -172,7 +204,31 @@ class WP_SweepBright_Contact
 			]);
 
 			$this->autorespond($form);
-			$this->emit_event('wp_contact_estate_sent');
+			$this->emit_event('wp_contact_estate_sent', 'success');
+		}
+	}
+
+	public function submit_valuation_form()
+	{
+		if (isset($_POST['submit-contact-valuation']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
+			$form = [
+				'first_name' => $this->validate_input($_POST['first_name']),
+				'last_name' => $this->validate_input($_POST['last_name']),
+				'email' => $this->validate_input($_POST['email']),
+				'phone' => $this->validate_input($_POST['phone']),
+				'message' => $this->validate_input($_POST['message']),
+				'street' => $this->validate_input($_POST['street']),
+				'city' => $this->validate_input($_POST['city']),
+
+				'contact_to' => $this->validate_input($_POST['contact_to']),
+				'contact_subject' => $this->validate_input($_POST['contact_subject']),
+				'contact_body' => $this->validate_input($_POST['contact_body']),
+				'autoreply_subject' => $this->validate_input($_POST['autoreply_subject']),
+				'autoreply_body' => $this->validate_input($_POST['autoreply_body']),
+			];
+
+			$this->mail_form($form);
+			$this->emit_event('wp_contact_estate_sent', 'success');
 		}
 	}
 
@@ -264,7 +320,7 @@ class WP_SweepBright_Contact
 
 
 			$this->autorespond($form);
-			$this->emit_event('wp_contact_estate_sent');
+			$this->emit_event('wp_contact_estate_sent', 'success');
 		}
 	}
 }

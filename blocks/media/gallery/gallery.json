@@ -1,0 +1,98 @@
+{
+  "name": "Gallery",
+  "id": "gallery",
+  "icon": "fad fa-images",
+  "category": "media",
+  "fields": [
+    {
+      "name": "Images",
+      "id": "images",
+      "type": "upload_multiple",
+      "default": [
+        {
+          "id": 0,
+          "url": "https://images.unsplash.com/photo-1430285561322-7808604715df?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1500&q=80",
+          "order": 0
+        },
+        {
+          "id": 1,
+          "url": "https://images.unsplash.com/photo-1512916194211-3f2b7f5f7de3?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1500&q=80",
+          "order": 1
+        },
+        {
+          "id": 2,
+          "url": "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1346&q=80",
+          "order": 2
+        }
+      ]
+    },
+    {
+      "name": "Gap",
+      "id": "gap",
+      "type": "select",
+      "default": "small",
+      "sync": true,
+      "options": {
+        "none": "None",
+        "small": "Small",
+        "medium": "Medium",
+        "large": "Large"
+      }
+    },
+    {
+      "name": "Slides per view",
+      "id": "slides_per_view",
+      "type": "select",
+      "default": "2",
+      "sync": true,
+      "options": {
+        "1": "1",
+        "2": "2",
+        "3": "3",
+        "4": "4",
+        "5": "5",
+        "6": "6"
+      }
+    },
+    {
+      "name": "Autoplay",
+      "id": "autoplay",
+      "type": "select",
+      "default": "false",
+      "sync": true,
+      "options": {
+        "false": "Disabled",
+        "true": "Enabled"
+      }
+    },
+    {
+      "name": "Border radius",
+      "id": "border_radius",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "None",
+        "rounded": "Small",
+        "rounded-lg": "Large",
+        "rounded-xl": "XL",
+        "rounded-full": "Full"
+      }
+    },
+    {
+      "name": "Aspect ratio",
+      "id": "aspect_ratio",
+      "type": "select",
+      "default": "4/3",
+      "sync": true,
+      "options": {
+        "square": "Square",
+        "4/3": "Photo",
+        "5/6": "Vertical (regular)",
+        "2/3": "Vertical (tall)",
+        "16/9": "Horizontal (widescreen)",
+        "21/9": "Horizontal (cinema)"
+      }
+    }
+  ]
+}

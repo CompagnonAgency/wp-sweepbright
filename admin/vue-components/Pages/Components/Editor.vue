@@ -1,5 +1,5 @@
 <template>
-  <div class="absolute top-0 h-full bg-gray-300 pages-container">
+  <div class="absolute h-full bg-gray-300 pages-container">
     <loading
       :active.sync="isLoading"
       :can-cancel="false"
@@ -12,35 +12,38 @@
       color="#fff"
     ></loading>
 
-    <!-- Navigation -->
-    <Navigation
-      :isLoaded="isLoaded"
-      :page="page"
-      :defaultLang="lang"
-    ></Navigation>
+    <template v-if="lang">
+      <!-- Navigation -->
+      <Navigation
+        :isLoaded="isLoaded"
+        :page="page"
+        :defaultLang="lang"
+        :settings="settings"
+      ></Navigation>
 
-    <!-- Canvas -->
-    <Canvas
-      :isLoaded="isLoaded"
-      :page="page"
-      :components="components"
-      :activeRow="activeRow"
-      :activeCol="activeCol"
-    ></Canvas>
+      <!-- Canvas -->
+      <Canvas
+        :isLoaded="isLoaded"
+        :page="page"
+        :components="components"
+        :activeRow="activeRow"
+        :activeCol="activeCol"
+      ></Canvas>
 
-    <!-- Sidebar -->
-    <Sidebar
-      :isLoaded="isLoaded"
-      :page="page"
-      :components="components"
-      :categories="categories"
-      :activeRow="activeRow"
-      :activeCol="activeCol"
-      :fields="fields"
-      :lang="lang"
-      :pages="pages"
-      :navigation="navigation"
-    ></Sidebar>
+      <!-- Sidebar -->
+      <Sidebar
+        :isLoaded="isLoaded"
+        :page="page"
+        :components="components"
+        :categories="categories"
+        :activeRow="activeRow"
+        :activeCol="activeCol"
+        :pageSelect="page_select_multiple"
+        :lang="lang"
+        :pages="pages"
+        :navigation="navigation"
+      ></Sidebar>
+    </template>
   </div>
 </template>
 
@@ -68,18 +71,17 @@ export default {
       isLoaded: false,
       activeCol: false,
       activeRow: false,
+      settings: {},
       components: [],
       categories: [],
-      lang: "nl",
+      lang: "",
       navigation: false,
       base: [],
       page: [],
       pages: [],
       link: "",
-      fields: {
-        page_select_multiple: {
-          active: false,
-        },
+      page_select_multiple: {
+        active: false,
       },
     };
   },
@@ -87,6 +89,17 @@ export default {
     preview() {
       const win = window.open(this.link, "_blank");
       win.focus();
+    },
+    getSettings() {
+      this.isLoading = true;
+      axios({
+        method: "get",
+        url: "/wp-json/v1/sweepbright/pages/settings",
+      }).then((response) => {
+        this.settings = response.data.DATA;
+        this.isLoading = false;
+        this.isLoaded = true;
+      });
     },
     getPage() {
       this.isLoading = true;
@@ -105,9 +118,8 @@ export default {
         if (this.$route.params.id !== "base") {
           this.base = response.data.BASE.layout;
         }
-        this.isLoaded = true;
         this.init();
-        this.isLoading = false;
+        this.getSettings();
       });
     },
     init() {
@@ -134,6 +146,16 @@ export default {
         if (this.page.id === "create") {
           this.page.id = response.data.ID;
           this.$router.push({ name: "editor", params: { id: this.page.id } });
+
+          this.$toast.open({
+            message: "Published successfully.",
+            type: "success",
+          });
+        } else {
+          this.$toast.open({
+            message: "Saved successfully.",
+            type: "success",
+          });
         }
       });
     },
@@ -146,38 +168,43 @@ export default {
         }
       });
     },
-    sortedPages(pages) {
-      let output = [];
-      if (pages) {
-        output = pages.sort((a, b) =>
-          a.order < b.order ? -1 : a.order > b.order ? 1 : 0
-        );
-      }
-      return output;
-    },
     addPage(col, field) {
       const id = this.pages.find(
-        (obj) => obj.post_name === this.fields.page_select_multiple.active
+        (obj) => obj.post_name === this.page_select_multiple.active
       ).ID;
+      const uuid = uuidv4();
 
       if (!col.data.default[field.id]) {
-        col.data.default = {};
-      }
-
-      if (col.data.default[field.id]) {
-        col.data.default[field.id].push({
-          id,
-          slug: this.fields.page_select_multiple.active,
-          order: col.data.default[field.id].length,
-        });
-      } else {
         col.data.default[field.id] = [];
-        col.data.default[field.id].push({
-          id,
-          slug: this.fields.page_select_multiple.active,
-          order: col.data.default[field.id].length,
-        });
       }
+      const page = {
+        id,
+        uuid,
+        slug: this.page_select_multiple.active,
+        order: col.data.default[field.id].length,
+      };
+      col.data.default[field.id].push(page);
+    },
+    addImage(id, url, col, field) {
+      if (!col.data.default[field.id]) {
+        col.data.default[field.id] = [];
+      }
+      const image = {
+        id,
+        url,
+        order: col.data.default[field.id].length,
+      };
+      col.data.default[field.id].push(image);
+    },
+    addGroup(fields, col, field) {
+      const colUid = uuidv4();
+      const group = {
+        id: colUid,
+        field: field.id,
+        fields,
+        order: col.data.default[field.id].length,
+      };
+      col.data.default[field.id].push(group);
       this.$forceUpdate();
     },
     endDrag(e, pages) {
@@ -187,33 +214,35 @@ export default {
       });
       this.$forceUpdate();
     },
-    resetPageOrder(field) {
-      this.activeCol.data.default[field["id"]].forEach((page, index) => {
+    resetPageOrder(field, col) {
+      col.data.default[field["id"]].forEach((page, index) => {
         page.order = index;
       });
     },
-    deletePage(field, order) {
-      this.activeCol.data.default[field["id"]] = this.activeCol.data.default[
-        field["id"]
-      ].filter((obj) => {
-        return obj.order !== order;
-      });
-      this.resetPageOrder(field);
+    deletePage(field, id, col) {
+      col.data.default[field["id"]] = col.data.default[field["id"]].filter(
+        (obj) => {
+          return obj.uuid !== id;
+        }
+      );
+      this.resetPageOrder(field, col);
+      this.$forceUpdate();
+    },
+    deleteItem(field, id, col) {
+      col.data.default[field["id"]] = col.data.default[field["id"]].filter(
+        (obj) => {
+          return obj.id !== id;
+        }
+      );
+      this.resetPageOrder(field, col);
       this.$forceUpdate();
     },
     resetFields() {
-      this.fields.page_select_multiple.active = this.pages[0].post_name;
+      this.page_select_multiple.active = this.pages[0].post_name;
     },
     setComponentData(col) {
       this.resetFields();
       const component = this.components.find((obj) => obj.id === col.component);
-
-      col.data = {
-        nl: {},
-        fr: {},
-        en: {},
-        default: {},
-      };
 
       if (component) {
         if (component.type === "navigation") {
@@ -222,13 +251,21 @@ export default {
           delete col.type;
         }
 
+        // Garbage collection > remove any existing data first
+        this.$set(col.data, "nl", {});
+        this.$set(col.data, "fr", {});
+        this.$set(col.data, "en", {});
+        this.$set(col.data, "default", {});
+
+        // Set the data
         component.fields.forEach((field) => {
-          if (!field.sync) {
-            col.data["nl"][field["id"]] = "";
-            col.data["en"][field["id"]] = "";
-            col.data["fr"][field["id"]] = "";
+          const data = field.default;
+          if (field.sync) {
+            this.$set(col.data.default, field.id, data);
           } else {
-            col.data["default"][field["id"]] = "";
+            this.$set(col.data.en, field.id, data);
+            this.$set(col.data.nl, field.id, data);
+            this.$set(col.data.fr, field.id, data);
           }
         });
       }
@@ -237,11 +274,27 @@ export default {
       this.activeRow = false;
       this.resetFields();
 
+      // This is needed when a page contains no data and the object is empty.
+      // Empty objects are saved and returned as an empty array in PHP, so it breaks reactivity in Vue.
+      if (col.data.nl.length === 0) {
+        col.data.nl = {};
+      }
+      if (col.data.fr.length === 0) {
+        col.data.fr = {};
+      }
+      if (col.data.en.length === 0) {
+        col.data.en = {};
+      }
+      if (col.data.default.length === 0) {
+        col.data.default = {};
+      }
+
       if (this.activeCol && this.activeCol.id === col.id) {
         this.activeCol = false;
       } else {
         this.activeCol = col;
       }
+
       bus.$emit("setCol", this.activeCol);
     },
     deselect() {
@@ -324,6 +377,7 @@ export default {
               return obj;
             });
             this.sortLayout();
+            this.deselect();
           }
         });
     },
@@ -359,9 +413,6 @@ export default {
           items_align: "items-start",
           mobile_direction: "flex-col",
           margin_bottom: "mb-20",
-          padding: "p-0",
-          background: false,
-          background_color: "",
         },
         columns: [],
       });
@@ -397,6 +448,7 @@ export default {
             return obj;
           });
           this.sortLayout();
+          this.deselect();
         });
       }
     },
@@ -481,16 +533,32 @@ export default {
         this.addPage(args.col, args.field);
       });
 
+      bus.$on("addImage", (args) => {
+        this.addImage(args.id, args.url, args.col, args.field);
+      });
+
+      bus.$on("addGroup", (args) => {
+        this.addGroup(args.fields, args.col, args.field);
+      });
+
+      bus.$on("deleteItem", (args) => {
+        this.deleteItem(args.field, args.id, args.col);
+      });
+
       bus.$on("deletePage", (args) => {
-        this.deletePage(args.field, args.order);
+        this.deletePage(args.field, args.id, args.col);
       });
 
       bus.$on("setFields", (fields) => {
-        this.fields = fields;
+        this.page_select_multiple = fields;
       });
 
-      bus.$on("setStyle", (style) => {
-        this.activeRow.style = style;
+      bus.$on("setStyle", (style, apply) => {
+        if (apply === "row") {
+          this.activeRow.style = style;
+        } else if (apply === "col") {
+          this.activeCol.style = style;
+        }
       });
 
       bus.$on("setSettings", (settings) => {
@@ -520,31 +588,79 @@ export default {
 </script>
 
 <style>
+:root {
+  --topOffset: 0px;
+  --containerWidthOffset: 20px;
+  --wordpressSidebar: 160px;
+  --editorSidebar: 400px;
+  --offsetTop: 84px;
+  --toolbarHeight: 52px;
+}
+
 .pages-navigation {
-  width: calc(100% - 160px);
+  width: calc(100% - var(--wordpressSidebar));
 }
 
 .pages-canvas {
-  margin-top: 52px;
-  margin-left: 160px;
-  width: calc(100% - 300px - 160px);
-  height: calc(100vh - 84px);
+  margin-top: var(--toolbarHeight);
+  margin-left: var(--wordpressSidebar);
+  width: calc(100% - var(--editorSidebar) - var(--wordpressSidebar));
+  height: calc(100vh - var(--offsetTop));
 
   @apply fixed left-0 z-0 overflow-hidden overflow-y-auto;
 }
 
 .pages-sidebar {
-  margin-top: 52px;
-  width: 300px;
-  height: calc(100vh - 84px);
+  margin-top: var(--toolbarHeight);
+  width: var(--editorSidebar);
+  height: calc(100vh - var(--offsetTop));
 
   @apply fixed right-0 z-0 border-l border-gray-400 overflow-hidden overflow-y-auto;
 }
 
 .pages-container {
-  margin-left: -20px;
-  width: calc(100% + 20px);
+  top: var(--topOffset);
+  margin-left: calc(1px - var(--containerWidthOffset));
+  width: calc(100% + var(--containerWidthOffset));
   min-height: 100%;
-  height: calc(100vh - 32px);
+}
+
+.v-toast__item {
+  @apply shadow-md rounded-lg;
+}
+
+.v-toast__item--success {
+  @apply bg-blue-500;
+}
+
+.v-toast__item .v-toast__icon {
+  width: 22px;
+  min-width: 22px;
+  height: 22px;
+}
+
+.v-toast__item .v-toast__text {
+  @apply py-1 pr-4 pl-2 text-sm;
+}
+
+@media only screen and (max-width: 960px) {
+  :root {
+    --wordpressSidebar: 36px;
+  }
+}
+
+@media only screen and (max-width: 782px) {
+  :root {
+    --wordpressSidebar: 0px;
+    --containerWidthOffset: 10px;
+    --toolbarHeight: 50px;
+    --offsetTop: 96px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  :root {
+    --topOffset: 45px;
+  }
 }
 </style>

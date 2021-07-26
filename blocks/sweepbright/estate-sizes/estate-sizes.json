@@ -1,0 +1,44 @@
+{
+  "name": "Estate - sizes",
+  "id": "estate-sizes",
+  "icon": "fad fa-ruler-combined",
+  "category": "sweepbright",
+  "type": "estate",
+  "fields": [
+    {
+      "name": "Sizes per row",
+      "id": "max_rows",
+      "type": "range",
+      "default": 2,
+      "min": 2,
+      "max": 6,
+      "sync": true
+    },
+    {
+      "name": "Locale",
+      "id": "locale",
+      "type": "locale",
+      "sync": true,
+      "default": {
+        "nl": {
+          "heading": "Oppervlaktes",
+          "terrace": "Terras",
+          "liveable_area": "Bewoonbare oppervlakte",
+          "plot_area": "Grondoppervlakte"
+        },
+        "fr": {
+          "heading": "Surfaces",
+          "terrace": "Terrasse",
+          "liveable_area": "Surface habitable",
+          "plot_area": "Surface au sol"
+        },
+        "en": {
+          "heading": "Surfaces",
+          "terrace": "Terrace",
+          "liveable_area": "Living area",
+          "plot_area": "Plot area"
+        }
+      }
+    }
+  ]
+}

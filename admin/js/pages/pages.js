@@ -6,9 +6,17 @@ import Pages from '../../vue-components/Pages/Pages.vue';
 // Modules
 import VTooltip from 'v-tooltip';
 import VuejsDialog from 'vuejs-dialog';
+import VueToast from 'vue-toast-notification';
+// import 'vue-toast-notification/dist/theme-default.css';
+import 'vue-toast-notification/dist/theme-sugar.css';
 
 // Tell Vue to install the plugin.
 Vue.use(VuejsDialog);
+Vue.use(VueToast);
+
+// Renderer
+import Renderer from '../../vue-components/Pages/Components/Editor/Fields/Renderer.vue';
+Vue.component('Renderer', Renderer)
 
 // Pages
 import Overview from '../../vue-components/Pages/Overview.vue';

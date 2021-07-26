@@ -30,23 +30,23 @@
               active-class="border-blue-500"
               :to="{ name: 'home' }"
               exact
-              class="inline-block py-4 border-b-2 border-transparent focus:shadow-none"
+              class="inline-block py-4 border-b-2 border-transparent  focus:shadow-none"
               >Overview</router-link
             >
           </li>
-          <li>
+          <li v-if="user_roles.includes('administrator')">
             <router-link
               active-class="border-blue-500"
               :to="{ name: 'theme' }"
-              class="inline-block py-4 border-b-2 border-transparent focus:shadow-none"
+              class="inline-block py-4 border-b-2 border-transparent  focus:shadow-none"
               >Theme</router-link
             >
           </li>
-          <li>
+          <li v-if="user_roles.includes('administrator')">
             <router-link
               active-class="border-blue-500"
               :to="{ name: 'settings' }"
-              class="inline-block py-4 border-b-2 border-transparent focus:shadow-none"
+              class="inline-block py-4 border-b-2 border-transparent  focus:shadow-none"
               >Settings</router-link
             >
           </li>
@@ -78,6 +78,7 @@ export default {
   computed: {},
   data() {
     return {
+      user_roles: window.wp_user_roles,
       isLoading: false,
       settingsLoaded: false,
       onboardingComplete: false,

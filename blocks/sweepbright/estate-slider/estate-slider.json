@@ -1,0 +1,94 @@
+{
+  "name": "Estate - slider",
+  "id": "estate-slider",
+  "icon": "fad fa-images",
+  "category": "sweepbright",
+  "type": "estate",
+  "fields": [
+    {
+      "name": "Gap",
+      "id": "gap",
+      "type": "select",
+      "default": "small",
+      "sync": true,
+      "options": {
+        "none": "None",
+        "small": "Small",
+        "medium": "Medium",
+        "large": "Large"
+      }
+    },
+    {
+      "name": "Slides per view",
+      "id": "slides_per_view",
+      "type": "select",
+      "default": "2",
+      "sync": true,
+      "options": {
+        "1": "1",
+        "2": "2",
+        "3": "3",
+        "4": "4",
+        "5": "5",
+        "6": "6"
+      }
+    },
+    {
+      "name": "Autoplay",
+      "id": "autoplay",
+      "type": "select",
+      "default": "false",
+      "sync": true,
+      "options": {
+        "false": "Disabled",
+        "true": "Enabled"
+      }
+    },
+    {
+      "name": "Border radius",
+      "id": "border_radius",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "None",
+        "rounded": "Small",
+        "rounded-lg": "Large",
+        "rounded-xl": "XL",
+        "rounded-full": "Full"
+      }
+    },
+    {
+      "name": "Aspect ratio",
+      "id": "aspect_ratio",
+      "type": "select",
+      "default": "4/3",
+      "sync": true,
+      "options": {
+        "square": "Square",
+        "4/3": "Photo",
+        "5/6": "Vertical (regular)",
+        "2/3": "Vertical (tall)",
+        "16/9": "Horizontal (widescreen)",
+        "21/9": "Horizontal (cinema)"
+      }
+    },
+    {
+      "name": "Locale",
+      "id": "locale",
+      "type": "locale",
+      "sync": true,
+      "default": {
+        "nl": {
+          "view_all_photos": "Bekijk alle foto's"
+        },
+        "fr": {
+          "view_all_photos": "Voir toutes les photos"
+        },
+        "en": {
+          "view_all_photos": "View all photos"
+        }
+      }
+    }
+  ]
+}

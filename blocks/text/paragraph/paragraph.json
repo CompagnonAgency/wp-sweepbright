@@ -5,10 +5,43 @@
   "category": "text",
   "fields": [
     {
-      "name": "Text",
-      "id": "text",
+      "name": "Textarea",
+      "id": "textarea",
       "type": "wysiwyg",
-      "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+      "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>"
+    },
+    {
+      "name": "Button",
+      "id": "button",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "Disabled",
+        "enabled": "Enabled"
+      }
+    },
+    {
+      "name": "Button label",
+      "id": "button_label",
+      "type": "text",
+      "default": "More info",
+      "condition": {
+        "button": [
+          "enabled"
+        ]
+      }
+    },
+    {
+      "name": "Button link",
+      "id": "button_link",
+      "type": "page_select",
+      "default": [],
+      "condition": {
+        "button": [
+          "enabled"
+        ]
+      }
     }
   ]
 }

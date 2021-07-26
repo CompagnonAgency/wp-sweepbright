@@ -1,0 +1,68 @@
+/* 
+ * Navigation
+________________________________________________________________________ */
+
+.js-navigation {
+  transform: translate3d(0,0,0);
+
+  @apply transition-all duration-300;
+}
+
+.js-navigation.is-hidden {
+  @apply transform -translate-y-full;
+}
+
+.js-navigation.is-detached {
+  @apply fixed bg-white shadow-md;
+}
+
+.js-navigation.is-attached {
+  @apply fixed bg-transparent;
+}
+
+.js-navigation.is-attached.is-animated {
+  animation: detach 1000ms forwards cubic-bezier(0.5, 0, 0, 1);
+}
+
+.js-navigation-logo.is-visible {
+  opacity: 0;
+  animation: showLogo 300ms forwards cubic-bezier(0.5, 0, 0, 1);
+}
+
+.js-navigation-logo.is-hidden {
+  animation: hideLogo 300ms forwards cubic-bezier(0.5, 0, 0, 1);
+}
+
+@keyframes showLogo {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes hideLogo {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes detach {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}

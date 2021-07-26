@@ -3,7 +3,7 @@
     v-if="isLoaded"
     class="fixed z-20 flex justify-between bg-white shadow pages-navigation"
   >
-    <div class="flex w-1/2">
+    <div class="flex flex-1">
       <div class="p-1">
         <button
           class="flex items-center btn btn-default"
@@ -15,15 +15,16 @@
       </div>
 
       <div
-        class="relative flex items-center w-full max-w-sm p-1 border-r border-gray-200"
+        class="relative flex items-center flex-1 max-w-sm p-1 border-r border-gray-200 "
       >
-        <i class="absolute ml-3 text-base text-gray-500 far fa-file-alt"></i>
+        <i class="absolute ml-3 text-base text-gray-500 fad fa-file-alt"></i>
         <input
           v-if="page.settings.template === 'default'"
           type="text"
           placeholder="Title"
           v-model="page.title[lang]"
           class="w-full h-full font-medium input-heading"
+          :disabled="user_roles.includes('administrator') ? false : true"
         />
         <input
           v-else
@@ -37,16 +38,17 @@
     </div>
 
     <div class="flex items-center justify-end w-1/2">
-      <div class="p-1 mr-2" v-if="page.updated">
+      <div class="flex-shrink-0 p-1 mr-2" v-if="page.updated">
         <p class="text-sm text-gray-500">
+          <i class="fad fa-clock"></i>
           Updated {{ moment(page.updated).fromNow() }}
         </p>
       </div>
-      <div class="p-1 mr-2">
+      <div class="flex-shrink-0 p-1 mr-2" v-if="settings.multilanguage">
         <select v-model="lang" @change="setLang">
-          <option value="nl">NL</option>
-          <option value="en">EN</option>
-          <option value="fr">FR</option>
+          <option value="nl" v-if="settings.enabled_nl">NL</option>
+          <option value="en" v-if="settings.enabled_en">EN</option>
+          <option value="fr" v-if="settings.enabled_fr">FR</option>
         </select>
       </div>
       <div
@@ -54,7 +56,7 @@
         v-if="page.id !== 'create' && page.settings.template === 'default'"
       >
         <button class="flex items-center btn btn-default" @click="preview">
-          <i class="mr-2 text-base text-gray-500 far fa-eye"></i>
+          <i class="mr-2 text-base text-gray-500 fad fa-eye"></i>
           Preview
         </button>
       </div>
@@ -70,7 +72,7 @@
       >
         <button class="flex items-center btn btn-primary" @click="savePage">
           <i
-            class="mr-2 text-base text-white text-opacity-50 far fa-cloud-upload-alt"
+            class="mr-2 text-base text-white text-opacity-50  far fa-cloud-upload-alt"
           ></i>
           <template v-if="page.id !== 'create'">Save</template>
           <template v-else>Publish</template>
@@ -85,11 +87,12 @@ import moment from "moment";
 import bus from "../../../../js/pages/bus.js";
 
 export default {
-  props: ["isLoaded", "page", "defaultLang"],
+  props: ["isLoaded", "page", "defaultLang", "settings"],
   components: {},
   computed: {},
   data() {
     return {
+      user_roles: window.wp_user_roles,
       moment,
       lang: "",
     };
