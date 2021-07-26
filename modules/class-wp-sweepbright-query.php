@@ -364,7 +364,7 @@ class WP_SweepBright_Query
 	{
 		if (isset($args['params']['filters']['agent'])) {
 			$args['posts'] = array_filter($args['posts'], function ($estate) use ($args) {
-				return $estate['meta']['negotiator']['email'] === $args['params']['filters']['agent'];
+				return in_array($estate['meta']['negotiator']['email'], $args['params']['filters']['agent']);
 			}, ARRAY_FILTER_USE_BOTH);
 		}
 
@@ -557,7 +557,11 @@ class WP_SweepBright_Query
 			$args['params']['filters']['location']['lng']
 		) {
 			$geopoint = new GeoPoint($args['params']['filters']['location']['lat'], $args['params']['filters']['location']['lng']);
-			$boundingBox = $geopoint->boundingBox(intval(WP_SweepBright_Helpers::settings_form()['geo_distance']), 'km');
+			$distance = WP_SweepBright_Helpers::settings_form()['geo_distance'];
+			if (isset($args['params']['filters']['location']['distance']) && $args['params']['filters']['location']['distance']) {
+				$distance = $args['params']['filters']['location']['distance'];
+			}
+			$boundingBox = $geopoint->boundingBox(intval($distance), 'km');
 
 			$args['posts'] = array_filter($args['posts'], function ($estate) use ($boundingBox) {
 				return (($estate['meta']['location']['latitude'] > $boundingBox->getMinLatitude()) && ($estate['meta']['location']['latitude'] <= $boundingBox->getMaxLatitude())) &&

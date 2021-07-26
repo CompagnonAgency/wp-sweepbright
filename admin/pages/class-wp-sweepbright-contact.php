@@ -113,7 +113,7 @@ class WP_SweepBright_Contact
 	public function parse_template($template, $form)
 	{
 		$output = str_replace('[title]', $form['title'], $template);
-		$output = str_replace('[address]', $form['address'], $template);
+		$output = str_replace('[address]', $form['address'], $output);
 		$output = str_replace('[url]', $form['url'], $output);
 		$output = str_replace('[first_name]', $form['first_name'], $output);
 		$output = str_replace('[last_name]', $form['last_name'], $output);

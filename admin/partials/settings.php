@@ -73,6 +73,17 @@
             <input name="geo_distance" type="number" id="geo_distance" value="<?= WP_SweepBright_Helpers::settings_form()['geo_distance']; ?>" class="regular-text" required>
           </td>
         </tr>
+        <tr>
+          <th scope="row">
+            <label for="unavailable_properties">Unavailable properties</label>
+          </th>
+          <td>
+            <select name="unavailable_properties" id="unavailable_properties" class="postform" value="<?= WP_SweepBright_Helpers::setting('unavailable_properties'); ?>">
+              <option class="level-0" value="hidden" <?= WP_SweepBright_Helpers::setting('unavailable_properties') === 'hidden' ? 'selected' : ''; ?>>Hidden</option>
+              <option class="level-0" value="visible" <?= WP_SweepBright_Helpers::setting('unavailable_properties') === 'visible' ? 'selected' : ''; ?>>Visible</option>
+            </select>
+          </td>
+        </tr>
       </tbody>
     </table>
 
@@ -141,6 +152,8 @@
       <option class="level-0" value="nl" <?= WP_SweepBright_Helpers::settings_form()['default_language'] === 'nl' ? 'selected' : ''; ?>>Dutch</option>
     </select>
 
+    <hr style="margin-top:15px;">
+
     <h2 class="title">SweepBright API version</h2>
     <p>
       To ensure maximum compatibility and performance we only support the most recent API version.
@@ -162,4 +175,4 @@
   </form>
 </div>
 
-<?php require_once(plugin_dir_path( __FILE__ ). 'components/footer.php'); ?>
+<?php require_once(plugin_dir_path(__FILE__) . 'components/footer.php'); ?>

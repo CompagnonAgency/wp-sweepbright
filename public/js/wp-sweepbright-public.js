@@ -63,6 +63,7 @@ export default {
                 region: '',
                 lat: false,
                 lng: false,
+                distance: false, // false (= default setting) or <int> in kilometers e.g. 5, 10, 15, ...
               },
             },
           },
@@ -114,12 +115,25 @@ export default {
             this.request.filters['location']['lat'] = lat;
             this.request.filters['location']['lng'] = lng;
           }
-          this.$search();
+
+          let page = 1;
+          if (window.location.hash) {
+            page = parseInt(window.location.hash.substr(1), 10);
+          }
+          this.$search({
+            page,
+          });
           this.$forceUpdate();
         },
         $search(params) {
+          let page = 1;
+
+          if (params && params.page) {
+            page = params.page;
+          }
+
           let args = {
-            page: 1,
+            page,
             sort: this.request.sort,
             filters: this.request.filters,
           };
@@ -221,12 +235,6 @@ export default {
           this.$sweepBrightReset();
           if (window.location.hash) {
             this.request.page = parseInt(window.location.hash.substr(1), 10);
-          }
-          if (params && params.page) {
-            this.request.page = params.page;
-          }
-          if (params && params.page && !this.request.recent) {
-            window.location.hash = params.page;
           }
           if (params && params.recent) {
             this.request.recent = params.recent;

@@ -32,15 +32,16 @@ class WP_SweepBright_Helpers
 			'base_uri_prod' => 'https://website.sweepbright.com/api/',
 			'base_uri_api_dev' => 'http://localhost:4000/api/',
 			'base_uri_api_prod' => 'https://wp-sweepbright-manager.herokuapp.com/api/',
-			'api_version' => WP_SweepBright_Helpers::settings_form()['api_version'],
-			'client_id' => WP_SweepBright_Helpers::settings_form()['client_id'],
-			'client_secret' => WP_SweepBright_Helpers::settings_form()['client_secret'],
-			'default_locale' => WP_SweepBright_Helpers::settings_form()['default_language'],
-			'max_per_page' => WP_SweepBright_Helpers::settings_form()['max_per_page'],
-			'recent_total' => WP_SweepBright_Helpers::settings_form()['recent_total'],
-			'geo_distance' => WP_SweepBright_Helpers::settings_form()['geo_distance'],
-			'recaptcha_site_key' => WP_SweepBright_Helpers::settings_form()['recaptcha_site_key'],
-			'recaptcha_secret_key' => WP_SweepBright_Helpers::settings_form()['recaptcha_secret_key'],
+			'api_version' => WP_SweepBright_Helpers::setting('api_version'),
+			'client_id' => WP_SweepBright_Helpers::setting('client_id'),
+			'client_secret' => WP_SweepBright_Helpers::setting('client_secret'),
+			'default_locale' => WP_SweepBright_Helpers::setting('default_language'),
+			'max_per_page' => WP_SweepBright_Helpers::setting('max_per_page'),
+			'recent_total' => WP_SweepBright_Helpers::setting('recent_total'),
+			'geo_distance' => WP_SweepBright_Helpers::setting('geo_distance'),
+			'recaptcha_site_key' => WP_SweepBright_Helpers::setting('recaptcha_site_key'),
+			'recaptcha_secret_key' => WP_SweepBright_Helpers::setting('recaptcha_secret_key'),
+			'unavailable_properties' => WP_SweepBright_Helpers::setting('unavailable_properties'),
 		];
 
 		// Show warning that you need to add settings
@@ -292,23 +293,47 @@ class WP_SweepBright_Helpers
 		}
 	}
 
+	public static function default_settings()
+	{
+		return [
+			'client_id' => '',
+			'client_secret' => '',
+			'custom_url' => 'estates',
+			'default_language' => 'en',
+			'api_version' => 'v20191206',
+			'max_per_page' => 12,
+			'recent_total' => 3,
+			'geo_distance' => 5,
+			'recaptcha_site_key' => '',
+			'recaptcha_secret_key' => '',
+			'enabled_nl' => false,
+			'enabled_fr' => false,
+			'enabled_en' => true,
+			'favorites' => false,
+			'multilanguage' => false,
+			'enable_pages' => false,
+			'header_code' => '',
+			'unavailable_properties' => 'hidden',
+		];
+	}
+
+	public static function setting($key)
+	{
+		$output = false;
+		if (isset(get_option('wp_sweepbright_settings')[$key])) {
+			$output = get_option('wp_sweepbright_settings')[$key];
+		} else {
+			$output = WP_SweepBright_Helpers::default_settings()[$key];
+		}
+		return $output;
+	}
+
 	public static function settings_form()
 	{
 		if (get_option('wp_sweepbright_settings')) {
 			$data = get_option('wp_sweepbright_settings');
 		} else {
-			$data = [
-				'client_id' => '',
-				'client_secret' => '',
-				'custom_url' => 'estates',
-				'default_language' => 'en',
-				'api_version' => 'v20191206',
-				'max_per_page' => 12,
-				'recent_total' => 3,
-				'geo_distance' => 5,
-				'recaptcha_site_key' => '',
-				'recaptcha_secret_key' => '',
-			];
+			$data = WP_SweepBright_Helpers::default_settings();
 		}
 		return $data;
 	}
@@ -316,18 +341,24 @@ class WP_SweepBright_Helpers
 	public function save_global_settings()
 	{
 		if (isset($_POST['submit-global-settings']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
-			$data = [
-				'client_id' => $_POST['client_id'],
-				'client_secret' => $_POST['client_secret'],
-				'custom_url' => $_POST['custom_url'],
-				'default_language' => $_POST['default_language'],
-				'api_version' => $_POST['api_version'],
-				'max_per_page' => $_POST['max_per_page'],
-				'recent_total' => $_POST['recent_total'],
-				'geo_distance' => $_POST['geo_distance'],
-				'recaptcha_site_key' => $_POST['recaptcha_site_key'],
-				'recaptcha_secret_key' => $_POST['recaptcha_secret_key'],
-			];
+			$data = WP_SweepBright_Helpers::settings_form();
+			$data['client_id'] = $_POST['client_id'];
+			$data['client_secret'] = $_POST['client_secret'];
+			$data['custom_url'] = $_POST['custom_url'];
+			$data['default_language'] = $_POST['default_language'];
+			$data['api_version'] = $_POST['api_version'];
+			$data['max_per_page'] = $_POST['max_per_page'];
+			$data['recent_total'] = $_POST['recent_total'];
+			$data['geo_distance'] = $_POST['geo_distance'];
+			$data['recaptcha_site_key'] = $_POST['recaptcha_site_key'];
+			$data['recaptcha_secret_key'] = $_POST['recaptcha_secret_key'];
+			$data['unavailable_properties'] = $_POST['unavailable_properties'];
+
+			if (isset($_POST['enable_pages'])) {
+				$data['enable_pages'] = true;
+			} else {
+				$data['enable_pages'] = false;
+			}
 
 			if (get_option('wp_sweepbright_settings')) {
 				update_option('wp_sweepbright_settings', $data);
