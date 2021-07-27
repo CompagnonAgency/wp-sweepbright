@@ -10,7 +10,7 @@
  * Author: Compagnon Agency
  * Author URI: https://compagnon.agency/
  * Text Domain: wp-sweepbright
- * Version: 1.8.1
+ * Version: 1.8.2
  */
 
 // If this file is called directly, abort.
@@ -23,7 +23,7 @@ if (!defined('WPINC')) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define('WP_SWEEPBRIGHT_VERSION', '1.8.1');
+define('WP_SWEEPBRIGHT_VERSION', '1.8.2');
 
 /**
  * The code that runs during plugin activation.
@@ -123,7 +123,9 @@ function redirect_pand()
   global $post;
   global $wp_query;
 
-  if (($post && $post->post_type === 'sweepbright_estates')) {
+  if (($post && $post->post_type === 'sweepbright_estates') &&
+    WP_SweepBright_Helpers::setting('unavailable_properties') === 'hidden'
+  ) {
     // Redirect projects & estates
     if (get_field('estate', $post->ID)['status'] !== 'available') {
       $wp_query->set_404();
