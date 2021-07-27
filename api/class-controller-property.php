@@ -53,50 +53,52 @@ class WP_SweepBright_Controller_Property
     $id = WP_SweepBright_Helpers::get_post_ID_from_estate($data['estate_id']);
 
     // Save tag
-    if (trim($data['form']['tag']) || !$data['form']['tag']) {
+    if (trim($data['form']['tag'])) {
       update_field('custom_fields', [
         'tag' => trim($data['form']['tag']),
       ], $id);
     }
 
     // Save style
-    if (trim($data['form']['style']) || !$data['form']['style']) {
+    if (trim($data['form']['style'])) {
       update_field('custom_fields', [
         'style' => trim($data['form']['style']),
       ], $id);
     }
 
     // Save type
-    if (trim($data['form']['type']) || !$data['form']['type']) {
+    if (trim($data['form']['type'])) {
       update_field('custom_fields', [
         'type' => trim($data['form']['type']),
       ], $id);
     }
 
     // Save USPs
-    $usps = [];
-    foreach ($data['form']['usp'] as $usp) {
-      $usp['value'] = trim($usp['value']);
-      if ($usp['value']) {
-        $usps[] = [
-          'acf_fc_layout' => 'usp_layout',
-          'usp_item' => $usp['value'],
-        ];
+    if ($data['form']['usp']) {
+      $usps = [];
+      foreach ($data['form']['usp'] as $usp) {
+        $usp['value'] = trim($usp['value']);
+        if ($usp['value']) {
+          $usps[] = [
+            'acf_fc_layout' => 'usp_layout',
+            'usp_item' => $usp['value'],
+          ];
+        }
       }
+      update_field('custom_fields', [
+        'usp' => $usps,
+      ], $id);
     }
-    update_field('custom_fields', [
-      'usp' => $usps,
-    ], $id);
 
     // Save contact
-    if (trim($data['form']['contact']['title']) || !$data['form']['contact']['title']) {
+    if ($data['form']['contact'] && $data['form']['contact']['title']) {
       update_field('custom_fields', [
         'contact' => [
           'title' => trim($data['form']['contact']['title'])
         ],
       ], $id);
     }
-    if (trim($data['form']['contact']['description']) || !$data['form']['contact']['description']) {
+    if ($data['form']['contact'] && $data['form']['contact']['description']) {
       update_field('custom_fields', [
         'contact' => [
           'description' => trim($data['form']['contact']['description'])
@@ -105,14 +107,14 @@ class WP_SweepBright_Controller_Property
     }
 
     // Save CTA
-    if (trim($data['form']['cta']['label']) || !$data['form']['cta']['label']) {
+    if ($data['form']['cta'] && $data['form']['cta']['label']) {
       update_field('custom_fields', [
         'cta' => [
           'label' => trim($data['form']['cta']['label'])
         ],
       ], $id);
     }
-    if (trim($data['form']['cta']['action']) || !$data['form']['cta']['action']) {
+    if ($data['form']['cta'] && $data['form']['cta']['action']) {
       update_field('custom_fields', [
         'cta' => [
           'action' => trim($data['form']['cta']['action'])

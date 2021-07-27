@@ -10,7 +10,7 @@
  * Author: Compagnon Agency
  * Author URI: https://compagnon.agency/
  * Text Domain: wp-sweepbright
- * Version: 1.8.0
+ * Version: 1.8.1
  */
 
 // If this file is called directly, abort.
@@ -23,7 +23,7 @@ if (!defined('WPINC')) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define('WP_SWEEPBRIGHT_VERSION', '1.8.0');
+define('WP_SWEEPBRIGHT_VERSION', '1.8.1');
 
 /**
  * The code that runs during plugin activation.
@@ -102,16 +102,18 @@ add_filter('wpseo_opengraph_desc', 'ag_yoast_seo_fb_share_descriptions');
 /**
  * Programmatically set SEO meta image
  */
-function add_images($object)
-{
-  global $post;
+if (isset(get_option('wp_sweepbright_settings')['enable_pages']) && get_option('wp_sweepbright_settings')['enable_pages'] == 1) {
+  function add_images($object)
+  {
+    global $post;
 
-  if (($post && $post->post_type === 'sweepbright_estates')) {
-    $image = get_field('features', $post->ID)['images'][0]['sizes']['large'];
-    $object->add_image($image);
+    if (($post && $post->post_type === 'sweepbright_estates')) {
+      $image = get_field('features', $post->ID)['images'][0]['sizes']['large'];
+      $object->add_image($image);
+    }
   }
+  add_action('wpseo_add_opengraph_images', 'add_images');
 }
-add_action('wpseo_add_opengraph_images', 'add_images');
 
 /**
  * Redirect estates that are no longer available.

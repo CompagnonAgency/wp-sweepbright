@@ -748,6 +748,130 @@ class WP_SweepBright_Query
 		return strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $string), '-'));
 	}
 
+	public static function store_cache($args)
+	{
+		$tmp_count = 0;
+		foreach ($args['post_chunks'] as $post_chunk) {
+			$posts_cache = [];
+			foreach ($post_chunk as $post_id) {
+				// Images
+				$images = [];
+				foreach (get_post_meta($post_id, 'features_images', true) as $image) {
+					$src = wp_get_attachment_image_src($image, 'medium_large');
+					if ($src) {
+						$src = $src[0];
+					} else {
+						$src = '';
+					}
+
+					$images[]['sizes'] = [
+						'thumbnail' => $src,
+						'medium' => $src,
+						'medium_large' => $src,
+						'large' => $src,
+					];
+				}
+
+				// Properties
+				$properties = [];
+				if (get_post_meta($post_id, 'estate_properties', true)) {
+					foreach (get_post_meta($post_id, 'estate_properties', true) as $property) {
+						if ($property) {
+							$properties[] = $property;
+						}
+					}
+				}
+
+				// Build post object
+				$post_item = [
+					'id' => $post_id,
+					'permalink' => get_the_permalink($post_id),
+					'date' => get_the_time('U', $post_id),
+					'meta' => [
+						'conditions' => [
+							'general_condition' => get_post_meta($post_id, 'conditions_general_condition', true),
+						],
+						'custom' => get_field('custom'),
+						'estate' => [
+							'id' => get_post_meta($post_id, 'estate_id', true),
+							'status' => get_post_meta($post_id, 'estate_status', true),
+							'title' => [
+								'en' => get_post_meta($post_id, 'estate_title_en', true),
+								'nl' => get_post_meta($post_id, 'estate_title_nl', true),
+								'fr' => get_post_meta($post_id, 'estate_title_fr', true),
+							],
+							'description' => [
+								'en' => get_post_meta($post_id, 'estate_description_en', true),
+								'nl' => get_post_meta($post_id, 'estate_description_nl', true),
+								'fr' => get_post_meta($post_id, 'estate_description_fr', true),
+							],
+							'is_project' => get_post_meta($post_id, 'estate_is_project', true),
+							'project_id' => get_post_meta($post_id, 'estate_project_id', true),
+							'properties' => $properties,
+						],
+						'facilities' => [
+							'kitchens' => get_post_meta($post_id, 'facilities_kitchens', true),
+							'bathrooms' => get_post_meta($post_id, 'facilities_bathrooms', true),
+							'toilets' => get_post_meta($post_id, 'facilities_toilets', true),
+							'floors' => get_post_meta($post_id, 'facilities_floors', true),
+							'bedrooms' => get_post_meta($post_id, 'facilities_bedrooms', true),
+							'living_rooms' => get_post_meta($post_id, 'facilities_living_rooms', true),
+							'storage_rooms' => get_post_meta($post_id, 'facilities_storage_rooms', true),
+							'manufacturing_areas' => get_post_meta($post_id, 'facilities_manufacturing_areas', true),
+							'showrooms' => get_post_meta($post_id, 'facilities_showrooms', true),
+						],
+						'features' => [
+							'images' => $images,
+							'negotiation' => get_post_meta($post_id, 'features_negotiation', true),
+							'type' => get_post_meta($post_id, 'features_type', true),
+							'sub_type' => get_post_meta($post_id, 'features_sub_type', true),
+						],
+						'location' => [
+							'hidden' => get_post_meta($post_id, 'location_hidden', true),
+							'latitude' => get_post_meta($post_id, 'location_latitude', true),
+							'longitude' => get_post_meta($post_id, 'location_longitude', true),
+							'city' => get_post_meta($post_id, 'location_city', true),
+							'street' => get_post_meta($post_id, 'location_street', true),
+							'street_2' => get_post_meta($post_id, 'location_street_2', true),
+							'number' => get_post_meta($post_id, 'location_number', true),
+							'box' => get_post_meta($post_id, 'location_box', true),
+							'addition' => get_post_meta($post_id, 'location_addition', true),
+							'country' => get_post_meta($post_id, 'location_country', true),
+							'postal_code' => get_post_meta($post_id, 'location_postal_code', true),
+							'formatted' => get_post_meta($post_id, 'location_formatted', true),
+							'formatted_agency' => get_post_meta($post_id, 'location_formatted_agency', true),
+						],
+						'negotiator' => [
+							'email' => get_post_meta($post_id, 'negotiator_email', true),
+						],
+						'open_homes' => get_field('open_homes', $post_id),
+						'price' => [
+							'amount' => get_post_meta($post_id, 'price_amount', true),
+							'currency' => get_post_meta($post_id, 'price_currency', true),
+							'hidden' => get_post_meta($post_id, 'price_hidden', true),
+							'price_costs' => get_post_meta($post_id, 'price_price_costs', true),
+						],
+						'sizes' => [
+							'liveable_area' => [
+								'size' => get_post_meta($post_id, 'sizes_liveable_area_size', true),
+								'unit' => get_post_meta($post_id, 'sizes_liveable_area_unit', true),
+							],
+							'plot_area' => [
+								'size' => get_post_meta($post_id, 'sizes_plot_area_size', true),
+								'unit' => get_post_meta($post_id, 'sizes_plot_area_unit', true),
+							],
+						],
+					],
+				];
+				$posts_cache[] = $post_item;
+				$results['estates'][] = $post_item;
+			}
+			FileSystemCache::store($args['key_arr'][$tmp_count], $posts_cache);
+			$tmp_count++;
+		}
+		return $results['estates'];
+	}
+
 	public static function list($params)
 	{
 		// Query
@@ -783,7 +907,6 @@ class WP_SweepBright_Query
 
 		// Load cache
 		if ($cache_arr[count($post_chunks) - 1]) {
-			error_log('cache retrieved');
 			foreach ($cache_arr as $cache_chunk) {
 				if (is_array($cache_chunk)) {
 					foreach ($cache_chunk as $cache_item) {
@@ -792,24 +915,10 @@ class WP_SweepBright_Query
 				}
 			}
 		} else {
-			error_log('cache stored');
-			$tmp_count = 0;
-			foreach ($post_chunks as $post_chunk) {
-				$posts_cache = [];
-				foreach ($post_chunk as $post_id) {
-					// Create post array
-					$post_item = [
-						'id' => $post_id,
-						'permalink' => get_the_permalink($post_id),
-						'date' => get_the_time('U', $post_id),
-						'meta' => get_fields($post_id),
-					];
-					$posts_cache[] = $post_item;
-					$results['estates'][] = $post_item;
-				}
-				FileSystemCache::store($key_arr[$tmp_count], $posts_cache);
-				$tmp_count++;
-			}
+			$results['estates'] = WP_SweepBright_Query::store_cache([
+				'post_chunks' => $post_chunks,
+				'key_arr' => $key_arr,
+			]);
 		}
 
 		// Filter: show favorites
@@ -948,13 +1057,18 @@ class WP_SweepBright_Query
 		} else if ($params['mapMode'] && !$params['recent']) {
 			$markers = [];
 			foreach ($results['estates'] as $estate) {
+				$image = '';
+				if ($estate["meta"]["features"]["images"]) {
+					$image = $estate["meta"]["features"]["images"][0]["sizes"]["medium"];
+				}
+
 				$markers[] = [
 					'id' => $estate["id"],
 					'status' => $estate["meta"]["estate"]["status"],
 					'permalink' => $estate["permalink"],
 					'title' => $estate["meta"]["estate"]["title"],
 					'location' => $estate["meta"]["location"],
-					'image' => $estate["meta"]["features"]["images"][0]["sizes"]["medium"],
+					'image' => $image,
 					'price' => $estate["meta"]["price"]["amount"],
 				];
 			}
