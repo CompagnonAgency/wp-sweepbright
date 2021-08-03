@@ -9,9 +9,6 @@
  * @package    WP_SweepBright_Helpers
  */
 
-use Selective\ImageType\ImageTypeDetector;
-use Selective\ImageType\Provider\RasterProvider;
-
 class WP_SweepBright_Helpers
 {
 	public function __construct()
@@ -114,6 +111,8 @@ class WP_SweepBright_Helpers
 
 	public static function insert_attachment_from_url($file, $post_id = null)
 	{
+		$detector = new League\MimeTypeDetection\FinfoMimeTypeDetector();
+
 		// Unique ID
 		$id = uniqid();
 
@@ -140,12 +139,12 @@ class WP_SweepBright_Helpers
 		fclose($fp);
 
 		// Check the type of file. We'll use this as the 'post_mime_type'.
-		$filetype = wp_check_filetype(basename($file_name), null);
+		$mimeType = $detector->detectMimeTypeFromFile($file_name);
 
 		// Prepare an array of post data for the attachment.
 		$attachment = [
 			'guid' => $wp_upload_dir['url'] . '/' . basename($file_name),
-			'post_mime_type' => $filetype['type'],
+			'post_mime_type' => $mimeType,
 			'post_title' => preg_replace('/\.[^.]+$/', '', basename($file_name)),
 			'post_content' => '',
 			'post_status' => 'inherit'
@@ -156,18 +155,13 @@ class WP_SweepBright_Helpers
 		$is_heic = false;
 		$is_image = false;
 
-		// Detect images
+		// Detect HEIC images from iPhone
 		if ($ext === 'jpg' || $ext === 'JPG' || $ext === 'jpeg' || $ext === 'JPEG' || $ext === 'png' || $ext === 'PNG' || $ext === 'gif' || $ext === 'GIF') {
-			// Detect HEIC
-			$file = new SplFileObject($file_name);
-			$detector = new ImageTypeDetector();
-			$detector->addProvider(new RasterProvider());
-
 			try {
 				$is_image = true;
-				$imageType = $detector->getImageTypeFromFile($file);
+				$mimeType = $detector->detectMimeTypeFromFile($file_name);
 
-				if ($imageType->getMimeType() === 'image/heic' || $imageType->getMimeType() === 'image/heif') {
+				if ($mimeType === 'image/heic' || $mimeType === 'image/heif') {
 					$is_heic = true;
 				}
 			} catch (Exception $e) {
@@ -177,15 +171,39 @@ class WP_SweepBright_Helpers
 			}
 		}
 
+		// Enable JPGs as PDFs
+		if ($ext === 'pdf') {
+			$mimeType = $detector->detectMimeTypeFromFile($file_name);
+
+			try {
+				if ($mimeType == 'image/jpeg') {
+					$is_image = true;
+					$new_file_name = substr_replace($file_name, 'jpg', strrpos($file_name, '.') + 1);
+					rename($file_name, $new_file_name);
+					$file_name = $new_file_name;
+				}
+				if ($mimeType == 'image/png') {
+					$is_image = true;
+					$new_file_name = substr_replace($file_name, 'png', strrpos($file_name, '.') + 1);
+					rename($file_name, $new_file_name);
+					$file_name = $new_file_name;
+				}
+				if ($mimeType == 'image/gif') {
+					$is_image = true;
+					$new_file_name = substr_replace($file_name, 'gif', strrpos($file_name, '.') + 1);
+					rename($file_name, $new_file_name);
+					$file_name = $new_file_name;
+				}
+			} catch (Exception $e) {
+				$is_image = false;
+				error_log(print_r('Prevented incorrect file from running `rename()`', true));
+				error_log(print_r($e, true));
+			}
+		}
+
 		if (!$is_heic) {
 			// Allow uploading PDFs
 			$attach_id = wp_insert_attachment($attachment, $file_name, $post_id);
-
-			// Set attachment data
-			// Make sure that this file is included, as wp_generate_attachment_metadata() depends on it.
-			require_once(ABSPATH . 'wp-admin/includes/image.php');
-			$attach_data = wp_generate_attachment_metadata($attach_id, $file_name);
-			wp_update_attachment_metadata($attach_id, $attach_data);
 
 			// Resize images
 			if ($is_image) {
@@ -196,6 +214,12 @@ class WP_SweepBright_Helpers
 					$image->save($file_name);
 				}
 			}
+
+			// Set attachment data
+			// Make sure that this file is included, as wp_generate_attachment_metadata() depends on it.
+			require_once(ABSPATH . 'wp-admin/includes/image.php');
+			$attach_data = wp_generate_attachment_metadata($attach_id, $file_name);
+			wp_update_attachment_metadata($attach_id, $attach_data);
 		}
 
 		// Return attachment id

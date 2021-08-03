@@ -545,6 +545,50 @@
         ]
     },
     {
+        "name": "league/mime-type-detection",
+        "version": "1.7.0",
+        "version_normalized": "1.7.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/thephpleague/mime-type-detection.git",
+            "reference": "3b9dff8aaf7323590c1d2e443db701eb1f9aa0d3"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/thephpleague/mime-type-detection/zipball/3b9dff8aaf7323590c1d2e443db701eb1f9aa0d3",
+            "reference": "3b9dff8aaf7323590c1d2e443db701eb1f9aa0d3",
+            "shasum": ""
+        },
+        "require": {
+            "ext-fileinfo": "*",
+            "php": "^7.2 || ^8.0"
+        },
+        "require-dev": {
+            "friendsofphp/php-cs-fixer": "^2.18",
+            "phpstan/phpstan": "^0.12.68",
+            "phpunit/phpunit": "^8.5.8 || ^9.3"
+        },
+        "time": "2021-01-18T20:58:21+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "League\\MimeTypeDetection\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Frank de Jonge",
+                "email": "info@frankdejonge.nl"
+            }
+        ],
+        "description": "Mime-type detection for Flysystem"
+    },
+    {
         "name": "psr/http-message",
         "version": "1.0.1",
         "version_normalized": "1.0.1.0",
@@ -637,50 +681,6 @@
             }
         ],
         "description": "A polyfill for getallheaders."
-    },
-    {
-        "name": "selective/image-type",
-        "version": "1.0.0",
-        "version_normalized": "1.0.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/selective-php/image-type.git",
-            "reference": "4937ec5418f542a23b3c6a603062fa57e33a9bc1"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/selective-php/image-type/zipball/4937ec5418f542a23b3c6a603062fa57e33a9bc1",
-            "reference": "4937ec5418f542a23b3c6a603062fa57e33a9bc1",
-            "shasum": ""
-        },
-        "require": {
-            "php": "^7.1"
-        },
-        "require-dev": {
-            "overtrue/phplint": "^1.1",
-            "phpstan/phpstan-shim": "^0.11",
-            "phpunit/phpunit": "^7",
-            "squizlabs/php_codesniffer": "^3.4"
-        },
-        "time": "2019-09-03T20:31:27+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Selective\\ImageType\\": "src"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "description": "Image type detection",
-        "homepage": "https://github.com/selective-php/image-type",
-        "keywords": [
-            "format",
-            "image",
-            "type"
-        ]
     },
     {
         "name": "stillat/numeral.php",

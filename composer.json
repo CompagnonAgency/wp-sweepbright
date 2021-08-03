@@ -17,6 +17,6 @@
         "sultann/wp-query-builder": "^1.0",
         "jdorn/file-system-cache": "dev-master",
         "fakerphp/faker": "^1.13",
-        "selective/image-type": "^1.0"
+        "league/mime-type-detection": "^1.7"
     }
 }

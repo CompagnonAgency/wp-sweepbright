@@ -27,12 +27,15 @@ class ComposerStaticInit87b5d6ac9dfd7201e6e6d47beebb1164
             'Symfony\\Polyfill\\Intl\\Normalizer\\' => 33,
             'Symfony\\Polyfill\\Intl\\Idn\\' => 26,
             'Stillat\\Numeral\\' => 16,
-            'Selective\\ImageType\\' => 20,
         ),
         'P' => 
         array (
             'Psr\\Http\\Message\\' => 17,
             'PluginEver\\QueryBuilder\\' => 24,
+        ),
+        'L' => 
+        array (
+            'League\\MimeTypeDetection\\' => 25,
         ),
         'G' => 
         array (
@@ -73,10 +76,6 @@ class ComposerStaticInit87b5d6ac9dfd7201e6e6d47beebb1164
         array (
             0 => __DIR__ . '/..' . '/stillat/numeral.php/src',
         ),
-        'Selective\\ImageType\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/selective/image-type/src',
-        ),
         'Psr\\Http\\Message\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/http-message/src',
@@ -84,6 +83,10 @@ class ComposerStaticInit87b5d6ac9dfd7201e6e6d47beebb1164
         'PluginEver\\QueryBuilder\\' => 
         array (
             0 => __DIR__ . '/..' . '/sultann/wp-query-builder/src',
+        ),
+        'League\\MimeTypeDetection\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/league/mime-type-detection/src',
         ),
         'GuzzleHttp\\Psr7\\' => 
         array (

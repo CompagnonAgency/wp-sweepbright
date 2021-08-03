@@ -756,28 +756,31 @@ class WP_SweepBright_Query
 			foreach ($post_chunk as $post_id) {
 				// Images
 				$images = [];
-				foreach (get_post_meta($post_id, 'features_images', true) as $image) {
-					$src_thumb = wp_get_attachment_image_src($image, 'thumbnail');
-					if ($src_thumb) {
-						$src_thumb = $src_thumb[0];
-					} else {
-						$src_thumb = '';
-					}
+				if (get_post_meta($post_id, 'features_images', true)) {
+					foreach (get_post_meta($post_id, 'features_images', true) as $image) {
+						$src_thumb = wp_get_attachment_image_src($image, 'thumbnail');
+						if ($src_thumb) {
+							$src_thumb = $src_thumb[0];
+						} else {
+							$src_thumb = '';
+						}
 
-					$src_medium = wp_get_attachment_image_src($image, 'medium');
-					if ($src_medium) {
-						$src_medium = $src_medium[0];
-					} else {
-						$src_medium = '';
-					}
+						$src_medium = wp_get_attachment_image_src($image, 'medium');
+						if ($src_medium) {
+							$src_medium = $src_medium[0];
+						} else {
+							$src_medium = '';
+						}
 
-					$images[]['sizes'] = [
-						'thumbnail' => $src_thumb,
-						'medium' => $src_medium,
-						'medium_large' => $src_medium,
-						'large' => $src_medium,
-					];
+						$images[]['sizes'] = [
+							'thumbnail' => $src_thumb,
+							'medium' => $src_medium,
+							'medium_large' => $src_medium,
+							'large' => $src_medium,
+						];
+					}
 				}
+
 
 				// Properties
 				$properties = [];
