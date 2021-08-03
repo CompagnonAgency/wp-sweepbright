@@ -801,7 +801,7 @@ class WP_SweepBright_Query
 						'conditions' => [
 							'general_condition' => get_post_meta($post_id, 'conditions_general_condition', true),
 						],
-						'custom' => get_field('custom'),
+						'custom' => get_field('custom', $post_id),
 						'estate' => [
 							'id' => get_post_meta($post_id, 'estate_id', true),
 							'status' => get_post_meta($post_id, 'estate_status', true),
