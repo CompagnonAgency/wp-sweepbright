@@ -181,11 +181,14 @@ class WP_SweepBright_Helpers
 			// Allow uploading PDFs
 			$attach_id = wp_insert_attachment($attachment, $file_name, $post_id);
 
+			// Set attachment data
+			// Make sure that this file is included, as wp_generate_attachment_metadata() depends on it.
+			require_once(ABSPATH . 'wp-admin/includes/image.php');
+			$attach_data = wp_generate_attachment_metadata($attach_id, $file_name);
+			wp_update_attachment_metadata($attach_id, $attach_data);
+
 			// Resize images
 			if ($is_image) {
-				// Make sure that this file is included, as wp_generate_attachment_metadata() depends on it.
-				require_once(ABSPATH . 'wp-admin/includes/image.php');
-
 				$image = wp_get_image_editor($file_name);
 
 				if (!is_wp_error($image)) {

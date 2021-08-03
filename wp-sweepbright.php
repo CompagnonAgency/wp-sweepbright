@@ -10,7 +10,7 @@
  * Author: Compagnon Agency
  * Author URI: https://compagnon.agency/
  * Text Domain: wp-sweepbright
- * Version: 1.8.2
+ * Version: 1.8.3
  */
 
 // If this file is called directly, abort.
@@ -23,7 +23,7 @@ if (!defined('WPINC')) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define('WP_SWEEPBRIGHT_VERSION', '1.8.2');
+define('WP_SWEEPBRIGHT_VERSION', '1.8.3');
 
 /**
  * The code that runs during plugin activation.
@@ -64,6 +64,20 @@ function delete_post_media($post_id)
 }
 add_action('delete_post', 'delete_post_media');
 add_action('wp_trash_post', 'delete_post_media');
+
+
+/**
+ * Disable large images.
+ */
+add_filter('big_image_size_threshold', '__return_false');
+function disable_image_sizes($sizes)
+{
+  unset($sizes['medium_large']);
+  unset($sizes['1536x1536']);
+  unset($sizes['2048x2048']);
+  return $sizes;
+}
+add_filter('intermediate_image_sizes_advanced', 'disable_image_sizes');
 
 /**
  * Custom page templates for the estate page.
