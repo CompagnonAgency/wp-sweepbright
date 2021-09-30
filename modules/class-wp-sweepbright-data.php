@@ -18,8 +18,28 @@ class WP_SweepBright_Data
 		$this->acf_add_fields();
 	}
 
+	public static function translate_slug_prefix()
+	{
+		return [
+			'en' => [
+				'sale' => 'buy',
+				'let' => 'rent',
+			],
+			'fr' => [
+				'sale' => 'a-vendre',
+				'let' => 'a-louer',
+			],
+			'nl' => [
+				'sale' => 'te-koop',
+				'let' => 'te-huur',
+			],
+		];
+	}
+
 	public function create_estates_custom_post_type()
 	{
+		$slug = WP_SweepBright_Helpers::settings_form()['custom_url'];
+
 		register_post_type(
 			'sweepbright_estates',
 			[
@@ -39,28 +59,111 @@ class WP_SweepBright_Data
 					'not_found_in_trash'  => __('Not found in Trash', 'text_domain'),
 				],
 				'public' => true,
-				'has_archive' => false,
+				'has_archive' => true,
 				'rewrite' => [
-					'slug' => WP_SweepBright_Helpers::settings_form()['custom_url'] . '/%post_id%',
+					'slug' => $slug,
 					'with_front' => false,
 				],
 				'show_in_menu' => false,
 				'show_in_rest' => false,
+				'publicly_queryable' => true,
 			]
 		);
 
-		function custom_permalink($post_link, $id = 0)
-		{
-			if (strpos('%post_id%', $post_link) === 'FALSE') {
-				return $post_link;
+		add_filter('post_type_link', function ($post_link, $post) {
+			if ($post && 'sweepbright_estates' === $post->post_type) {
+				// Build default estate URL
+				$slug = WP_SweepBright_Helpers::settings_form()['custom_url'];
+
+				// Dynamic URL
+				if (WP_SweepBright_Helpers::setting('dynamic_url') == 1) {
+					if (get_post_meta($post->ID, 'features_negotiation', true)) {
+						$slug = WP_SweepBright_Data::translate_slug_prefix()[WP_SweepBright_Helpers::setting('default_language')][get_post_meta($post->ID, 'features_negotiation', true)];
+					}
+				}
+
+				// Base URL
+				$url = $slug . '/' . $post->ID;
+
+				if (in_array('polylang-pro/polylang.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+					global $polylang;
+
+					// Get current or default language
+					if (is_admin() && !pll_current_language()) {
+						$lang = $polylang->pref_lang->slug;
+					} else if (!is_admin() && !pll_current_language()) {
+						$lang = WP_SweepBright_Helpers::setting('default_language');
+					} else {
+						$lang = pll_current_language();
+					}
+
+					// Dynamic URL
+					if (WP_SweepBright_Helpers::setting('dynamic_url') == 1) {
+						if (get_post_meta($post->ID, 'features_negotiation', true)) {
+							$slug = WP_SweepBright_Data::translate_slug_prefix()[$lang][get_post_meta($post->ID, 'features_negotiation', true)];
+							$url = $slug . '/' . $post->ID;
+						}
+					}
+
+					// Prepend language prefix only when the data is available.
+					// E.g. on the sitemap `get_field()` is empty because of no specific URL context
+					if (get_field('estate')['title'][$lang]) {
+						$url = $lang . '/' . $url . '/' . sanitize_title(get_field('estate')['title'][$lang]);
+					} else {
+						$url = $lang . '/' . $url . '/' . $post->post_name;
+					}
+				} else {
+					$url = $url . '/' . $post->post_name;
+				}
+				return home_url($url);
 			}
-			$post = get_post($id);
-			if (is_wp_error($post) || $post->post_type != 'sweepbright_estates') {
-				return $post_link;
+			return $post_link;
+		}, 10, 2);
+
+		// Language prefix rewrite rule
+		if (in_array('polylang-pro/polylang.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+			function rewrite_url()
+			{
+				$slug = WP_SweepBright_Helpers::settings_form()['custom_url'];
+				$slug_prefixes = [$slug];
+
+				// Dynamic URL
+				if (WP_SweepBright_Helpers::setting('dynamic_url') == 1) {
+					foreach (WP_SweepBright_Data::translate_slug_prefix() as $key => $prefix) {
+						$slug_prefixes[] = $prefix['sale'];
+						$slug_prefixes[] = $prefix['let'];
+					}
+				}
+				$slug = '(' . implode('|', $slug_prefixes) . ')';
+				add_rewrite_rule(
+					'(fr|nl|en)/' . $slug . '/([0-9]+)/(.+?)?$',
+					'index.php?post_type=sweepbright_estates&lang=$matches[1]&page_id=$matches[3]',
+					'top'
+				);
 			}
-			return str_replace('%post_id%', $post->ID, $post_link);
+			add_action('init', 'rewrite_url', 11, 0);
+		} else {
+			function rewrite_url()
+			{
+				$slug = WP_SweepBright_Helpers::settings_form()['custom_url'];
+				$slug_prefixes = [$slug];
+
+				// Dynamic URL
+				if (WP_SweepBright_Helpers::setting('dynamic_url') == 1) {
+					foreach (WP_SweepBright_Data::translate_slug_prefix() as $key => $prefix) {
+						$slug_prefixes[] = $prefix['sale'];
+						$slug_prefixes[] = $prefix['let'];
+					}
+				}
+				$slug = '(' . implode('|', $slug_prefixes) . ')';
+				add_rewrite_rule(
+					$slug . '/([0-9]+)/(.+?)?$',
+					'index.php?post_type=sweepbright_estates&page_id=$matches[1]',
+					'top'
+				);
+			}
+			add_action('init', 'rewrite_url', 11, 0);
 		}
-		add_filter('post_type_link', 'custom_permalink', 1, 3);
 	}
 
 	public function acf_disable_fields()

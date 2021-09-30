@@ -24,6 +24,10 @@ class FieldFeaturesUpdate
     ], $post_id);
 
     update_field('features', [
+      'virtual_tour_url' => $estate['virtual_tour_url'],
+    ], $post_id);
+
+    update_field('features', [
       'appointment_service_url' => $estate['appointment_service_url'],
     ], $post_id);
 

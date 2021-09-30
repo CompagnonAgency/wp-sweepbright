@@ -123,9 +123,8 @@ class WP_SweepBright_Controller_Property
     }
 
     // Update cache
-    FileSystemCache::$cacheDir = WP_PLUGIN_DIR . '/wp-sweepbright/db/' . WP_SweepBright_Query::slugify(get_bloginfo('name'));
-    $key = FileSystemCache::generateCacheKey('estates');
-    FileSystemCache::invalidate($key);
+    FileSystemCache::$cacheDir = WP_PLUGIN_DIR . '/wp-sweepbright/db';
+    FileSystemCache::invalidateGroup(WP_SweepBright_Query::slugify(get_bloginfo('name')));
 
     return rest_ensure_response([
       'STATUS_CODE' => http_response_code(200),

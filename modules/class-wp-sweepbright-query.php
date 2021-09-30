@@ -424,41 +424,14 @@ class WP_SweepBright_Query
 
 	public static function filter_status($args)
 	{
-		if (isset($args['params']['filters']['status'])) {
-			switch ($args['params']['filters']['status']) {
-				case 'available':
-					$args['posts'] = array_filter($args['posts'], function ($estate) {
-						return $estate['meta']['estate']['status'] == 'available';
-					}, ARRAY_FILTER_USE_BOTH);
-					break;
-				case 'sold':
-					$args['posts'] = array_filter($args['posts'], function ($estate) {
-						return $estate['meta']['estate']['status'] == 'sold';
-					}, ARRAY_FILTER_USE_BOTH);
-					break;
-				case 'rented':
-					$args['posts'] = array_filter($args['posts'], function ($estate) {
-						return $estate['meta']['estate']['status'] == 'rented';
-					}, ARRAY_FILTER_USE_BOTH);
-					break;
-				case 'option':
-					$args['posts'] = array_filter($args['posts'], function ($estate) {
-						return $estate['meta']['estate']['status'] == 'option';
-					}, ARRAY_FILTER_USE_BOTH);
-					break;
-				case 'sold_stc':
-					$args['posts'] = array_filter($args['posts'], function ($estate) {
-						return $estate['meta']['estate']['status'] == 'option';
-					}, ARRAY_FILTER_USE_BOTH);
-					break;
-				case 'under_contract':
-					$args['posts'] = array_filter($args['posts'], function ($estate) {
-						return $estate['meta']['estate']['status'] == 'under_contract';
-					}, ARRAY_FILTER_USE_BOTH);
-					break;
-				default:
-					break;
+		if (isset($args['params']['filters']['status']) && $args['params']['filters']['status']) {
+			$status = $args['params']['filters']['status'];
+			if (!is_array($status)) {
+				$status = explode(',', $status);
 			}
+			$args['posts'] = array_filter($args['posts'], function ($estate) use ($status) {
+				return in_array($estate['meta']['estate']['status'], $status);
+			}, ARRAY_FILTER_USE_BOTH);
 		}
 		return $args['posts'];
 	}
@@ -784,10 +757,15 @@ class WP_SweepBright_Query
 
 				// Properties
 				$properties = [];
-				if (get_post_meta($post_id, 'estate_properties', true)) {
-					foreach (get_post_meta($post_id, 'estate_properties', true) as $property) {
+
+				if (get_field('estate', $post_id)['properties']) {
+					foreach (get_field('estate', $post_id)['properties'] as $property) {
 						if ($property) {
-							$properties[] = $property;
+							$unit_id = WP_SweepBright_Helpers::get_post_ID_from_estate($property['property_item']);
+							$properties[] = [
+								'id' => $property['property_item'],
+								'status' => get_field('estate', $unit_id)['status'],
+							];
 						}
 					}
 				}

@@ -133,6 +133,15 @@
             <input name="custom_url" type="text" id="custom_url" placeholder="estates" value="<?= WP_SweepBright_Helpers::settings_form()['custom_url']; ?>" class="regular-text ltr" required>
           </td>
         </tr>
+        <tr>
+          <th scope="row">
+            <label for="custom_url">Use automatic URLs</label>
+          </th>
+          <td>
+            <input type="checkbox" id="dynamic_url" name="dynamic_url" value="1" <?= WP_SweepBright_Helpers::setting('dynamic_url') == 1 ? 'checked' : ''; ?> />
+            <label for="dynamic_url"> E.g. <kbd>/for-sale</kbd>, <kbd>/a-vendre</kbd>, <kbd>/te-koop</kbd></label>
+          </td>
+        </tr>
       </tbody>
     </table>
 

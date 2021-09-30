@@ -6,18 +6,21 @@
  * @package FieldLocation
  */
 
-class FieldLocation {
+class FieldLocation
+{
 
-	public function __construct() {
+	public function __construct()
+	{
 	}
 
-	public static function retrieve() {
-    return [
-      'key' => 'location',
-      'name' => 'location',
-      'label' => 'Location',
-      'layout' => 'row',
-      'type' => 'group',
+	public static function retrieve()
+	{
+		return [
+			'key' => 'location',
+			'name' => 'location',
+			'label' => 'Location',
+			'layout' => 'row',
+			'type' => 'group',
 			'sub_fields' => [
 				[
 					'key'    => 'location_hidden',
@@ -75,6 +78,12 @@ class FieldLocation {
 					'type'   => 'text',
 				],
 				[
+					'key'    => 'floor',
+					'label'  => 'Floor',
+					'name'   => 'floor',
+					'type'   => 'text',
+				],
+				[
 					'key'    => 'country',
 					'label'  => 'Country',
 					'name'   => 'country',
@@ -99,7 +108,6 @@ class FieldLocation {
 					'type'   => 'text',
 				],
 			],
-    ];
+		];
 	}
-
 }
