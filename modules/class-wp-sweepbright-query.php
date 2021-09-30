@@ -426,8 +426,8 @@ class WP_SweepBright_Query
 	{
 		if (isset($args['params']['filters']['status']) && $args['params']['filters']['status']) {
 			$status = $args['params']['filters']['status'];
-			if (!is_array($status)) {
-				$status = explode(',', $status);
+			if (!is_array($args['params']['filters']['status'])) {
+				$status = explode(',', $args['params']['filters']['status']);
 			}
 			$args['posts'] = array_filter($args['posts'], function ($estate) use ($status) {
 				return in_array($estate['meta']['estate']['status'], $status);
@@ -729,21 +729,11 @@ class WP_SweepBright_Query
 			foreach ($post_chunk as $post_id) {
 				// Images
 				$images = [];
+
 				if (get_post_meta($post_id, 'features_images', true)) {
 					foreach (get_post_meta($post_id, 'features_images', true) as $image) {
-						$src_thumb = wp_get_attachment_image_src($image, 'thumbnail');
-						if ($src_thumb) {
-							$src_thumb = $src_thumb[0];
-						} else {
-							$src_thumb = '';
-						}
-
-						$src_medium = wp_get_attachment_image_src($image, 'medium');
-						if ($src_medium) {
-							$src_medium = $src_medium[0];
-						} else {
-							$src_medium = '';
-						}
+						$src_thumb = wp_get_attachment_image_url($image, 'thumbnail');
+						$src_medium = wp_get_attachment_image_url($image, 'medium');
 
 						$images[]['sizes'] = [
 							'thumbnail' => $src_thumb,
@@ -754,18 +744,19 @@ class WP_SweepBright_Query
 					}
 				}
 
-
 				// Properties
 				$properties = [];
 
-				if (get_field('estate', $post_id)['properties']) {
+				if (get_post_meta($post_id, 'estate_properties', true)) {
 					foreach (get_field('estate', $post_id)['properties'] as $property) {
 						if ($property) {
 							$unit_id = WP_SweepBright_Helpers::get_post_ID_from_estate($property['property_item']);
-							$properties[] = [
-								'id' => $property['property_item'],
-								'status' => get_field('estate', $unit_id)['status'],
-							];
+							if ($unit_id) {
+								$properties[] = [
+									'id' => $property['property_item'],
+									'status' => get_post_meta($unit_id, 'estate_status', true),
+								];
+							}
 						}
 					}
 				}
@@ -938,7 +929,6 @@ class WP_SweepBright_Query
 			'posts' => $results['estates'],
 			'params' => $params,
 		]);
-
 
 		// Filter: agent
 		$results['estates'] = WP_SweepBright_Query::filter_agent([
