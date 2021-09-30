@@ -99,7 +99,11 @@ class WP_SweepBright_Helpers
 				],
 			],
 		));
-		return $query->posts[0]->ID;
+		$id = false;
+		if ($query->posts) {
+			$id = $query->posts[0]->ID;
+		}
+		return $id;
 	}
 
 	public static function status($data)
