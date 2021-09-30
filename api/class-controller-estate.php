@@ -147,7 +147,7 @@ class WP_SweepBright_Controller_Estate
 							"ordinal" => 1
 						],
 						[
-							"type" => "bathroom",
+							"type" => "bathrooms",
 							"size_description" => "Bathroom",
 							"size" => $faker->numberBetween(10, 30),
 							"unit" => "sq_m",
@@ -399,6 +399,7 @@ class WP_SweepBright_Controller_Estate
 			"garden_orientation" => $faker->randomElement(['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW']),
 			"terrace_orientation" => $faker->randomElement(['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW']),
 			"video_url" => $faker->randomElement(['', 'https://www.youtube.com/watch?v=kkEPkKF0XGA', 'https://www.youtube.com/watch?v=hr9KR6t_mEM']),
+			"virtual_tour_url" => $faker->randomElement(['', 'https://host.drawbotics.com/revo/demos/hauts-du-port/#/building/20']),
 			"appointment_service_url" => $faker->randomElement(['https://calendly.com/', '']),
 			"general_condition" => $faker->randomElement(['good', 'new']),
 			"legal" => [
@@ -425,17 +426,17 @@ class WP_SweepBright_Controller_Estate
 					"report_fuel_tank" => $faker->randomElement(['conform', 'not_conform', 'no_report', 'not_applicable', '']),
 				],
 				"regulations" => [
-					"building_permit" => $faker->boolean(),
-					"priority_purchase_right" => $faker->boolean(),
-					"subdivision_authorisation" => $faker->boolean(),
-					"urban_planning_breach" => $faker->boolean(),
-					"as_built_report" => $faker->boolean(),
-					"expropriation_plan" => $faker->boolean(),
-					"heritage_list" => $faker->boolean(),
-					"pending_legal_proceedings" => $faker->boolean(),
-					"registered_building" => $faker->boolean(),
-					"site_untapped_activity" => $faker->boolean(),
-					"urban_planning_certificate" => $faker->boolean()
+					"building_permit" => $faker->randomElement([1, 0, '']),
+					"priority_purchase_right" => $faker->randomElement([1, 0, '']),
+					"subdivision_authorisation" => $faker->randomElement([1, 0, '']),
+					"urban_planning_breach" => $faker->randomElement([1, 0, '']),
+					"as_built_report" => $faker->randomElement([1, 0, '']),
+					"expropriation_plan" => $faker->randomElement([1, 0, '']),
+					"heritage_list" => $faker->randomElement([1, 0, '']),
+					"pending_legal_proceedings" => $faker->randomElement([1, 0, '']),
+					"registered_building" => $faker->randomElement([1, 0, '']),
+					"site_untapped_activity" => $faker->randomElement([1, 0, '']),
+					"urban_planning_certificate" => $faker->randomElement([1, 0, ''])
 				],
 				"legal_mentions" => [
 					"en" => "Legal regulations English",
@@ -480,6 +481,7 @@ class WP_SweepBright_Controller_Estate
 				"street_2" => $faker->streetName(),
 				"number" => $faker->buildingNumber(),
 				"box" => $faker->numberBetween(0, 10),
+				"floor" => $faker->numberBetween(1, 10),
 				"addition" => $faker->randomLetter(),
 				"country" => "BE",
 				"formatted" => $faker->streetAddress(),

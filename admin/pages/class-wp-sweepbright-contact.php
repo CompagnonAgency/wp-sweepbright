@@ -60,6 +60,8 @@ class WP_SweepBright_Contact
 				$this->submit_valuation_form();
 			} else {
 				$this->emit_event('wp_contact_estate_error', $recaptcha);
+				$_POST['wp_contact_estate_sent'] = false;
+				$_POST['wp_contact_estate_error'] = $recaptcha;
 			}
 		}
 	}
@@ -70,7 +72,7 @@ class WP_SweepBright_Contact
 		{
 			$form = "";
 			$form .= "<form name=\"contact-estate\" method=\"post\" action=\"\">";
-			$form .= stripslashes(WP_SweepBright_Helpers::contact_form()['contact_request_estate_form']);
+			$form .= stripslashes(WP_SweepBright_Helpers::get_contact_form_translation(WP_SweepBright_Helpers::contact_form()['contact_request_estate_form']));
 			$form .= "</form>";
 			return $form;
 		}
@@ -80,7 +82,7 @@ class WP_SweepBright_Contact
 		{
 			$form = "";
 			$form .= "<form name=\"contact-general\" method=\"post\" action=\"\">";
-			$form .= stripslashes(WP_SweepBright_Helpers::contact_form()['contact_request_general_form']);
+			$form .= stripslashes(WP_SweepBright_Helpers::get_contact_form_translation(WP_SweepBright_Helpers::contact_form()['contact_request_general_form']));
 			$form .= "</form>";
 			return $form;
 		}
@@ -183,6 +185,8 @@ class WP_SweepBright_Contact
 				'title' => get_the_title(),
 				'url' => '<a href="' . get_the_permalink() . '">View property</a>',
 				'address' => get_field('location')['formatted_agency'],
+				'street' => $this->validate_input($_POST['street']),
+				'city' => $this->validate_input($_POST['city']),
 				'first_name' => $this->validate_input($_POST['first_name']),
 				'last_name' => $this->validate_input($_POST['last_name']),
 				'email' => $this->validate_input($_POST['email']),
@@ -205,6 +209,8 @@ class WP_SweepBright_Contact
 
 			$this->autorespond($form);
 			$this->emit_event('wp_contact_estate_sent', 'success');
+			$_POST['wp_contact_estate_sent'] = true;
+			$_POST['wp_contact_estate_error'] = false;
 		}
 	}
 
@@ -229,6 +235,8 @@ class WP_SweepBright_Contact
 
 			$this->mail_form($form);
 			$this->emit_event('wp_contact_estate_sent', 'success');
+			$_POST['wp_contact_estate_sent'] = true;
+			$_POST['wp_contact_estate_error'] = false;
 		}
 	}
 
@@ -239,6 +247,8 @@ class WP_SweepBright_Contact
 				'title' => '-',
 				'url' => '-',
 				'address' => '-',
+				'city' => '-',
+				'street' => '-',
 				'first_name' => $this->validate_input($_POST['first_name']),
 				'last_name' => $this->validate_input($_POST['last_name']),
 				'email' => $this->validate_input($_POST['email']),
@@ -286,6 +296,13 @@ class WP_SweepBright_Contact
 			if (isset($_POST['postal_codes']) && $_POST['postal_codes'] !== '') {
 				$form['postal_codes'] = explode(',', $_POST['postal_codes']);
 
+				function trim_value(&$value)
+				{
+					$value = trim($value);
+				}
+				array_walk($form['postal_codes'], 'trim_value');
+
+
 				if (!is_array($form['postal_codes'])) {
 					$form['postal_codes'] = [$form['postal_codes']];
 				}
@@ -293,7 +310,7 @@ class WP_SweepBright_Contact
 				$form['postal_codes'] = [];
 			}
 
-			WP_SweepBright_Controller_Hook::get_client()->request('POST', "contacts", [
+			$data = [
 				'verify' => false,
 				'json' => [
 					'first_name' => $form['first_name'],
@@ -316,11 +333,15 @@ class WP_SweepBright_Contact
 						'postal_codes' => $form['postal_codes'],
 					]
 				],
-			]);
+			];
+
+			WP_SweepBright_Controller_Hook::get_client()->request('POST', "contacts", $data);
 
 
 			$this->autorespond($form);
 			$this->emit_event('wp_contact_estate_sent', 'success');
+			$_POST['wp_contact_estate_sent'] = true;
+			$_POST['wp_contact_estate_error'] = false;
 		}
 	}
 }

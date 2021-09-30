@@ -39,6 +39,8 @@ class WP_SweepBright_Helpers
 			'recaptcha_site_key' => WP_SweepBright_Helpers::setting('recaptcha_site_key'),
 			'recaptcha_secret_key' => WP_SweepBright_Helpers::setting('recaptcha_secret_key'),
 			'unavailable_properties' => WP_SweepBright_Helpers::setting('unavailable_properties'),
+			'dynamic_url' => WP_SweepBright_Helpers::setting('dynamic_url'),
+			'enable_pages' => WP_SweepBright_Helpers::setting('enable_pages'),
 		];
 
 		// Show warning that you need to add settings
@@ -49,6 +51,12 @@ class WP_SweepBright_Helpers
 
 		// Save global settings
 		$this->save_global_settings();
+
+		// Translate contact forms
+		if (in_array('polylang-pro/polylang.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+			$this->translate_contact_form(WP_SweepBright_Helpers::contact_form()['contact_request_estate_form']);
+			$this->translate_contact_form(WP_SweepBright_Helpers::contact_form()['contact_request_general_form']);
+		}
 	}
 
 	public function onboarding()
@@ -226,6 +234,37 @@ class WP_SweepBright_Helpers
 		return $attach_id;
 	}
 
+	public function translate_contact_form($to_translate)
+	{
+		preg_match_all('#\{\{(.*?)\}\}#', $to_translate, $match);
+		if (isset($match) && count($match) > 0) {
+			foreach ($match[1] as $key => $string) {
+				$name = explode('|', $string, 2)[0];
+				$value = explode('|', $string, 2)[1];
+				if (function_exists('pll_register_string')) {
+					pll_register_string('wps-' . $name, $value, 'wp-sweepbright');
+				}
+			}
+		}
+	}
+
+	public static function get_contact_form_translation($data)
+	{
+		if (in_array('polylang-pro/polylang.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+			preg_match_all('#\{\{(.*?)\}\}#', $data, $match);
+			if (isset($match) && count($match) > 0) {
+				foreach ($match[1] as $key => $string) {
+					$value = explode('|', $string, 2)[1];
+					if (function_exists('pll_register_string')) {
+						$value = pll__($value);
+					}
+					$data = str_replace('{{' . $string . '}}', $value, $data);
+				}
+			}
+		}
+		return $data;
+	}
+
 	public static function contact_form()
 	{
 		$locale = explode('_', get_locale())[0];
@@ -341,6 +380,7 @@ class WP_SweepBright_Helpers
 			'enable_pages' => false,
 			'header_code' => '',
 			'unavailable_properties' => 'hidden',
+			'dynamic_url' => false,
 		];
 	}
 
@@ -385,6 +425,12 @@ class WP_SweepBright_Helpers
 				$data['enable_pages'] = true;
 			} else {
 				$data['enable_pages'] = false;
+			}
+
+			if (isset($_POST['dynamic_url'])) {
+				$data['dynamic_url'] = true;
+			} else {
+				$data['dynamic_url'] = false;
 			}
 
 			if (get_option('wp_sweepbright_settings')) {

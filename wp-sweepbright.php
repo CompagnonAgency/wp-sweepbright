@@ -10,7 +10,7 @@
  * Author: Compagnon Agency
  * Author URI: https://compagnon.agency/
  * Text Domain: wp-sweepbright
- * Version: 1.8.7
+ * Version: 1.9.5
  */
 
 // If this file is called directly, abort.
@@ -23,7 +23,7 @@ if (!defined('WPINC')) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define('WP_SWEEPBRIGHT_VERSION', '1.8.7');
+define('WP_SWEEPBRIGHT_VERSION', '1.9.5');
 
 /**
  * The code that runs during plugin activation.
@@ -127,6 +127,45 @@ if (isset(get_option('wp_sweepbright_settings')['enable_pages']) && get_option('
     }
   }
   add_action('wpseo_add_opengraph_images', 'add_images');
+}
+
+/**
+ * Programmatically override SEO meta data if multilanguage is enabled
+ */
+if (in_array('polylang-pro/polylang.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+  // Change URL
+  function filter_wpseo_opengraph_url($wpseo_frontend)
+  {
+    global $post;
+    if (($post && $post->post_type === 'sweepbright_estates') && !is_admin()) {
+      $wpseo_frontend = get_the_permalink();
+    }
+    return $wpseo_frontend;
+  };
+  add_filter('wpseo_opengraph_url', 'filter_wpseo_opengraph_url', 10, 1);
+
+  // Change title
+  function filter_wpseo_opengraph_title($wpseo_frontend)
+  {
+    global $post;
+    if (($post && $post->post_type === 'sweepbright_estates') && !is_admin()) {
+      $wpseo_frontend = get_field('estate')['title'][pll_current_language()] . ' - ' . get_bloginfo('name');
+    }
+    return $wpseo_frontend;
+  };
+  add_filter('wpseo_opengraph_title', 'filter_wpseo_opengraph_title', 10, 1);
+  add_filter('pre_get_document_title', 'filter_wpseo_opengraph_title', 99);
+
+  // Change description
+  function filter_wpseo_opengraph_description($wpseo_frontend)
+  {
+    global $post;
+    if (($post && $post->post_type === 'sweepbright_estates') && !is_admin()) {
+      $wpseo_frontend = wp_trim_words(get_field('estate')['description'][pll_current_language()], 20);
+    }
+    return $wpseo_frontend;
+  };
+  add_filter('wpseo_opengraph_desc', 'filter_wpseo_opengraph_description', 10, 1);
 }
 
 /**

@@ -43,6 +43,12 @@ class FieldFeatures
 					'type'   => 'text',
 				],
 				[
+					'key'    => 'virtual_tour_url',
+					'label'  => 'Virtual tour URL',
+					'name'   => 'virtual_tour_url',
+					'type'   => 'text',
+				],
+				[
 					'key'    => 'appointment_service_url',
 					'label'  => 'Appointment service url',
 					'name'   => 'appointment_service_url',

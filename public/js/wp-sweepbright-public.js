@@ -211,7 +211,6 @@ export default {
         },
         getEstates(params) {
           this.isLoading = true;
-
           axios.post('/wp-json/v1/sweepbright/list', this.request).then((response) => {
             if (params && params.mapMode) {
               this.storeMarkers(response);
