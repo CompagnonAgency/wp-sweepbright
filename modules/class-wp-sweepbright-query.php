@@ -71,7 +71,12 @@ class WP_SweepBright_Query
 
 		if ($query) {
 			foreach ($query as $item) {
+				// Delete posts
 				wp_delete_post($item, true);
+
+				// Delete cache
+				require_once plugin_dir_path(__DIR__) . 'modules/class-wp-sweepbright-cache.php';
+				WP_SweepBright_Cache::remove($post_id);
 			}
 		}
 		return true;
@@ -350,70 +355,100 @@ class WP_SweepBright_Query
 		return $price;
 	}
 
-	public static function filter_min_max_price($args)
+	public static function process_filter_min_max_price($posts)
 	{
-		for ($i = 0; $i < count($args['posts']); $i++) {
-			if ($args['posts'][$i]['meta']['estate']['is_project']) {
-				$args['posts'][$i]['meta']['price']['min_max'] = WP_SweepBright_Query::min_max_price(false, $args['posts'][$i]['meta']['estate']['id']);
-			}
-		}
+		// Set cache directory
+		FileSystemCache::$cacheDir = WP_PLUGIN_DIR . '/wp-sweepbright/db';
 
-		return $args['posts'];
-	}
+		foreach ($posts as &$post) {
+			// Initialize caching
+			$price_cache = FileSystemCache::generateCacheKey('post_' . $post['id'] . '_price', WP_SweepBright_Query::slugify(get_bloginfo('name')));
 
-	public static function filter_favorites($args)
-	{
-		if (isset($args['params']['favorites']) && $args['params']['favorites']) {
-			if (isset($_COOKIE['favorites']) && json_decode($_COOKIE['favorites'], true)) {
-				$args['posts'] = array_filter($args['posts'], function ($estate) {
-					return in_array($estate['id'], json_decode($_COOKIE['favorites'], true));
-				}, ARRAY_FILTER_USE_BOTH);
+			if ($post['meta']['estate']['is_project']) {
+				if (!FileSystemCache::retrieve($price_cache)) {
+					$min_max_price = WP_SweepBright_Query::min_max_price(false, $post['meta']['estate']['id']);
+					FileSystemCache::store($price_cache, $min_max_price);
+				} else {
+					$min_max_price = FileSystemCache::retrieve($price_cache);
+				}
 			} else {
-				$args['posts'] = [];
+				$min_max_price = [
+					'min' => false,
+					'max' => false,
+				];
 			}
-		}
 
+			$post['meta']['price']['min_max'] = $min_max_price;
+		}
+		return $posts;
+	}
+
+	public static function sql_filter_hide_prospects($args)
+	{
+		$args['posts'] = $args['posts']->andWhere('status', '!=', 'prospect');
 		return $args['posts'];
 	}
 
-
-	public static function filter_hide_units($args)
+	public static function sql_filter_hide_units($args)
 	{
-		return $args['posts'] = array_filter($args['posts'], function ($estate) {
-			return !$estate['meta']['estate']['project_id'];
-		}, ARRAY_FILTER_USE_BOTH);
+		$args['posts'] = $args['posts']->andWhere('is_unit', 0);
+		return $args['posts'];
 	}
 
-	public static function filter_hide_prospects($args)
+	public static function sql_filter_status($args)
 	{
-		return $args['posts'] = array_filter($args['posts'], function ($estate) {
-			return !$estate['meta']['features']['negotiation'] !== 'prospect';
-		}, ARRAY_FILTER_USE_BOTH);
+		if (isset($args['params']['filters']['status'])) {
+			if ($args['params']['filters']['status'] !== 'all') {
+				$status = $args['params']['filters']['status'];
+
+				if (!is_array($args['params']['filters']['status'])) {
+					$status = explode(',', $args['params']['filters']['status']);
+				}
+
+				foreach ($status as $key => $status_item) {
+					if (!$status_item) {
+						unset($status[$key]);
+					}
+
+					if ($status_item === 'sold_stc') {
+						$status[$key] = 'option';
+					}
+				}
+
+				$args['posts'] = $args['posts']->whereIn('status', $status);
+			}
+		}
+		return $args['posts'];
 	}
 
-	public static function filter_negotiation($args)
+	public static function sql_filter_new_home($args)
+	{
+		if (isset($args['params']['filters']['new_home'])) {
+			if ($args['params']['filters']['new_home'] === 'new') {
+				$args['posts'] = $args['posts']->andWhere('general_condition', 'new');
+			} else if ($args['params']['filters']['new_home'] === 'used') {
+				$args['posts'] = $args['posts']->andWhere('general_condition', '!=', 'new');
+			}
+		}
+		return $args['posts'];
+	}
+
+	public static function sql_filter_negotiation($args)
 	{
 		if (isset($args['params']['filters']['negotiation'])) {
 			switch ($args['params']['filters']['negotiation']) {
 				case 'sale':
-					$args['posts'] = array_filter($args['posts'], function ($estate) {
-						return $estate['meta']['features']['negotiation'] == 'sale';
-					}, ARRAY_FILTER_USE_BOTH);
+					$args['posts'] = $args['posts']->andWhere('negotiation', 'sale');
 					break;
 				case 'let':
-					$args['posts'] = array_filter($args['posts'], function ($estate) {
-						return $estate['meta']['features']['negotiation'] == 'let';
-					}, ARRAY_FILTER_USE_BOTH);
+					$args['posts'] = $args['posts']->andWhere('negotiation', 'let');
 					break;
 				case 'projects':
-					$args['posts'] = array_filter($args['posts'], function ($estate) {
-						return $estate['meta']['estate']['is_project'];
-					}, ARRAY_FILTER_USE_BOTH);
+					$args['posts'] = $args['posts']->andWhere('is_project', 1);
 					break;
 				case 'sale_non_projects':
-					$args['posts'] = array_filter($args['posts'], function ($estate) {
-						return $estate['meta']['features']['negotiation'] == 'sale' && !$estate['meta']['estate']['is_project'];
-					}, ARRAY_FILTER_USE_BOTH);
+					$args['posts'] = $args['posts']->andWhere('negotiation', 'sale')
+						->andWhere('is_project', 0);
 					break;
 				default:
 					break;
@@ -422,112 +457,50 @@ class WP_SweepBright_Query
 		return $args['posts'];
 	}
 
-	public static function filter_status($args)
-	{
-		if (isset($args['params']['filters']['status']) && $args['params']['filters']['status']) {
-			$status = $args['params']['filters']['status'];
-			if (!is_array($args['params']['filters']['status'])) {
-				$status = explode(',', $args['params']['filters']['status']);
-			}
-			$args['posts'] = array_filter($args['posts'], function ($estate) use ($status) {
-				return in_array($estate['meta']['estate']['status'], $status);
-			}, ARRAY_FILTER_USE_BOTH);
-		}
-		return $args['posts'];
-	}
-
-	public static function filter_agent($args)
-	{
-		if (isset($args['params']['filters']['agent'])) {
-			$args['posts'] = array_filter($args['posts'], function ($estate) use ($args) {
-				return in_array($estate['meta']['negotiator']['email'], $args['params']['filters']['agent']);
-			}, ARRAY_FILTER_USE_BOTH);
-		}
-
-		return $args['posts'];
-	}
-
-	public static function filter_new_home($args)
-	{
-		if (isset($args['params']['filters']['new_home'])) {
-			if ($args['params']['filters']['new_home'] === 'new') {
-				$args['posts'] = array_filter($args['posts'], function ($estate) use ($args) {
-					return $estate['meta']['conditions']['general_condition'] === 'new';
-				}, ARRAY_FILTER_USE_BOTH);
-			} else if ($args['params']['filters']['new_home'] === 'used') {
-				$args['posts'] = array_filter($args['posts'], function ($estate) use ($args) {
-					return $estate['meta']['conditions']['general_condition'] !== 'new';
-				}, ARRAY_FILTER_USE_BOTH);
-			}
-		}
-		return $args['posts'];
-	}
-
-	public static function filter_category($args)
+	public static function sql_filter_category($args)
 	{
 		if (
 			isset($args['params']['filters']['category']) &&
 			count($args['params']['filters']['category']) > 0
 		) {
-			$args['posts'] = array_filter($args['posts'], function ($estate) use ($args) {
-				return in_array($estate['meta']['features']['type'], $args['params']['filters']['category']);
-			}, ARRAY_FILTER_USE_BOTH);
+			$category = '';
+			if ($args['params']['filters']['category'] !== 'all') {
+				$category = $args['params']['filters']['category'];
+				$args['posts'] = $args['posts']->whereIn('category', $category);
+			}
 		}
 		return $args['posts'];
 	}
 
-	public static function filter_subcategory($args)
+	public static function sql_filter_subcategory($args)
 	{
 		if (
 			isset($args['params']['filters']['subcategory']) &&
 			count($args['params']['filters']['subcategory']) > 0
 		) {
-			$args['posts'] = array_filter($args['posts'], function ($estate) use ($args) {
-				return in_array($estate['meta']['features']['sub_type'], $args['params']['filters']['subcategory']);
-			}, ARRAY_FILTER_USE_BOTH);
+			$subcategory = '';
+			if ($args['params']['filters']['subcategory'] !== 'all') {
+				$subcategory = $args['params']['filters']['subcategory'];
+				$args['posts'] = $args['posts']->whereIn('subcategory', $subcategory);
+			}
 		}
 		return $args['posts'];
 	}
 
-	public static function filter_price($args)
+	public static function sql_filter_agent($args)
+	{
+		if (isset($args['params']['filters']['agent'])) {
+			$args['posts'] = $args['posts']->andWhere('negotiator_email', $args['params']['filters']['agent']);
+		}
+		return $args['posts'];
+	}
+
+	public static function sql_filter_price($args)
 	{
 		if (isset($args['params']['filters']['price'])) {
 			$params = [
 				'min' => $args['params']['filters']['price']['min'],
 				'max' => $args['params']['filters']['price']['max']
-			];
-
-			if ($params['min'] === 0) {
-				$params['min'] = 1;
-			}
-
-			if (isset($params['min']) && is_numeric($params['min']) && isset($params['max']) && is_numeric($params['max'])) {
-				$args['posts'] = array_filter($args['posts'], function ($estate) use ($params) {
-					return empty($estate['meta']['price']['amount']) || ((intval($estate['meta']['price']['amount']) >= $params['min']) && (intval($estate['meta']['price']['amount']) <= $params['max']));
-				}, ARRAY_FILTER_USE_BOTH);
-			}
-
-			if (empty($params['min']) && is_numeric($params['max']) && isset($params['max'])) {
-				$args['posts'] = array_filter($args['posts'], function ($estate) use ($params) {
-					return empty($estate['meta']['price']['amount']) || ((intval($estate['meta']['price']['amount']) <= $params['max']));
-				}, ARRAY_FILTER_USE_BOTH);
-			}
-
-			if (empty($params['max']) && is_numeric($params['min']) && isset($params['min'])) {
-				$args['posts'] = array_filter($args['posts'], function ($estate) use ($params) {
-					return empty($estate['meta']['price']['amount']) || ((intval($estate['meta']['price']['amount']) >= $params['min']));
-				}, ARRAY_FILTER_USE_BOTH);
-			}
-		}
-		return $args['posts'];
-	}
-
-	public static function filter_bedrooms($args)
-	{
-		if (isset($args['params']['filters']['facilities']['bedrooms'])) {
-			$params = [
-				'min' => $args['params']['filters']['facilities']['bedrooms']['min'],
-				'max' => $args['params']['filters']['facilities']['bedrooms']['max']
 			];
 
 			if ($params['min'] === 0) {
@@ -539,27 +512,22 @@ class WP_SweepBright_Query
 			}
 
 			if (isset($params['min']) && is_numeric($params['min']) && isset($params['max']) && is_numeric($params['max'])) {
-				$args['posts'] = array_filter($args['posts'], function ($estate) use ($params) {
-					return empty($estate['meta']['facilities']['bedrooms']) || ((intval($estate['meta']['facilities']['bedrooms']) >= $params['min']) && (intval($estate['meta']['facilities']['bedrooms']) <= $params['max']));
-				}, ARRAY_FILTER_USE_BOTH);
+				$args['posts'] = $args['posts']->andWhere('price', '>=', $params['min'])
+					->andWhere('price', '<=', $params['max']);
 			}
 
 			if (empty($params['min']) && is_numeric($params['max']) && isset($params['max'])) {
-				$args['posts'] = array_filter($args['posts'], function ($estate) use ($params) {
-					return empty($estate['meta']['facilities']['bedrooms']) || ((intval($estate['meta']['facilities']['bedrooms']) <= $params['max']));
-				}, ARRAY_FILTER_USE_BOTH);
+				$args['posts'] = $args['posts']->andWhere('price', '<=', $params['max']);
 			}
 
 			if (empty($params['max']) && is_numeric($params['min']) && isset($params['min'])) {
-				$args['posts'] = array_filter($args['posts'], function ($estate) use ($params) {
-					return empty($estate['meta']['facilities']['bedrooms']) || ((intval($estate['meta']['facilities']['bedrooms']) >= $params['min']));
-				}, ARRAY_FILTER_USE_BOTH);
+				$args['posts'] = $args['posts']->andWhere('price', '>=', $params['min']);
 			}
 		}
 		return $args['posts'];
 	}
 
-	public static function filter_plot_area($args)
+	public static function sql_filter_plot_area($args)
 	{
 		if (
 			isset($args['params']['filters']['plot_area']) &&
@@ -570,29 +538,22 @@ class WP_SweepBright_Query
 				'min' => $args['params']['filters']['plot_area']['min'],
 				'max' => $args['params']['filters']['plot_area']['max']
 			];
-
 			if ($params['min'] === 0) {
-				$params['min'] = 1;
+				$params['min'] = false;
 			}
 
-			$args['posts'] = array_filter($args['posts'], function ($estate) use ($params) {
-				if (isset($estate['meta']['sizes']['plot_area']['size'])) {
-					$size = intval($estate['meta']['sizes']['plot_area']['size']);
+			if ($params['max'] === 0) {
+				$params['max'] = false;
+			}
 
-					if ($estate['meta']['sizes']['plot_area']['unit'] === 'are') {
-						$size = $size * 100;
-					}
-				} else {
-					$size = false;
-				}
-
-				return empty($estate['meta']['sizes']['plot_area']['size']) || !$size || (($size >= $params['min']) && ($size <= $params['max']));
-			}, ARRAY_FILTER_USE_BOTH);
+			$args['posts'] = $args['posts']->andWhere('plot_area', '>', 0)
+				->andWhere('plot_area', '>=', $params['min'])
+				->andWhere('plot_area', '<=', $params['max']);
 		}
 		return $args['posts'];
 	}
 
-	public static function filter_liveable_area($args)
+	public static function sql_filter_liveable_area($args)
 	{
 		if (
 			isset($args['params']['filters']['liveable_area']) &&
@@ -603,29 +564,51 @@ class WP_SweepBright_Query
 				'min' => $args['params']['filters']['liveable_area']['min'],
 				'max' => $args['params']['filters']['liveable_area']['max']
 			];
-
 			if ($params['min'] === 0) {
-				$params['min'] = 1;
+				$params['min'] = false;
 			}
 
-			$args['posts'] = array_filter($args['posts'], function ($estate) use ($params) {
-				if (isset($estate['meta']['sizes']['liveable_area']['size'])) {
-					$size = intval($estate['meta']['sizes']['liveable_area']['size']);
-
-					if ($estate['meta']['sizes']['liveable_area']['unit'] === 'are') {
-						$size = $size * 100;
-					}
-				} else {
-					$size = false;
-				}
-
-				return empty($estate['meta']['sizes']['liveable_area']['size']) || !$size || (($size >= $params['min']) && ($size <= $params['max']));
-			}, ARRAY_FILTER_USE_BOTH);
+			if ($params['max'] === 0) {
+				$params['max'] = false;
+			}
+			$args['posts'] = $args['posts']->andWhere('liveable_area', '>', 0)
+				->andWhere('liveable_area', '>=', $params['min'])
+				->andWhere('liveable_area', '<=', $params['max']);
 		}
 		return $args['posts'];
 	}
 
-	public static function filter_geolocation($args)
+	public static function sql_filter_bedrooms($args)
+	{
+		if (isset($args['params']['filters']['facilities']['bedrooms'])) {
+			$params = [
+				'min' => $args['params']['filters']['facilities']['bedrooms']['min'],
+				'max' => $args['params']['filters']['facilities']['bedrooms']['max']
+			];
+			if ($params['min'] === 0) {
+				$params['min'] = false;
+			}
+
+			if ($params['max'] === 0) {
+				$params['max'] = false;
+			}
+			if (isset($params['min']) && is_numeric($params['min']) && isset($params['max']) && is_numeric($params['max'])) {
+				$args['posts'] = $args['posts']->andWhere('bedrooms', '>=', $params['min'])
+					->andWhere('bedrooms', '<=', $params['max']);
+			}
+
+			if (empty($params['min']) && is_numeric($params['max']) && isset($params['max'])) {
+				$args['posts'] = $args['posts']->andWhere('bedrooms', '<=', $params['max']);
+			}
+
+			if (empty($params['max']) && is_numeric($params['min']) && isset($params['min'])) {
+				$args['posts'] = $args['posts']->andWhere('bedrooms', '>=', $params['min']);
+			}
+		}
+		return $args['posts'];
+	}
+
+	public static function sql_filter_geolocation($args)
 	{
 		if (
 			isset($args['params']['filters']['location']) &&
@@ -639,79 +622,61 @@ class WP_SweepBright_Query
 			}
 			$boundingBox = $geopoint->boundingBox(intval($distance), 'km');
 
-			$args['posts'] = array_filter($args['posts'], function ($estate) use ($boundingBox) {
-				return (($estate['meta']['location']['latitude'] > $boundingBox->getMinLatitude()) && ($estate['meta']['location']['latitude'] <= $boundingBox->getMaxLatitude())) &&
-					(($estate['meta']['location']['longitude'] > $boundingBox->getMinLongitude()) && ($estate['meta']['location']['longitude'] <= $boundingBox->getMaxLongitude()));
-			}, ARRAY_FILTER_USE_BOTH);
+			$args['posts'] = $args['posts']->andWhere('lat', '>', $boundingBox->getMinLatitude())
+				->andWhere('lat', '<=', $boundingBox->getMaxLatitude());
+
+			$args['posts'] = $args['posts']->andWhere('lng', '>', $boundingBox->getMinLongitude())
+				->andWhere('lng', '<=', $boundingBox->getMaxLongitude());
 		}
 		return $args['posts'];
 	}
 
-	public static function order_by_date($args)
+	public static function sql_filter_favorites($args)
 	{
-		if (isset($args['params']['sort']) && $args['params']['sort']['orderBy'] === 'date') {
-			usort($args['posts'], function ($a, $b) use ($args) {
-				$order = $b['date'] - $a['date'];
-				if ($args['params']['sort']['order'] === 'asc') {
-					$order = $a['date'] - $b['date'];
-				}
-				return $order;
-			});
+		if (isset($args['params']['favorites']) && $args['params']['favorites']) {
+			if (isset($_COOKIE['favorites']) && json_decode($_COOKIE['favorites'], true)) {
+				$args['posts'] = $args['posts']->whereIn('post_id', json_decode($_COOKIE['favorites'], true));
+			} else {
+				$args['posts'] = [];
+			}
 		}
 		return $args['posts'];
 	}
 
-	public static function order_by_price($args)
-	{
-		if (isset($args['params']['sort']) && $args['params']['sort']['orderBy'] === 'price') {
-			usort($args['posts'], function ($a, $b) use ($args) {
-				$order = floatval($b['meta']['price']['amount']) - floatval($a['meta']['price']['amount']);
-				if ($args['params']['sort']['order'] === 'asc') {
-					$order = floatval($a['meta']['price']['amount']) - floatval($b['meta']['price']['amount']);
-				}
-				return $order;
-			});
-		}
-		return $args['posts'];
-	}
 
-	public static function negotiationValue($value)
-	{
-		switch ($value) {
-			case 'sale':
-				return 0;
-			case 'let':
-				return 1;
-		}
-		return $value;
-	}
-
-	public static function statusValue($value)
-	{
-		switch ($value) {
-			case 'available':
-				return 0;
-			case 'option':
-				return 1;
-			case 'under_contract':
-				return 2;
-			case 'sold':
-				return 3;
-			case 'rented':
-				return 4;
-		}
-		return $value;
-	}
-
-	public static function order_by_relevance($args)
+	public static function sql_order_by_relevance($args)
 	{
 		if ((isset($args['params']['sort']) && $args['params']['sort']['orderBy'] === 'relevance') || $args['params']['recent']) {
-			usort($args['posts'], function ($a, $b) {
-				return ($b['date'] <=> $a['date']) * 2 +
-					(WP_SweepBright_Query::negotiationValue($a['meta']['features']['negotiation']) <=> WP_SweepBright_Query::negotiationValue($b['meta']['features']['negotiation'])) * 100 +
-					(WP_SweepBright_Query::statusValue($a['meta']['estate']['status']) <=> WP_SweepBright_Query::statusValue($b['meta']['estate']['status'])) * 500 +
-					($b['meta']['open_homes']['hasOpenHome'] <=> $a['meta']['open_homes']['hasOpenHome']) * 1000;
-			});
+			// Order by status
+			$condition_let = "CASE WHEN status = 'lost' THEN 8.5 WHEN status = 'prospect' THEN 7.5 WHEN status = 'rented' THEN 6.5 WHEN status = 'bid' THEN 5.5 WHEN status = 'sold' THEN 4.5 WHEN status = 'under_contract' THEN 3.5 WHEN status = 'option' THEN 2.5 WHEN status = 'available' THEN 1.5 END";
+			$condition_sale = "CASE WHEN status = 'lost' THEN 8 WHEN status = 'prospect' THEN 7 WHEN status = 'rented' THEN 6 WHEN status = 'bid' THEN 5 WHEN status = 'sold' THEN 4 WHEN status = 'under_contract' THEN 3 WHEN status = 'option' THEN 2 WHEN status = 'available' THEN 1 END";
+
+			$args['posts'] = $args['posts']
+				// Order by open homes
+				->order_by("CASE WHEN has_open_home = 1 THEN 0 END", 'DESC')
+
+				// Order by negotiation
+				->order_by("CASE WHEN negotiation = 'sale' THEN " . $condition_sale . " WHEN negotiation = 'let' THEN " . $condition_let . " END", 'ASC')
+
+				// Order by date
+				->order_by("date", "DESC");
+		}
+		return $args['posts'];
+	}
+
+	public static function sql_order_by_date($args)
+	{
+		if (isset($args['params']['sort']) && $args['params']['sort']['orderBy'] === 'date') {
+			$args['posts'] = $args['posts']->order_by("date", $args['params']['sort']['order']);
+		}
+		return $args['posts'];
+	}
+
+	public static function sql_order_by_price($args)
+	{
+		if (isset($args['params']['sort']) && $args['params']['sort']['orderBy'] === 'price') {
+			$args['posts'] = $args['posts']
+				->order_by("ABS(price)", $args['params']['sort']['order']);
 		}
 		return $args['posts'];
 	}
@@ -721,344 +686,327 @@ class WP_SweepBright_Query
 		return strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $string), '-'));
 	}
 
-	public static function store_cache($args)
+	public static function get_estates($posts, $params)
 	{
-		$tmp_count = 0;
-		foreach ($args['post_chunks'] as $post_chunk) {
-			$posts_cache = [];
-			foreach ($post_chunk as $post_id) {
-				// Images
-				$images = [];
+		$results = [];
 
-				if (get_post_meta($post_id, 'features_images', true)) {
-					foreach (get_post_meta($post_id, 'features_images', true) as $image) {
-						$src_thumb = wp_get_attachment_image_url($image, 'thumbnail');
-						$src_medium = wp_get_attachment_image_url($image, 'medium');
+		foreach ($posts as $post) {
+			// Get the ID
+			$id = $post->post_id;
 
-						$images[]['sizes'] = [
-							'thumbnail' => $src_thumb,
-							'medium' => $src_medium,
-							'medium_large' => $src_medium,
-							'large' => $src_medium,
+			if (isset($params['mapMode']) && $params['mapMode']) {
+				$results = WP_SweepBright_Query::add_marker($id, $results);
+			} else {
+				$results = WP_SweepBright_Query::add_estate($id, $results);
+			}
+		}
+		return $results;
+	}
+
+	public static function add_marker($id, $results)
+	{
+		$image = '';
+		if (get_post_meta($id, 'features_images', true)) {
+			$attach_id = get_post_meta($id, 'features_images', true)[0];
+			$image = wp_get_attachment_image_url($attach_id, 'medium');
+		}
+
+		$results[] = [
+			'id' => get_post_meta($id, 'estate_id', true),
+			'status' => get_post_meta($id, 'estate_status', true),
+			'is_project' => get_post_meta($id, 'estate_is_project', true),
+			'permalink' => get_the_permalink($id),
+			'title' => [
+				'en' => get_post_meta($id, 'estate_title_en', true),
+				'nl' => get_post_meta($id, 'estate_title_nl', true),
+				'fr' => get_post_meta($id, 'estate_title_fr', true),
+			],
+			'location' => [
+				'hidden' => get_post_meta($id, 'location_hidden', true),
+				'latitude' => get_post_meta($id, 'location_latitude', true),
+				'longitude' => get_post_meta($id, 'location_longitude', true),
+				'city' => get_post_meta($id, 'location_city', true),
+				'street' => get_post_meta($id, 'location_street', true),
+				'street_2' => get_post_meta($id, 'location_street_2', true),
+				'number' => get_post_meta($id, 'location_number', true),
+				'box' => get_post_meta($id, 'location_box', true),
+				'addition' => get_post_meta($id, 'location_addition', true),
+				'country' => get_post_meta($id, 'location_country', true),
+				'postal_code' => get_post_meta($id, 'location_postal_code', true),
+				'formatted' => get_post_meta($id, 'location_formatted', true),
+				'formatted_agency' => get_post_meta($id, 'location_formatted_agency', true),
+			],
+			'image' => $image,
+			'price' => get_post_meta($id, 'price_amount', true),
+		];
+
+		return $results;
+	}
+
+	public static function add_estate($id, $results)
+	{
+		// Properties
+		$properties = [];
+		if (get_post_meta($id, 'estate_properties', true)) {
+			foreach (get_field('estate', $id)['properties'] as $property) {
+				if ($property) {
+					$unit_id = WP_SweepBright_Helpers::get_post_ID_from_estate($property['property_item']);
+					if ($unit_id) {
+						$properties[] = [
+							'id' => $property['property_item'],
+							'status' => get_post_meta($unit_id, 'estate_status', true),
 						];
 					}
 				}
-
-				// Properties
-				$properties = [];
-
-				if (get_post_meta($post_id, 'estate_properties', true)) {
-					foreach (get_field('estate', $post_id)['properties'] as $property) {
-						if ($property) {
-							$unit_id = WP_SweepBright_Helpers::get_post_ID_from_estate($property['property_item']);
-							if ($unit_id) {
-								$properties[] = [
-									'id' => $property['property_item'],
-									'status' => get_post_meta($unit_id, 'estate_status', true),
-								];
-							}
-						}
-					}
-				}
-
-				// Build post object
-				$post_item = [
-					'id' => $post_id,
-					'permalink' => get_the_permalink($post_id),
-					'date' => get_the_time('U', $post_id),
-					'meta' => [
-						'conditions' => [
-							'general_condition' => get_post_meta($post_id, 'conditions_general_condition', true),
-						],
-						'custom_fields' => get_field('custom_fields', $post_id),
-						'estate' => [
-							'id' => get_post_meta($post_id, 'estate_id', true),
-							'status' => get_post_meta($post_id, 'estate_status', true),
-							'title' => [
-								'en' => get_post_meta($post_id, 'estate_title_en', true),
-								'nl' => get_post_meta($post_id, 'estate_title_nl', true),
-								'fr' => get_post_meta($post_id, 'estate_title_fr', true),
-							],
-							'description' => [
-								'en' => get_post_meta($post_id, 'estate_description_en', true),
-								'nl' => get_post_meta($post_id, 'estate_description_nl', true),
-								'fr' => get_post_meta($post_id, 'estate_description_fr', true),
-							],
-							'is_project' => get_post_meta($post_id, 'estate_is_project', true),
-							'project_id' => get_post_meta($post_id, 'estate_project_id', true),
-							'properties' => $properties,
-						],
-						'facilities' => [
-							'kitchens' => get_post_meta($post_id, 'facilities_kitchens', true),
-							'bathrooms' => get_post_meta($post_id, 'facilities_bathrooms', true),
-							'toilets' => get_post_meta($post_id, 'facilities_toilets', true),
-							'floors' => get_post_meta($post_id, 'facilities_floors', true),
-							'bedrooms' => get_post_meta($post_id, 'facilities_bedrooms', true),
-							'living_rooms' => get_post_meta($post_id, 'facilities_living_rooms', true),
-							'storage_rooms' => get_post_meta($post_id, 'facilities_storage_rooms', true),
-							'manufacturing_areas' => get_post_meta($post_id, 'facilities_manufacturing_areas', true),
-							'showrooms' => get_post_meta($post_id, 'facilities_showrooms', true),
-						],
-						'features' => [
-							'images' => $images,
-							'negotiation' => get_post_meta($post_id, 'features_negotiation', true),
-							'type' => get_post_meta($post_id, 'features_type', true),
-							'sub_type' => get_post_meta($post_id, 'features_sub_type', true),
-						],
-						'location' => [
-							'hidden' => get_post_meta($post_id, 'location_hidden', true),
-							'latitude' => get_post_meta($post_id, 'location_latitude', true),
-							'longitude' => get_post_meta($post_id, 'location_longitude', true),
-							'city' => get_post_meta($post_id, 'location_city', true),
-							'street' => get_post_meta($post_id, 'location_street', true),
-							'street_2' => get_post_meta($post_id, 'location_street_2', true),
-							'number' => get_post_meta($post_id, 'location_number', true),
-							'box' => get_post_meta($post_id, 'location_box', true),
-							'addition' => get_post_meta($post_id, 'location_addition', true),
-							'country' => get_post_meta($post_id, 'location_country', true),
-							'postal_code' => get_post_meta($post_id, 'location_postal_code', true),
-							'formatted' => get_post_meta($post_id, 'location_formatted', true),
-							'formatted_agency' => get_post_meta($post_id, 'location_formatted_agency', true),
-						],
-						'negotiator' => [
-							'email' => get_post_meta($post_id, 'negotiator_email', true),
-						],
-						'open_homes' => get_field('open_homes', $post_id),
-						'price' => [
-							'amount' => get_post_meta($post_id, 'price_amount', true),
-							'currency' => get_post_meta($post_id, 'price_currency', true),
-							'hidden' => get_post_meta($post_id, 'price_hidden', true),
-							'price_costs' => get_post_meta($post_id, 'price_price_costs', true),
-						],
-						'sizes' => [
-							'liveable_area' => [
-								'size' => get_post_meta($post_id, 'sizes_liveable_area_size', true),
-								'unit' => get_post_meta($post_id, 'sizes_liveable_area_unit', true),
-							],
-							'plot_area' => [
-								'size' => get_post_meta($post_id, 'sizes_plot_area_size', true),
-								'unit' => get_post_meta($post_id, 'sizes_plot_area_unit', true),
-							],
-						],
-					],
-				];
-				$posts_cache[] = $post_item;
-				$results['estates'][] = $post_item;
 			}
-			FileSystemCache::store($args['key_arr'][$tmp_count], $posts_cache);
-			$tmp_count++;
 		}
-		return $results['estates'];
+
+		// Images
+		$images = [];
+		if (get_post_meta($id, 'features_images', true)) {
+			foreach (array_slice(get_post_meta($id, 'features_images', true), 0, 5) as $image) {
+				if ($image) {
+					$images[]['sizes'] = [
+						'thumbnail' => wp_get_attachment_image_url($image, 'thumbnail'),
+						'medium' => wp_get_attachment_image_url($image, 'medium'),
+						'large' => wp_get_attachment_image_url($image, 'large'),
+					];
+				}
+			}
+		}
+
+		// Render card information
+		$results[] = [
+			'id' => $id,
+			'permalink' => get_the_permalink($id),
+			'date' => get_the_time('U', $id),
+			'meta' => [
+				'conditions' => [
+					'general_condition' => get_post_meta($id, 'conditions_general_condition', true),
+				],
+				'custom_fields' => get_field('custom_fields', $id),
+				'estate' => [
+					'id' => get_post_meta($id, 'estate_id', true),
+					'status' => get_post_meta($id, 'estate_status', true),
+					'title' => [
+						'en' => get_post_meta($id, 'estate_title_en', true),
+						'nl' => get_post_meta($id, 'estate_title_nl', true),
+						'fr' => get_post_meta($id, 'estate_title_fr', true),
+					],
+					'description' => [
+						'en' => get_post_meta($id, 'estate_description_en', true),
+						'nl' => get_post_meta($id, 'estate_description_nl', true),
+						'fr' => get_post_meta($id, 'estate_description_fr', true),
+					],
+					'is_project' => get_post_meta($id, 'estate_is_project', true) === '1' ? true : false,
+					'project_id' => get_post_meta($id, 'estate_project_id', true) === '1' ? true : false,
+					'properties' => $properties,
+				],
+				'facilities' => [
+					'kitchens' => get_post_meta($id, 'facilities_kitchens', true),
+					'bathrooms' => get_post_meta($id, 'facilities_bathrooms', true),
+					'toilets' => get_post_meta($id, 'facilities_toilets', true),
+					'floors' => get_post_meta($id, 'facilities_floors', true),
+					'bedrooms' => get_post_meta($id, 'facilities_bedrooms', true),
+					'living_rooms' => get_post_meta($id, 'facilities_living_rooms', true),
+					'storage_rooms' => get_post_meta($id, 'facilities_storage_rooms', true),
+					'manufacturing_areas' => get_post_meta($id, 'facilities_manufacturing_areas', true),
+					'showrooms' => get_post_meta($id, 'facilities_showrooms', true),
+				],
+				'features' => [
+					'images' => $images,
+					'negotiation' => get_post_meta($id, 'features_negotiation', true),
+					'type' => get_post_meta($id, 'features_type', true),
+					'sub_type' => get_post_meta($id, 'features_sub_type', true),
+				],
+				'location' => [
+					'hidden' => get_post_meta($id, 'location_hidden', true),
+					'latitude' => get_post_meta($id, 'location_latitude', true),
+					'longitude' => get_post_meta($id, 'location_longitude', true),
+					'city' => get_post_meta($id, 'location_city', true),
+					'street' => get_post_meta($id, 'location_street', true),
+					'street_2' => get_post_meta($id, 'location_street_2', true),
+					'number' => get_post_meta($id, 'location_number', true),
+					'box' => get_post_meta($id, 'location_box', true),
+					'addition' => get_post_meta($id, 'location_addition', true),
+					'country' => get_post_meta($id, 'location_country', true),
+					'postal_code' => get_post_meta($id, 'location_postal_code', true),
+					'formatted' => get_post_meta($id, 'location_formatted', true),
+					'formatted_agency' => get_post_meta($id, 'location_formatted_agency', true),
+				],
+				'negotiator' => [
+					'email' => get_post_meta($id, 'negotiator_email', true),
+				],
+				'open_homes' => get_field('open_homes', $id),
+				'price' => [
+					'amount' => get_post_meta($id, 'price_amount', true),
+					'currency' => get_post_meta($id, 'price_currency', true),
+					'hidden' => get_post_meta($id, 'price_hidden', true),
+					'price_costs' => get_post_meta($id, 'price_price_costs', true),
+				],
+				'sizes' => [
+					'liveable_area' => [
+						'size' => get_post_meta($id, 'sizes_liveable_area_size', true),
+						'unit' => get_post_meta($id, 'sizes_liveable_area_unit', true),
+					],
+					'plot_area' => [
+						'size' => get_post_meta($id, 'sizes_plot_area_size', true),
+						'unit' => get_post_meta($id, 'sizes_plot_area_unit', true),
+					],
+				],
+			]
+		];
+		return $results;
 	}
 
 	public static function list($params)
 	{
-		// Query
-		$query = \PluginEver\QueryBuilder\Query::init();
-		$posts = $query->select('ID')
-			->from('posts')
-			->where('post_type', 'sweepbright_estates')
-			->group_by('ID')
-			->andWhere('post_status', 'publish');
-		$posts = $posts->get();
-
-		// Set cache directory
-		FileSystemCache::$cacheDir = WP_PLUGIN_DIR . '/wp-sweepbright/db';
-
-		// Separate cache per 100 properties
-		$results['estates'] = [];
-		$id_arr = [];
-		$key_arr = [];
-		$cache_arr = [];
-		$count = 0;
-
-		foreach ($posts as $post) {
-			// Create post array
-			$id_arr[] = $post->ID;
-			// Create cache key
-			$key_arr[] = FileSystemCache::generateCacheKey('estates_' . $count, WP_SweepBright_Query::slugify(get_bloginfo('name')));
-			$cache_arr[] = FileSystemCache::retrieve($key_arr[$count]);
-
-			// Update count
-			$count++;
-		}
-		$post_chunks = array_chunk($id_arr, 100);
-
-		// Load cache
-		if ($cache_arr[count($post_chunks) - 1]) {
-			foreach ($cache_arr as $cache_chunk) {
-				if (is_array($cache_chunk)) {
-					foreach ($cache_chunk as $cache_item) {
-						$results['estates'][] = $cache_item;
-					}
-				}
-			}
-		} else {
-			$results['estates'] = WP_SweepBright_Query::store_cache([
-				'post_chunks' => $post_chunks,
-				'key_arr' => $key_arr,
-			]);
-		}
-
-		// Filter: show favorites
-		$results['estates'] = WP_SweepBright_Query::filter_favorites([
-			'posts' => $results['estates'],
-			'params' => $params,
-		]);
-
-		// Filter: hide prospects
-		$results['estates'] = WP_SweepBright_Query::filter_hide_prospects([
-			'posts' => $results['estates'],
-			'params' => $params,
-		]);
-
-		// Filter: hide units
-		$results['estates'] = WP_SweepBright_Query::filter_hide_units([
-			'posts' => $results['estates'],
-			'params' => $params,
-		]);
-
-		// Filter: negotiation
-		$results['estates'] = WP_SweepBright_Query::filter_negotiation([
-			'posts' => $results['estates'],
-			'params' => $params,
-		]);
-
-		// Filter: status
-		$results['estates'] = WP_SweepBright_Query::filter_status([
-			'posts' => $results['estates'],
-			'params' => $params,
-		]);
-
-		// Filter: agent
-		$results['estates'] = WP_SweepBright_Query::filter_agent([
-			'posts' => $results['estates'],
-			'params' => $params,
-		]);
-
-		// Filter: new home
-		$results['estates'] = WP_SweepBright_Query::filter_new_home([
-			'posts' => $results['estates'],
-			'params' => $params,
-		]);
-
-		// Filter: category
-		$results['estates'] = WP_SweepBright_Query::filter_category([
-			'posts' => $results['estates'],
-			'params' => $params,
-		]);
-
-		// Filter: subcategory
-		$results['estates'] = WP_SweepBright_Query::filter_subcategory([
-			'posts' => $results['estates'],
-			'params' => $params,
-		]);
-
-		// Filter: price
-		$results['estates'] = WP_SweepBright_Query::filter_price([
-			'posts' => $results['estates'],
-			'params' => $params,
-		]);
-
-		// Filter: bedrooms
-		$results['estates'] = WP_SweepBright_Query::filter_bedrooms([
-			'posts' => $results['estates'],
-			'params' => $params,
-		]);
-
-		// Filter: plot area
-		$results['estates'] = WP_SweepBright_Query::filter_plot_area([
-			'posts' => $results['estates'],
-			'params' => $params,
-		]);
-
-		// Filter: liveable area
-		$results['estates'] = WP_SweepBright_Query::filter_liveable_area([
-			'posts' => $results['estates'],
-			'params' => $params,
-		]);
-
-		// Filter: geolocation
-		$results['estates'] = WP_SweepBright_Query::filter_geolocation([
-			'posts' => $results['estates'],
-			'params' => $params,
-		]);
-
-		// Order relevance
-		$results['estates'] = WP_SweepBright_Query::order_by_relevance([
-			'posts' => $results['estates'],
-			'params' => $params,
-		]);
-
-		// Order date
-		$results['estates'] = WP_SweepBright_Query::order_by_date([
-			'posts' => $results['estates'],
-			'params' => $params,
-		]);
-
-		// Order price
-		$results['estates'] = WP_SweepBright_Query::order_by_price([
-			'posts' => $results['estates'],
-			'params' => $params,
-		]);
-
-		// Min max pricing
-		$results['estates'] = WP_SweepBright_Query::filter_min_max_price([
-			'posts' => $results['estates'],
-			'params' => $params,
-		]);
-
-		// Count totals
-		if (empty($params['page'])) {
-			$params['page'] = 1;
-		}
-
-		// Max per page
 		if (isset($params['maxPerPage']) && $params['maxPerPage']) {
 			$max_per_page = $params['maxPerPage'];
 		} else {
 			$max_per_page = WP_SweepBright_Helpers::settings_form()['max_per_page'];
 		}
-
-		// Totals
-		$total_posts = count($results['estates']);
-		$total_pages = abs(ceil($total_posts / $max_per_page));
+		if (empty($params['page'])) {
+			$params['page'] = 1;
+		}
 		$offset = ($params['page'] * $max_per_page) - $max_per_page;
 
-		// Set totals
-		$results['totalPages'] = $total_pages;
-		$results['totalPosts'] = $total_posts;
+		// Query
+		$query = \PluginEver\QueryBuilder\Query::init();
 
-		// Pagination
+		// Get posts
+		$posts = $query->from('sweepbright_estates')
+			->select('post_id');
+
+		// Filter: hide prospects
+		$posts = WP_SweepBright_Query::sql_filter_hide_prospects([
+			'posts' => $posts,
+			'params' => $params,
+		]);
+
+		// Filter: hide units
+		$posts = WP_SweepBright_Query::sql_filter_hide_units([
+			'posts' => $posts,
+			'params' => $params,
+		]);
+
+		// Filter: status
+		$posts = WP_SweepBright_Query::sql_filter_status([
+			'posts' => $posts,
+			'params' => $params,
+		]);
+
+		// Filter: new home
+		$posts = WP_SweepBright_Query::sql_filter_new_home([
+			'posts' => $posts,
+			'params' => $params,
+		]);
+
+		// Filter: negotiation
+		$posts = WP_SweepBright_Query::sql_filter_negotiation([
+			'posts' => $posts,
+			'params' => $params,
+		]);
+
+		// Filter: category
+		$posts = WP_SweepBright_Query::sql_filter_category([
+			'posts' => $posts,
+			'params' => $params,
+		]);
+
+		// Filter: subcategory
+		$posts = WP_SweepBright_Query::sql_filter_subcategory([
+			'posts' => $posts,
+			'params' => $params,
+		]);
+
+		// Filter: agent
+		$posts = WP_SweepBright_Query::sql_filter_agent([
+			'posts' => $posts,
+			'params' => $params,
+		]);
+
+		// Filter: price
+		$posts = WP_SweepBright_Query::sql_filter_price([
+			'posts' => $posts,
+			'params' => $params,
+		]);
+
+		// Filter: plot area
+		$posts = WP_SweepBright_Query::sql_filter_plot_area([
+			'posts' => $posts,
+			'params' => $params,
+		]);
+
+		// Filter: liveable area
+		$posts = WP_SweepBright_Query::sql_filter_liveable_area([
+			'posts' => $posts,
+			'params' => $params,
+		]);
+
+		// Filter: bedrooms
+		$posts = WP_SweepBright_Query::sql_filter_bedrooms([
+			'posts' => $posts,
+			'params' => $params,
+		]);
+
+		// Filter: geolocation
+		$posts = WP_SweepBright_Query::sql_filter_geolocation([
+			'posts' => $posts,
+			'params' => $params,
+		]);
+
+		// Filter: show favorites
+		$posts = WP_SweepBright_Query::sql_filter_favorites([
+			'posts' => $posts,
+			'params' => $params,
+		]);
+
+		// Order: relevance
+		$posts = WP_SweepBright_Query::sql_order_by_relevance([
+			'posts' => $posts,
+			'params' => $params,
+		]);
+
+		// Order: date
+		$posts = WP_SweepBright_Query::sql_order_by_date([
+			'posts' => $posts,
+			'params' => $params,
+		]);
+
+		// Order: price
+		$posts = WP_SweepBright_Query::sql_order_by_price([
+			'posts' => $posts,
+			'params' => $params,
+		]);
+
+		// Count posts
+		$total_posts = count($posts->get());
+		$total_pages = abs(ceil($total_posts / $max_per_page));
+
+		// Output
 		if ($params['recent']) {
-			$results['estates'] = array_slice($results['estates'], $offset, $params['recent']);
-		} else if ($params['mapMode'] && !$params['recent']) {
-			$markers = [];
-			foreach ($results['estates'] as $estate) {
-				$image = '';
-				if ($estate["meta"]["features"]["images"]) {
-					$image = $estate["meta"]["features"]["images"][0]["sizes"]["medium"];
-				}
-
-				$markers[] = [
-					'id' => $estate["id"],
-					'status' => $estate["meta"]["estate"]["status"],
-					'permalink' => $estate["permalink"],
-					'title' => $estate["meta"]["estate"]["title"],
-					'location' => $estate["meta"]["location"],
-					'image' => $image,
-					'price' => $estate["meta"]["price"]["amount"],
-				];
-			}
-			$results['estates'] = $markers;
-		} else if (!$params['showAll'] && !$params['recent']) {
-			if ($total_posts > $max_per_page) {
-				$results['estates'] = array_slice($results['estates'], $offset, $max_per_page);
-			}
+			$posts = $posts->limit($params['recent'])
+				->offset($offset)
+				->get();
+		} else if ($params['mapMode']) {
+			$posts = $posts->get();
+		} else {
+			$posts = $posts->limit($max_per_page)
+				->offset($offset)
+				->get();
 		}
 
-		// Reset array keys
-		$results['estates'] = array_values($results['estates']);
+		// Render results
+		$results['estates'] = WP_SweepBright_Query::get_estates($posts, $params);
+
+		if (empty($params['mapMode'])) {
+			// Process: add min max pricing to projects
+			$results['estates'] = WP_SweepBright_Query::process_filter_min_max_price($results['estates']);
+		}
+
+		$results['totalPages'] = $total_pages;
+		$results['totalPosts'] = $total_posts;
 
 		return $results;
 	}

@@ -43,11 +43,19 @@ class FieldEstateUpdate
       update_field('estate', [
         'is_project' => $estate['is_project'],
       ], $post_id);
+    } else {
+      update_field('estate', [
+        'is_project' => 0,
+      ], $post_id);
     }
 
     if ($estate['project_id']) {
       update_field('estate', [
         'project_id' => $estate['project_id'],
+      ], $post_id);
+    } else {
+      update_field('estate', [
+        'project_id' => 0,
       ], $post_id);
     }
 

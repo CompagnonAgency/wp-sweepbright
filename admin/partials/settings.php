@@ -135,11 +135,11 @@
         </tr>
         <tr>
           <th scope="row">
-            <label for="custom_url">Use automatic URLs</label>
+            <label for="custom_url">Use automatic URLs instead</label>
           </th>
           <td>
             <input type="checkbox" id="dynamic_url" name="dynamic_url" value="1" <?= WP_SweepBright_Helpers::setting('dynamic_url') == 1 ? 'checked' : ''; ?> />
-            <label for="dynamic_url"> E.g. <kbd>/for-sale</kbd>, <kbd>/a-vendre</kbd>, <kbd>/te-koop</kbd></label>
+            <label for="dynamic_url"> E.g. <kbd>/buy</kbd>, <kbd>/a-vendre</kbd>, <kbd>/te-koop</kbd></label>
           </td>
         </tr>
       </tbody>

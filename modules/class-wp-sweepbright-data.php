@@ -16,6 +16,13 @@ class WP_SweepBright_Data
 		$this->create_estates_custom_post_type();
 		$this->acf_disable_fields();
 		$this->acf_add_fields();
+		$this->migrate_db();
+	}
+
+	public function migrate_db()
+	{
+		require_once plugin_dir_path(__DIR__) . 'modules/class-wp-sweepbright-cache.php';
+		WP_SweepBright_Cache::migrate_db();
 	}
 
 	public static function translate_slug_prefix()
@@ -59,7 +66,7 @@ class WP_SweepBright_Data
 					'not_found_in_trash'  => __('Not found in Trash', 'text_domain'),
 				],
 				'public' => true,
-				'has_archive' => true,
+				'has_archive' => false,
 				'rewrite' => [
 					'slug' => $slug,
 					'with_front' => false,
@@ -158,7 +165,7 @@ class WP_SweepBright_Data
 				$slug = '(' . implode('|', $slug_prefixes) . ')';
 				add_rewrite_rule(
 					$slug . '/([0-9]+)/(.+?)?$',
-					'index.php?post_type=sweepbright_estates&page_id=$matches[1]',
+					'index.php?post_type=sweepbright_estates&page_id=$matches[2]',
 					'top'
 				);
 			}

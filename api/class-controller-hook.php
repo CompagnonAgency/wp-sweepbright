@@ -256,6 +256,7 @@ class WP_SweepBright_Controller_Hook
 				'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
 			]);
 			WP_SweepBright_Controller_Hook::update_fields($data['estate'], $data['post_id']);
+			WP_SweepBright_Controller_Hook::update_cache($data['estate'], $data['post_id']);
 
 			// Set the estate URL in SweepBright (not for units)
 			if (empty($data['estate']['project_id']) || !$data['estate']['project_id']) {
@@ -325,6 +326,9 @@ class WP_SweepBright_Controller_Hook
 		]);
 		wp_delete_post($id, true);
 
+		// Delete cache
+		WP_SweepBright_Controller_Hook::delete_cache($id);
+
 		// Update cache
 		FileSystemCache::$cacheDir = WP_PLUGIN_DIR . '/wp-sweepbright/db';
 		FileSystemCache::invalidateGroup(WP_SweepBright_Query::slugify(get_bloginfo('name')));
@@ -334,6 +338,8 @@ class WP_SweepBright_Controller_Hook
 	// Delete units
 	public function delete_units($estate_id)
 	{
+		require_once plugin_dir_path(__DIR__) . 'modules/class-wp-sweepbright-cache.php';
+
 		$loop = new WP_Query([
 			'post_status' => 'publish',
 			'posts_per_page' => -1,
@@ -352,7 +358,11 @@ class WP_SweepBright_Controller_Hook
 
 		if ($query) {
 			foreach ($query as $item) {
+				// Delete post
 				wp_delete_post($item, true);
+
+				// Delete cache
+				WP_SweepBright_Cache::remove($item);
 			}
 		}
 		return true;
@@ -547,5 +557,19 @@ class WP_SweepBright_Controller_Hook
 			'ID' => $post_id,
 			'post_status' => 'publish',
 		]);
+	}
+
+	// Update cache
+	public static function update_cache($estate, $post_id)
+	{
+		require_once plugin_dir_path(__DIR__) . 'modules/class-wp-sweepbright-cache.php';
+		WP_SweepBright_Cache::update($estate, $post_id);
+	}
+
+	// Delete cache
+	public static function delete_cache($post_id)
+	{
+		require_once plugin_dir_path(__DIR__) . 'modules/class-wp-sweepbright-cache.php';
+		WP_SweepBright_Cache::remove($post_id);
 	}
 }
