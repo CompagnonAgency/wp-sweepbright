@@ -529,15 +529,12 @@ class WP_SweepBright_Query
 
 	public static function sql_filter_plot_area($args)
 	{
-		if (
-			isset($args['params']['filters']['plot_area']) &&
-			is_numeric($args['params']['filters']['plot_area']['min']) &&
-			is_numeric($args['params']['filters']['plot_area']['max'])
-		) {
+		if (isset($args['params']['filters']['plot_area'])) {
 			$params = [
 				'min' => $args['params']['filters']['plot_area']['min'],
 				'max' => $args['params']['filters']['plot_area']['max']
 			];
+
 			if ($params['min'] === 0) {
 				$params['min'] = false;
 			}
@@ -546,24 +543,33 @@ class WP_SweepBright_Query
 				$params['max'] = false;
 			}
 
-			$args['posts'] = $args['posts']->andWhere('plot_area', '>', 0)
-				->andWhere('plot_area', '>=', $params['min'])
-				->andWhere('plot_area', '<=', $params['max']);
+			if (isset($params['min']) && is_numeric($params['min']) && isset($params['max']) && is_numeric($params['max'])) {
+				$args['posts'] = $args['posts']->andWhere('plot_area', '!=', 0)
+					->andWhere('plot_area', '>=', $params['min'])
+					->andWhere('plot_area', '<=', $params['max']);
+			}
+
+			if (empty($params['min']) && is_numeric($params['max']) && isset($params['max'])) {
+				$args['posts'] = $args['posts']->andWhere('plot_area', '!=', 0)
+					->andWhere('plot_area', '<=', $params['max']);
+			}
+
+			if (empty($params['max']) && is_numeric($params['min']) && isset($params['min'])) {
+				$args['posts'] = $args['posts']->andWhere('plot_area', '!=', 0)
+					->andWhere('plot_area', '>=', $params['min']);
+			}
 		}
 		return $args['posts'];
 	}
 
 	public static function sql_filter_liveable_area($args)
 	{
-		if (
-			isset($args['params']['filters']['liveable_area']) &&
-			is_numeric($args['params']['filters']['liveable_area']['min']) &&
-			is_numeric($args['params']['filters']['liveable_area']['max'])
-		) {
+		if (isset($args['params']['filters']['liveable_area'])) {
 			$params = [
 				'min' => $args['params']['filters']['liveable_area']['min'],
 				'max' => $args['params']['filters']['liveable_area']['max']
 			];
+
 			if ($params['min'] === 0) {
 				$params['min'] = false;
 			}
@@ -571,9 +577,22 @@ class WP_SweepBright_Query
 			if ($params['max'] === 0) {
 				$params['max'] = false;
 			}
-			$args['posts'] = $args['posts']->andWhere('liveable_area', '>', 0)
-				->andWhere('liveable_area', '>=', $params['min'])
-				->andWhere('liveable_area', '<=', $params['max']);
+
+			if (isset($params['min']) && is_numeric($params['min']) && isset($params['max']) && is_numeric($params['max'])) {
+				$args['posts'] = $args['posts']->andWhere('liveable_area', '!=', 0)
+					->andWhere('liveable_area', '>=', $params['min'])
+					->andWhere('liveable_area', '<=', $params['max']);
+			}
+
+			if (empty($params['min']) && is_numeric($params['max']) && isset($params['max'])) {
+				$args['posts'] = $args['posts']->andWhere('liveable_area', '!=', 0)
+					->andWhere('liveable_area', '<=', $params['max']);
+			}
+
+			if (empty($params['max']) && is_numeric($params['min']) && isset($params['min'])) {
+				$args['posts'] = $args['posts']->andWhere('liveable_area', '!=', 0)
+					->andWhere('liveable_area', '>=', $params['min']);
+			}
 		}
 		return $args['posts'];
 	}
@@ -737,6 +756,13 @@ class WP_SweepBright_Query
 				'formatted_agency' => get_post_meta($id, 'location_formatted_agency', true),
 			],
 			'image' => $image,
+			'images' => [
+				[
+					'sizes' => [
+						'medium_large' => $image,
+					]
+				]
+			],
 			'price' => get_post_meta($id, 'price_amount', true),
 		];
 
@@ -769,6 +795,7 @@ class WP_SweepBright_Query
 					$images[]['sizes'] = [
 						'thumbnail' => wp_get_attachment_image_url($image, 'thumbnail'),
 						'medium' => wp_get_attachment_image_url($image, 'medium'),
+						'medium_large' => wp_get_attachment_image_url($image, 'medium'),
 						'large' => wp_get_attachment_image_url($image, 'large'),
 					];
 				}
