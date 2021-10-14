@@ -74,8 +74,8 @@ class WP_SweepBright_Controller_Property
     }
 
     // Save USPs
+    $usps = [];
     if ($data['form']['usp']) {
-      $usps = [];
       foreach ($data['form']['usp'] as $usp) {
         $usp['value'] = trim($usp['value']);
         if ($usp['value']) {
@@ -85,10 +85,10 @@ class WP_SweepBright_Controller_Property
           ];
         }
       }
-      update_field('custom_fields', [
-        'usp' => $usps,
-      ], $id);
     }
+    update_field('custom_fields', [
+      'usp' => $usps,
+    ], $id);
 
     // Save contact
     if ($data['form']['contact'] && $data['form']['contact']['title']) {
