@@ -54,3 +54,26 @@ input[type="file"] {
 .attachment-info .thumbnail img {
   border: none;
 }
+
+.toggle-checkbox {
+  @apply border-0 rounded-full h-6 w-6 m-0 min-w-0 shadow-sm !important;
+}
+
+input[type=checkbox]:checked::before {
+  @apply hidden;
+}
+
+.toggle-checkbox:checked {
+  @apply right-0 border-blue-500 !important;
+}
+.toggle-checkbox:checked + .toggle-label {
+  @apply bg-blue-500 !important;
+}
+
+td.has-error {
+  @apply text-red-500 !important;
+}
+
+td.has-error input {
+  @apply border-red-500 !important;
+}

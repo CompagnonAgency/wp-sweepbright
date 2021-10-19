@@ -121,6 +121,42 @@ class WP_SweepBright_Controller_Property
         ],
       ], $id);
     }
+    // Save additional price information
+    update_field('custom_fields', [
+      'enable_additional_price' => $data['form']['enable_additional_price'],
+    ], $id);
+
+    update_field('custom_fields', [
+      'gross_rent_profit' => $data['form']['gross_rent_profit'],
+    ], $id);
+
+    update_field('custom_fields', [
+      'price_construction' => $data['form']['price_construction'],
+    ], $id);
+
+    update_field('custom_fields', [
+      'price_land' => $data['form']['price_land'],
+    ], $id);
+
+    update_field('custom_fields', [
+      'ground_lease' => $data['form']['ground_lease'],
+    ], $id);
+
+    update_field('custom_fields', [
+      'enable_normal_vat' => $data['form']['enable_normal_vat'],
+    ], $id);
+
+    update_field('custom_fields', [
+      'vat_total_price' => $data['form']['vat_total_price'],
+    ], $id);
+
+    update_field('custom_fields', [
+      'vat_construction' => $data['form']['vat_construction'],
+    ], $id);
+
+    update_field('custom_fields', [
+      'vat_registration_rights' => $data['form']['vat_registration_rights'],
+    ], $id);
 
     // Update cache
     FileSystemCache::$cacheDir = WP_PLUGIN_DIR . '/wp-sweepbright/db';

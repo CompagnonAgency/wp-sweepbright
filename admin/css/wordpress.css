@@ -1,0 +1,7 @@
+#wp-admin-bar-languages {
+  @apply hidden;
+}
+
+#adminmenu .wp-menu-image img {
+  @apply border-0 pl-2;
+}
