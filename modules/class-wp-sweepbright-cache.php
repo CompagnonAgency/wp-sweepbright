@@ -134,9 +134,6 @@ class WP_SweepBright_Cache
     $query = "SELECT post_id FROM $table_name WHERE estate_id='" . $estate['id'] . "'";
     $query_results = $wpdb->get_results($query);
 
-    error_log(print_r(count($query_results), true));
-    error_log(print_r($query, true));
-
     if (count($query_results) == 0) {
       error_log('no_results_insert');
       $wpdb->insert($table_name, $data);
