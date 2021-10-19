@@ -15,6 +15,7 @@ class WP_SweepBright_Cache
 
   public static function migrate_db()
   {
+    // Create the table which is used for storing properties (WordPress posts) in cache
     if (!get_option('wp_sweepbright_migrate_00001')) {
       global $wpdb;
       $table_name = $wpdb->prefix . 'sweepbright_estates';
@@ -49,6 +50,20 @@ class WP_SweepBright_Cache
         WP_SweepBright_Cache::migrate_properties();
       }
     }
+
+    // Migration to fix missing properties the database and re-populates
+    if (!get_option('wp_sweepbright_migrate_00002')) {
+      WP_SweepBright_Cache::truncate_properties();
+      WP_SweepBright_Cache::migrate_properties();
+    }
+  }
+
+  public static function truncate_properties()
+  {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'sweepbright_estates';
+    $wpdb->query('TRUNCATE TABLE ' . $table_name);
+    add_option('wp_sweepbright_migrate_00002', true);
   }
 
   public static function migrate_properties()
@@ -73,17 +88,17 @@ class WP_SweepBright_Cache
           'status' => get_post_meta($id, 'estate_status', true),
           'is_unit' => get_post_meta($id, 'estate_project_id', true) ? 1 : 0,
           'is_project' => get_post_meta($id, 'estate_is_project', true) ? 1 : 0,
-          'general_condition' => get_post_meta($id, 'conditions_general_condition', true),
+          'general_condition' => get_post_meta($id, 'conditions_general_condition', true) ? get_post_meta($id, 'conditions_general_condition', true) : '',
           'negotiation' => get_post_meta($id, 'features_negotiation', true),
-          'category' => get_post_meta($id, 'features_type', true),
-          'subcategory' => get_post_meta($id, 'features_sub_type', true),
+          'category' => get_post_meta($id, 'features_type', true) ? get_post_meta($id, 'features_type', true) : '',
+          'subcategory' => get_post_meta($id, 'features_sub_type', true) ? get_post_meta($id, 'features_sub_type', true) : '',
           'negotiator_email' => get_post_meta($id, 'negotiator_email', true),
-          'price' => get_post_meta($id, 'price_amount', true),
-          'plot_area' => get_post_meta($id, 'sizes_plot_area_size', true),
-          'liveable_area' => get_post_meta($id, 'sizes_liveable_area_size', true),
-          'bedrooms' => get_post_meta($id, 'facilities_bedrooms', true),
-          'lat' => get_post_meta($id, 'location_latitude', true),
-          'lng' => get_post_meta($id, 'location_longitude', true),
+          'price' => get_post_meta($id, 'price_amount', true) ? get_post_meta($id, 'price_amount', true) : '',
+          'plot_area' => get_post_meta($id, 'sizes_plot_area_size', true) ? get_post_meta($id, 'sizes_plot_area_size', true) : '',
+          'liveable_area' => get_post_meta($id, 'sizes_liveable_area_size', true) ? get_post_meta($id, 'sizes_liveable_area_size', true) : '',
+          'bedrooms' => get_post_meta($id, 'facilities_bedrooms', true) ? get_post_meta($id, 'facilities_bedrooms', true) : '',
+          'lat' => get_post_meta($id, 'location_latitude', true) ? get_post_meta($id, 'location_latitude', true) : '',
+          'lng' => get_post_meta($id, 'location_longitude', true) ? get_post_meta($id, 'location_longitude', true) : '',
           'has_open_home' => get_post_meta($id, 'open_homes_hasOpenHome', true) ? 1 : 0,
         ]);
       }
@@ -102,26 +117,31 @@ class WP_SweepBright_Cache
       'status' => $estate['status'],
       'is_unit' => $estate['project_id'] ? 1 : 0,
       'is_project' => $estate['is_project'] ? 1 : 0,
-      'general_condition' => $estate['general_condition'],
+      'general_condition' => $estate['general_condition'] ? $estate['general_condition'] : '',
       'negotiation' => $estate['negotiation'],
-      'category' => $estate['type'],
-      'subcategory' => $estate['sub_type'],
+      'category' => $estate['type'] ? $estate['type'] : '',
+      'subcategory' => $estate['sub_type'] ? $estate['sub_type'] : '',
       'negotiator_email' => $estate['negotiator']['email'],
-      'price' => $estate['price']['amount'],
-      'plot_area' => $estate['sizes']['liveable_area']['size'],
-      'liveable_area' => $estate['sizes']['liveable_area']['size'],
-      'bedrooms' => $estate['bedrooms'],
-      'lat' => $estate['location']['geo']['latitude'],
-      'lng' => $estate['location']['geo']['longitude'],
+      'price' => $estate['price']['amount'] ? $estate['price']['amount'] : '',
+      'plot_area' => $estate['sizes']['liveable_area']['size'] ? $estate['sizes']['liveable_area']['size'] : '',
+      'liveable_area' => $estate['sizes']['liveable_area']['size'] ? $estate['sizes']['liveable_area']['size'] : '',
+      'bedrooms' => $estate['bedrooms'] ? $estate['bedrooms'] : '',
+      'lat' => $estate['location']['geo']['latitude'] ? $estate['location']['geo']['latitude'] : '',
+      'lng' => $estate['location']['geo']['longitude'] ? $estate['location']['geo']['longitude'] : '',
       'has_open_home' => count($estate['open_homes']) > 0 ? 1 : 0,
     ];
 
-    $query = "SELECT post_id FROM $table_name WHERE 'estate_id'='" . $estate['id'] . "'";
+    $query = "SELECT post_id FROM $table_name WHERE estate_id='" . $estate['id'] . "'";
     $query_results = $wpdb->get_results($query);
 
+    error_log(print_r(count($query_results), true));
+    error_log(print_r($query, true));
+
     if (count($query_results) == 0) {
+      error_log('no_results_insert');
       $wpdb->insert($table_name, $data);
     } else {
+      error_log('has_results_update');
       $wpdb->update($table_name, $data, [
         'estate_id' => $estate['id'],
       ]);
