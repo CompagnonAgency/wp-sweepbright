@@ -38,6 +38,19 @@
         "16/9": "Horizontal (widescreen)",
         "21/9": "Horizontal (cinema)"
       }
+    },
+    {
+      "name": "Mobile: max width",
+      "id": "mobile_max_width",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "Full width",
+        "icon": "Icon",
+        "tiny": "Tiny",
+        "xxs": "Small"
+      }
     }
   ]
 }

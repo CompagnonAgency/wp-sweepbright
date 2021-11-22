@@ -1,0 +1,74 @@
+{
+  "name": "Share",
+  "id": "share",
+  "icon": "fad fa-share-alt",
+  "category": "widgets",
+  "fields": [
+    {
+      "name": "Facebook",
+      "id": "facebook",
+      "type": "select",
+      "default": "enabled",
+      "sync": true,
+      "options": {
+        "": "Disabled",
+        "enabled": "Enabled"
+      }
+    },
+    {
+      "name": "Twitter",
+      "id": "twitter",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "Disabled",
+        "enabled": "Enabled"
+      }
+    },
+    {
+      "name": "WhatsApp",
+      "id": "whatsapp",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "Disabled",
+        "enabled": "Enabled"
+      }
+    },
+    {
+      "name": "Pinterest",
+      "id": "pinterest",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "Disabled",
+        "enabled": "Enabled"
+      }
+    },
+    {
+      "name": "Email",
+      "id": "email",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "Disabled",
+        "enabled": "Enabled"
+      }
+    },
+    {
+      "name": "Linkedin",
+      "id": "linkedin",
+      "type": "select",
+      "default": "enabled",
+      "sync": true,
+      "options": {
+        "": "Disabled",
+        "enabled": "Enabled"
+      }
+    }
+  ]
+}

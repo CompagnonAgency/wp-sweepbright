@@ -1,0 +1,28 @@
+{
+  "name": "Video",
+  "id": "video",
+  "icon": "fad fa-play-circle",
+  "category": "media",
+  "fields": [
+    {
+      "name": "Video",
+      "id": "video",
+      "type": "upload_video",
+      "default": "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_1280_10MG.mp4"
+    },
+    {
+      "name": "Border radius",
+      "id": "border_radius",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "None",
+        "rounded": "Small",
+        "rounded-lg": "Large",
+        "rounded-xl": "XL",
+        "rounded-full": "Full"
+      }
+    }
+  ]
+}

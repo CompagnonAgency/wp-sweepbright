@@ -21,6 +21,7 @@
               v-if="
                 !field.sync &&
                 field.type !== 'upload_single' &&
+                field.type !== 'upload_video' &&
                 field.type !== 'upload_multiple' &&
                 field.type !== 'page_select' &&
                 field.type !== 'page_select_multiple' &&
@@ -77,6 +78,14 @@
             ></FieldUploadSingle>
           </template>
 
+          <template v-else-if="field.type === 'upload_video'">
+            <FieldUploadVideo
+              :field="field"
+              :col="col"
+              :lang="lang"
+            ></FieldUploadVideo>
+          </template>
+
           <template v-else-if="field.type === 'upload_multiple'">
             <FieldUploadMultiple
               :field="field"
@@ -120,6 +129,7 @@ import FieldSelect from "./FieldSelect";
 import FieldPage from "./FieldPage";
 import FieldPageMultiple from "./FieldPageMultiple";
 import FieldUploadSingle from "./FieldUploadSingle";
+import FieldUploadVideo from "./FieldUploadVideo";
 import FieldUploadMultiple from "./FieldUploadMultiple";
 
 export default {
@@ -142,6 +152,7 @@ export default {
     FieldPage,
     FieldPageMultiple,
     FieldUploadSingle,
+    FieldUploadVideo,
     FieldUploadMultiple,
   },
   methods: {

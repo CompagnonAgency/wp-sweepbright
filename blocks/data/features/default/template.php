@@ -16,11 +16,17 @@
           <?php if (WP_Wrapper::get('button', $component, $args, $feature)) : ?>
             <div class="mt-3">
               <?php
+              // Get the page link
               $link = WP_Wrapper::page(
                 $component,
                 WP_Wrapper::get('button_link', $component, $args, $feature),
                 ['single' => true]
               )["url"];
+
+              // Add URL parameters to the link if they exist
+              if ($link && WP_Wrapper::get('enable_url_param', $component, $args, $feature) && WP_Wrapper::get('url_param', $component, $args, $feature)) {
+                $link .= '?' . WP_Wrapper::get('url_param', $component, $args, $feature);
+              }
               ?>
               <a href="<?= $link; ?>" class="text-base font-semibold lowercase">
                 <?= WP_Wrapper::get('button_label', $component, $args, $feature); ?>

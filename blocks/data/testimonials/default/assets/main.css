@@ -65,7 +65,7 @@
   height: 10px;
   padding: 0;
   border-radius: 100px;
-  border: 1px solid rgba(0, 0, 0, .5);
+  border: 1px solid currentColor;
   transition: all 300ms ease-in-out;
   cursor: pointer;
   line-height: 0;
@@ -78,12 +78,12 @@
 
 .testimonials-default .glide__bullet:hover, 
 .testimonials-default .glide__bullet:focus {
-  background-color: rgba(0, 0, 0, 1);
-  border: 1px solid rgba(0, 0, 0, 1);
+  background-color: currentColor;
+  border: 1px solid currentColor;
 }
 
 .testimonials-default .glide__bullet--active {
-  background-color: rgba(0, 0, 0, 1);
-  border: 1px solid rgba(0, 0, 0, 1);
+  background-color: currentColor;
+  border: 1px solid currentColor;
   width: 30px;
 }

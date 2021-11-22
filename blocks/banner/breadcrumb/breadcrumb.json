@@ -1,0 +1,14 @@
+{
+  "name": "Breadcrumb",
+  "id": "breadcrumb",
+  "icon": "fad fa-link",
+  "category": "banner",
+  "fields": [
+    {
+      "name": "Parent page(s)",
+      "id": "links",
+      "type": "page_select_multiple",
+      "default": []
+    }
+  ]
+}

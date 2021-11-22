@@ -29,6 +29,7 @@ export default {
               "italic",
               "underline",
               "blockquote",
+              "link",
               { list: "bullet" },
               { align: [] },
             ],

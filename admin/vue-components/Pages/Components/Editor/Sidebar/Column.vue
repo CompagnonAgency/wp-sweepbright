@@ -177,6 +177,12 @@ export default {
           obj.type !== this.page.settings.template
         ) {
           condition = false;
+        } else if (
+          obj.category === category["value"] &&
+          obj.type === "blog" &&
+          obj.type !== this.page.settings.template
+        ) {
+          condition = false;
         }
         return condition;
       });

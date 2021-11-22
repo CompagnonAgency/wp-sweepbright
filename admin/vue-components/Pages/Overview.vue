@@ -72,6 +72,12 @@
             </p>
             <p
               class="ml-6 text-sm text-gray-500"
+              v-if="page.template === 'blog'"
+            >
+              Blog
+            </p>
+            <p
+              class="ml-6 text-sm text-gray-500"
               v-if="page.template === 'base'"
             >
               Base
@@ -185,6 +191,15 @@ export default {
           });
         }
 
+        if (this.settings.blog) {
+          this.pages.push({
+            id: "blog-post",
+            title: "Blog - post",
+            locked: true,
+            template: "blog",
+          });
+        }
+
         response.data.PAGES.forEach((page) => {
           let locked = false;
 
@@ -210,6 +225,16 @@ export default {
           } else {
             this.pages.push(data);
           }
+        });
+
+        // Remove Polylang duplicate pages
+        this.pages = this.pages.filter((page) => {
+          const home_titles = [
+            "Home - English",
+            "Home - Français",
+            "Home - Nederlands",
+          ];
+          return !home_titles.includes(page.title);
         });
 
         this.sortPages();

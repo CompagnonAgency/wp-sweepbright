@@ -17,7 +17,7 @@
       <div
         v-if="modalOpen"
         @click="hideModal"
-        class="fixed top-0 left-0 z-50 flex flex-col items-center justify-center w-full h-screen pb-20 overflow-hidden overflow-y-auto bg-black  bg-opacity-70"
+        class="fixed top-0 left-0 z-50 flex flex-col items-center justify-center w-full h-screen pb-20 overflow-hidden overflow-y-auto bg-black bg-opacity-70"
       >
         <div
           class="max-w-lg mb-10 overflow-hidden text-center rounded shadow-lg"
@@ -53,7 +53,7 @@
 
     <!-- Filter (toggle / clear filters) -->
     <div
-      class="relative z-10 flex flex-col mb-10 text-base  lg:items-center lg:justify-between text-dark lg:flex-row"
+      class="relative z-10 flex flex-col mb-10 text-base lg:items-center lg:justify-between text-dark lg:flex-row"
       v-if="data.mode === 'filter' || data.mode === 'favorites'"
     >
       <div class="mb-5 text-2xl font-semibold lowercase lg:w-1/2 lg:mb-0">
@@ -80,7 +80,7 @@
     <!-- List -->
     <template v-if="view === 'list'">
       <div
-        class="relative z-0 flex flex-col flex-wrap space-y-5  lg:-m-5 lg:flex-row lg:space-y-0"
+        class="relative z-0 flex flex-col flex-wrap space-y-5 lg:-m-5 lg:flex-row lg:space-y-0"
         v-if="estates.length > 0 && totalPages > 0"
       >
         <div
@@ -114,7 +114,10 @@
         "
         class="text-center"
       >
-        {{ data.locale[lang].no_favorites }}
+        <div class="mb-5 text-6xl text-primary">
+          <i class="fas fa-home-heart"></i>
+        </div>
+        <p>{{ data.locale[lang].no_favorites }}</p>
       </div>
 
       <!-- Empty: recent -->

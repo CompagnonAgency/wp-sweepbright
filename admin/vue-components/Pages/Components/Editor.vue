@@ -413,6 +413,7 @@ export default {
           items_align: "items-start",
           mobile_direction: "flex-col",
           margin_bottom: "mb-20",
+          columns_per_row: "",
         },
         columns: [],
       });

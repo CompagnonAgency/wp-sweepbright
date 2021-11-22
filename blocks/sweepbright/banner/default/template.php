@@ -28,7 +28,14 @@
     </div>
   </div>
 
-  <img src="<?= WP_Wrapper::get('image', $component, $args); ?>" class="absolute top-0 left-0 object-cover object-center w-full h-full">
+  <?php if (WP_Wrapper::get('media', $component, $args) === 'image') : ?>
+    <img src="<?= WP_Wrapper::get('image', $component, $args); ?>" class="absolute top-0 left-0 object-cover object-center w-full h-full">
+  <?php else : ?>
+    <video class="absolute top-0 left-0 object-cover object-center w-full h-full border-none rounded" autoplay muted loop>
+      <source src="<?= WP_Wrapper::get('video', $component, $args); ?>" type="video/mp4" />
+    </video>
+  <?php endif; ?>
+
   <div class="absolute top-0 left-0 w-full h-full bg-black bg-opacity-40"></div>
 </div>
 

@@ -58,6 +58,7 @@ class WP_SweepBright_Contact
 				$this->submit_estate_form();
 				$this->submit_general_form();
 				$this->submit_valuation_form();
+				$this->submit_contact_form();
 			} else {
 				$this->emit_event('wp_contact_estate_error', $recaptcha);
 				$_POST['wp_contact_estate_sent'] = false;
@@ -117,16 +118,49 @@ class WP_SweepBright_Contact
 
 	public function parse_template($template, $form)
 	{
-		$output = str_replace('[title]', $form['title'], $template);
-		$output = str_replace('[address]', $form['address'], $output);
-		$output = str_replace('[url]', $form['url'], $output);
-		$output = str_replace('[first_name]', $form['first_name'], $output);
-		$output = str_replace('[last_name]', $form['last_name'], $output);
-		$output = str_replace('[email]', $form['email'], $output);
-		$output = str_replace('[phone]', $form['phone'], $output);
-		$output = str_replace('[message]', $form['message'], $output);
-		$output = str_replace('[street]', $form['street'], $output);
-		$output = str_replace('[city]', $form['city'], $output);
+		$output = $template;
+		if (isset($form['title'])) {
+			$output = str_replace('[title]', $form['title'], $template);
+		}
+		if (isset($form['address'])) {
+			$output = str_replace('[address]', $form['address'], $output);
+		}
+		if (isset($form['url'])) {
+			$output = str_replace('[url]', $form['url'], $output);
+		}
+		if (isset($form['first_name'])) {
+			$output = str_replace('[first_name]', $form['first_name'], $output);
+		}
+		if (isset($form['last_name'])) {
+			$output = str_replace('[last_name]', $form['last_name'], $output);
+		}
+		if (isset($form['reference'])) {
+			$output = str_replace('[reference]', $form['reference'], $output);
+		}
+		if (isset($form['address'])) {
+			$output = str_replace('[address]', $form['address'], $output);
+		}
+		if (isset($form['postal_code'])) {
+			$output = str_replace('[postal_code]', $form['postal_code'], $output);
+		}
+		if (isset($form['subject'])) {
+			$output = str_replace('[subject]', $form['subject'], $output);
+		}
+		if (isset($form['email'])) {
+			$output = str_replace('[email]', $form['email'], $output);
+		}
+		if (isset($form['phone'])) {
+			$output = str_replace('[phone]', $form['phone'], $output);
+		}
+		if (isset($form['message'])) {
+			$output = str_replace('[message]', $form['message'], $output);
+		}
+		if (isset($form['street'])) {
+			$output = str_replace('[street]', $form['street'], $output);
+		}
+		if (isset($form['city'])) {
+			$output = str_replace('[city]', $form['city'], $output);
+		}
 		return $output;
 	}
 
@@ -225,13 +259,25 @@ class WP_SweepBright_Contact
 				'message' => $this->validate_input($_POST['message']),
 				'street' => $this->validate_input($_POST['street']),
 				'city' => $this->validate_input($_POST['city']),
-
-				'contact_to' => $this->validate_input($_POST['contact_to']),
-				'contact_subject' => $this->validate_input($_POST['contact_subject']),
-				'contact_body' => $this->validate_input($_POST['contact_body']),
-				'autoreply_subject' => $this->validate_input($_POST['autoreply_subject']),
-				'autoreply_body' => $this->validate_input($_POST['autoreply_body']),
 			];
+
+			$this->mail_form($form);
+			$this->emit_event('wp_contact_estate_sent', 'success');
+			$_POST['wp_contact_estate_sent'] = true;
+			$_POST['wp_contact_estate_error'] = false;
+		}
+	}
+
+	public function submit_contact_form()
+	{
+		if (isset($_POST['submit-contact-form']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
+			$form = [];
+
+			foreach ($_POST as $key => $value) {
+				if (strpos($key, 'form_') === 0) {
+					$form[str_replace('form_', '', $key)] = $value;
+				}
+			}
 
 			$this->mail_form($form);
 			$this->emit_event('wp_contact_estate_sent', 'success');

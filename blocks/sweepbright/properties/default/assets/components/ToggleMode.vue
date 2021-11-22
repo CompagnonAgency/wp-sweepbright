@@ -4,7 +4,7 @@
       class="flex items-center justify-center w-12 px-0 transition duration-200 border-r-0 rounded-r-none cursor-pointer btn form-input"
       :class="`${theme.rounded_lg_l} ${
         view === 'list'
-          ? 'text-white btn-primary border-primary'
+          ? 'text-white btn-primary'
           : 'text-primary'
       }`"
       @click="setView('list')"
@@ -15,7 +15,7 @@
       class="flex items-center justify-center w-12 px-0 transition duration-200 border-l-0 rounded-l-none cursor-pointer btn form-input"
       :class="`${theme.rounded_lg_r} ${
         view === 'map'
-          ? 'text-white btn-primary border-primary'
+          ? 'text-white btn-primary'
           : 'text-primary'
       }`"
       @click="setView('map')"

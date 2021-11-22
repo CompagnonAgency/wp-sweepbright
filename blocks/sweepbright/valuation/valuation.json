@@ -20,7 +20,7 @@
       "name": "Message body",
       "id": "contact_body",
       "type": "wysiwyg",
-      "default": "<p>You have received a new valuation request via the website.</p><br><br><p><strong>Name:</strong> [first_name] [last_name]</p><p><strong>Email:</strong> [email]</p><p><strong>Phone:</strong> [phone]</p><p><strong>Street:</strong> [street]</p><p><strong>City:</strong> [city]</p><br><br><p><strong>Message:</strong><p><br><p>[message]</p>"
+      "default": "<p>You have received a new valuation request via the website.</p><p><strong>Name:</strong> [first_name] [last_name]</p><p><strong>Email:</strong> [email]</p><p><strong>Phone:</strong> [phone]</p><p><strong>Street:</strong> [street]</p><p><strong>City:</strong> [city]</p><p><strong>Message:</strong><p><p>[message]</p>"
     },
     {
       "name": "Autoreply subject",
@@ -32,7 +32,7 @@
       "name": "Autoreply body",
       "id": "autoreply_body",
       "type": "wysiwyg",
-      "default": "<p>Thank you for your valuation request.</p><p>We will contact you as soon as possible.</p><br><br><p>With best regards</p>"
+      "default": "<p>Thank you for your valuation request.</p><p>We will contact you as soon as possible.</p><p>With best regards</p>"
     },
     {
       "name": "Locale",

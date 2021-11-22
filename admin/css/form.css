@@ -59,7 +59,7 @@ input[type="file"] {
   @apply border-0 rounded-full h-6 w-6 m-0 min-w-0 shadow-sm !important;
 }
 
-input[type=checkbox]:checked::before {
+.toggle-checkbox:checked::before {
   @apply hidden;
 }
 

@@ -46,6 +46,21 @@
       }
     },
     {
+      "name": "Arrow color",
+      "id": "arrow_color",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "Default",
+        "text-white": "White",
+        "text-light": "Light",
+        "text-dark": "Dark",
+        "text-primary": "Primary",
+        "text-secondary": "Secondary"
+      }
+    },
+    {
       "name": "Background color",
       "id": "background_color",
       "type": "select",
@@ -106,6 +121,34 @@
           "condition": {
             "button": [
               "enabled"
+            ]
+          }
+        },
+        {
+          "name": "Enable URL parameter",
+          "id": "enable_url_param",
+          "type": "select",
+          "default": "",
+          "sync": true,
+          "options": {
+            "": "False",
+            "true": "True"
+          },
+          "condition": {
+            "button": [
+              "enabled"
+            ]
+          }
+        },
+        {
+          "name": "URL parameter",
+          "id": "url_param",
+          "type": "text",
+          "default": "",
+          "allow_empty": true,
+          "condition": {
+            "enable_url_param": [
+              "true"
             ]
           }
         }

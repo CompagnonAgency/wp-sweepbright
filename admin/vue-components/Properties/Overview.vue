@@ -12,7 +12,7 @@
     <div class="flex mb-8 space-x-5">
       <div class="flex-1 p-5 bg-white rounded shadow-sm">
         <p
-          class="mb-2 text-sm font-medium tracking-wider text-gray-600 uppercase"
+          class="mb-2 text-sm font-medium tracking-wider text-gray-600 uppercase "
         >
           <i class="dashicons dashicons-update"></i> Synchronization
         </p>
@@ -46,7 +46,7 @@
 
       <div class="flex-1 p-5 bg-white rounded shadow-sm">
         <p
-          class="mb-2 text-sm font-medium tracking-wider text-gray-600 uppercase"
+          class="mb-2 text-sm font-medium tracking-wider text-gray-600 uppercase "
         >
           <i class="dashicons dashicons-building"></i> Total properties
         </p>
@@ -55,7 +55,7 @@
 
       <div class="flex-1 p-5 bg-white rounded shadow-sm">
         <p
-          class="mb-2 text-sm font-medium tracking-wider text-gray-600 uppercase"
+          class="mb-2 text-sm font-medium tracking-wider text-gray-600 uppercase "
         >
           <i class="dashicons dashicons-clock"></i> Last updated
         </p>
@@ -303,8 +303,6 @@ export default {
       axios
         .post("/wp-json/v1/sweepbright/list", this.request)
         .then((response) => {
-          console.log(response.data);
-
           if (response.data.estates && response.data.estates.length > 0) {
             this.estates = this.generateUid(response.data.estates);
           }

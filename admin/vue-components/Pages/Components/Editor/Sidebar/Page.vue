@@ -30,6 +30,9 @@
         <template v-if="pageDefault.settings.template === 'default'"
           >Default</template
         >
+        <template v-if="pageDefault.settings.template === 'blog'"
+          >Blog</template
+        >
         <template v-if="pageDefault.settings.template === 'base'"
           >Base</template
         >
@@ -37,7 +40,7 @@
       </p>
     </div>
     <template v-if="pageDefault.settings.template === 'default'">
-      <template v-if="user_roles.includes('administrator')">
+      <template v-if="user_roles.includes('administrator') && isEditable()">
         <div class="p-5 py-3 font-medium bg-gray-200 border-b border-gray-400">
           Information
         </div>
@@ -98,6 +101,12 @@ export default {
     };
   },
   methods: {
+    isEditable() {
+      return !(
+        this.pageDefault.title[this.lang] === "Home" &&
+        this.pageDefault.slug === "home"
+      );
+    },
     setSlug() {
       bus.$emit("setSlug", this.pageDefault.slug);
     },

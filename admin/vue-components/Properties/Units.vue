@@ -183,7 +183,6 @@ export default {
           0,
           window.location.hash.lastIndexOf("p=") - 1
         );
-        console.log(url);
         window.location.hash = `${url}/p=${page}-`;
       }
       window.location.hash = `${url}/p=${page}-`;

@@ -380,6 +380,7 @@ class WP_SweepBright_Helpers
 			'enabled_fr' => false,
 			'enabled_en' => true,
 			'favorites' => false,
+			'blog' => false,
 			'multilanguage' => false,
 			'enable_pages' => false,
 			'header_code' => '',

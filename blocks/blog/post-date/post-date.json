@@ -1,0 +1,8 @@
+{
+  "name": "Post - date",
+  "id": "post-date",
+  "icon": "fad fa-clock",
+  "category": "blog",
+  "type": "blog",
+  "fields": []
+}

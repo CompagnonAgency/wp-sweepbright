@@ -1,0 +1,40 @@
+{
+  "name": "YouTube",
+  "id": "youtube",
+  "icon": "fab fa-youtube",
+  "category": "media",
+  "fields": [
+    {
+      "name": "YouTube Link",
+      "id": "link",
+      "type": "text",
+      "sync": true,
+      "default": "https://www.youtube.com/watch?v=9ZfN87gSjvI"
+    },
+    {
+      "name": "Border radius",
+      "id": "border_radius",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "None",
+        "rounded": "Small",
+        "rounded-lg": "Large",
+        "rounded-xl": "XL",
+        "rounded-full": "Full"
+      }
+    },
+    {
+      "name": "Autoplay",
+      "id": "autoplay",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "Disabled",
+        "enabled": "Enabled"
+      }
+    }
+  ]
+}

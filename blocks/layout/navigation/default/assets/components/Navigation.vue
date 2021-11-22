@@ -11,21 +11,8 @@
         </a>
       </div>
 
-      <div class="flex items-center mx-4 space-x-3">
-        <a :href="data.favorites.link" class="relative inline-block px-3" v-if="data.favorites.enabled">
-          <div
-            class="absolute right-0 flex items-center justify-center w-5 h-5 -mt-1 text-sm font-medium text-white bg-red-500 rounded-full "
-            v-if="totalFavorites > 0"
-          >
-            <span>
-              {{ totalFavorites }}
-            </span>
-          </div>
-          <i
-            class="text-2xl fa-heart"
-            :class="totalFavorites > 0 ? 'fas' : 'fal'"
-          ></i>
-        </a>
+      <div class="flex items-center mx-4 space-x-5">
+        <Favorites v-if="data.favorites.enabled" :component="component"></Favorites>
         <button
           class="flex items-center justify-center w-10 text-xl outline-none btn btn-primary"
           @click="toggleMenu"
@@ -64,7 +51,7 @@
             </li>
 
             <li v-if="data.multilanguage.enabled">
-              <div class="relative block pt-10 text-white border-t border-white border-opacity-25 group">
+              <div class="relative inline-block pt-10 text-white border-t border-white border-opacity-25 group">
                 <p class="mb-3 text-base font-semibold tracking-wide uppercase opacity-60">
                   <template v-if="data.multilanguage.current_lang === 'nl'"
                     >Kies uw taal</template
@@ -91,7 +78,7 @@
                   <i class="text-lg fas fa-caret-down"></i>
                 </div>
                 <ul
-                  class="absolute hidden w-auto py-2 text-base font-semibold tracking-wide uppercase bg-white rounded shadow group-hover:block text-dark"
+                  class="absolute bottom-0 hidden w-auto py-2 mb-10 text-base font-semibold tracking-wide uppercase bg-white rounded shadow group-hover:block text-dark"
                 >
                   <li v-if="data.multilanguage.enabled_nl">
                     <a
@@ -128,9 +115,13 @@
 </template>
 
 <script>
+import Favorites from "./Favorites";
+
 export default {
   props: ["component"],
-  components: {},
+  components: {
+    Favorites,
+  },
   data() {
     return {
       lang: window.currentLang,
