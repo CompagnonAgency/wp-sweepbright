@@ -25,7 +25,7 @@
       "
     >
       <option
-        v-for="(page, index) in pages"
+        v-for="(page, index) in $pages"
         :key="index"
         :value="page.post_name"
       >
@@ -51,7 +51,16 @@ import bus from "../../../../../js/pages/bus.js";
 export default {
   props: ["pages", "col", "pageSelect", "field"],
   components: {},
-  computed: {},
+  computed: {
+    $pages() {
+      return this.pages.filter(
+        (page) =>
+          !["Home - Nederlands", "Home - English", "Home - Français"].includes(
+            page.post_title
+          )
+      );
+    },
+  },
   data() {
     return {
       defaultFields: this.pageSelect,

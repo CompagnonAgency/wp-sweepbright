@@ -11,6 +11,7 @@ $wp_default_home = array(
       'items_align' => 'items-start',
       'mobile_direction' => 'flex-col',
       'margin_bottom' => 'mb-20',
+      'columns_per_row' => '',
     ),
     'columns' =>
     array(
@@ -51,6 +52,7 @@ $wp_default_home = array(
       'justify_align' => '',
       'items_align' => 'items-start',
       'mobile_direction' => 'flex-col',
+      'columns_per_row' => '',
     ),
     'columns' =>
     array(
@@ -86,6 +88,7 @@ $wp_default_home = array(
       'items_align' => 'items-start',
       'mobile_direction' => 'flex-col',
       'margin_bottom' => 'mb-20',
+      'columns_per_row' => '',
     ),
     'columns' =>
     array(

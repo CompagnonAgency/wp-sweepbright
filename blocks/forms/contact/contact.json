@@ -1,0 +1,181 @@
+{
+  "name": "Form - contact",
+  "id": "contact",
+  "icon": "fad fa-envelope-open-text",
+  "category": "forms",
+  "fields": [
+    {
+      "name": "Columns",
+      "id": "column_group",
+      "type": "group",
+      "subfields": [
+        {
+          "name": "Fields (* = required)",
+          "id": "field_group",
+          "type": "group",
+          "subfields": [
+            {
+              "name": "Field",
+              "id": "field",
+              "type": "select",
+              "default": "",
+              "sync": true,
+              "options": {
+                "first_name": "[first_name] *",
+                "last_name": "[last_name] *",
+                "email": "[email] *",
+                "phone": "[phone]",
+                "reference": "[reference]",
+                "address": "[address]",
+                "city": "[city]",
+                "postal_code": "[postal_code]",
+                "subject": "[subject] *",
+                "message": "[message] *"
+              }
+            },
+            {
+              "name": "Options",
+              "id": "options_group",
+              "type": "group",
+              "subfields": [
+                {
+                  "name": "Option",
+                  "id": "option",
+                  "type": "text",
+                  "default": "Lorem ipsum"
+                }
+              ],
+              "default": [],
+              "condition": {
+                "field": [
+                  "subject"
+                ]
+              }
+            },
+            {
+              "name": "Required",
+              "id": "required",
+              "type": "select",
+              "default": "",
+              "sync": true,
+              "options": {
+                "": "False",
+                "required": "True"
+              }
+            }
+          ],
+          "default": []
+        }
+      ],
+      "default": []
+    },
+    {
+      "name": "Send to",
+      "id": "send_to",
+      "type": "text",
+      "sync": true,
+      "default": "info@example.com"
+    },
+    {
+      "name": "Message subject",
+      "id": "contact_subject",
+      "type": "text",
+      "default": "New contact request | [first_name] [last_name]"
+    },
+    {
+      "name": "Message body",
+      "id": "contact_body",
+      "type": "wysiwyg",
+      "default": "<p>You have received a new contact request via the website.</p><p><strong>Name:</strong> [first_name] [last_name]</p><p><strong>Email:</strong> [email]</p><p><strong>Subject:</strong> [subject]</p><p><strong>Message:</strong><p><p>[message]</p>"
+    },
+    {
+      "name": "Autoreply subject",
+      "id": "autoreply_subject",
+      "type": "text",
+      "default": "Thank you for your contact request, [first_name]!"
+    },
+    {
+      "name": "Autoreply body",
+      "id": "autoreply_body",
+      "type": "wysiwyg",
+      "default": "<p>Thank you for your contact request.</p><p>We will contact you as soon as possible.</p><p>With best regards</p>"
+    },
+    {
+      "name": "Locale",
+      "id": "locale",
+      "type": "locale",
+      "sync": true,
+      "default": {
+        "nl": {
+          "first_name": "Voornaam",
+          "last_name": "Achternaam",
+          "email": "Email",
+          "phone": "Telefoonnummer",
+          "reference": "Referentie",
+          "address": "address",
+          "city": "Stad",
+          "posal_code": "Postcode",
+          "subject": "Onderwerp",
+          "message": "Bericht",
+          "send": "Verzenden",
+          "flash": {
+            "success": {
+              "title": "Bedankt voor uw aanvraag",
+              "description": "We nemen zo snel mogelijk contact met u op."
+            },
+            "error": {
+              "title": "Onze excuses, er liep iets mis.",
+              "description": "Probeer nog eens opnieuw, of neem contact met ons op via e-mail."
+            }
+          }
+        },
+        "fr": {
+          "first_name": "Prénom",
+          "last_name": "Nom de famille",
+          "email": "Email",
+          "phone": "Numéro de téléphone",
+          "reference": "Référence",
+          "address": "Adresse",
+          "city": "Ville",
+          "posal_code": "Code postal",
+          "subject": "Sujet",
+          "message": "Message",
+          "send": "Envoyer",
+          "flash": {
+            "success": {
+              "title": "Merci pour votre demande",
+              "description": "Nous vous contacterons dans les plus brefs"
+            },
+            "error": {
+              "title": "Nous sommes désolés, quelque chose s'est mal passé.",
+              "description": "Veuillez réessayer ou contactez-nous par e-mail."
+            }
+          }
+        },
+        "en": {
+          "first_name": "First name",
+          "last_name": "Last name",
+          "email": "Email",
+          "phone": "Phone",
+          "reference": "Reference",
+          "address": "Address",
+          "city": "City",
+          "posal_code": "Postal code",
+          "subject": "Subject",
+          "message": "Message",
+          "send": "Send",
+          "flash": {
+            "success": {
+              "title": "Thank you for your request",
+              "description": "We will contact you as soon as possible."
+            },
+            "error": {
+              "title": "We're sorry, something went wrong.",
+              "description": "Please try again, or contact us via email."
+            }
+          }
+        }
+      }
+    }
+  ]
+}

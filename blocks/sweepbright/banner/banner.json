@@ -14,10 +14,37 @@
       "default": "Find your next home."
     },
     {
+      "name": "Media",
+      "id": "media",
+      "type": "select",
+      "default": "image",
+      "sync": true,
+      "options": {
+        "image": "Image",
+        "video": "Video"
+      }
+    },
+    {
+      "name": "Video",
+      "id": "video",
+      "type": "upload_video",
+      "default": "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_1280_10MG.mp4",
+      "condition": {
+        "media": [
+          "video"
+        ]
+      }
+    },
+    {
       "name": "Image",
       "id": "image",
       "type": "upload_single",
-      "default": "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2250&q=80"
+      "default": "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2250&q=80",
+      "condition": {
+        "media": [
+          "image"
+        ]
+      }
     },
     {
       "name": "Search country",

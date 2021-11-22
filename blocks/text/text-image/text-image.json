@@ -1,14 +1,41 @@
 {
-  "name": "Text + image",
+  "name": "Text + media",
   "id": "text-image",
   "icon": "fad fa-image-polaroid",
   "category": "text",
   "fields": [
     {
+      "name": "Media",
+      "id": "media",
+      "type": "select",
+      "default": "image",
+      "sync": true,
+      "options": {
+        "image": "Image",
+        "video": "Video"
+      }
+    },
+    {
+      "name": "Video",
+      "id": "video",
+      "type": "upload_video",
+      "default": "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_1280_10MG.mp4",
+      "condition": {
+        "media": [
+          "video"
+        ]
+      }
+    },
+    {
       "name": "Image",
       "id": "image",
       "type": "upload_single",
-      "default": "https://images.unsplash.com/photo-1554995207-c18c203602cb?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2850&q=80"
+      "default": "https://images.unsplash.com/photo-1554995207-c18c203602cb?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2850&q=80",
+      "condition": {
+        "media": [
+          "image"
+        ]
+      }
     },
     {
       "name": "Textarea",
@@ -17,16 +44,65 @@
       "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>"
     },
     {
+      "name": "Button",
+      "id": "button",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "Disabled",
+        "enabled": "Enabled"
+      }
+    },
+    {
       "name": "Button label",
       "id": "button_label",
       "type": "text",
-      "default": "Contact us"
+      "default": "Contact us",
+      "condition": {
+        "button": [
+          "enabled"
+        ]
+      }
     },
     {
       "name": "Button link",
       "id": "button_link",
       "type": "page_select",
-      "default": []
+      "default": [],
+      "condition": {
+        "button": [
+          "enabled"
+        ]
+      }
+    },
+    {
+      "name": "Enable URL parameter",
+      "id": "enable_url_param",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "False",
+        "true": "True"
+      },
+      "condition": {
+        "button": [
+          "enabled"
+        ]
+      }
+    },
+    {
+      "name": "URL parameter",
+      "id": "url_param",
+      "type": "text",
+      "default": "",
+      "allow_empty": true,
+      "condition": {
+        "enable_url_param": [
+          "true"
+        ]
+      }
     },
     {
       "name": "Background pattern",

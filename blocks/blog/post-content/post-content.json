@@ -1,0 +1,8 @@
+{
+  "name": "Post - content",
+  "id": "post-content",
+  "icon": "fad fa-file-alt",
+  "category": "blog",
+  "type": "blog",
+  "fields": []
+}

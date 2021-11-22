@@ -23,42 +23,36 @@
 
     <?php if (get_field('amenities')['amenity']) : ?>
       <?php foreach (get_field('amenities')['amenity'] as $index => $amenity) : ?>
-        <li class="w-1/2 lg:w-1/<?= WP_Wrapper::get('max_rows', $component, $args); ?> p-5">
-          <p class="mb-3 text-uppercase"><?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['parking']; ?></p>
-          <p class="text-xl font-medium">
-            <?php if ($amenity['amenity_type'] == 'parking') : ?>
+        <?php if ($amenity['amenity_type'] == 'parking') : ?>
+          <li class="w-1/2 lg:w-1/<?= WP_Wrapper::get('max_rows', $component, $args); ?> p-5">
+            <p class="mb-3 text-uppercase"><?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['parking']; ?></p>
+            <p class="text-xl font-medium">
               <?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['available']; ?>
-            <?php else : ?>
-              -
-            <?php endif; ?>
-          </p>
-        </li>
+            </p>
+          </li>
+        <?php endif; ?>
       <?php endforeach; ?>
 
       <?php foreach (get_field('amenities')['amenity'] as $index => $amenity) : ?>
-        <li class="w-1/2 lg:w-1/<?= WP_Wrapper::get('max_rows', $component, $args); ?> p-5">
-          <p class="mb-3 text-uppercase"><?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['fireplace']; ?></p>
-          <p class="text-xl font-medium">
-            <?php if ($amenity['amenity_type'] == 'fireplace') : ?>
+        <?php if ($amenity['amenity_type'] == 'fireplace') : ?>
+          <li class="w-1/2 lg:w-1/<?= WP_Wrapper::get('max_rows', $component, $args); ?> p-5">
+            <p class="mb-3 text-uppercase"><?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['fireplace']; ?></p>
+            <p class="text-xl font-medium">
               <?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['available']; ?>
-            <?php else : ?>
-              -
-            <?php endif; ?>
-          </p>
-        </li>
+            </p>
+          </li>
+        <?php endif; ?>
       <?php endforeach; ?>
 
       <?php foreach (get_field('amenities')['amenity'] as $index => $amenity) : ?>
-        <li class="w-1/2 lg:w-1/<?= WP_Wrapper::get('max_rows', $component, $args); ?> p-5">
-          <p class="mb-3 text-uppercase"><?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['walk_in_closet']; ?></p>
-          <p class="text-xl font-medium">
-            <?php if ($amenity['amenity_type'] == 'walk_in_closet') : ?>
+        <?php if ($amenity['amenity_type'] == 'walk_in_closet') : ?>
+          <li class="w-1/2 lg:w-1/<?= WP_Wrapper::get('max_rows', $component, $args); ?> p-5">
+            <p class="mb-3 text-uppercase"><?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['walk_in_closet']; ?></p>
+            <p class="text-xl font-medium">
               <?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['available']; ?>
-            <?php else : ?>
-              -
-            <?php endif; ?>
-          </p>
-        </li>
+            </p>
+          </li>
+        <?php endif; ?>
       <?php endforeach; ?>
     <?php endif; ?>
   </ul>

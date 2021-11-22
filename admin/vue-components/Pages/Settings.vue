@@ -36,6 +36,27 @@
         </div>
 
         <div class="mb-5 last:mb-0">
+          <h2 class="mb-1 text-2xl">Blog</h2>
+          <table class="form-table" role="presentation">
+            <tbody>
+              <tr>
+                <th scope="row">
+                  <label for="blog">Enable</label>
+                </th>
+                <td>
+                  <input
+                    type="checkbox"
+                    name="blog"
+                    id="blog"
+                    v-model="settings.blog"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mb-5 last:mb-0">
           <h2 class="mb-1 text-2xl">Multilanguage</h2>
           <table class="form-table" role="presentation">
             <tbody>
@@ -143,13 +164,13 @@
             <tbody>
               <tr>
                 <th scope="row">
-                  <label for="favorites">Completed</label>
+                  <label for="onboarded">Completed</label>
                 </th>
                 <td>
                   <input
                     type="checkbox"
-                    name="favorites"
-                    id="favorites"
+                    name="onboarded"
+                    id="onboarded"
                     v-model="settings.onboarded"
                   />
                 </td>

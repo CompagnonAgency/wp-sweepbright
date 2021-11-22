@@ -41,6 +41,7 @@ class WP_SweepBright_Controller_Pages
       'enabled_fr' => WP_SweepBright_Helpers::setting('enabled_fr'),
       'enabled_en' => WP_SweepBright_Helpers::setting('enabled_en'),
       'favorites' => WP_SweepBright_Helpers::setting('favorites'),
+      'blog' => WP_SweepBright_Helpers::setting('blog'),
       'header_code' => WP_SweepBright_Helpers::setting('header_code'),
     ];
 
@@ -59,6 +60,7 @@ class WP_SweepBright_Controller_Pages
     // Settings
     $settings = WP_SweepBright_Helpers::settings_form();
     $settings['favorites'] = $data['settings']['favorites'];
+    $settings['blog'] = $data['settings']['blog'];
     $settings['default_language'] = $data['settings']['default_language'];
     $settings['multilanguage'] = $data['settings']['multilanguage'];
     $settings['enabled_nl'] = $data['settings']['enabled_nl'];
@@ -118,7 +120,15 @@ class WP_SweepBright_Controller_Pages
 
   public static function raw_data()
   {
-    return get_option('wp_sweepbright_page_' . get_the_ID());
+    $id = get_the_ID();
+    if (
+      get_post($id)->post_name === 'home-francais' ||
+      get_post($id)->post_name === 'home-english' ||
+      get_post($id)->post_name === 'home-nederlands'
+    ) {
+      $id = url_to_postid('home');
+    }
+    return get_option('wp_sweepbright_page_' . $id);
   }
 
   public static function yoast_seo()
@@ -131,14 +141,18 @@ class WP_SweepBright_Controller_Pages
         $title = get_the_title();
         $lang = WP_SweepBright_Controller_Pages::current_lang();
 
-        if (is_single() || is_front_page()) {
-          $title = WP_SweepBright_Controller_Pages::raw_data()['settings']['seo']['title'][$lang];
+        if (get_post_type() === 'post') {
+          $title = htmlspecialchars(wp_strip_all_tags(get_the_title()));
+        }
+
+        if (get_post_type() === 'page' || is_front_page()) {
+          $title = htmlspecialchars(wp_strip_all_tags(WP_SweepBright_Controller_Pages::raw_data()['settings']['seo']['title'][$lang]));
         }
 
         if (($post && $post->post_type === 'sweepbright_estates')) {
-          $title = get_field('estate')['title'][$lang];
+          $title = htmlspecialchars(wp_strip_all_tags(get_field('estate')['title'][$lang]));
         }
-        return __($title . ' - ' . get_bloginfo('name'), 'change_textdomain');
+        return __(get_bloginfo('name') . ' | ' . $title, 'change_textdomain');
       }
       add_filter('wpseo_opengraph_title', 'change_opengraph_title');
 
@@ -149,14 +163,23 @@ class WP_SweepBright_Controller_Pages
         $title = get_the_title();
         $lang = WP_SweepBright_Controller_Pages::current_lang();
 
-        if (is_single() || is_front_page()) {
-          $title = WP_SweepBright_Controller_Pages::raw_data()['title'][$lang];
+        if (get_post_type() === 'post') {
+          $title = htmlspecialchars(wp_strip_all_tags(get_the_title()));
+        }
+
+        if (get_post_type() === 'page' || is_front_page()) {
+          $seo_title = htmlspecialchars(wp_strip_all_tags(WP_SweepBright_Controller_Pages::raw_data()['settings']['seo']['title'][$lang]));
+          if ($seo_title) {
+            $title = $seo_title;
+          } else {
+            $title = htmlspecialchars(wp_strip_all_tags(WP_SweepBright_Controller_Pages::raw_data()['title'][$lang]));
+          }
         }
 
         if (($post && $post->post_type === 'sweepbright_estates')) {
-          $title = get_field('estate')['title'][$lang];
+          $title = htmlspecialchars(wp_strip_all_tags(get_field('estate')['title'][$lang]));
         }
-        return __($title . ' - ' . get_bloginfo('name'), 'change_textdomain');
+        return __(get_bloginfo('name') . ' | ' .  $title, 'change_textdomain');
       }
       add_filter('wpseo_title', 'change_title');
 
@@ -166,12 +189,16 @@ class WP_SweepBright_Controller_Pages
         global $post;
         $lang = WP_SweepBright_Controller_Pages::current_lang();
 
-        if (is_single() || is_front_page()) {
-          $desc = __(WP_SweepBright_Controller_Pages::raw_data()['settings']['seo']['description'][$lang], 'change_textdomain');
+        if (get_post_type() === 'post') {
+          $desc = htmlspecialchars(mb_strimwidth(wp_strip_all_tags(get_the_content()), 0, 150, '...'));
+        }
+
+        if (get_post_type() === 'page' || is_front_page()) {
+          $desc = htmlspecialchars(__(wp_strip_all_tags(WP_SweepBright_Controller_Pages::raw_data()['settings']['seo']['description'][$lang], 'change_textdomain')));
         }
 
         if (($post && $post->post_type === 'sweepbright_estates')) {
-          $desc = mb_strimwidth(get_field('estate')['description'][$lang], 0, 150, '...');
+          $desc = htmlspecialchars(mb_strimwidth(wp_strip_all_tags(get_field('estate')['description'][$lang]), 0, 150, '...'));
         }
         return strip_tags($desc);
       }
@@ -208,6 +235,17 @@ class WP_SweepBright_Controller_Pages
       if (in_array($lang_param, ['nl', 'fr', 'en'])) {
         $lang = $lang_param;
       }
+      switch ($lang) {
+        case 'nl':
+          switch_to_locale('nl_NL');
+          break;
+        case 'fr':
+          switch_to_locale('fr_FR');
+          break;
+        case 'en':
+          switch_to_locale('en_US');
+          break;
+      }
       setcookie('wps_lang', $lang, time() + (86400 * 30), "/");
     }
 
@@ -217,7 +255,11 @@ class WP_SweepBright_Controller_Pages
         strpos($_SERVER['REQUEST_URI'], '/wp-json/') === false &&
         !is_admin()
       ) {
-        header('Location: ' . get_the_permalink() . '?lang=' . $_COOKIE['wps_lang']);
+        $link = get_the_permalink() . '?lang=' . $_COOKIE['wps_lang'];
+        foreach ($_GET as $key => $value) {
+          $link .= '&' . $key . '=' . $value;
+        }
+        header('Location: ' . $link);
       }
     }
   }
@@ -296,7 +338,6 @@ class WP_SweepBright_Controller_Pages
   public function list()
   {
     $list_pages = get_pages();
-
     $result = [
       'STATUS_CODE' => http_response_code(200),
       'PAGES' => $list_pages,
@@ -319,8 +360,11 @@ class WP_SweepBright_Controller_Pages
 
     foreach ($fields as $field) {
       if (
-        isset($field['type']) && ($field['type'] == 'upload_single' || $field['type'] == 'upload_multiple'
-          || $field['type'] == 'page_select' || $field['type'] == 'page_select_multiple'
+        isset($field['type']) && ($field['type'] == 'upload_single'
+          || $field['type'] == 'upload_multiple'
+          || $field['type'] == 'upload_video'
+          || $field['type'] == 'page_select'
+          || $field['type'] == 'page_select_multiple'
           || $field['type'] == 'group')
       ) {
         $field['sync'] = 'true';
@@ -498,6 +542,17 @@ class WP_SweepBright_Controller_Pages
           "template" => "estate",
         ],
       ];
+    } else if ($data['id'] === 'blog-post') {
+      $link = '';
+      $page = [
+        "id" => "blog-post",
+        "title" => "Blog - post",
+        "updated" => false,
+        "settings" => [
+          "locked" => true,
+          "template" => "blog",
+        ],
+      ];
     } else if ($data['id'] === 'create') {
       $link = '';
       $page = [
@@ -528,9 +583,22 @@ class WP_SweepBright_Controller_Pages
       ];
     } else {
       $locked = false;
+
+      // Make the homepage locked
       if (get_post($data["id"])->post_name === 'home') {
         $locked = true;
       }
+
+      // If Polylang is enabled, disable the clones of the homepage and use 
+      // the default homepage instead
+      if (
+        get_post($data["id"])->post_name === 'home-francais' ||
+        get_post($data["id"])->post_name === 'home-english' ||
+        get_post($data["id"])->post_name === 'home-nederlands'
+      ) {
+        $data["id"] = url_to_postid('home');
+      }
+
       $link = get_the_permalink($data['id']);
       $page = [
         "id" => $data["id"],
@@ -607,6 +675,7 @@ class WP_SweepBright_Controller_Pages
       && $data['page']['id'] !== 'estate-default'
       && $data['page']['id'] !== 'estate-project'
       && $data['page']['id'] !== 'estate-unit'
+      && $data['page']['id'] !== 'blog-post'
       && $data['page']['id'] !== '404'
     ) {
       // Update modified date & ID
@@ -777,9 +846,11 @@ class WP_SweepBright_Controller_Pages
   {
     $components = [];
 
+    // Load the scripts from a page template
     $id = get_the_ID();
 
     if (get_field('estate')['id']) {
+      // Load the scripts from an estate template
       if (get_field('estate')['project_id']) {
         $id = 'estate-unit';
       } else if (get_field('estate')['is_project']) {
@@ -787,6 +858,9 @@ class WP_SweepBright_Controller_Pages
       } else {
         $id = 'estate-default';
       }
+    } else if (is_single()) {
+      // Load the scripts from a blog template
+      $id = 'blog-post';
     }
 
     $output = WP_SweepBright_Controller_Pages::data(['id' => $id]);
@@ -829,11 +903,11 @@ class WP_SweepBright_Controller_Pages
             $style_url = plugin_dir_url(__DIR__) . 'blocks/' . $category['value'] . '/' . $directory . '/' . $variant . '/dist/main.css';
 
             if (file_exists($style_path)) {
-              echo '<link rel="stylesheet" href="' . $style_url . '">';
+              echo '<link rel="stylesheet" href="' . $style_url . '?version=' . filemtime($style_path) . '">';
             }
 
             if (file_exists($script_path)) {
-              echo '<script type="text/javascript" src="' . $script_url . '"></script>';
+              echo '<script type="text/javascript" src="' . $script_url . '?version=' . filemtime($script_path) . '"></script>';
             }
           }
         }
@@ -865,7 +939,9 @@ class WP_SweepBright_Controller_Pages
     }
 
     if ($data['action']) {
-      array_push($cookies, $data['id']);
+      if (!in_array($data['id'], $cookies, true)) {
+        array_push($cookies, $data['id']);
+      }
     } else {
       $cookies = array_values(array_filter($cookies, function ($estate) use ($data) {
         return $estate !== $data['id'];

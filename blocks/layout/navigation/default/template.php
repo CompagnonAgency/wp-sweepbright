@@ -31,7 +31,7 @@
 
   $data['multilanguage'] = [
     'current_lang' => WP_SweepBright_Controller_Pages::current_lang(),
-    'enabled' => WP_Wrapper::setting('favorites'),
+    'enabled' => WP_Wrapper::setting('multilanguage'),
     'enabled_nl' => WP_SweepBright_Helpers::settings_form()['enabled_nl'],
     'enabled_fr' => WP_SweepBright_Helpers::settings_form()['enabled_fr'],
     'enabled_en' => WP_SweepBright_Helpers::settings_form()['enabled_en'],
@@ -42,8 +42,10 @@
   window.component_<?= str_replace('-', '_', $args['column']['id']); ?> = <?= json_encode($data); ?>;
 </script>
 
+<!-- Mobile navigation -->
 <div class="navigation-default" data-component="component_<?= str_replace('-', '_', $args['column']['id']); ?>"></div>
 
+<!-- Desktop navigation -->
 <div class="hidden lg:block fixed top-0 left-0 z-30 w-full h-24 js-navigation <?php if (WP_Wrapper::has_banner()) : ?>text-white<?php endif; ?>" data-component="component_<?= str_replace('-', '_', $args['column']['id']); ?>">
   <?php if (get_field('estate')['id']) : ?>
     <div class="absolute top-0 left-0 right-0 z-10 flex items-center w-11/12 h-full mx-auto transition-transform duration-500 transform -translate-y-full lg:w-10/12 js-navigation-estate">
@@ -73,7 +75,7 @@
           </p>
         </li>
         <?php if (WP_Wrapper::setting('favorites')) : ?>
-          <?php require('favorites.php'); ?>
+          <div class="favorites-default" data-component="component_<?= str_replace('-', '_', $args['column']['id']); ?>"></div>
         <?php endif; ?>
       </ul>
     </div>
@@ -123,7 +125,7 @@
 
       <?php if (WP_Wrapper::setting('favorites')) : ?>
         <li class="ml-10">
-          <?php require('favorites.php'); ?>
+          <div class="favorites-default" data-component="component_<?= str_replace('-', '_', $args['column']['id']); ?>"></div>
         </li>
       <?php endif; ?>
 

@@ -23,6 +23,9 @@
         "nl": {
           "heading": "Energiescore",
           "gas": "Aardgas",
+          "fuel": "Mazout (brandstof)",
+          "heat_pump": "Warmtepomp",
+          "floor_heating": "Vloerverwarming",
           "solar_panels": "Zonnepanelen",
           "central_heating": "Centrale verwarming",
           "electricity": "Electriciteit",
@@ -33,6 +36,9 @@
         "fr": {
           "heading": "Score énergétique",
           "gas": "Gaz naturel",
+          "fuel": "Carburant",
+          "heat_pump": "Pompe à chaud",
+          "floor_heating": "Chauffage par le sol",
           "solar_panels": "Panneaux solaires",
           "central_heating": "Chauffage central",
           "electricity": "Électricité",
@@ -43,6 +49,9 @@
         "en": {
           "heading": "Energy score",
           "gas": "Natural gas",
+          "fuel": "Fuel",
+          "heat_pump": "Heat pump",
+          "floor_heating": "Floor heating",
           "solar_panels": "Solar panels",
           "central_heating": "Chauffage central",
           "electricity": "Electricity",

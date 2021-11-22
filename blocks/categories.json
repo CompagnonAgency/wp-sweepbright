@@ -32,6 +32,18 @@
     "value": "data"
   },
   {
+    "name": "Forms",
+    "value": "forms"
+  },
+  {
+    "name": "Blog - overview",
+    "value": "blog-overview"
+  },
+  {
+    "name": "Blog - post",
+    "value": "blog"
+  },
+  {
     "name": "Widgets",
     "value": "widgets"
   }

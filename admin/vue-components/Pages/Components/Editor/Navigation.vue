@@ -24,7 +24,9 @@
           placeholder="Title"
           v-model="page.title[lang]"
           class="w-full h-full font-medium input-heading"
-          :disabled="user_roles.includes('administrator') ? false : true"
+          :disabled="
+            user_roles.includes('administrator') && isEditable() ? false : true
+          "
         />
         <input
           v-else
@@ -98,6 +100,11 @@ export default {
     };
   },
   methods: {
+    isEditable() {
+      return !(
+        this.page.title[this.lang] === "Home" && this.page.slug === "home"
+      );
+    },
     preview() {
       bus.$emit("preview");
     },

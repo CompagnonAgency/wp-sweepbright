@@ -11,6 +11,7 @@ $wp_default_base = array(
       'items_align' => 'items-start',
       'mobile_direction' => 'flex-col',
       'margin_bottom' => 'mb-0',
+      'columns_per_row' => '',
     ),
     'columns' =>
     array(
@@ -47,6 +48,7 @@ $wp_default_base = array(
       'items_align' => 'items-start',
       'mobile_direction' => 'flex-col',
       'margin_bottom' => 'mb-20',
+      'columns_per_row' => '',
     ),
     'columns' =>
     array(
@@ -82,6 +84,7 @@ $wp_default_base = array(
       'items_align' => 'items-start',
       'mobile_direction' => 'flex-col',
       'margin_bottom' => 'mb-0',
+      'columns_per_row' => '',
     ),
     'columns' =>
     array(

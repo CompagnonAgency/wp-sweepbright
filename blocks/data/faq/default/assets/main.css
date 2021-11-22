@@ -1,0 +1,51 @@
+.faq-default,
+.faq-default > li {
+  @apply m-0 p-0 list-none
+}
+
+.faq-default ul {
+  @apply ml-0;
+}
+
+.faq-default > li {
+  @apply shadow-none border bg-white transition-all duration-200 mb-5 text-white;
+}
+
+.faq-default > li:last-child {
+  @apply mb-0;
+}
+
+.faq-default > li:hover {
+  @apply shadow-lg;
+}
+
+.faq-default > li .question {
+  @apply block font-medium relative border-none py-5 pr-5 pl-12;
+}
+
+.faq-default > li .question.on p {
+  @apply text-white;
+}
+
+.faq-default > li .question.on {
+  @apply bg-current;
+}
+
+.faq-default > li .question:before {
+  position: absolute;
+  top: 20px;
+  left: 25px;
+  font-family: "Font Awesome 5 Pro";
+  content: "\f054";
+  @apply font-normal text-gray-800;
+}
+
+.faq-default > li .question.on:before {
+  font-family: "Font Awesome 5 Pro";
+  content: "\f078";
+  @apply font-normal text-white;
+}
+
+.faq-default > li .answer {
+  @apply text-gray-800 p-6 hidden border-t;
+}

@@ -1,0 +1,110 @@
+{
+  "name": "Blog - list",
+  "id": "blog-list",
+  "icon": "fad fa-blog",
+  "category": "blog-overview",
+  "fields": [
+    {
+      "name": "Pagination",
+      "id": "pagination",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "None",
+        "enabled": "Enabled"
+      }
+    },
+    {
+      "name": "Posts per page",
+      "id": "posts_per_page",
+      "type": "range",
+      "default": 5,
+      "min": 1,
+      "max": 20,
+      "sync": true
+    },
+    {
+      "name": "Posts per row",
+      "id": "posts_per_row",
+      "type": "range",
+      "default": 1,
+      "min": 1,
+      "max": 4,
+      "sync": true
+    },
+    {
+      "name": "[Post] Text color",
+      "id": "grid__text_color",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "Default",
+        "text-white": "White",
+        "text-light": "Light",
+        "text-dark": "Dark",
+        "text-primary": "Primary",
+        "text-secondary": "Secondary"
+      }
+    },
+    {
+      "name": "[Post] Background color",
+      "id": "grid__background_color",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "Transparent",
+        "bg-white": "White",
+        "bg-light": "Light",
+        "bg-dark": "Dark",
+        "bg-primary": "Primary",
+        "bg-secondary": "Secondary"
+      }
+    },
+    {
+      "name": "Border radius",
+      "id": "border_radius",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "None",
+        "rounded": "Small",
+        "rounded-lg": "Large",
+        "rounded-xl": "XL",
+        "rounded-full": "Full"
+      }
+    },
+    {
+      "name": "Locale",
+      "id": "locale",
+      "type": "locale",
+      "sync": true,
+      "default": {
+        "nl": {
+          "read_more": "Lees meer",
+          "empty": {
+            "title": "Er werden nog geen berichten geplaatst.",
+            "description": "Er wordt nog aan de inhoud van onze artikelen gewerkt. Bezoek onze blog later opnieuw, en blijf op de hoogte van de laatste nieuwtjes."
+          }
+        },
+        "fr": {
+          "read_more": "Lire plus",
+          "empty": {
+            "title": "Aucun message n'a encore été publié.",
+            "description": "Le contenu de nos articles est toujours en cours d'élaboration. Veuillez visiter à nouveau notre blog plus tard et restez informé des dernières nouvelles."
+          }
+        },
+        "en": {
+          "read_more": "Read more",
+          "empty": {
+            "title": "There are no posts yet.",
+            "description": "The content of our articles is still being worked on. Please visit our blog again later, and stay informed of the latest news."
+          }
+        }
+      }
+    }
+  ]
+}

@@ -17,7 +17,7 @@
       <div
         class="inline-block p-2 mr-2 bg-black"
         :class="`${data.card_border_radius}`"
-        v-if="estate.meta.open_homes.hasOpenHome"
+        v-if="estate.meta.open_homes.hasOpenHome && estate.meta.estate.status === 'available'"
       >
         {{ data.locale[lang].open_home }}
       </div>
@@ -40,13 +40,13 @@
         <template slot="control">
           <div v-if="estate.meta.estate.status === 'available'">
             <button
-              class="absolute bottom-0 right-0 w-12 py-2 mr-12 text-lg text-white transition duration-200 bg-black appearance-none  focus:outline-none hover:bg-gray-800"
+              class="absolute bottom-0 right-0 w-12 py-2 mr-12 text-lg text-white transition duration-200 bg-black appearance-none focus:outline-none hover:bg-gray-800"
               @click.stop="back"
             >
               <i class="far fa-chevron-left"></i>
             </button>
             <button
-              class="absolute bottom-0 right-0 w-12 py-2 text-lg text-white transition duration-200 bg-black appearance-none  focus:outline-none hover:bg-gray-800"
+              class="absolute bottom-0 right-0 w-12 py-2 text-lg text-white transition duration-200 bg-black appearance-none focus:outline-none hover:bg-gray-800"
               @click.stop="next"
             >
               <i class="-mr-1 far fa-chevron-right"></i>
@@ -67,11 +67,11 @@
           {{ estate.meta.location.city }}
         </p>
         <div
-          class="-mt-1 text-lg transition duration-200 transform cursor-pointer  hover:scale-110"
+          class="-mt-1 text-lg transition duration-200 transform cursor-pointer hover:scale-110"
           @click.stop="toggleFavorite"
           v-if="data.favorites"
         >
-          <template v-if="isFavorited">
+          <template v-if="checkFavorited">
             <i class="text-red-500 fas fa-heart"></i>
           </template>
           <template v-else>
@@ -94,12 +94,12 @@
               !estate.meta.price.hidden
             "
           >
-            {{ price }}
+            {{ getPrice(estate.meta.price.amount) }}
           </p>
         </div>
         <div class="flex justify-end w-1/2">
           <i
-            class="transition-all duration-200 transform  fal fa-arrow-right group-hover:translate-x-2"
+            class="transition-all duration-200 transform fal fa-arrow-right group-hover:translate-x-2"
           ></i>
         </div>
       </div>
@@ -114,7 +114,8 @@
         h-0.5
         transition-all
         duration-300
-        bg-gray-200
+        bg-black
+        bg-opacity-10
         group-hover:w-full
       "
     ></div>
@@ -129,6 +130,18 @@ export default {
   components: {
     [Glide.name]: Glide,
     [GlideSlide.name]: GlideSlide,
+  },
+  computed: {
+    checkFavorited: {
+      get() {
+        let isFavorited = false;
+        if (this.favorites.includes(parseFloat(this.estate.id))) {
+          isFavorited = true;
+        }
+        this.isFavorited = isFavorited;
+        return isFavorited;
+      },
+    },
   },
   data() {
     return {
@@ -146,10 +159,26 @@ export default {
     };
   },
   methods: {
-    favoriteStatus() {
-      if (this.favorites.includes(parseFloat(this.estate.id))) {
-        this.isFavorited = true;
+    getPrice(price) {
+      let currency = "";
+      let format = "";
+      switch (this.estate.meta.price.currency) {
+        case "EUR":
+          currency = "€";
+          format = "DOT";
+          break;
+        case "USD":
+          currency = "$";
+          format = "COMMA";
+          break;
+        case "GBP":
+          currency = "£";
+          format = "COMMA";
+          break;
+        default:
+          break;
       }
+      return `${currency} ${this.$formatNumber(price, format)}`;
     },
     toggleFavorite(e) {
       this.isFavorited = !this.isFavorited;
@@ -176,7 +205,6 @@ export default {
     },
   },
   mounted() {
-    this.favoriteStatus();
   },
 };
 </script>

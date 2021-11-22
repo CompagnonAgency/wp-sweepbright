@@ -654,10 +654,11 @@ class WP_SweepBright_Query
 	{
 		if (isset($args['params']['favorites']) && $args['params']['favorites']) {
 			if (isset($_COOKIE['favorites']) && json_decode($_COOKIE['favorites'], true)) {
-				$args['posts'] = $args['posts']->whereIn('post_id', json_decode($_COOKIE['favorites'], true));
+				$favorites = json_decode($_COOKIE['favorites']);
 			} else {
-				$args['posts'] = [];
+				$favorites = ['no_favorites'];
 			}
+			$args['posts'] = $args['posts']->whereIn('post_id', $favorites, true);
 		}
 		return $args['posts'];
 	}
@@ -672,7 +673,7 @@ class WP_SweepBright_Query
 
 			$args['posts'] = $args['posts']
 				// Order by open homes
-				->order_by("CASE WHEN has_open_home = 1 THEN 0 END", 'DESC')
+				->order_by("CASE WHEN has_open_home = 1 AND status = 'available' THEN 0 END", 'DESC')
 
 				// Order by negotiation
 				->order_by("CASE WHEN negotiation = 'sale' THEN " . $condition_sale . " WHEN negotiation = 'let' THEN " . $condition_let . " END", 'ASC')

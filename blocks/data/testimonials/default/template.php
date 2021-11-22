@@ -18,7 +18,7 @@
               &#8220;
             </div>
 
-            <div class="inline-block lg:max-w-xl lg:pt-16 lg:pl-8 post is-large">
+            <div class="inline-block lg:max-w-4xl lg:pt-16 lg:pl-8 post is-large">
               <?= WP_Wrapper::get('description', $component, $args, $testimonial); ?>
             </div>
 
@@ -32,10 +32,12 @@
       </ul>
     </div>
 
-    <div class="mt-5 lg:ml-8 glide__bullets" data-glide-el="controls[nav]">
-      <?php foreach (WP_Wrapper::get('testimonials', $component, $args) as $index => $value) : ?>
-        <button class="glide__bullet" data-glide-dir="=<?= $index; ?>"></button>
-      <?php endforeach; ?>
-    </div>
+    <?php if (count(WP_Wrapper::get('testimonials', $component, $args)) > 1) : ?>
+      <div class="mt-5 lg:ml-8 glide__bullets" data-glide-el="controls[nav]">
+        <?php foreach (WP_Wrapper::get('testimonials', $component, $args) as $index => $value) : ?>
+          <button class="glide__bullet" data-glide-dir="=<?= $index; ?>"></button>
+        <?php endforeach; ?>
+      </div>
+    <?php endif; ?>
   </div>
 <?php endif; ?>

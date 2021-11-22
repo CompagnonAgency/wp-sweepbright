@@ -55,11 +55,23 @@
     <div class="p-5 border-b border-gray-400 last:border-0">
       <p class="mb-3 text-xs font-medium tracking-wide text-gray-600 uppercase">
         <i class="w-3 fad fa-mobile-alt"></i>
-        Mobile direction
+        Mobile: direction
       </p>
       <select v-model="row.style.mobile_direction" @change="setStyle">
         <option value="flex-col">Normal (default)</option>
         <option value="flex-col-reverse">Reverse</option>
+      </select>
+    </div>
+    <div class="p-5 border-b border-gray-400 last:border-0">
+      <p class="mb-3 text-xs font-medium tracking-wide text-gray-600 uppercase">
+        <i class="w-3 fad fa-mobile-alt"></i>
+        Mobile: columns per row
+      </p>
+      <select v-model="row.style.columns_per_row" @change="setStyle">
+        <option value="">1 (default)</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
       </select>
     </div>
     <SettingSyle :active="row" apply="row"></SettingSyle>
@@ -82,13 +94,21 @@ export default {
     };
   },
   methods: {
+    setDefaults() {
+      if (!this.row.style.columns_per_row) {
+        this.$set(this.row.style, "columns_per_row", "");
+      }
+    },
     setStyle() {
       bus.$emit("setStyle", this.row.style);
     },
   },
   mounted() {
+    this.setDefaults();
+
     bus.$on("setRow", (row) => {
       this.row = row;
+      this.setDefaults();
     });
   },
   beforeDestroy() {

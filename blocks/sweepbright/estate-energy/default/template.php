@@ -32,70 +32,85 @@
   <?php endif; ?>
 
   <ul class="flex flex-wrap -m-5">
-    <li class="w-1/2 lg:w-1/<?= WP_Wrapper::get('max_rows', $component, $args); ?> p-5">
-      <p class="mb-3 text-uppercase"><?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['gas']; ?></p>
-      <p class="text-xl font-medium">
-        <?php if (get_field('features')['energy']['gas']) : ?>
-          <?= WP_SweepBright_Query::get_the_size(WP_Wrapper::lang(), 'available'); ?>
-        <?php else : ?>
-          -
-        <?php endif; ?>
-      </p>
-    </li>
+    <?php if (get_field('heating_cooling')['central_heating']) : ?>
+      <li class="w-1/2 lg:w-1/<?= WP_Wrapper::get('max_rows', $component, $args); ?> p-5">
+        <p class="mb-3 text-uppercase"><?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['central_heating']; ?></p>
+        <p class="text-xl font-medium">
+          <?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['available']; ?>
+        </p>
+      </li>
+    <?php endif; ?>
 
-    <li class="w-1/2 lg:w-1/<?= WP_Wrapper::get('max_rows', $component, $args); ?> p-5">
-      <p class="mb-3 text-uppercase"><?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['solar_panels']; ?></p>
-      <p class="text-xl font-medium">
-        <?php if (get_field('ecology')['solar_panels']) : ?>
-          <?= WP_SweepBright_Query::get_the_size(WP_Wrapper::lang(), 'available'); ?>
-        <?php else : ?>
-          -
-        <?php endif; ?>
-      </p>
-    </li>
+    <?php if (get_field('ecology')['solar_panels']) : ?>
+      <li class="w-1/2 lg:w-1/<?= WP_Wrapper::get('max_rows', $component, $args); ?> p-5">
+        <p class="mb-3 text-uppercase"><?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['solar_panels']; ?></p>
+        <p class="text-xl font-medium">
+          <?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['available']; ?>
+        </p>
+      </li>
+    <?php endif; ?>
 
-    <li class="w-1/2 lg:w-1/<?= WP_Wrapper::get('max_rows', $component, $args); ?> p-5">
-      <p class="mb-3 text-uppercase"><?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['central_heating']; ?></p>
-      <p class="text-xl font-medium">
-        <?php if (get_field('heating_cooling')['central_heating']) : ?>
-          <?= WP_SweepBright_Query::get_the_size(WP_Wrapper::lang(), 'available'); ?>
-        <?php else : ?>
-          -
-        <?php endif; ?>
-      </p>
-    </li>
+    <?php if (get_field('heating_cooling')['floor_heating']) : ?>
+      <li class="w-1/2 lg:w-1/<?= WP_Wrapper::get('max_rows', $component, $args); ?> p-5">
+        <p class="mb-3 text-uppercase"><?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['floor_heating']; ?></p>
+        <p class="text-xl font-medium">
+          <?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['available']; ?>
+        </p>
+      </li>
+    <?php endif; ?>
 
-    <li class="w-1/2 lg:w-1/<?= WP_Wrapper::get('max_rows', $component, $args); ?> p-5">
-      <p class="mb-3 text-uppercase"><?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['electricity']; ?></p>
-      <p class="text-xl font-medium">
-        <?php if (get_field('features')['energy']['electricity']) : ?>
-          <?= WP_SweepBright_Query::get_the_size(WP_Wrapper::lang(), 'available'); ?>
-        <?php else : ?>
-          -
-        <?php endif; ?>
-      </p>
-    </li>
+    <?php if (get_field('heating_cooling')['air_conditioning']) : ?>
+      <li class="w-1/2 lg:w-1/<?= WP_Wrapper::get('max_rows', $component, $args); ?> p-5">
+        <p class="mb-3 text-uppercase"><?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['airco']; ?></p>
+        <p class="text-xl font-medium">
+          <?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['available']; ?>
+        </p>
+      </li>
+    <?php endif; ?>
 
-    <li class="w-1/2 lg:w-1/<?= WP_Wrapper::get('max_rows', $component, $args); ?> p-5">
-      <p class="mb-3 text-uppercase"><?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['double_glazing']; ?></p>
-      <p class="text-xl font-medium">
-        <?php if (get_field('ecology')['double_glazing']) : ?>
-          <?= WP_SweepBright_Query::get_the_size(WP_Wrapper::lang(), 'available'); ?>
-        <?php else : ?>
-          -
-        <?php endif; ?>
-      </p>
-    </li>
+    <?php if (get_field('features')['energy']['gas']) : ?>
+      <li class="w-1/2 lg:w-1/<?= WP_Wrapper::get('max_rows', $component, $args); ?> p-5">
+        <p class="mb-3 text-uppercase"><?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['gas']; ?></p>
+        <p class="text-xl font-medium">
+          <?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['available']; ?>
+        </p>
+      </li>
+    <?php endif; ?>
 
-    <li class="w-1/2 lg:w-1/<?= WP_Wrapper::get('max_rows', $component, $args); ?> p-5">
-      <p class="mb-3 text-uppercase"><?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['airco']; ?></p>
-      <p class="text-xl font-medium">
-        <?php if (get_field('heating_cooling')['air_conditioning']) : ?>
-          <?= WP_SweepBright_Query::get_the_size(WP_Wrapper::lang(), 'available'); ?>
-        <?php else : ?>
-          -
-        <?php endif; ?>
-      </p>
-    </li>
+    <?php if (get_field('features')['energy']['fuel']) : ?>
+      <li class="w-1/2 lg:w-1/<?= WP_Wrapper::get('max_rows', $component, $args); ?> p-5">
+        <p class="mb-3 text-uppercase"><?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['fuel']; ?></p>
+        <p class="text-xl font-medium">
+          <?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['available']; ?>
+        </p>
+      </li>
+    <?php endif; ?>
+
+    <?php if (get_field('features')['energy']['heat_pump']) : ?>
+      <li class="w-1/2 lg:w-1/<?= WP_Wrapper::get('max_rows', $component, $args); ?> p-5">
+        <p class="mb-3 text-uppercase"><?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['heat_pump']; ?></p>
+        <p class="text-xl font-medium">
+          <?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['available']; ?>
+        </p>
+      </li>
+    <?php endif; ?>
+
+    <?php if (get_field('features')['energy']['electricity']) : ?>
+      <li class="w-1/2 lg:w-1/<?= WP_Wrapper::get('max_rows', $component, $args); ?> p-5">
+        <p class="mb-3 text-uppercase"><?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['electricity']; ?></p>
+        <p class="text-xl font-medium">
+          <?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['available']; ?>
+        </p>
+      </li>
+    <?php endif; ?>
+
+    <?php if (get_field('ecology')['double_glazing']) : ?>
+      <li class="w-1/2 lg:w-1/<?= WP_Wrapper::get('max_rows', $component, $args); ?> p-5">
+        <p class="mb-3 text-uppercase"><?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['double_glazing']; ?></p>
+        <p class="text-xl font-medium">
+          <?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['available']; ?>
+        </p>
+      </li>
+    <?php endif; ?>
   </ul>
 </div>

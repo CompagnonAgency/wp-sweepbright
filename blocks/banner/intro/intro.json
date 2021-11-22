@@ -54,6 +54,33 @@
       }
     },
     {
+      "name": "Enable URL parameter",
+      "id": "enable_url_param",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "False",
+        "true": "True"
+      },
+      "condition": {
+        "button": [
+          "true"
+        ]
+      }
+    },
+    {
+      "name": "URL parameter",
+      "id": "url_param",
+      "type": "text",
+      "default": "",
+      "condition": {
+        "enable_url_param": [
+          "true"
+        ]
+      }
+    },
+    {
       "name": "Background image",
       "id": "background_image",
       "type": "select",
