@@ -1,0 +1,80 @@
+{
+  "name": "Estate - regulations",
+  "id": "estate-regulations",
+  "icon": "fad fa-balance-scale",
+  "category": "sweepbright",
+  "type": "estate",
+  "fields": [
+    {
+      "name": "Specifications per row",
+      "id": "max_rows",
+      "type": "range",
+      "default": 2,
+      "min": 1,
+      "max": 6,
+      "sync": true
+    },
+    {
+      "name": "Locale",
+      "id": "locale",
+      "type": "locale",
+      "sync": true,
+      "default": {
+        "nl": {
+          "heading": "Stedenbouw",
+          "building_permit": "Bouwvergunning",
+          "priority_purchase_right": "Recht van voorkoop",
+          "subdivision_authorisation": "Verkavelingsvergunning",
+          "urban_planning_breach": "Stedenbouwkundige overtreding",
+          "expropriation_plan": "Onteigeningsplan",
+          "heritage_list": "Inventaris onroerend erfgoed",
+          "pending_legal_proceedings": "Lopende juridische procedures",
+          "urban_planning_certificate": "Stedenbouwkundige vergunning",
+          "cadastral_income": "Kadastraal inkomen",
+          "no": "Neen",
+          "yes": "Ja",
+          "flood_risk": "Overstromingsgevoelig gebied",
+          "no_flood_risk_area": "Neen",
+          "potential_flood_sensitive_area": "Mogelijk gevoelig",
+          "effective_flood_sensitive_area": "Verhoogd risico"
+        },
+        "fr": {
+          "heading": "Aménagement urbain",
+          "building_permit": "Permis de construire",
+          "priority_purchase_right": "Droit de préemption",
+          "subdivision_authorisation": "Permis de lotissement",
+          "urban_planning_breach": "Violation d'urbanisme",
+          "expropriation_plan": "Plan d'expropriation",
+          "heritage_list": "Inventaire du patrimoine immobilier",
+          "pending_legal_proceedings": "En cours de procédure judiciaire",
+          "urban_planning_certificate": "Permis d'urbanisme",
+          "cadastral_income": "Revenu cadastral",
+          "no": "Non",
+          "yes": "Oui",
+          "flood_risk": "Zone sujette aux inondations",
+          "no_flood_risk_area": "Non",
+          "potential_flood_sensitive_area": "Potentiellement sensible",
+          "effective_flood_sensitive_area": "Risque accru"
+        },
+        "en": {
+          "heading": "Urban planning",
+          "building_permit": "Building Permit",
+          "priority_purchase_right": "Priority purchase right",
+          "subdivision_authorisation": "Subdivision authorisation",
+          "urban_planning_breach": "Urban planning breach",
+          "expropriation_plan": "Expropriation plan",
+          "heritage_list": "Heritage list",
+          "pending_legal_proceedings": "Pending legal proceedings",
+          "urban_planning_certificate": "Urban planning certificate",
+          "cadastral_income": "Cadastral income",
+          "no": "No",
+          "yes": "Yes",
+          "flood_risk": "Flood risk",
+          "no_flood_risk_area": "No",
+          "potential_flood_sensitive_area": "Potentially sensitive",
+          "effective_flood_sensitive_area": "Effective risk"
+        }
+      }
+    }
+  ]
+}

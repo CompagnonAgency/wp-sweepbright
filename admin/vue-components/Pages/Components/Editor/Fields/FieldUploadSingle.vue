@@ -1,13 +1,13 @@
 <template>
   <div>
-    <div class="relative mb-2" v-if="inputData(field, col)">
+    <div class="mb-2 relative" v-if="inputData(field, col)">
       <div class="aspect-ratio-16/9"></div>
       <img
-        class="absolute top-0 left-0 object-contain object-center w-full h-full p-5 bg-gray-200 border-none rounded"
+        class="border-none rounded h-full object-contain object-center bg-gray-200 w-full p-5 top-0 left-0 absolute"
         :src="inputData(field, col)"
       />
     </div>
-    <div class="flex mt-2 space-x-2">
+    <div class="flex space-x-2 mt-2">
       <button class="w-1/2 btn btn-primary" @click="openLibrary">
         Select image
       </button>
@@ -59,9 +59,8 @@ export default {
             if (attachment.attributes.type === "image") {
               if (attachment.toJSON().url) {
                 const path = attachment
-                  .toJSON()
-                  .url.replace(/^(?:\/\/|[^/]+)*\//, "");
-                self.col.data["default"][self.field.id] = `/${path}`;
+                  .toJSON().url;
+                self.col.data["default"][self.field.id] = path;
                 self.$forceUpdate();
               }
             } else {

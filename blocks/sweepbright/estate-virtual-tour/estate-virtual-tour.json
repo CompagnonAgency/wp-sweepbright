@@ -1,0 +1,38 @@
+{
+  "name": "Estate - virtual tour",
+  "id": "estate-virtual-tour",
+  "icon": "fad fa-head-vr",
+  "category": "sweepbright",
+  "type": "estate",
+  "fields": [
+    {
+      "name": "Border radius",
+      "id": "border_radius",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "None",
+        "rounded": "Small",
+        "rounded-lg": "Large",
+        "rounded-xl": "XL",
+        "rounded-full": "Full"
+      }
+    },
+    {
+      "name": "Aspect ratio",
+      "id": "aspect_ratio",
+      "type": "select",
+      "default": "4/3",
+      "sync": true,
+      "options": {
+        "square": "Square",
+        "4/3": "Photo",
+        "5/6": "Vertical (regular)",
+        "2/3": "Vertical (tall)",
+        "16/9": "Horizontal (widescreen)",
+        "21/9": "Horizontal (cinema)"
+      }
+    }
+  ]
+}

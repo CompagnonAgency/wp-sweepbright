@@ -318,6 +318,11 @@ export default {
           weights: [300, 400, 500, 600, 700],
         },
         {
+          name: "Poppins",
+          value: "Poppins",
+          weights: [300, 400, 500, 600, 700],
+        },
+        {
           name: "Source Serif Pro",
           value: "Source+Serif+Pro",
           weights: [300, 400, 600],

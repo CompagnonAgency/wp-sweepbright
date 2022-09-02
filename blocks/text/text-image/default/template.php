@@ -15,9 +15,17 @@
 
   <div class="relative flex items-center p-10 lg:p-24 lg:justify-center lg:w-1/2">
     <div class="relative z-10">
-      <div class="lg:max-w-lg post">
-        <?= WP_Wrapper::get('textarea', $component, $args); ?>
-      </div>
+      <?php if (WP_Wrapper::get('title', $component, $args)) : ?>
+        <p class="mb-2 text-xl font-semibold leading-tight font-secondary lg:text-2xl">
+          <?= WP_Wrapper::get('title', $component, $args); ?>
+        </p>
+      <?php endif; ?>
+
+      <?php if (WP_Wrapper::get('textarea', $component, $args)) : ?>
+        <div class="lg:max-w-lg post">
+          <?= WP_Wrapper::get('textarea', $component, $args); ?>
+        </div>
+      <?php endif; ?>
 
       <?php if (WP_Wrapper::get('button', $component, $args)) : ?>
         <div class="mt-6">
@@ -33,8 +41,13 @@
           if ($link && WP_Wrapper::get('enable_url_param', $component, $args) && WP_Wrapper::get('url_param', $component, $args)) {
             $link .= '?' . WP_Wrapper::get('url_param', $component, $args);
           }
+
+          // Add anchor link if it exists
+          if (WP_Wrapper::get('enable_url_anchor', $component, $args) && WP_Wrapper::get('anchor_link', $component, $args)) {
+            $link .= '#' . WP_Wrapper::get('anchor_link', $component, $args);
+          }
           ?>
-          <a href="<?= $link; ?>" class="btn btn-primary">
+          <a href="<?= $link; ?>" class="btn btn-primary" data-scroll>
             <?= WP_Wrapper::get('button_label', $component, $args); ?>
           </a>
         </div>

@@ -23,6 +23,7 @@
         "nl": {
           "bedrooms": "Slaapkamers",
           "bathrooms": "Badkamers",
+          "shower_rooms": "Doucheruimtes",
           "toilets": "WC's",
           "parking": "Parking",
           "available": "Aanwezig",
@@ -32,6 +33,7 @@
         "fr": {
           "bedrooms": "Chambres a coucher",
           "bathrooms": "Salles de bain",
+          "shower_rooms": "Salles de douche",
           "toilets": "Toilettes",
           "parking": "Parking",
           "available": "Présent",
@@ -41,6 +43,7 @@
         "en": {
           "bedrooms": "Bedrooms",
           "bathrooms": "Bathrooms",
+          "shower_rooms": "Shower rooms",
           "toilets": "Toilets",
           "parking": "Parking",
           "available": "Available",

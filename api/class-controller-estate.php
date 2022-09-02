@@ -408,6 +408,8 @@ class WP_SweepBright_Controller_Estate
 					"epc_category" => $faker->randomElement(['A++', 'A+', 'A', 'B', 'C', 'D', 'E', 'F', 'G']),
 					"epc_reference" => "20081101-0000000245-00000015",
 					"total_epc_value" => $faker->randomElement([100, 200, 300, 400, 500, 600, 700]),
+					"energy_dpe" => $faker->randomElement(['A', 'B', 'C', 'D', 'E', 'F', 'G']),
+					"greenhouse_emissions" => $faker->randomElement(['A', 'B', 'C', 'D', 'E', 'F', 'G']),
 					"nabers" => [
 						"description" => "Historical and current water and energy use",
 						"type" => "number",
@@ -470,7 +472,28 @@ class WP_SweepBright_Controller_Estate
 				"fr" => "Taxes en français",
 				"nl" => "Belastingen in het Nederlands"
 			],
+			"price_vat_regime" => 55,
+			"price_yearly_budgeted_building_costs" => [
+				"amount" => $faker->numberBetween(5000, 100000),
+				"currency" => "EUR"
+			],
+			"price_property_taxes" => [
+				"amount" => $faker->numberBetween(5000, 100000),
+				"currency" => "EUR"
+			],
+			"price_recurring_costs" => [
+				"amount" => $faker->numberBetween(5000, 100000),
+				"currency" => "EUR"
+			],
 			"custom_price" => "Price available on request",
+			"buyer_percentage" => $faker->numberBetween(10, 50),
+			"buyer_fixed_fee" => $faker->numberBetween(10000, 100000),
+			"vendor_percentage" => $faker->numberBetween(10, 50),
+			"vendor_fixed_fee" => $faker->numberBetween(10000, 100000),
+			"agency_commission" => [
+				"fixed_fee" => $faker->numberBetween(500, 5000),
+				"percentage" => $faker->numberBetween(10, 50),
+			],
 			"location" => [
 				"geo" => [
 					"latitude" => $faker->latitude(50.95686, 51.20892),
@@ -487,7 +510,7 @@ class WP_SweepBright_Controller_Estate
 				"formatted" => $faker->streetAddress(),
 				"formatted_agency" => "Formatted Agency",
 				"postal_code" => $faker->postcode(),
-				"hidden" => false
+				"hidden" => $faker->boolean(),
 			],
 			"amenities" => $amenities,
 			"sizes" => [
@@ -564,18 +587,14 @@ class WP_SweepBright_Controller_Estate
 				"photo_url" => $faker->randomElement(['https://images.pexels.com/photos/4063856/pexels-photo-4063856.jpeg', 'https://images.pexels.com/photos/4347368/pexels-photo-4347368.jpeg', 'https://images.pexels.com/photos/3206114/pexels-photo-3206114.jpeg', 'https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg']),
 				"photo_url_expires_on" => "2017-01-01T12:12:12+00:00"
 			],
-			"agency_commission" => [
-				"fixed_fee" => 500.2,
-				"percentage" => 5
-			],
 			"mandate" => [
 				"start_date" => "2018-01-01",
 				"end_date" => "2019-01-01",
-				"exclusive" => true
+				"exclusive" => $faker->boolean()
 			],
 			"internal_note" => "Internal note",
 			"occupancy" => [
-				"occupied" => false,
+				"occupied" => $faker->boolean(),
 				"available_from" => "2018-01-01",
 				"contact_details" => "Available next week",
 				"tenant_contract" => [

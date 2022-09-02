@@ -1,4 +1,27 @@
 <?php
+if (WP_Wrapper::get('category_group', $component, $args)) {
+  $categories = [];
+  foreach (WP_Wrapper::get('category_group', $component, $args) as $category) {
+    $category = get_category_by_slug(WP_Wrapper::get('category', $component, $args, $category));
+    if ($category) {
+      $categories[] = $category->term_id;
+    }
+  }
+
+  if ($categories) {
+    $categories = implode(',', $categories);
+  } else {
+    $categories = '';
+  }
+} else if (isset($_GET['category'])) {
+  $category = get_category_by_slug($_GET['category']);
+  if ($category) {
+    $categories = $category->term_id;
+  }
+} else {
+  $categories = '';
+}
+
 $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
 $posts_per_page = WP_Wrapper::get('posts_per_page', $component, $args);
 $posts_per_row = intval(WP_Wrapper::get('posts_per_row', $component, $args));
@@ -9,6 +32,7 @@ $query = [
   'post_type' => 'post',
   'post_status' => 'publish',
   'posts_per_page' => $posts_per_page,
+  'cat' => $categories
 ];
 $wp_query = new WP_Query($query);
 ?>

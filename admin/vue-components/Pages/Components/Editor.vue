@@ -103,9 +103,10 @@ export default {
     },
     getPage() {
       this.isLoading = true;
+      const duplicate = this.$route.params.duplicate ? `/${this.$route.params.duplicate}` : '';
       axios({
         method: "get",
-        url: `/wp-json/v1/sweepbright/pages/${this.$route.params.id}`,
+        url: `/wp-json/v1/sweepbright/pages/${this.$route.params.id}${duplicate}`,
       }).then((response) => {
         this.lang = response.data.LANG;
         this.page = response.data.PAGE;
@@ -213,6 +214,10 @@ export default {
         item.order = index;
       });
       this.$forceUpdate();
+    },
+    orderRow(args) {
+      this.page.layout[args.newIndex].order = args.newIndex;
+      this.page.layout[args.oldIndex].order = args.oldIndex;
     },
     resetPageOrder(field, col) {
       col.data.default[field["id"]].forEach((page, index) => {
@@ -381,24 +386,47 @@ export default {
           }
         });
     },
-    insertRow(id) {
+    insertRow(id, args) {
       let order = 0;
 
-      if (this.page.layout.length > 0) {
-        // Set order
-        const previous = this.page.layout.find((obj) => {
-          return obj.id === id;
-        });
+      if (args && args.before) {
+        if (this.page.layout.length > 0) {
+          // Set order
+          const previous = this.page.layout.find((obj) => {
+            return obj.id === id;
+          });
 
-        order = previous.order + 1;
-
-        // Set higher orders
-        this.page.layout = this.page.layout.filter((obj) => {
-          if (obj.order >= order && obj.columns) {
-            obj.order += 1;
+          if (previous.order === 0) {
+            order = 0;
+          } else {
+            order = previous.order - 1;
           }
-          return obj;
-        });
+
+          // Set higher orders
+          this.page.layout = this.page.layout.filter((obj) => {
+            if (obj.order >= order && obj.columns) {
+              obj.order += 1;
+            }
+            return obj;
+          });
+        }
+      } else {
+        if (this.page.layout.length > 0) {
+          // Set order
+          const previous = this.page.layout.find((obj) => {
+            return obj.id === id;
+          });
+
+          order = previous.order + 1;
+
+          // Set higher orders
+          this.page.layout = this.page.layout.filter((obj) => {
+            if (obj.order >= order && obj.columns) {
+              obj.order += 1;
+            }
+            return obj;
+          });
+        }
       }
 
       // Add row
@@ -428,9 +456,9 @@ export default {
       });
       bus.$emit("setRow", this.activeRow);
     },
-    removeRow(id) {
+    removeRow(id, args) {
       if (this.page.layout.length > 1) {
-        this.$dialog.confirm("Please confirm to delete row").then((dialog) => {
+        const deleteRow = () => {
           // Current row
           const row = this.page.layout.find((obj) => {
             return obj.id === id;
@@ -450,7 +478,15 @@ export default {
           });
           this.sortLayout();
           this.deselect();
-        });
+        }
+
+        if (args && args.skipConfirm) {
+          deleteRow();
+        } else {
+          this.$dialog.confirm("Please confirm to delete row").then((dialog) => {
+            deleteRow();
+          });
+        }
       }
     },
     sortLayout() {
@@ -506,8 +542,8 @@ export default {
         this.insertColumn(args.rowId, args.columnId);
       });
 
-      bus.$on("removeRow", (rowId) => {
-        this.removeRow(rowId);
+      bus.$on("removeRow", (rowId, args) => {
+        this.removeRow(rowId, args);
       });
 
       bus.$on("editRow", (rowId) => {
@@ -516,6 +552,10 @@ export default {
 
       bus.$on("insertRow", (rowId) => {
         this.insertRow(rowId);
+      });
+
+      bus.$on("insertRowBefore", (rowId) => {
+        this.insertRow(rowId, {before: true});
       });
 
       bus.$on("setWidth", (width) => {
@@ -572,6 +612,10 @@ export default {
 
       bus.$on("endDrag", (args) => {
         this.endDrag(args.$event, args.data);
+      });
+
+      bus.$on("orderRow", (args) => {
+        this.orderRow(args);
       });
     },
   },

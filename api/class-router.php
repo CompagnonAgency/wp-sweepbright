@@ -111,7 +111,7 @@ class WP_SweepBright_Router
 				'permission_callback' => '__return_true',
 			));
 
-			register_rest_route('v1/sweepbright', '/pages/(?P<id>[^/]+)', array(
+			register_rest_route('v1/sweepbright', '/pages/(?P<id>[^/]+)(?:/(?P<duplicate>\d+))?', array(
 				'methods' => 'GET',
 				'callback' => __CLASS__ . '::pages_data',
 				'permission_callback' => '__return_true',
@@ -120,6 +120,42 @@ class WP_SweepBright_Router
 			register_rest_route('v1/sweepbright', '/pages/save', array(
 				'methods' => 'POST',
 				'callback' => __CLASS__ . '::pages_save',
+				'permission_callback' => '__return_true',
+			));
+
+			register_rest_route('v1/sweepbright', '/pages/column', array(
+				'methods' => 'POST',
+				'callback' => __CLASS__ . '::pages_column',
+				'permission_callback' => '__return_true',
+			));
+
+			register_rest_route('v1/sweepbright', '/pages/column/save', array(
+				'methods' => 'POST',
+				'callback' => __CLASS__ . '::pages_column_save',
+				'permission_callback' => '__return_true',
+			));
+
+			register_rest_route('v1/sweepbright', '/pages/column/delete', array(
+				'methods' => 'POST',
+				'callback' => __CLASS__ . '::pages_column_delete',
+				'permission_callback' => '__return_true',
+			));
+
+			register_rest_route('v1/sweepbright', '/pages/row', array(
+				'methods' => 'POST',
+				'callback' => __CLASS__ . '::pages_row',
+				'permission_callback' => '__return_true',
+			));
+
+			register_rest_route('v1/sweepbright', '/pages/row/save', array(
+				'methods' => 'POST',
+				'callback' => __CLASS__ . '::pages_row_save',
+				'permission_callback' => '__return_true',
+			));
+
+			register_rest_route('v1/sweepbright', '/pages/row/delete', array(
+				'methods' => 'POST',
+				'callback' => __CLASS__ . '::pages_row_delete',
 				'permission_callback' => '__return_true',
 			));
 
@@ -270,6 +306,42 @@ class WP_SweepBright_Router
 	{
 		$wp_sweepbright_controller_pages = new WP_SweepBright_Controller_Pages();
 		return $wp_sweepbright_controller_pages->save($data);
+	}
+
+	public static function pages_column($data)
+	{
+		$wp_sweepbright_controller_pages = new WP_SweepBright_Controller_Pages();
+		return $wp_sweepbright_controller_pages->pages_column($data);
+	}
+
+	public static function pages_column_save($data)
+	{
+		$wp_sweepbright_controller_pages = new WP_SweepBright_Controller_Pages();
+		return $wp_sweepbright_controller_pages->pages_column_save($data);
+	}
+
+	public static function pages_column_delete($data)
+	{
+		$wp_sweepbright_controller_pages = new WP_SweepBright_Controller_Pages();
+		return $wp_sweepbright_controller_pages->pages_column_delete($data);
+	}
+
+	public static function pages_row($data)
+	{
+		$wp_sweepbright_controller_pages = new WP_SweepBright_Controller_Pages();
+		return $wp_sweepbright_controller_pages->pages_row($data);
+	}
+
+	public static function pages_row_save($data)
+	{
+		$wp_sweepbright_controller_pages = new WP_SweepBright_Controller_Pages();
+		return $wp_sweepbright_controller_pages->pages_row_save($data);
+	}
+
+	public static function pages_row_delete($data)
+	{
+		$wp_sweepbright_controller_pages = new WP_SweepBright_Controller_Pages();
+		return $wp_sweepbright_controller_pages->pages_row_delete($data);
 	}
 
 	public static function pages_data($data)

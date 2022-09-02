@@ -14,6 +14,13 @@
       </li>
     <?php endif; ?>
 
+    <?php if (get_field('facilities')['shower_rooms']) : ?>
+      <li class="w-1/2 lg:w-1/<?= WP_Wrapper::get('max_rows', $component, $args); ?> p-5">
+        <p class="mb-3 text-uppercase"><?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['shower_rooms']; ?></p>
+        <p class="text-xl font-medium"><?= get_field('facilities')['shower_rooms']; ?></p>
+      </li>
+    <?php endif; ?>
+
     <?php if (get_field('facilities')['toilets']) : ?>
       <li class="w-1/2 lg:w-1/<?= WP_Wrapper::get('max_rows', $component, $args); ?> p-5">
         <p class="mb-3 text-uppercase"><?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['toilets']; ?></p>

@@ -16,9 +16,14 @@
     if ($link && WP_Wrapper::get('enable_url_param', $component, $args) && WP_Wrapper::get('url_param', $component, $args)) {
       $link .= '?' . WP_Wrapper::get('url_param', $component, $args);
     }
+
+    // Add anchor link if it exists
+    if (WP_Wrapper::get('enable_url_anchor', $component, $args) && WP_Wrapper::get('anchor_link', $component, $args)) {
+      $link .= '#' . WP_Wrapper::get('anchor_link', $component, $args);
+    }
     ?>
     <div class="mt-7">
-      <a href="<?= $link; ?>" class="btn btn-primary">
+      <a href="<?= $link; ?>" class="btn btn-primary" data-scroll>
         <?= WP_Wrapper::get('button_label', $component, $args); ?>
       </a>
     </div>

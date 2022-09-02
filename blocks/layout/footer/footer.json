@@ -51,6 +51,34 @@
       "sync": true
     },
     {
+      "name": "Facebook",
+      "id": "facebook",
+      "type": "text",
+      "allow_empty": "true",
+      "sync": true
+    },
+    {
+      "name": "YouTube",
+      "id": "youtube",
+      "type": "text",
+      "allow_empty": "true",
+      "sync": true
+    },
+    {
+      "name": "LinkedIn",
+      "id": "linkedin",
+      "type": "text",
+      "allow_empty": "true",
+      "sync": true
+    },
+    {
+      "name": "TikTok",
+      "id": "tiktok",
+      "type": "text",
+      "allow_empty": "true",
+      "sync": true
+    },
+    {
       "name": "Legal pages",
       "id": "legal_pages",
       "type": "page_select_multiple",

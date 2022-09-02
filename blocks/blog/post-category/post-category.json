@@ -1,0 +1,32 @@
+{
+  "name": "Post - category",
+  "id": "post-category",
+  "icon": "fas fa-filter",
+  "category": "blog",
+  "type": "blog",
+  "fields": [
+    {
+      "name": "Parent page",
+      "id": "parent_page",
+      "type": "page_select",
+      "default": []
+    },
+    {
+      "name": "Locale",
+      "id": "locale",
+      "type": "locale",
+      "sync": true,
+      "default": {
+        "nl": {
+          "categories": "Categorieën"
+        },
+        "fr": {
+          "categories": "Catégories"
+        },
+        "en": {
+          "categories": "Categories"
+        }
+      }
+    }
+  ]
+}

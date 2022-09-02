@@ -6,18 +6,21 @@
  * @package FieldHeatingCooling
  */
 
-class FieldHeatingCooling {
+class FieldHeatingCooling
+{
 
-	public function __construct() {
+	public function __construct()
+	{
 	}
 
-	public static function retrieve() {
-    return [
-      'key' => 'heating_cooling',
-      'name' => 'heating_cooling',
-      'label' => 'Heating & cooling',
-      'layout' => 'table',
-      'type' => 'group',
+	public static function retrieve()
+	{
+		return [
+			'key' => 'heating_cooling',
+			'name' => 'heating_cooling',
+			'label' => 'Heating & cooling',
+			'layout' => 'table',
+			'type' => 'group',
 			'sub_fields' => [
 				[
 					'key'    => 'central_heating',
@@ -40,8 +43,14 @@ class FieldHeatingCooling {
 					'type'   => 'true_false',
 					'ui' => true,
 				],
+				[
+					'key'    => 'individual_heating',
+					'label'  => 'Individual heating',
+					'name'   => 'individual_heating',
+					'type'   => 'true_false',
+					'ui' => true,
+				],
 			],
-    ];
+		];
 	}
-
 }

@@ -29,7 +29,7 @@
     "@neojp/tailwindcss-aspect-ratio-utilities": "^1.0.0",
     "autoprefixer": "^9.8.0",
     "css": "^2.2.4",
-    "glightbox": "^3.0.8",
+    "glightbox": "^3.2.0",
     "jquery": "^3.5.1",
     "parcel": "^2.0.0-nightly.463",
     "postcss-import": "^12.0.1",

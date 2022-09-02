@@ -5,6 +5,21 @@
   "category": "blog-overview",
   "fields": [
     {
+      "name": "Categories",
+      "id": "category_group",
+      "type": "group",
+      "subfields": [
+        {
+          "name": "Category (slug)",
+          "id": "category",
+          "type": "text",
+          "default": "",
+          "allow_empty": true
+        }
+      ],
+      "default": []
+    },
+    {
       "name": "Pagination",
       "id": "pagination",
       "type": "select",

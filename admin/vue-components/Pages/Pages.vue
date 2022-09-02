@@ -30,7 +30,7 @@
               active-class="border-blue-500"
               :to="{ name: 'home' }"
               exact
-              class="inline-block py-4 border-b-2 border-transparent  focus:shadow-none"
+              class="inline-block py-4 border-b-2 border-transparent focus:shadow-none"
               >Overview</router-link
             >
           </li>
@@ -38,7 +38,7 @@
             <router-link
               active-class="border-blue-500"
               :to="{ name: 'theme' }"
-              class="inline-block py-4 border-b-2 border-transparent  focus:shadow-none"
+              class="inline-block py-4 border-b-2 border-transparent focus:shadow-none"
               >Theme</router-link
             >
           </li>
@@ -46,7 +46,7 @@
             <router-link
               active-class="border-blue-500"
               :to="{ name: 'settings' }"
-              class="inline-block py-4 border-b-2 border-transparent  focus:shadow-none"
+              class="inline-block py-4 border-b-2 border-transparent focus:shadow-none"
               >Settings</router-link
             >
           </li>

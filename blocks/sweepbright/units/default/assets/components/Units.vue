@@ -80,25 +80,30 @@
         <template v-else-if="props.column.field == 'status'">
           <div
             v-if="props.row.status === 'available'"
-            class="inline-block px-3 py-1 text-xs font-medium leading-loose tracking-widest text-white uppercase  bg-primary"
+            class="inline-block px-3 py-1 text-xs font-medium leading-loose tracking-widest text-white uppercase bg-primary"
           >
-            {{ data.locale[lang].negotiation.sale }}
+            <p v-if="props.row.negotiation === 'sale'">
+              {{ data.locale[lang].negotiation.sale }}
+            </p>
+            <p v-else>
+              {{ data.locale[lang].negotiation.let }}
+            </p>
           </div>
           <div
             v-else-if="props.row.status === 'option'"
-            class="inline-block px-3 py-1 text-xs font-medium leading-loose tracking-widest uppercase border border-current "
+            class="inline-block px-3 py-1 text-xs font-medium leading-loose tracking-widest uppercase border border-current"
           >
             {{ data.locale[lang].negotiation.option }}
           </div>
           <div
             v-else-if="props.row.status === 'sold'"
-            class="inline-block px-3 py-1 text-xs font-medium leading-loose tracking-widest uppercase "
+            class="inline-block px-3 py-1 text-xs font-medium leading-loose tracking-widest uppercase"
           >
             {{ data.locale[lang].negotiation.sold }}
           </div>
           <div
             v-else-if="props.row.status === 'rented'"
-            class="inline-block px-3 py-1 text-xs font-medium leading-loose tracking-widest uppercase "
+            class="inline-block px-3 py-1 text-xs font-medium leading-loose tracking-widest uppercase"
           >
             {{ data.locale[lang].negotiation.rented }}
           </div>
@@ -148,6 +153,11 @@ export default {
         {
           label: "Price hidden",
           field: "price_hidden",
+          hidden: true,
+        },
+        {
+          label: "Negotiation",
+          field: "negotiation",
           hidden: true,
         },
       ],
@@ -204,6 +214,7 @@ export default {
             },
             price_hidden: estate.meta.price.hidden,
             status: estate.meta.estate.status,
+            negotiation: estate.meta.features.negotiation,
           };
 
           if (estate.meta.rooms && estate.meta.rooms.room.length > 0) {

@@ -3,11 +3,19 @@
   // Get component data
   $data = WP_Wrapper::all($component, $args);
   $data['favorites'] = WP_Wrapper::setting('favorites');
-  $data['button_url'] = WP_Wrapper::page(
+  $data['unavailable_properties'] = WP_Wrapper::setting('unavailable_properties');
+  $data['available_properties'] = WP_Wrapper::setting('available_properties');
+  $data['button_url'] = '';
+
+  $button_url = WP_Wrapper::page(
     $component,
     WP_Wrapper::get('button_link', $component, $args),
     ['single' => true]
-  )["url"];
+  );
+
+  if (isset($button_url['url'])) {
+    $data['button_url'] = $button_url['url'];
+  }
   ?>
 
   // Set unique data object for Javascript

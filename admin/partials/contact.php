@@ -71,7 +71,7 @@
           </th>
           <td>
             <p>
-              Available tags: <kbd>[title]</kbd>, <kbd>[address]</kbd>, <kbd>[url]</kbd>, <kbd>[first_name]</kbd>, <kbd>[last_name]</kbd>, <kbd>[email]</kbd>, <kbd>[phone]</kbd>, <kbd>[message]</kbd>.<br>
+              Available tags: <kbd>[title]</kbd>, <kbd>[address]</kbd>, <kbd>[negotiation]</kbd>, <kbd>[url]</kbd>, <kbd>[first_name]</kbd>, <kbd>[last_name]</kbd>, <kbd>[email]</kbd>, <kbd>[phone]</kbd>, <kbd>[message]</kbd>.<br>
               <kbd>[title]</kbd>, <kbd>[address]</kbd>, <kbd>[url]</kbd> are only available for estate contact requests.
             </p>
             <br>
@@ -84,8 +84,8 @@
           </th>
           <td>
             <p>
-              Available tags: <kbd>[title]</kbd>, <kbd>[address]</kbd>, <kbd>[url]</kbd>, <kbd>[first_name]</kbd>, <kbd>[last_name]</kbd>, <kbd>[email]</kbd>, <kbd>[phone]</kbd>, <kbd>[message]</kbd>.<br>
-              <kbd>[title]</kbd>, <kbd>[address]</kbd>, <kbd>[url]</kbd> are only available for estate contact requests.
+              Available tags: <kbd>[title]</kbd>, <kbd>[address]</kbd>, <kbd>[negotiation]</kbd>, <kbd>[url]</kbd>, <kbd>[first_name]</kbd>, <kbd>[last_name]</kbd>, <kbd>[email]</kbd>, <kbd>[phone]</kbd>, <kbd>[message]</kbd>.<br>
+              <kbd>[title]</kbd>, <kbd>[address]</kbd>, <kbd>[negotiation]</kbd>, <kbd>[url]</kbd> are only available for estate contact requests.
             </p>
             <br>
             <textarea name="mail_message" required id="mail_message" rows="10" class="widefat textarea code"><?= WP_SweepBright_Helpers::contact_form()['autoresponder']['message']; ?></textarea>

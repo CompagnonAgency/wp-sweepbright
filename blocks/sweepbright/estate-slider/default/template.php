@@ -12,10 +12,10 @@
 <?php if (get_field('features')['images']) : ?>
   <div class="relative">
     <?php if (count(get_field('features')['images']) > 1) : ?>
-      <div class="absolute bottom-0 left-0 z-10 m-5 lg:m-10">
-        <a href="<?= get_field('features')['images'][0]['sizes']['large']; ?>" class="btn btn-primary btn-small glightbox" data-gallery="images">
+      <div class="absolute bottom-0 left-0 z-10 m-5 pointer-events-none lg:m-10">
+        <div class="btn btn-primary btn-small">
           <?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['view_all_photos']; ?>
-        </a>
+        </div>
       </div>
     <?php endif; ?>
 

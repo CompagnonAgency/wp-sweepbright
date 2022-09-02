@@ -19,6 +19,7 @@
           "phone": "Telefoonnummer",
           "message": "Uw bericht",
           "send_message": "Stuur uw bericht",
+          "unavailable": "Deze woning is niet langer beschikbaar.",
           "flash": {
             "success": {
               "title": "Bedankt voor uw aanvraag",
@@ -38,6 +39,7 @@
           "phone": "Numéro de téléphone",
           "message": "Votre message",
           "send_message": "Envoyez votre message",
+          "unavailable": "Cette propriété n'est plus disponible.",
           "flash": {
             "success": {
               "title": "Merci pour votre demande",
@@ -57,6 +59,7 @@
           "phone": "Phone number",
           "message": "Your message",
           "send_message": "Send your message",
+          "unavailable": "This property is no longer available.",
           "flash": {
             "success": {
               "title": "Thank you for your request",

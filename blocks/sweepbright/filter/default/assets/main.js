@@ -1,5 +1,6 @@
 import $ from "jquery";
 
+import "./tags.css";
 import Vue from "vue";
 import Filter from "./components/Filter.vue";
 

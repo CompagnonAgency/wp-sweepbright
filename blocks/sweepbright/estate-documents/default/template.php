@@ -12,7 +12,7 @@
         <ul class="space-y-4">
           <?php foreach (get_field('features')['plans'] as $plan) : ?>
             <li>
-              <a href="<?= $plan['file']['url']; ?>" target="_blank" class="font-semibold">
+              <a href="<?= $plan['file']['url']; ?>" target="_blank" class="font-semibold hover:underline">
                 <i class="mt-1 mr-3 fal fa-file-pdf"></i>
                 <?php if ($plan['description']) : ?>
                   <?= $plan['description']; ?>
@@ -36,7 +36,7 @@
         <ul class="space-y-4">
           <?php foreach (get_field('features')['documents'] as $document) : ?>
             <li>
-              <a href="<?= $document['file']['url']; ?>" target="_blank" class="font-semibold">
+              <a href="<?= $document['file']['url']; ?>" target="_blank" class="font-semibold hover:underline">
                 <i class="mt-1 mr-3 fal fa-file-pdf"></i>
                 <?php if ($document['description']) : ?>
                   <?= $document['description']; ?>

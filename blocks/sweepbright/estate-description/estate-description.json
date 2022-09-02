@@ -4,5 +4,40 @@
   "icon": "fad fa-align-left",
   "category": "sweepbright",
   "type": "estate",
-  "fields": []
+  "fields": [
+    {
+      "name": "Contact call-to-action",
+      "id": "contact_cta",
+      "type": "select",
+      "default": "false",
+      "sync": true,
+      "options": {
+        "false": "Disable",
+        "true": "Enable"
+      }
+    },
+    {
+      "name": "Locale",
+      "id": "locale",
+      "type": "locale",
+      "sync": true,
+      "default": {
+        "nl": {
+          "contact_cta": "Contacteer ons",
+          "read_more": "Lees meer",
+          "read_less": "Lees minder"
+        },
+        "fr": {
+          "contact_cta": "Contactez-nous",
+          "read_more": "Lire plus",
+          "read_less": "Lire moins"
+        },
+        "en": {
+          "contact_cta": "Contact us",
+          "read_more": "Read more",
+          "read_less": "Read less"
+        }
+      }
+    }
+  ]
 }

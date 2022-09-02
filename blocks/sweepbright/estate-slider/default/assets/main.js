@@ -7,13 +7,6 @@ import GLightbox from "glightbox";
 $(".estate-slider-default").each((index, el) => {
   const data = window[$(el).data("component")];
 
-  GLightbox({
-    touchNavigation: true,
-    loop: true,
-    openEffect: "fade",
-    closeEffect: "fade",
-  });
-
   let autoplay; let gap; let
     perView;
 
@@ -84,6 +77,18 @@ $(".estate-slider-default").each((index, el) => {
       },
     },
   }).mount();
+
+  $(".glide__slide--clone").find(".glightbox").removeAttr("data-gallery");
+  $(".glide__slide--clone").find(".glightbox").removeClass("glightbox");
+
+  setTimeout(() => {
+    GLightbox({
+      touchNavigation: true,
+      loop: true,
+      openEffect: "fade",
+      closeEffect: "fade",
+    });
+  }, 10);
 
   window.addEventListener("estateSliderAction", (args) => {
     if (args.detail.action === "back") {

@@ -5,6 +5,17 @@
   "category": "widgets",
   "fields": [
     {
+      "name": "Hide labels",
+      "id": "hide_labels",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "Disabled",
+        "enabled": "Enabled"
+      }
+    },
+    {
       "name": "Email",
       "id": "email",
       "type": "text",
@@ -19,10 +30,40 @@
       "sync": true
     },
     {
+      "name": "Instagram username",
+      "id": "instagram_username",
+      "type": "text",
+      "allow_empty": "true",
+      "sync": true
+    },
+    {
+      "name": "WhatsApp",
+      "id": "whatsapp",
+      "type": "text",
+      "allow_empty": "true",
+      "sync": true
+    },
+    {
+      "name": "Enable location",
+      "id": "enable_location",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "Enabled",
+        "disabled": "Disabled"
+      }
+    },
+    {
       "name": "Location",
       "id": "location",
       "type": "wysiwyg",
-      "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>"
+      "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>",
+      "condition": {
+        "enable_location": [
+          ""
+        ]
+      }
     },
     {
       "name": "Locale",
@@ -35,21 +76,30 @@
           "office": "Kantoor",
           "email": "Mail",
           "phone": "Telefoon",
-          "contact_us": "Contacteer ons"
+          "contact_us": "Contacteer ons",
+          "instagram": "Instagram",
+          "whatsapp": "WhatsApp",
+          "whatsapp_chat": "Chat via WhatsApp"
         },
         "fr": {
           "contact": "Contacter",
           "office": "Bureau",
           "email": "E-mail",
           "phone": "Téléphone",
-          "contact_us": "Contactez-nous"
+          "contact_us": "Contactez-nous",
+          "instagram": "Instagram",
+          "whatsapp": "WhatsApp",
+          "whatsapp_chat": "Chatter via WhatsApp"
         },
         "en": {
           "contact": "Contact",
           "office": "Office",
           "email": "Mail",
           "phone": "Phone",
-          "contact_us": "Contact us"
+          "contact_us": "Contact us",
+          "instagram": "Instagram",
+          "whatsapp": "WhatsApp",
+          "whatsapp_chat": "Chat via WhatsApp"
         }
       }
     }

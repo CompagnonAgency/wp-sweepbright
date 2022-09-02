@@ -8,33 +8,42 @@
       </div>
 
       <div
-        class="
-          flex flex-col
-          space-y-3
-          text-base
-          lg:flex-row
-          lg:space-x-7 lg:space-y-0
-          text-dark
-        "
+        class="flex flex-col space-y-3 text-base lg:items-start lg:flex-row lg:space-x-7 lg:space-y-0 text-dark"
       >
         <Search
-          :zIndex="40"
+          v-if="data.multi_location === 'false'"
+          :zIndex="50"
           :location="config.location"
           :component="component"
           :filters="request.filters"
         ></Search>
 
+        <MultiSearch
+          v-if="data.multi_location === 'true'"
+          :zIndex="50"
+          :location="config.location"
+          :component="component"
+          :filters="request.filters"
+        ></MultiSearch>
+
         <Dropdown
-          :zIndex="30"
+          :zIndex="40"
           v-if="this.data.filters === 'all'"
           id="negotiation"
           :dropdown="config.dropdowns.negotiation"
         ></Dropdown>
 
         <Dropdown
-          :zIndex="20"
+          :zIndex="30"
           id="category"
           :dropdown="config.dropdowns.category"
+        ></Dropdown>
+
+        <Dropdown
+          v-if="data.subcategory_filter === 'true'"
+          :zIndex="20"
+          id="subcategory"
+          :dropdown="config.dropdowns.subcategory"
         ></Dropdown>
 
         <Range :zIndex="10" id="price" :range="config.dropdowns.price"></Range>
@@ -47,6 +56,7 @@
 
 <script>
 import Search from "./Search";
+import MultiSearch from "./MultiSearch";
 import Dropdown from "./Dropdown";
 import Range from "./Range";
 
@@ -54,6 +64,7 @@ export default {
   props: ["component"],
   components: {
     Search,
+    MultiSearch,
     Dropdown,
     Range,
   },
@@ -65,7 +76,9 @@ export default {
       configCache: {},
       config: {
         location: {
-          focus: false,
+          // focus: false,
+          lat: false,
+          lng: false,
           region: "",
         },
         dropdowns: {
@@ -136,6 +149,154 @@ export default {
               },
             ],
           },
+          subcategory: {
+            open: false,
+            selected: false,
+            placeholder:
+              window[this.component].locale[window.lang].type.subcategories,
+            dropdown: [
+              {
+                value: [],
+                label:
+                  window[this.component].locale[window.lang].type
+                    .all_subcategories,
+              },
+              {
+                value: ["semi_detached"],
+                label: window[this.component].locale[window.lang].type.semi_detached,
+              },
+              {
+                value: ["detached"],
+                label:
+                  window[this.component].locale[window.lang].type.detached,
+              },
+              {
+                value: ["terraced"],
+                label: window[this.component].locale[window.lang].type.terraced,
+              },
+              {
+                value: ["bungalow"],
+                label: window[this.component].locale[window.lang].type.bungalow,
+              },
+              {
+                value: ["villa"],
+                label:
+                  window[this.component].locale[window.lang].type.villa,
+              },
+              {
+                value: ["condo"],
+                label: window[this.component].locale[window.lang].type.condo,
+              },
+              {
+                value: ["loft"],
+                label: window[this.component].locale[window.lang].type.loft,
+              },
+              {
+                value: ["duplex"],
+                label: window[this.component].locale[window.lang].type.duplex,
+              },
+              {
+                value: ["penthouse"],
+                label: window[this.component].locale[window.lang].type.penthouse,
+              },
+              {
+                value: ["student_accommodation"],
+                label: window[this.component].locale[window.lang].type.student_accommodation,
+              },
+              {
+                value: ["healthcare"],
+                label: window[this.component].locale[window.lang].type.healthcare,
+              },
+              {
+                value: ["industrial"],
+                label: window[this.component].locale[window.lang].type.industrial,
+              },
+              {
+                value: ["leasure_and_sports"],
+                label: window[this.component].locale[window.lang].type.leasure_and_sports,
+              },
+              {
+                value: ["restaurant_and_café"],
+                label: window[this.component].locale[window.lang].type.restaurant_and_café,
+              },
+              {
+                value: ["retail"],
+                label: window[this.component].locale[window.lang].type.retail,
+              },
+              {
+                value: ["shop"],
+                label: window[this.component].locale[window.lang].type.shop,
+              },
+              {
+                value: ["warehouse"],
+                label: window[this.component].locale[window.lang].type.warehouse,
+              },
+              {
+                value: ["townhouse"],
+                label: window[this.component].locale[window.lang].type.townhouse,
+              },
+              {
+                value: ["cottage"],
+                label: window[this.component].locale[window.lang].type.cottage,
+              },
+              {
+                value: ["mansion"],
+                label: window[this.component].locale[window.lang].type.mansion,
+              },
+              {
+                value: ["farm"],
+                label: window[this.component].locale[window.lang].type.farm,
+              },
+              {
+                value: ["investment_property"],
+                label: window[this.component].locale[window.lang].type.investment_property,
+              },
+              {
+                value: ["agricultural"],
+                label: window[this.component].locale[window.lang].type.agricultural,
+              },
+              {
+                value: ["buildable"],
+                label: window[this.component].locale[window.lang].type.buildable,
+              },
+              {
+                value: ["recreational"],
+                label: window[this.component].locale[window.lang].type.recreational,
+              },
+              {
+                value: ["pasture_land"],
+                label: window[this.component].locale[window.lang].type.pasture_land,
+              },
+              {
+                value: ["coworking"],
+                label: window[this.component].locale[window.lang].type.coworking,
+              },
+              {
+                value: ["flex_office"],
+                label: window[this.component].locale[window.lang].type.flex_office,
+              },
+              {
+                value: ["open_office"],
+                label: window[this.component].locale[window.lang].type.open_office,
+              },
+              {
+                value: ["private_garage"],
+                label: window[this.component].locale[window.lang].type.private_garage,
+              },
+              {
+                value: ["indoor_parking_space"],
+                label: window[this.component].locale[window.lang].type.indoor_parking_space,
+              },
+              {
+                value: ["outdoor_parking_space"],
+                label: window[this.component].locale[window.lang].type.outdoor_parking_space,
+              },
+              {
+                value: ["covered_outdoor_space"],
+                label: window[this.component].locale[window.lang].type.covered_outdoor_space,
+              },
+            ],
+          },
           price: {
             open: false,
             selected: {
@@ -147,7 +308,7 @@ export default {
             range: [
               {
                 id: "price",
-                symbol: "",
+                symbol: "€",
                 symbol_position: "before",
                 label:
                   window[this.component].locale[window.lang].filters.price
@@ -210,8 +371,15 @@ export default {
     },
     defaultFilters() {
       if (this.$urlParam().negotiation) {
-        this.config.dropdowns.negotiation.selected =
-          this.$urlParam().negotiation;
+        this.config.dropdowns.negotiation.selected = this.$urlParam().negotiation;
+      }
+
+      if (this.$urlParam().lat) {
+        this.config.location.lat = this.$urlParam().lat;
+      }
+
+      if (this.$urlParam().lng) {
+        this.config.location.lng = this.$urlParam().lng;
       }
 
       if (this.$urlParam().region) {
@@ -220,7 +388,7 @@ export default {
     },
     init() {
       this.defaultFilters();
-      this.defaultLocales();
+      // this.defaultLocales();
       this.configCache = JSON.parse(JSON.stringify(this.config));
       this.configCache.location.region = "";
       this.$events();

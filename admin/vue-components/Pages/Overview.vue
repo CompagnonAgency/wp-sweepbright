@@ -38,14 +38,14 @@
       </div>
       <div class="bg-white">
         <ul
-          class="flex items-center px-4 py-5 transition duration-200 border-b  last:border-0 hover:bg-gray-100"
+          class="flex items-center px-4 py-5 transition duration-200 border-b last:border-0 hover:bg-gray-100"
           v-for="(page, index) in pages"
           :key="index"
         >
           <li class="w-10/12">
             <router-link
               :to="{ name: 'editor', params: { id: page.id } }"
-              class="inline-flex items-center text-base font-semibold transition duration-200  focus:shadow-none hover:text-blue-500 group"
+              class="inline-flex items-center text-base font-semibold transition duration-200 focus:shadow-none hover:text-blue-500 group"
             >
               <i
                 class="w-6 text-lg text-gray-500 fad fa-file-alt"
@@ -95,17 +95,27 @@
                 <router-link
                   :to="{ name: 'editor', params: { id: page.id } }"
                   v-tooltip="{ content: 'Edit' }"
-                  class="text-gray-500 transition duration-200  hover:text-green-500 focus:shadow-none focus:text-gray-500"
+                  class="text-gray-500 transition duration-200 hover:text-green-500 focus:shadow-none focus:text-gray-500"
                 >
                   <i class="fad fa-edit"></i>
                 </router-link>
+              </li>
+              <li v-if="!page.locked">
+                <a
+                  href="#"
+                  @click.prevent="$router.push({ name: 'editor', params: { id: 'create', duplicate: page.id } })"
+                  v-tooltip="{ content: 'Duplicate' }"
+                  class="text-gray-500 transition duration-200 hover:text-green-500 focus:shadow-none focus:text-gray-500"
+                >
+                  <i class="fad fa-clone"></i>
+                </a>
               </li>
               <li v-if="!page.locked && user_roles.includes('administrator')">
                 <a
                   href="#"
                   @click="deletePage(page.id)"
                   v-tooltip="{ content: 'Delete' }"
-                  class="text-gray-500 transition duration-200  hover:text-red-500 focus:shadow-none focus:text-gray-500"
+                  class="text-gray-500 transition duration-200 hover:text-red-500 focus:shadow-none focus:text-gray-500"
                 >
                   <i class="fad fa-trash"></i>
                 </a>

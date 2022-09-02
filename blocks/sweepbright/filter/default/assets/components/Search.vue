@@ -10,7 +10,7 @@
     ></i>
     <input
       type="text"
-      class="w-full h-full pr-5 placeholder-black placeholder-opacity-50  form-input"
+      class="w-full h-full pr-5 placeholder-black placeholder-opacity-50 form-input"
       :class="`${theme.form_style === 'line' ? 'pl-7' : 'pl-11'} ${
         theme.rounded_lg
       } ${location.focus ? 'border-primary' : ''}`"
@@ -21,7 +21,7 @@
       :placeholder="data.search_placeholder"
     />
     <GeoSuggest
-      class="absolute top-0 left-0 w-full overflow-hidden border border-gray-200  mt-14"
+      class="absolute top-0 left-0 w-full overflow-hidden border border-gray-200 mt-14"
       :country="data.search_country"
       :types="['(cities)']"
       :search="searchDefault"
@@ -39,7 +39,7 @@
               v-for="(suggestion, index) in suggestions"
               :key="index"
               @click="setSuggestion(suggestion)"
-              class="px-3 py-2 transition duration-200 cursor-pointer  hover:bg-gray-100"
+              class="px-3 py-2 transition duration-200 cursor-pointer hover:bg-gray-100"
             >
               {{ suggestion.description }}
             </li>

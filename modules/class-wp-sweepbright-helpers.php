@@ -39,6 +39,7 @@ class WP_SweepBright_Helpers
 			'recaptcha_site_key' => WP_SweepBright_Helpers::setting('recaptcha_site_key'),
 			'recaptcha_secret_key' => WP_SweepBright_Helpers::setting('recaptcha_secret_key'),
 			'unavailable_properties' => WP_SweepBright_Helpers::setting('unavailable_properties'),
+			'available_properties' => WP_SweepBright_Helpers::setting('available_properties'),
 			'dynamic_url' => WP_SweepBright_Helpers::setting('dynamic_url'),
 			'enable_pages' => WP_SweepBright_Helpers::setting('enable_pages'),
 		];
@@ -134,6 +135,7 @@ class WP_SweepBright_Helpers
 		// Download file
 		$ext = pathinfo($file['url'])["extension"];
 		$ext = strtok($ext, '?');
+		$ext = strtok($ext, '%');
 		$file_name = $wp_upload_dir['path'] . '/asset_' . $id . '.' . $ext;
 		$fp = fopen($file_name, 'w');
 
@@ -342,8 +344,8 @@ class WP_SweepBright_Helpers
 				'autoresponder' => [
 					'to' => $_POST['mail_to'],
 					'cc' => $_POST['mail_cc'],
-					'subject' => $_POST['mail_subject'],
-					'message' => $_POST['mail_message'],
+					'subject' => stripslashes($_POST['mail_subject']),
+					'message' => stripslashes($_POST['mail_message']),
 				],
 			];
 
@@ -385,6 +387,7 @@ class WP_SweepBright_Helpers
 			'enable_pages' => false,
 			'header_code' => '',
 			'unavailable_properties' => 'hidden',
+			'available_properties' => 'available',
 			'dynamic_url' => false,
 		];
 	}
@@ -425,6 +428,7 @@ class WP_SweepBright_Helpers
 			$data['recaptcha_site_key'] = $_POST['recaptcha_site_key'];
 			$data['recaptcha_secret_key'] = $_POST['recaptcha_secret_key'];
 			$data['unavailable_properties'] = $_POST['unavailable_properties'];
+			$data['available_properties'] = $_POST['available_properties'];
 
 			if (isset($_POST['enable_pages'])) {
 				$data['enable_pages'] = true;

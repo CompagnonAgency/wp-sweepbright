@@ -90,8 +90,12 @@
           <p
             class="text-base font-semibold tracking-wide uppercase"
             v-if="
-              estate.meta.estate.status === 'available' &&
-              !estate.meta.price.hidden
+              (estate.meta.estate.status === 'available' &&
+              data.available_properties === 'available' &&
+              !estate.meta.price.hidden) ||
+              (estate.meta.estate.status === 'under_contract' &&
+              data.available_properties === 'under_contract' &&
+              !estate.meta.price.hidden)
             "
           >
             {{ getPrice(estate.meta.price.amount) }}
@@ -198,6 +202,10 @@ export default {
     },
     openWindow(data) {
       if (data.meta.estate.status === "available") {
+        window.location.href = data.permalink;
+      } else if (data.meta.estate.status !== "available" && this.data.unavailable_properties === "visible") {
+        window.location.href = data.permalink;
+      } else if (data.meta.estate.status === "under_contract" && this.data.available_properties === "under_contract") {
         window.location.href = data.permalink;
       } else {
         this.$bus.$emit("openModal", data);

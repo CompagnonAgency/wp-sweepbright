@@ -84,6 +84,17 @@
             </select>
           </td>
         </tr>
+        <tr>
+          <th scope="row">
+            <label for="available_properties">Available properties</label>
+          </th>
+          <td>
+            <select name="available_properties" id="available_properties" class="postform" value="<?= WP_SweepBright_Helpers::setting('available_properties'); ?>">
+              <option class="level-0" value="available" <?= WP_SweepBright_Helpers::setting('available_properties') === 'available' ? 'selected' : ''; ?>>Default (available)</option>
+              <option class="level-0" value="under_contract" <?= WP_SweepBright_Helpers::setting('available_properties') === 'under_contract' ? 'selected' : ''; ?>>Under contract</option>
+            </select>
+          </td>
+        </tr>
       </tbody>
     </table>
 
@@ -172,7 +183,8 @@
     </p>
 
     <select name="api_version" id="api_version" class="postform" value="<?= WP_SweepBright_Helpers::settings_form()['api_version']; ?>">
-      <option class="level-0" value="v20191206" <?= WP_SweepBright_Helpers::settings_form()['api_version'] === 'v20191206' ? 'selected' : ''; ?>>v20191206 (latest)</option>
+      <option class="level-0" value="v20191206" <?= WP_SweepBright_Helpers::settings_form()['api_version'] === 'v20210723' ? 'selected' : ''; ?>>v20210723 (latest)</option>
+      <option class="level-0" value="v20191206" <?= WP_SweepBright_Helpers::settings_form()['api_version'] === 'v20191206' ? 'selected' : ''; ?>>v20191206 (stable)</option>
       <option class="level-0" value="v20191121" <?= WP_SweepBright_Helpers::settings_form()['api_version'] === 'v20191121' ? 'selected' : ''; ?>>v20191121 (stable)</option>
       <option class="level-0" value="20190920" <?= WP_SweepBright_Helpers::settings_form()['api_version'] === '20190920' ? 'selected' : ''; ?>>20190920 (stable)</option>
       <option class="level-0" value="v1" <?= WP_SweepBright_Helpers::settings_form()['api_version'] === 'v1' ? 'selected' : ''; ?>>v1 (unstable)</option>
