@@ -10,9 +10,20 @@
       "id": "max_rows",
       "type": "range",
       "default": 2,
-      "min": 2,
+      "min": 1,
       "max": 6,
       "sync": true
+    },
+    {
+      "name": "Display mode",
+      "id": "display_mode",
+      "type": "select",
+      "default": "basic",
+      "sync": true,
+      "options": {
+        "visual": "Visual",
+        "basic": "Basic"
+      }
     },
     {
       "name": "Locale",
@@ -22,21 +33,45 @@
       "default": {
         "nl": {
           "heading": "Oppervlaktes",
-          "terrace": "Terras",
           "liveable_area": "Bewoonbare oppervlakte",
-          "plot_area": "Grondoppervlakte"
+          "plot_area": "Grondoppervlakte",
+          "living_room": "Woonkamer",
+          "kitchen": "Keuken",
+          "kitchens": "Keuken",
+          "bedrooms": "Slaapkamer",
+          "bathroom": "Badkamer",
+          "bathrooms": "Badkamer",
+          "garden": "Tuin",
+          "terrace": "Terras",
+          "shower_rooms": "Douche kamer"
         },
         "fr": {
           "heading": "Surfaces",
-          "terrace": "Terrasse",
           "liveable_area": "Surface habitable",
-          "plot_area": "Surface au sol"
+          "plot_area": "Surface au sol",
+          "living_room": "Salon",
+          "kitchen": "Cuisine",
+          "kitchens": "Cuisine",
+          "bedrooms": "Chambre à coucher",
+          "bathroom": "Salle de bain",
+          "bathrooms": "Salle de bain",
+          "garden": "Jardin",
+          "terrace": "Terrasse",
+          "shower_rooms": "salle de douche"
         },
         "en": {
           "heading": "Surfaces",
-          "terrace": "Terrace",
           "liveable_area": "Living area",
-          "plot_area": "Plot area"
+          "plot_area": "Plot area",
+          "living_room": "Living room",
+          "kitchen": "Kitchen",
+          "kitchens": "Kitchen",
+          "bedrooms": "Bedroom",
+          "bathroom": "Bathroom",
+          "bathrooms": "Bathroom",
+          "garden": "Garden",
+          "terrace": "Terrace",
+          "shower_rooms": "Shower rooms"
         }
       }
     }

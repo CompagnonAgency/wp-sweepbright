@@ -118,6 +118,7 @@
           "subject": "Onderwerp",
           "message": "Bericht",
           "send": "Verzenden",
+          "privacy_policy": "Ik ga akkoord met de privacy policy.",
           "flash": {
             "success": {
               "title": "Bedankt voor uw aanvraag",
@@ -141,6 +142,7 @@
           "subject": "Sujet",
           "message": "Message",
           "send": "Envoyer",
+          "privacy_policy": "Je suis d'accord avec la politique de confidentialité.",
           "flash": {
             "success": {
               "title": "Merci pour votre demande",
@@ -164,6 +166,7 @@
           "subject": "Subject",
           "message": "Message",
           "send": "Send",
+          "privacy_policy": "I accept the privacy policy.",
           "flash": {
             "success": {
               "title": "Thank you for your request",

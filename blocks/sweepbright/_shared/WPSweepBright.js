@@ -1,4 +1,5 @@
-import EventBus from './bus.js'
+import EventBus from './bus.js';
+
 export default {
   install(Vue) {
     Vue.mixin(EventBus)
@@ -34,7 +35,7 @@ export default {
           });
           window.dispatchEvent(e);
         },
-        $events() {
+        $events() {          
           this.$bus.$on("toggleDropdown", (dropdown) => {
             this.config.dropdowns[dropdown].open = !this.config.dropdowns[dropdown]
               .open;
@@ -94,6 +95,15 @@ export default {
             } else {
               this.request.filters['location'].lat = false;
               this.request.filters['location'].lng = false;
+            }
+            this.$applyFilter();
+          });
+
+          this.$bus.$on("setLocations", (locations) => {
+            if (locations) {
+              this.request.filters['locations'] = locations;
+            } else {
+              this.request.filters['locations'] = [];
             }
             this.$applyFilter();
           });

@@ -137,6 +137,19 @@ class FieldCustom
 					]
 				],
 				[
+					'key'    => 'enable_setle',
+					'label'  => 'Enable Setle',
+					'name'   => 'enable_setle',
+					'type'   => 'true_false',
+					'ui' => true,
+				],
+				[
+					'key'    => 'setle_link',
+					'label'  => 'Setle link',
+					'name'   => 'setle_link',
+					'type'   => 'text',
+				],
+				[
 					'key'    => 'enable_additional_price',
 					'label'  => 'Enable additional price',
 					'name'   => 'enable_additional_price',

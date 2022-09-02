@@ -48,8 +48,13 @@
                     if ($link && WP_Wrapper::get('enable_url_param', $component, $args, $step) && WP_Wrapper::get('url_param', $component, $args, $step)) {
                       $link .= '?' . WP_Wrapper::get('url_param', $component, $args, $step);
                     }
+
+                    // Add anchor link if it exists
+                    if (WP_Wrapper::get('enable_url_anchor', $component, $args, $step) && WP_Wrapper::get('anchor_link', $component, $args, $step)) {
+                      $link .= '#' . WP_Wrapper::get('anchor_link', $component, $args, $step);
+                    }
                     ?>
-                    <a href="<?= $link; ?>" class="text-base font-semibold lowercase">
+                    <a href="<?= $link; ?>" class="text-base font-semibold lowercase" data-scroll>
                       <?= WP_Wrapper::get('button_label', $component, $args, $step); ?>
                     </a>
                   </div>

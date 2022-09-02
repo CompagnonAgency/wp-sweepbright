@@ -53,7 +53,7 @@ const pages = () => {
         component: Theme,
       },
       {
-        path: '/editor/:id',
+        path: '/editor/:id/:duplicate?',
         name: 'editor',
         component: Editor,
       },

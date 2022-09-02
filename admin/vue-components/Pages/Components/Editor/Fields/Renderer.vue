@@ -23,6 +23,7 @@
                 field.type !== 'upload_single' &&
                 field.type !== 'upload_video' &&
                 field.type !== 'upload_multiple' &&
+                field.type !== 'upload_file' &&
                 field.type !== 'page_select' &&
                 field.type !== 'page_select_multiple' &&
                 field.type !== 'group'
@@ -94,6 +95,14 @@
             ></FieldUploadMultiple>
           </template>
 
+          <template v-else-if="field.type === 'upload_file'">
+            <FieldUploadFile
+              :field="field"
+              :col="col"
+              :lang="lang"
+            ></FieldUploadFile>
+          </template>
+
           <template v-else-if="field.type === 'wysiwyg'">
             <FieldWysiwyg :field="field" :col="col" :lang="lang"></FieldWysiwyg>
           </template>
@@ -131,6 +140,7 @@ import FieldPageMultiple from "./FieldPageMultiple";
 import FieldUploadSingle from "./FieldUploadSingle";
 import FieldUploadVideo from "./FieldUploadVideo";
 import FieldUploadMultiple from "./FieldUploadMultiple";
+import FieldUploadFile from "./FieldUploadFile";
 
 export default {
   props: [
@@ -154,6 +164,7 @@ export default {
     FieldUploadSingle,
     FieldUploadVideo,
     FieldUploadMultiple,
+    FieldUploadFile,
   },
   methods: {
     conditionalField(field) {

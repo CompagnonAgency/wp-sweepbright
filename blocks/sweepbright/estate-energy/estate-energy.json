@@ -6,6 +6,17 @@
   "type": "estate",
   "fields": [
     {
+      "name": "Local law",
+      "id": "local_law",
+      "type": "select",
+      "default": "be",
+      "sync": true,
+      "options": {
+        "be": "Belgium",
+        "fr": "France"
+      }
+    },
+    {
       "name": "Sizes per row",
       "id": "max_rows",
       "type": "range",
@@ -21,43 +32,73 @@
       "sync": true,
       "default": {
         "nl": {
-          "heading": "Energiescore",
+          "heading": "Energie",
+          "epc_category": "Energie score",
           "gas": "Aardgas",
           "fuel": "Mazout (brandstof)",
           "heat_pump": "Warmtepomp",
           "floor_heating": "Vloerverwarming",
           "solar_panels": "Zonnepanelen",
           "central_heating": "Centrale verwarming",
+          "individual_heating": "Individuele verwarming",
           "electricity": "Electriciteit",
           "double_glazing": "Dubbel glas",
           "airco": "Air conditioning",
-          "available": "Aanwezig"
+          "available": "Aanwezig",
+          "insulated_roof": "Geïsoleerd dak",
+          "rainwater_harvesting": "Regenwaterput",
+          "energy_class": "Energieklasse",
+          "climate_class": "Klimaatklasse",
+          "consumption": "Consumptie",
+          "per_year": ".jr",
+          "emmissions": "Emissies",
+          "empty": "Geen informatie over energie beschikbaar."
         },
         "fr": {
-          "heading": "Score énergétique",
+          "heading": "Énergie",
+          "epc_category": "Score énergétique",
           "gas": "Gaz naturel",
           "fuel": "Carburant",
           "heat_pump": "Pompe à chaud",
           "floor_heating": "Chauffage par le sol",
           "solar_panels": "Panneaux solaires",
-          "central_heating": "Chauffage central",
+          "central_heating": "Chauffage collectif",
+          "individual_heating": "Chauffage individuel",
           "electricity": "Électricité",
-          "double_glazing": "Verre double",
+          "double_glazing": "Double vitrage",
           "airco": "Climatisation",
-          "available": "Présent"
+          "available": "Présent",
+          "insulated_roof": "Toit isolé",
+          "rainwater_harvesting": "Régénération de l'eau",
+          "energy_class": "Classe énergie",
+          "climate_class": "Classe climat",
+          "consumption": "Consommation",
+          "per_year": ".an",
+          "emmissions": "Emissions",
+          "empty": "Aucune information énergétique disponible."
         },
         "en": {
-          "heading": "Energy score",
+          "heading": "Energy",
+          "epc_category": "Energy score",
           "gas": "Natural gas",
           "fuel": "Fuel",
           "heat_pump": "Heat pump",
           "floor_heating": "Floor heating",
           "solar_panels": "Solar panels",
           "central_heating": "Chauffage central",
+          "individual_heating": "Individual heating",
           "electricity": "Electricity",
           "double_glazing": "Double glazing",
           "airco": "Air conditioning",
-          "available": "Available"
+          "available": "Available",
+          "insulated_roof": "Insulated roof",
+          "rainwater_harvesting": "Rainwater well",
+          "energy_class": "Energy class",
+          "climate_class": "Climate class",
+          "consumption": "Consumption",
+          "per_year": ".yr",
+          "emmissions": "Emmissions",
+          "empty": "No energy information available."
         }
       }
     }

@@ -15,6 +15,15 @@ class WP_Wrapper
   {
   }
 
+  public static function ID()
+  {
+    $id = get_queried_object_id();
+    if ($id === 0) {
+      $id = get_option('page_on_front');
+    }
+    return $id;
+  }
+
   public static function all($component, $args)
   {
     return WP_SweepBright_Controller_Pages::get($component, $args['column']['data']);
@@ -73,7 +82,7 @@ class WP_Wrapper
 
     // Find page by ID
     $post = new WP_Query([
-      'p' => get_the_ID(),
+      'p' => WP_Wrapper::ID(),
       'post_type' => 'page',
       'posts_per_page' => 1,
     ]);

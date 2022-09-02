@@ -121,6 +121,17 @@ class WP_SweepBright_Controller_Property
         ],
       ], $id);
     }
+
+    // Save Setle
+    update_field('custom_fields', [
+      'enable_setle' => $data['form']['enable_setle'],
+    ], $id);
+
+    update_field('custom_fields', [
+      'setle_link' => $data['form']['setle_link'],
+    ], $id);
+
+
     // Save additional price information
     update_field('custom_fields', [
       'enable_additional_price' => $data['form']['enable_additional_price'],

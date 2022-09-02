@@ -77,6 +77,7 @@ class WP_SweepBright_Data
 			]
 		);
 
+		// Link building
 		add_filter('post_type_link', function ($post_link, $post) {
 			if ($post && 'sweepbright_estates' === $post->post_type) {
 				// Build default estate URL
@@ -127,8 +128,71 @@ class WP_SweepBright_Data
 			return $post_link;
 		}, 10, 2);
 
-		// Language prefix rewrite rule
+		// SweepBright default rewrite rule
+		function rewrite_sweepbright_url()
+		{
+			$uri_segments = explode("/", parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+
+			if (isset($uri_segments[1]) && isset($uri_segments[2]) && isset($uri_segments[3])) {
+				$id = $uri_segments[3];
+				if (in_array($uri_segments[1], ['nl', 'fr', 'en']) && in_array($uri_segments[2], ['let', 'sale']) && (strlen($id) === 36 || strlen($id) === 27)) {
+					// Search for the property
+					$query = new WP_Query([
+						'post_type' => 'sweepbright_estates',
+						'post_status' => 'publish',
+						'fields' => 'ids',
+						'posts_per_page' => 1,
+						'meta_query' => [
+							[
+								'key' => 'estate_id',
+								'value' => $id,
+								'compare' => '='
+							]
+						]
+					]);
+					$estate = $query->posts[0];
+					$link = get_the_permalink($estate);
+					header("Location: " . $link);
+					die();
+				}
+			}
+		}
+		add_action('init', 'rewrite_sweepbright_url', 11, 0);
+
+		// SweepBright ID based rewrite rule
+		function rewrite_sweepbright_id_url()
+		{
+			$uri_segments = explode("/", parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+
+			if (isset($uri_segments[1])) {
+				$id = $uri_segments[1];
+				if (strlen($id) === 36 || strlen($id) === 27) {
+					// Search for the property
+					$query = new WP_Query([
+						'post_type' => 'sweepbright_estates',
+						'post_status' => 'publish',
+						'fields' => 'ids',
+						'posts_per_page' => 1,
+						'meta_query' => [
+							[
+								'key' => 'estate_id',
+								'value' => $id,
+								'compare' => '='
+							]
+						]
+					]);
+					$estate = $query->posts[0];
+					$link = get_the_permalink($estate);
+					header("Location: " . $link);
+					die();
+				}
+			}
+		}
+		add_action('init', 'rewrite_sweepbright_id_url', 11, 0);
+
+		// Rewrite rules
 		if (in_array('polylang-pro/polylang.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+			// Translated estate rewrite rule
 			function rewrite_url()
 			{
 				$slug = WP_SweepBright_Helpers::settings_form()['custom_url'];
@@ -150,6 +214,7 @@ class WP_SweepBright_Data
 			}
 			add_action('init', 'rewrite_url', 11, 0);
 		} else {
+			// Default estate rewrite rule
 			function rewrite_url()
 			{
 				$slug = WP_SweepBright_Helpers::settings_form()['custom_url'];
@@ -210,6 +275,7 @@ class WP_SweepBright_Data
 			require_once plugin_dir_path(__DIR__) . 'modules/fields/class-regulations.php';
 			require_once plugin_dir_path(__DIR__) . 'modules/fields/class-legal.php';
 			require_once plugin_dir_path(__DIR__) . 'modules/fields/class-property.php';
+			require_once plugin_dir_path(__DIR__) . 'modules/fields/class-mandate.php';
 			require_once plugin_dir_path(__DIR__) . 'modules/fields/class-custom.php';
 
 			// Merge fields into one group
@@ -238,6 +304,7 @@ class WP_SweepBright_Data
 				[FieldRegulations::retrieve()],
 				[FieldLegal::retrieve()],
 				[FieldProperty::retrieve()],
+				[FieldMandate::retrieve()],
 				[FieldCustom::retrieve()],
 			);
 

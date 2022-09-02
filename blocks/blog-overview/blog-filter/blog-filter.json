@@ -1,0 +1,43 @@
+{
+  "name": "Blog - filter",
+  "id": "blog-filter",
+  "icon": "fas fa-filter",
+  "category": "blog-overview",
+  "fields": [
+    {
+      "name": "Categories",
+      "id": "category_group",
+      "type": "group",
+      "subfields": [
+        {
+          "name": "Category (slug)",
+          "id": "category",
+          "type": "text",
+          "default": "",
+          "allow_empty": true
+        }
+      ],
+      "default": []
+    },
+    {
+      "name": "Locale",
+      "id": "locale",
+      "type": "locale",
+      "sync": true,
+      "default": {
+        "nl": {
+          "all": "Alles",
+          "categories": "Categorieën"
+        },
+        "fr": {
+          "all": "Tout",
+          "categories": "Catégories"
+        },
+        "en": {
+          "all": "All",
+          "categories": "Categories"
+        }
+      }
+    }
+  ]
+}

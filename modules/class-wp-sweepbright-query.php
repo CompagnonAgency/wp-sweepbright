@@ -174,15 +174,6 @@ class WP_SweepBright_Query
 
 	public static function min_max_price($iso = false, $project_id = false, $is_currency = false)
 	{
-		// Easier formatting, used by the editor which uses single language codes
-		if ($iso === 'nl') {
-			$iso = 'nl_NL';
-		} else if ($iso === 'fr') {
-			$iso = 'fr_FR';
-		} else if ($iso === 'en') {
-			$iso = 'en_GB';
-		}
-
 		if ($project_id) {
 			$id = $project_id;
 		} else {
@@ -202,7 +193,14 @@ class WP_SweepBright_Query
 			if (get_field('price', $unit['id'])['amount'] && !get_field('price', $unit['id'])['hidden']) {
 				$results[] = floatval(get_field('price', $unit['id'])['amount']);
 			}
+
+			if (get_field('price', $unit['id'])['currency'] === 'EUR') {
+				$iso = 'nl_BE';
+			} else if (get_field('price', $unit['id'])['currency'] === 'GBP' || get_field('price', $unit['id'])['currency'] === 'USD') {
+				$iso = 'en_GB';
+			}
 		}
+
 		if (count($results) >= 2) {
 			if ($iso && !$is_currency) {
 				$min = WP_SweepBright_Query::format_number(min($results), $iso);
@@ -301,19 +299,23 @@ class WP_SweepBright_Query
 	public static function format_price($val, $iso)
 	{
 		// Easier formatting, used by the editor which uses single language codes
-		if ($iso === 'nl') {
-			$iso = 'nl_NL';
-		} else if ($iso === 'fr') {
-			$iso = 'fr_FR';
-		} else if ($iso === 'en') {
+		if (get_field('price')['currency'] === 'EUR') {
+			$iso = 'nl_BE';
+		} else if (get_field('price')['currency'] === 'GBP' || get_field('price')['currency'] === 'USD') {
 			$iso = 'en_GB';
+		}
+
+		if ($iso === 'nl_BE') {
+			$currency = 'EUR';
+		} else {
+			$currency = 'GBP';
 		}
 
 		$formatter = new \NumberFormatter($iso, \NumberFormatter::CURRENCY);
 		$formatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, 0);
 		$formatter->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 0);
 		$formatter->setAttribute(NumberFormatter::DECIMAL_ALWAYS_SHOWN, 0);
-		$price = $formatter->formatCurrency($val, get_field('price')['currency']);
+		$price = $formatter->formatCurrency($val, $currency);
 
 		if ($iso === 'en_GB') {
 			$price = substr($price, 0, -3);
@@ -327,11 +329,9 @@ class WP_SweepBright_Query
 		$price = '';
 
 		// Easier formatting, used by the editor which uses single language codes
-		if ($iso === 'nl') {
-			$iso = 'nl_NL';
-		} else if ($iso === 'fr') {
-			$iso = 'fr_FR';
-		} else if ($iso === 'en') {
+		if (get_field('price')['currency'] === 'EUR') {
+			$iso = 'nl_BE';
+		} else if (get_field('price')['currency'] === 'GBP' || get_field('price')['currency'] === 'USD') {
 			$iso = 'en_GB';
 		}
 
@@ -346,7 +346,7 @@ class WP_SweepBright_Query
 				$price = $formatter->formatCurrency(get_field('price')['amount'], get_field('price')['currency']);
 
 				if ($iso === 'en_GB') {
-					$price = substr($price, 0, -3);
+					// $price = substr($price, 0, -3);
 				}
 			}
 		} else {
@@ -386,6 +386,20 @@ class WP_SweepBright_Query
 	public static function sql_filter_hide_prospects($args)
 	{
 		$args['posts'] = $args['posts']->andWhere('status', '!=', 'prospect');
+		return $args['posts'];
+	}
+
+	public static function sql_filter_hide_available($args)
+	{
+		if (WP_SweepBright_Helpers::setting('available_properties') === 'under_contract') {
+			$args['posts'] = $args['posts']->andWhere('status', '!=', 'available');
+		}
+		return $args['posts'];
+	}
+
+	public static function sql_filter_hide_lost($args)
+	{
+		$args['posts'] = $args['posts']->andWhere('status', '!=', 'lost');
 		return $args['posts'];
 	}
 
@@ -489,8 +503,16 @@ class WP_SweepBright_Query
 
 	public static function sql_filter_agent($args)
 	{
-		if (isset($args['params']['filters']['agent'])) {
+		if (isset($args['params']['filters']['agent']) && $args['params']['filters']['agent']) {
 			$args['posts'] = $args['posts']->andWhere('negotiator_email', $args['params']['filters']['agent']);
+		}
+		return $args['posts'];
+	}
+
+	public static function sql_filter_office($args)
+	{
+		if (isset($args['params']['filters']['office']) && $args['params']['filters']['office']) {
+			$args['posts'] = $args['posts']->andWhere('office_name', $args['params']['filters']['office']);
 		}
 		return $args['posts'];
 	}
@@ -650,15 +672,52 @@ class WP_SweepBright_Query
 		return $args['posts'];
 	}
 
+	public static function sql_filter_multi_geolocation($args)
+	{
+		if (isset($args['params']['filters']['locations']) && count($args['params']['filters']['locations']) > 0) {
+			$args['posts'] = $args['posts']->andWhere(function ($q) use ($args) {
+				$count = 0;
+				foreach ($args['params']['filters']['locations'] as $location) {
+					$geopoint = new GeoPoint($location['latLng']['lat'], $location['latLng']['lng']);
+					$distance = WP_SweepBright_Helpers::settings_form()['geo_distance'];
+					if (isset($args['params']['filters']['location']['distance']) && $args['params']['filters']['location']['distance']) {
+						$distance = $args['params']['filters']['location']['distance'];
+					}
+					$boundingBox = $geopoint->boundingBox(intval($distance), 'km');
+
+					if ($count === 0) {
+						$q->andWhere(function ($w) use ($boundingBox) {
+							$w->andWhere('lat', '>', $boundingBox->getMinLatitude());
+							$w->andWhere('lat', '<=', $boundingBox->getMaxLatitude());
+
+							$w->andWhere('lng', '>', $boundingBox->getMinLongitude());
+							$w->andWhere('lng', '<=', $boundingBox->getMaxLongitude());
+						});
+					} else {
+						$q->orWhere(function ($w) use ($boundingBox) {
+							$w->andWhere('lat', '>', $boundingBox->getMinLatitude());
+							$w->andWhere('lat', '<=', $boundingBox->getMaxLatitude());
+
+							$w->andWhere('lng', '>', $boundingBox->getMinLongitude());
+							$w->andWhere('lng', '<=', $boundingBox->getMaxLongitude());
+						});
+					}
+
+					$count += 1;
+				}
+			});
+		}
+		return $args['posts'];
+	}
+
 	public static function sql_filter_favorites($args)
 	{
 		if (isset($args['params']['favorites']) && $args['params']['favorites']) {
 			if (isset($_COOKIE['favorites']) && json_decode($_COOKIE['favorites'], true)) {
-				$favorites = json_decode($_COOKIE['favorites']);
+				$args['posts'] = $args['posts']->whereIn('post_id', json_decode($_COOKIE['favorites'], true));
 			} else {
-				$favorites = ['no_favorites'];
+				$args['posts'] = $args['posts']->whereIn('post_id', [0]);
 			}
-			$args['posts'] = $args['posts']->whereIn('post_id', $favorites, true);
 		}
 		return $args['posts'];
 	}
@@ -667,18 +726,40 @@ class WP_SweepBright_Query
 	public static function sql_order_by_relevance($args)
 	{
 		if ((isset($args['params']['sort']) && $args['params']['sort']['orderBy'] === 'relevance') || $args['params']['recent']) {
+			$has_location = false;
+
+			if (isset($args['params']['filters']['location']['lat']) && isset($args['params']['filters']['location']['lng']) && $args['params']['filters']['location']['lat'] && $args['params']['filters']['location']['lng']) {
+				$has_location = true;
+				$lat = $args['params']['filters']['location']['lat'];
+				$lng = $args['params']['filters']['location']['lng'];
+			}
+
 			// Order by status
-			$condition_let = "CASE WHEN status = 'lost' THEN 8.5 WHEN status = 'prospect' THEN 7.5 WHEN status = 'rented' THEN 6.5 WHEN status = 'bid' THEN 5.5 WHEN status = 'sold' THEN 4.5 WHEN status = 'under_contract' THEN 3.5 WHEN status = 'option' THEN 2.5 WHEN status = 'available' THEN 1.5 END";
-			$condition_sale = "CASE WHEN status = 'lost' THEN 8 WHEN status = 'prospect' THEN 7 WHEN status = 'rented' THEN 6 WHEN status = 'bid' THEN 5 WHEN status = 'sold' THEN 4 WHEN status = 'under_contract' THEN 3 WHEN status = 'option' THEN 2 WHEN status = 'available' THEN 1 END";
+			$condition_let = "CASE WHEN status = 'lost' THEN 8.5 WHEN status = 'prospect' THEN 7.5 WHEN status = 'rented' THEN 6.5 WHEN status = 'bid' THEN 5.5 WHEN status = 'sold' THEN 4.5 WHEN status = 'option' THEN 3.5 WHEN status = 'under_contract' THEN 2.5 WHEN status = 'available' THEN 1.5 END";
+			$condition_sale = "CASE WHEN status = 'lost' THEN 8 WHEN status = 'prospect' THEN 7 WHEN status = 'rented' THEN 6 WHEN status = 'bid' THEN 5 WHEN status = 'sold' THEN 4 WHEN status = 'option' THEN 3 WHEN status = 'under_contract' THEN 2 WHEN status = 'available' THEN 1 END";
+
+			if (WP_SweepBright_Helpers::setting('available_properties') === 'available') {
+				$args['posts'] = $args['posts']
+					// Order by open homes
+					->order_by("CASE WHEN has_open_home = 1 AND status = 'available' THEN 0 END", 'DESC');
+			} else {
+				$args['posts'] = $args['posts']
+					// Order by open homes
+					->order_by("CASE WHEN has_open_home = 1 AND status = 'under_contract' THEN 0 END", 'DESC');
+			}
 
 			$args['posts'] = $args['posts']
-				// Order by open homes
-				->order_by("CASE WHEN has_open_home = 1 AND status = 'available' THEN 0 END", 'DESC')
-
 				// Order by negotiation
-				->order_by("CASE WHEN negotiation = 'sale' THEN " . $condition_sale . " WHEN negotiation = 'let' THEN " . $condition_let . " END", 'ASC')
+				->order_by("CASE WHEN negotiation = 'sale' THEN " . $condition_sale . " WHEN negotiation = 'let' THEN " . $condition_let . " END", 'ASC');
 
-				// Order by date
+			// Order by location
+			if ($has_location) {
+				$args['posts'] = $args['posts']
+					->order_by("ABS(lat-$lat) + ABS(lng - $lng)", "ASC");
+			}
+
+			// Order by date
+			$args['posts'] = $args['posts']
 				->order_by("date", "DESC");
 		}
 		return $args['posts'];
@@ -715,7 +796,9 @@ class WP_SweepBright_Query
 			$id = $post->post_id;
 
 			if (isset($params['mapMode']) && $params['mapMode']) {
-				$results = WP_SweepBright_Query::add_marker($id, $results);
+				if (empty(get_post_meta($id, 'location_hidden', true))) {
+					$results = WP_SweepBright_Query::add_marker($id, $results);
+				}
 			} else {
 				$results = WP_SweepBright_Query::add_estate($id, $results);
 			}
@@ -912,6 +995,18 @@ class WP_SweepBright_Query
 			'params' => $params,
 		]);
 
+		// Filter: hide available
+		$posts = WP_SweepBright_Query::sql_filter_hide_available([
+			'posts' => $posts,
+			'params' => $params,
+		]);
+
+		// Filter: hide lost
+		$posts = WP_SweepBright_Query::sql_filter_hide_lost([
+			'posts' => $posts,
+			'params' => $params,
+		]);
+
 		// Filter: hide units
 		$posts = WP_SweepBright_Query::sql_filter_hide_units([
 			'posts' => $posts,
@@ -954,6 +1049,12 @@ class WP_SweepBright_Query
 			'params' => $params,
 		]);
 
+		// Filter: office
+		$posts = WP_SweepBright_Query::sql_filter_office([
+			'posts' => $posts,
+			'params' => $params,
+		]);
+
 		// Filter: price
 		$posts = WP_SweepBright_Query::sql_filter_price([
 			'posts' => $posts,
@@ -980,6 +1081,12 @@ class WP_SweepBright_Query
 
 		// Filter: geolocation
 		$posts = WP_SweepBright_Query::sql_filter_geolocation([
+			'posts' => $posts,
+			'params' => $params,
+		]);
+
+		// Filter: multi geolocations
+		$posts = WP_SweepBright_Query::sql_filter_multi_geolocation([
 			'posts' => $posts,
 			'params' => $params,
 		]);

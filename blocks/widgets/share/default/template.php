@@ -51,7 +51,7 @@ if (get_post_type() === 'post') {
 
   <?php if (WP_Wrapper::get('email', $component, $args)) : ?>
     <li>
-      <a data-sharer="email" data-title="<?= $title; ?>" data-description="<?= $description; ?>" data-url="<?= get_the_permalink(); ?>" href="#" class="transition duration-200 opacity-100 hover:opacity-60">
+      <a data-sharer="email" data-title="<?= $title; ?>" data-subject="<?= $title; ?>" data-url="<?= get_the_permalink(); ?>" href="#" class="transition duration-200 opacity-100 hover:opacity-60">
         <i class="fas fa-envelope"></i>
       </a>
     </li>

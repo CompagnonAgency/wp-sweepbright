@@ -1,3 +1,3 @@
 <div class="post">
-  <?= get_the_content(); ?>
+  <?php the_content(); ?>
 </div>

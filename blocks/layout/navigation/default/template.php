@@ -140,21 +140,21 @@
             <ul class="absolute hidden py-1 text-sm font-semibold tracking-wide text-center uppercase bg-white rounded shadow w-14 group-hover:block text-dark">
               <?php if (WP_SweepBright_Helpers::settings_form()['enabled_nl']) : ?>
                 <li>
-                  <a href="<?= get_the_permalink(); ?>?lang=nl" class="block p-1 transition duration-200 hover:bg-gray-100">
+                  <a href="<?= get_the_permalink(WP_Wrapper::ID()); ?>?lang=nl" class="block p-1 transition duration-200 hover:bg-gray-100">
                     NL
                   </a>
                 </li>
               <?php endif; ?>
               <?php if (WP_SweepBright_Helpers::settings_form()['enabled_fr']) : ?>
                 <li>
-                  <a href="<?= get_the_permalink(); ?>?lang=fr" class="block p-1 transition duration-200 hover:bg-gray-100">
+                  <a href="<?= get_the_permalink(WP_Wrapper::ID()); ?>?lang=fr" class="block p-1 transition duration-200 hover:bg-gray-100">
                     FR
                   </a>
                 </li>
               <?php endif; ?>
               <?php if (WP_SweepBright_Helpers::settings_form()['enabled_en']) : ?>
                 <li>
-                  <a href="<?= get_the_permalink(); ?>?lang=en" class="block p-1 transition duration-200 hover:bg-gray-100">
+                  <a href="<?= get_the_permalink(WP_Wrapper::ID()); ?>?lang=en" class="block p-1 transition duration-200 hover:bg-gray-100">
                     EN
                   </a>
                 </li>

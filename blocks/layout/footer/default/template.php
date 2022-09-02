@@ -1,5 +1,5 @@
 <div class="flex flex-col w-11/12 mx-auto lg:space-x-20 lg:w-10/12 lg:flex-row">
-  <div class="items-center hidden w-1/4 lg:flex">
+  <div class="items-start hidden w-1/4 lg:flex">
     <a href="/" class="inline-block">
       <img src="<?= WP_Wrapper::get('small_logo', $component, $args); ?>" class="max-h-20">
     </a>
@@ -86,6 +86,30 @@
             </a>
           </li>
         <?php endif; ?>
+
+        <?php if (WP_Wrapper::get('youtube', $component, $args)) : ?>
+          <li>
+            <a href="<?= WP_Wrapper::get('youtube', $component, $args); ?>" target="_blank">
+              <i class="fab fa-youtube"></i>
+            </a>
+          </li>
+        <?php endif; ?>
+
+        <?php if (WP_Wrapper::get('linkedin', $component, $args)) : ?>
+          <li>
+            <a href="<?= WP_Wrapper::get('linkedin', $component, $args); ?>" target="_blank">
+              <i class="fab fa-linkedin"></i>
+            </a>
+          </li>
+        <?php endif; ?>
+
+        <?php if (WP_Wrapper::get('tiktok', $component, $args)) : ?>
+          <li>
+            <a href="<?= WP_Wrapper::get('tiktok', $component, $args); ?>" target="_blank">
+              <i class="fab fa-tiktok"></i>
+            </a>
+          </li>
+        <?php endif; ?>
       </ul>
     </div>
   <?php endif; ?>
@@ -122,19 +146,19 @@
 <?php endif; ?>
 
 <div class="w-11/12 mx-auto mt-10 lg:mb-10 lg:w-10/12">
-  <ul class="flex flex-col space-y-2 text-sm text-gray-500 lowercase lg:space-x-8 lg:space-y-0 lg:flex-row">
+  <ul class="flex flex-col space-y-2 text-sm text-gray-500 lg:space-x-8 lg:space-y-0 lg:flex-row">
     <li>
       &copy; <?= date('Y') ?> <?php bloginfo('site_name'); ?>
     </li>
-    <li>
-      Built by <a href="https://compagnon.agency" target="_blank" class="font-semibold">Compagnon</a>
+    <li class="lowercase">
+      Website by <a href="https://nextfloor.immo" target="_blank" class="font-semibold">Nextfloor</a>
     </li>
-    <li>
+    <li class="lowercase">
       Powered by <a href="https://sweepbright.com" target="_blank" class="font-semibold">SweepBright</a>
     </li>
     <?php foreach (WP_Wrapper::get('legal_pages', $component, $args) as $link) : ?>
       <?php if (WP_Wrapper::page($args, $link)) : ?>
-        <li>
+        <li class="lowercase">
           <a href="<?= WP_Wrapper::page($args, $link)['url']; ?>" class="font-semibold">
             <?= WP_Wrapper::page($args, $link)['title']; ?>
           </a>

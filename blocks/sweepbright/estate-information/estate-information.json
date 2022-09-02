@@ -6,8 +6,30 @@
   "type": "estate",
   "fields": [
     {
+      "name": "Show features",
+      "id": "show_features",
+      "type": "select",
+      "default": "true",
+      "sync": true,
+      "options": {
+        "false": "Disable",
+        "true": "Enable"
+      }
+    },
+    {
       "name": "Documents call-to-action",
       "id": "documents_cta",
+      "type": "select",
+      "default": "false",
+      "sync": true,
+      "options": {
+        "false": "Disable",
+        "true": "Enable"
+      }
+    },
+    {
+      "name": "Rentio call-to-action",
+      "id": "rentio_cta",
       "type": "select",
       "default": "false",
       "sync": true,
@@ -27,18 +49,15 @@
             "sale": "Te koop",
             "let": "Te huur"
           },
+          "mandate": "Exclusief mandaat",
           "documents_cta": "Informatie opvragen",
-          "rooms": {
-            "bedroom": {
-              "single": "Slaapkamer",
-              "multiple": "Slaapkamers"
-            }
-          },
+          "rentio_cta": "Ik wil huren",
           "sub_type": {
             "semi_detached": "Halfvrijstaand",
             "detached": "Vrijstaand",
             "terraced": "Terrasvormig",
             "bungalow": "Bungalow",
+            "villa": "Villa",
             "condo": "Condo",
             "loft": "Loft",
             "duplex": "Duplex",
@@ -74,7 +93,9 @@
             "sale": "À vendre",
             "let": "A louer"
           },
+          "mandate": "Mandat exclusif",
           "documents_cta": "Demande d'information",
+          "rentio_cta": "je veux louer",
           "rooms": {
             "bedroom": {
               "single": "Chambre à coucher",
@@ -86,6 +107,7 @@
             "detached": "Détaché",
             "terraced": "En terrasse",
             "bungalow": "Bungalow",
+            "villa": "Villa",
             "condo": "condo",
             "loft": "Loft",
             "duplex": "Duplex",
@@ -121,7 +143,9 @@
             "sale": "For sale",
             "let": "For rent"
           },
+          "mandate": "Exclusive mandate",
           "documents_cta": "Request information",
+          "rentio_cta": "I want to rent",
           "rooms": {
             "bedroom": {
               "single": "Bedroom",
@@ -133,6 +157,7 @@
             "detached": "Detached",
             "terraced": "Terraced",
             "bungalow": "Bungalow",
+            "villa": "Villa",
             "condo": "Condo",
             "loft": "Loft",
             "duplex": "Duplex",

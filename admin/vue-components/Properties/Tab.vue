@@ -1,10 +1,15 @@
 <template>
   <div>
-    <ul class="flex mt-10 space-x-2" v-if="!estate.meta.estate.project_id">
+    <ul
+      class="flex mt-10 space-x-2"
+      v-if="
+        !estate.meta.estate.project_id || estate.meta.estate.project_id === '0'
+      "
+    >
       <li>
         <router-link
           :to="{ name: 'edit', params: { id: estate.meta.estate.id } }"
-          class="inline-block p-2 px-3 -mb-px text-black border-t border-l border-r border-gray-500 bg-wp-dark hover:bg-white"
+          class="inline-block p-2 px-3 -mb-px text-black border-t border-l border-r border-gray-500  bg-wp-dark hover:bg-white"
           exact-active-class="font-semibold bg-wp"
         >
           Property
@@ -13,7 +18,7 @@
       <li v-if="estate.meta.estate.is_project">
         <router-link
           :to="{ name: 'units', params: { id: estate.meta.estate.id } }"
-          class="inline-block p-2 px-3 -mb-px text-black border-t border-l border-r border-gray-500 bg-wp-dark hover:bg-white"
+          class="inline-block p-2 px-3 -mb-px text-black border-t border-l border-r border-gray-500  bg-wp-dark hover:bg-white"
           active-class="font-semibold bg-wp"
         >
           Units

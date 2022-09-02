@@ -11,10 +11,10 @@
     <transition name="menu">
       <div
         v-if="menuOpen"
-        class="fixed top-0 right-0 z-50 w-full p-10 pt-24 bg-white shadow-xl  lg:pt-10 lg:h-full lg:w-96"
+        class="fixed top-0 right-0 z-50 w-full p-10 pt-24 bg-white shadow-xl lg:pt-10 lg:h-full lg:w-96"
       >
         <button
-          class="absolute top-0 right-0 px-8 py-5 text-xl text-gray-300 transition duration-200  focus:outline-none hover:text-gray-500 lg:hidden"
+          class="absolute top-0 right-0 px-8 py-5 text-xl text-gray-300 transition duration-200 focus:outline-none hover:text-gray-500 lg:hidden"
           @click="closeMenu"
         >
           <i class="fal fa-times"></i>
@@ -25,7 +25,7 @@
             <h2>{{ data.locale[lang].contact }}</h2>
             <div class="mt-8 space-y-8">
               <div v-if="data.email">
-                <h4>{{ data.locale[lang].email }}</h4>
+                <h4 v-if="!data.hide_labels">{{ data.locale[lang].email }}</h4>
                 <div class="mt-2">
                   <i class="w-7 fas fa-envelope"></i>
                   <a :href="`mailto:${data.email}`">{{ data.email }}</a>
@@ -33,16 +33,32 @@
               </div>
 
               <div v-if="data.phone">
-                <h4>{{ data.locale[lang].phone }}</h4>
+                <h4 v-if="!data.hide_labels">{{ data.locale[lang].phone }}</h4>
                 <div class="mt-2">
                   <i class="w-7 fas fa-phone"></i>
                   <a :href="`tel:${data.phone}`">{{ data.phone }}</a>
                 </div>
               </div>
+
+              <div v-if="data.instagram_username">
+                <h4 v-if="!data.hide_labels">{{ data.locale[lang].instagram }}</h4>
+                <div class="mt-2">
+                  <i class="w-7 fab fa-instagram"></i>
+                  <a :href="`https://instagram.com/${data.instagram_username}`" target="_blank">@{{ data.instagram_username }}</a>
+                </div>
+              </div>
+
+              <div v-if="data.whatsapp">
+                <h4 v-if="!data.hide_labels">{{ data.locale[lang].whatsapp }}</h4>
+                <div class="mt-2">
+                  <i class="w-7 fab fa-whatsapp"></i>
+                  <a :href="data.whatsapp" target="_blank">{{ data.locale[lang].whatsapp_chat }}</a>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div>
+          <div v-if="!data.enable_location">
             <h2>{{ data.locale[lang].office }}</h2>
             <div class="mt-8" v-html="data.location"></div>
           </div>
@@ -92,8 +108,8 @@ export default {
   methods: {
     toggleMenu() {
       if (
-        this.data.negotiator.photo &&
-        this.data.negotiator.photo.sizes.medium
+        this.data.negotiator.photo
+        && this.data.negotiator.photo.sizes.medium
       ) {
         $("html, body").animate(
           {

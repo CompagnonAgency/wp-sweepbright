@@ -17,8 +17,20 @@
       }
     },
     {
-      "name": "Breadcrumb parent",
+      "name": "Breadcrumb parent (buy)",
       "id": "breadcrumb_parent",
+      "type": "page_select",
+      "default": []
+    },
+    {
+      "name": "Breadcrumb parent (rent)",
+      "id": "breadcrumb_parent_rent",
+      "type": "page_select",
+      "default": []
+    },
+    {
+      "name": "Breadcrumb parent (new)",
+      "id": "breadcrumb_parent_new",
       "type": "page_select",
       "default": []
     },
@@ -29,13 +41,49 @@
       "sync": true,
       "default": {
         "nl": {
-          "all_units": "Toon alle units"
+          "all_units": "Toon alle units",
+          "buyer_label": "Door de koper te betalen vergoedingen",
+          "vendor_label": "Door de koper te betalen vergoedingen",
+          "unavailable": "Deze woning is niet langer beschikbaar.",
+          "status": {
+            "prospect": "Prospect",
+            "available": "Beschikbaar",
+            "option": "In optie",
+            "under_contract": "Onder contract",
+            "Bid": "Geboden",
+            "sold": "Verkocht",
+            "rented": "Verhuurd"
+          }
         },
         "fr": {
-          "all_units": "Afficher toutes les unités"
+          "all_units": "Afficher toutes les unités",
+          "buyer_label": "Honoraires à la charge de l'acquéreur",
+          "vendor_label": "Honoraires à la charge du vendeur",
+          "unavailable": "Cette propriété n'est plus disponible.",
+          "status": {
+            "prospect": "Prospect",
+            "available": "Disponible",
+            "option": "Option",
+            "under_contract": "En vente",
+            "Bid": "Enchère",
+            "sold": "Vendu",
+            "rented": "Loué"
+          }
         },
         "en": {
-          "all_units": "Show all units"
+          "all_units": "Show all units",
+          "buyer_label": "Fees payable by the purchaser",
+          "vendor_label": "Fees payable by the vendor",
+          "unavailable": "This property is no longer available.",
+          "status": {
+            "prospect": "Prospect",
+            "available": "Available",
+            "option": "Option",
+            "under_contract": "Under contract",
+            "Bid": "Bid",
+            "sold": "Sold",
+            "rented": "Rented"
+          }
         }
       }
     }

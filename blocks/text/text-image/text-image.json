@@ -38,10 +38,18 @@
       }
     },
     {
+      "name": "Title",
+      "id": "title",
+      "type": "text",
+      "default": "",
+      "allow_empty": true
+    },
+    {
       "name": "Textarea",
       "id": "textarea",
       "type": "wysiwyg",
-      "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>"
+      "default": "",
+      "allow_empty": true
     },
     {
       "name": "Button",
@@ -100,6 +108,33 @@
       "allow_empty": true,
       "condition": {
         "enable_url_param": [
+          "true"
+        ]
+      }
+    },
+    {
+      "name": "Enable anchor link",
+      "id": "enable_url_anchor",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "False",
+        "true": "True"
+      },
+      "condition": {
+        "button": [
+          "enabled"
+        ]
+      }
+    },
+    {
+      "name": "Anchor link",
+      "id": "anchor_link",
+      "type": "text",
+      "sync": true,
+      "condition": {
+        "enable_url_anchor": [
           "true"
         ]
       }

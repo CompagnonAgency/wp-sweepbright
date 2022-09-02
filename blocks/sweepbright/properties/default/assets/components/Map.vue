@@ -209,6 +209,10 @@ export default {
     openWindow(data) {
       if (data.status === "available") {
         window.location.href = data.permalink;
+      } else if (data.status !== "available" && this.data.unavailable_properties === "visible") {
+        window.location.href = data.permalink;
+      } else if (data.status === "under_contract" && this.data.available_properties === "under_contract") {
+        window.location.href = data.permalink;
       } else {
         this.$bus.$emit("openModal", data);
       }

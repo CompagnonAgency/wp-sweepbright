@@ -1,6 +1,6 @@
 <div>
   <?php if (get_field('negotiator')['photo']) : ?>
-    <div class="inline-block w-32 lg:w-full lg:max-w-xs">
+    <div class="inline-block w-48">
       <div class="relative">
         <div class="aspect-ratio-<?= WP_Wrapper::get('aspect_ratio', $component, $args); ?>"></div>
         <img class="absolute top-0 left-0 object-cover object-center w-full h-full <?= WP_Wrapper::get('border_radius', $component, $args); ?>" src="<?= get_field('negotiator')['photo']['sizes']['medium'] ?>">

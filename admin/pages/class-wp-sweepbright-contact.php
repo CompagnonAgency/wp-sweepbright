@@ -125,6 +125,9 @@ class WP_SweepBright_Contact
 		if (isset($form['address'])) {
 			$output = str_replace('[address]', $form['address'], $output);
 		}
+		if (isset($form['negotiation'])) {
+			$output = str_replace('[negotiation]', $form['negotiation'], $output);
+		}
 		if (isset($form['url'])) {
 			$output = str_replace('[url]', $form['url'], $output);
 		}
@@ -136,9 +139,6 @@ class WP_SweepBright_Contact
 		}
 		if (isset($form['reference'])) {
 			$output = str_replace('[reference]', $form['reference'], $output);
-		}
-		if (isset($form['address'])) {
-			$output = str_replace('[address]', $form['address'], $output);
 		}
 		if (isset($form['postal_code'])) {
 			$output = str_replace('[postal_code]', $form['postal_code'], $output);
@@ -215,17 +215,49 @@ class WP_SweepBright_Contact
 	{
 		if (isset($_POST['submit-contact-estate']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
 			$id = get_field('estate', get_the_ID())['id'];
+			$negotiation = get_field('features')['negotiation'];
+
+			switch ($negotiation) {
+				case 'let':
+					$negotiation = 'For rent';
+
+					if (in_array('polylang-pro/polylang.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+						if (pll_current_language() === 'en') {
+							$negotiation = 'For rent';
+						} else if (pll_current_language() === 'nl') {
+							$negotiation = 'Te huur';
+						} else if (pll_current_language() === 'fr') {
+							$negotiation = 'A louer';
+						}
+					}
+					break;
+				case 'sale':
+					$negotiation = 'For sale';
+
+					if (in_array('polylang-pro/polylang.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+						if (pll_current_language() === 'en') {
+							$negotiation = 'For sale';
+						} else if (pll_current_language() === 'nl') {
+							$negotiation = 'Te koop';
+						} else if (pll_current_language() === 'fr') {
+							$negotiation = 'À vendre';
+						}
+					}
+					break;
+			}
+
 			$form = [
 				'title' => get_the_title(),
 				'url' => '<a href="' . get_the_permalink() . '">View property</a>',
 				'address' => get_field('location')['formatted_agency'],
-				'street' => $this->validate_input($_POST['street']),
-				'city' => $this->validate_input($_POST['city']),
-				'first_name' => $this->validate_input($_POST['first_name']),
-				'last_name' => $this->validate_input($_POST['last_name']),
+				'negotiation' => $negotiation,
+				'street' => stripslashes($this->validate_input($_POST['street'])),
+				'city' => stripslashes($this->validate_input($_POST['city'])),
+				'first_name' => stripslashes($this->validate_input($_POST['first_name'])),
+				'last_name' => stripslashes($this->validate_input($_POST['last_name'])),
 				'email' => $this->validate_input($_POST['email']),
 				'phone' => $this->validate_input($_POST['phone']),
-				'message' => $this->validate_input($_POST['message']),
+				'message' => stripslashes($this->validate_input($_POST['message'])),
 				'locale' => $this->validate_input($_POST['locale']),
 			];
 

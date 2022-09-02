@@ -1,9 +1,33 @@
 <?php
-$breadcrumb = WP_Wrapper::page(
-  $component,
-  WP_Wrapper::get('breadcrumb_parent', $component, $args),
-  ['single' => true]
-);
+if (WP_Wrapper::get('breadcrumb_parent', $component, $args)) {
+  $breadcrumb_buy = WP_Wrapper::page(
+    $component,
+    WP_Wrapper::get('breadcrumb_parent', $component, $args),
+    ['single' => true]
+  );
+}
+if (WP_Wrapper::get('breadcrumb_parent_rent', $component, $args)) {
+  $breadcrumb_rent = WP_Wrapper::page(
+    $component,
+    WP_Wrapper::get('breadcrumb_parent_rent', $component, $args),
+    ['single' => true]
+  );
+}
+if (WP_Wrapper::get('breadcrumb_parent_new', $component, $args)) {
+  $breadcrumb_new = WP_Wrapper::page(
+    $component,
+    WP_Wrapper::get('breadcrumb_parent_new', $component, $args),
+    ['single' => true]
+  );
+}
+
+if (get_field('features')['negotiation'] === 'sale') {
+  $breadcrumb = $breadcrumb_buy;
+} else if (get_field('features')['negotiation'] === 'let') {
+  $breadcrumb = $breadcrumb_rent;
+} else if (get_field('estate')['project_id']) {
+  $breadcrumb = $breadcrumb_new;
+}
 ?>
 <div>
   <?php if ($breadcrumb || get_field('estate')['project_id']) : ?>
@@ -11,10 +35,12 @@ $breadcrumb = WP_Wrapper::page(
       <li>
         <?php if (!get_field('estate')['project_id']) : ?>
           <a href="<?= $breadcrumb["url"]; ?>" class="font-semibold">
+            <i class="mr-1 far fa-long-arrow-alt-left"></i>
             <?= $breadcrumb["title"]; ?>
           </a>
         <?php else : ?>
           <a href="<?= get_the_permalink(WP_SweepBright_Helpers::get_post_ID_from_estate(get_field('estate')['project_id'])); ?>" class="font-semibold">
+            <i class="mr-1 far fa-long-arrow-alt-left"></i>
             <?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['all_units']; ?>
           </a>
         <?php endif; ?>
@@ -23,7 +49,14 @@ $breadcrumb = WP_Wrapper::page(
         |
       </li>
       <li class="hidden lg:block">
-        <?= mb_strimwidth(get_field('estate')['title'][WP_Wrapper::lang()], 0, 40, '...'); ?>
+        <?php if (get_field('estate')['status'] === 'available' || get_field('estate')['status'] === 'prospect' || (get_field('estate')['status'] === 'under_contract' && WP_SweepBright_Helpers::setting('available_properties') === 'under_contract')) : ?>
+          <?= mb_strimwidth(get_field('estate')['title'][WP_Wrapper::lang()], 0, 40, '...'); ?>
+        <?php else : ?>
+          <span class="inline-block px-2 py-1 mr-1 text-xs tracking-widest text-white uppercase bg-black">
+            <?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['status'][get_field('estate')['status']]; ?>
+          </span>
+          <?= mb_strimwidth(get_field('estate')['title'][WP_Wrapper::lang()], 0, 40, '...'); ?>
+        <?php endif; ?>
       </li>
     </ul>
   <?php endif; ?>
@@ -37,20 +70,42 @@ $breadcrumb = WP_Wrapper::page(
 
     <div class="flex flex-col lg:items-end lg:justify-between lg:space-x-20 lg:w-1/2 lg:flex-row">
       <div class="flex-1 mb-5 lg:mb-0">
-        <p class="mb-2">
-          <?= get_field('location')['street']; ?>,
-          <?= get_field('location')['postal_code']; ?>
-          <?= get_field('location')['city']; ?>
-        </p>
-        <p class="text-2xl font-medium">
-          <?php if (get_field('estate')['is_project']) : ?>
-            <?= WP_SweepBright_Query::min_max_price(WP_Wrapper::lang(), false, true)['min']; ?>
-            -
-            <?= WP_SweepBright_Query::min_max_price(WP_Wrapper::lang(), false, true)['max']; ?>
-          <?php else : ?>
-            <?= WP_SweepBright_Query::get_the_price(WP_Wrapper::lang()); ?>
+        <?php if (get_field('estate')['status'] === 'available' || get_field('estate')['status'] === 'prospect' || (get_field('estate')['status'] === 'under_contract' && WP_SweepBright_Helpers::setting('available_properties') === 'under_contract')) : ?>
+          <?php if (!get_field('location')['hidden']) : ?>
+            <p class="mb-2">
+              <?php if (get_field('estate')['status'] === 'available' || get_field('estate')['status'] === 'prospect') : ?>
+                <?= get_field('location')['street']; ?> <?= get_field('location')['number']; ?>,
+              <?php else : ?>
+                <?= get_field('location')['street']; ?>,
+              <?php endif; ?>
+              <?= get_field('location')['postal_code']; ?>
+              <?= get_field('location')['city']; ?>
+            </p>
           <?php endif; ?>
-        </p>
+          <p class="text-2xl font-medium">
+            <?php if (get_field('estate')['is_project']) : ?>
+              <?= WP_SweepBright_Query::min_max_price(WP_Wrapper::lang(), false, true)['min']; ?>
+              -
+              <?= WP_SweepBright_Query::min_max_price(WP_Wrapper::lang(), false, true)['max']; ?>
+            <?php else : ?>
+              <?= WP_SweepBright_Query::get_the_price(WP_Wrapper::lang()); ?>
+            <?php endif; ?>
+          </p>
+
+          <?php if (get_field('price')['buyer_percentage'] || get_field('price')['buyer_fixed_fee']) : ?>
+            <p class="mt-2 text-sm opacity-75">
+              <?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['buyer_label']; ?>
+            </p>
+          <?php endif; ?>
+
+          <?php if (get_field('price')['vendor_percentage'] || get_field('price')['vendor_fixed_fee']) : ?>
+            <p class="mt-2 text-sm opacity-75">
+              <?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['vendor_label']; ?>
+            </p>
+          <?php endif; ?>
+        <?php else : ?>
+          <?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['unavailable']; ?>
+        <?php endif; ?>
       </div>
 
       <?php if (WP_Wrapper::get('slider_navigation', $component, $args) === 'true') : ?>

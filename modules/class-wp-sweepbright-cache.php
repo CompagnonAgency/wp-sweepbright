@@ -15,55 +15,56 @@ class WP_SweepBright_Cache
 
   public static function migrate_db()
   {
+    /*
+     Always increase the number after each iteration
+    */
+
     // Create the table which is used for storing properties (WordPress posts) in cache
-    if (!get_option('wp_sweepbright_migrate_00001')) {
+    if (!get_option('wp_sweepbright_migrate_00003')) {
+      // Truncate database
+      WP_SweepBright_Cache::drop_table();
+
+      // Create table
       global $wpdb;
       $table_name = $wpdb->prefix . 'sweepbright_estates';
-      $query = $wpdb->prepare('SHOW TABLES LIKE %s', $wpdb->esc_like($table_name));
-      if ($wpdb->get_var($query) == $table_name) {
-        WP_SweepBright_Cache::migrate_properties();
-      } else {
-        $wpdb->query("CREATE TABLE `$table_name` (
-					`id` int(11) NOT NULL,
-					`date` datetime NOT NULL,
-					`post_id` int(11) NOT NULL,
-					`estate_id` varchar(255) NOT NULL,
-					`status` varchar(255) NOT NULL,
-					`is_unit` tinyint(1) NOT NULL,
-					`is_project` tinyint(1) NOT NULL,
-					`general_condition` varchar(255) NOT NULL,
-					`negotiation` varchar(255) NOT NULL,
-					`category` varchar(255) NOT NULL,
-					`subcategory` varchar(255) NOT NULL,
-					`negotiator_email` varchar(255) NOT NULL,
-					`price` decimal(10,2) NOT NULL,
-					`plot_area` decimal(10,2) NOT NULL,
-					`liveable_area` decimal(10,2) NOT NULL,
-					`bedrooms` int(11) NOT NULL,
-					`lat` decimal(8,6) NOT NULL,
-					`lng` decimal(9,6) NOT NULL,
-					`has_open_home` tinyint(1) NOT NULL
-				) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-        $wpdb->query("ALTER TABLE `$table_name` ADD PRIMARY KEY (`id`);");
-        $wpdb->query("ALTER TABLE `$table_name` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
+      $wpdb->query("CREATE TABLE `$table_name` (
+        `id` int(11) NOT NULL,
+        `date` datetime NOT NULL,
+        `post_id` int(11) NOT NULL,
+        `estate_id` varchar(255) NOT NULL,
+        `status` varchar(255) NOT NULL,
+        `is_unit` tinyint(1) NOT NULL,
+        `is_project` tinyint(1) NOT NULL,
+        `general_condition` varchar(255) NOT NULL,
+        `negotiation` varchar(255) NOT NULL,
+        `category` varchar(255) NOT NULL,
+        `subcategory` varchar(255) NOT NULL,
+        `negotiator_email` varchar(255) NOT NULL,
+        `price` decimal(10,2) NOT NULL,
+        `plot_area` decimal(10,2) NOT NULL,
+        `liveable_area` decimal(10,2) NOT NULL,
+        `bedrooms` int(11) NOT NULL,
+        `lat` decimal(8,6) NOT NULL,
+        `lng` decimal(9,6) NOT NULL,
+        `has_open_home` tinyint(1) NOT NULL,
+        `office_name` varchar(255) NOT NULL
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+      $wpdb->query("ALTER TABLE `$table_name` ADD PRIMARY KEY (`id`);");
+      $wpdb->query("ALTER TABLE `$table_name` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
 
-        WP_SweepBright_Cache::migrate_properties();
-      }
-    }
-
-    // Migration to fix missing properties the database and re-populates
-    if (!get_option('wp_sweepbright_migrate_00002')) {
-      WP_SweepBright_Cache::truncate_properties();
+      // Migrate
       WP_SweepBright_Cache::migrate_properties();
+
+      // Finish migration
+      add_option('wp_sweepbright_migrate_00003', true);
     }
   }
 
-  public static function truncate_properties()
+  public static function drop_table()
   {
     global $wpdb;
     $table_name = $wpdb->prefix . 'sweepbright_estates';
-    $wpdb->query('TRUNCATE TABLE ' . $table_name);
-    add_option('wp_sweepbright_migrate_00002', true);
+    $wpdb->query('DROP TABLE ' . $table_name);
   }
 
   public static function migrate_properties()
@@ -78,8 +79,6 @@ class WP_SweepBright_Cache
     ]);
     $posts = $query->posts;
     if ($posts) {
-      add_option('wp_sweepbright_migrate_00001', true);
-
       foreach ($posts as $id) {
         $wpdb->insert($table_name, [
           'date' => get_the_date('c', $id),
@@ -100,6 +99,7 @@ class WP_SweepBright_Cache
           'lat' => get_post_meta($id, 'location_latitude', true) ? get_post_meta($id, 'location_latitude', true) : '',
           'lng' => get_post_meta($id, 'location_longitude', true) ? get_post_meta($id, 'location_longitude', true) : '',
           'has_open_home' => get_post_meta($id, 'open_homes_hasOpenHome', true) ? 1 : 0,
+          'office_name' => get_post_meta($id, 'office_name', true) ? get_post_meta($id, 'office_name', true) : '',
         ]);
       }
     }
@@ -129,6 +129,7 @@ class WP_SweepBright_Cache
       'lat' => $estate['location']['geo']['latitude'] ? $estate['location']['geo']['latitude'] : '',
       'lng' => $estate['location']['geo']['longitude'] ? $estate['location']['geo']['longitude'] : '',
       'has_open_home' => count($estate['open_homes']) > 0 ? 1 : 0,
+      'office_name' => $estate['office']['name'] ? $estate['office']['name'] : '',
     ];
 
     $query = "SELECT post_id FROM $table_name WHERE estate_id='" . $estate['id'] . "'";

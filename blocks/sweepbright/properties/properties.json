@@ -17,6 +17,14 @@
       }
     },
     {
+      "name": "Office name",
+      "id": "office_name",
+      "type": "text",
+      "default": "",
+      "sync": true,
+      "allow_empty": true
+    },
+    {
       "name": "Filter",
       "id": "filter",
       "type": "select",
@@ -202,7 +210,7 @@
             "prospect": "Prospect",
             "available": "Disponible",
             "option": "Option",
-            "under_contract": "Sous contrat",
+            "under_contract": "En vente",
             "Bid": "Enchère",
             "sold": "Vendu",
             "rented": "Loué"

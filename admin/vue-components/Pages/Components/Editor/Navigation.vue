@@ -64,6 +64,16 @@
       </div>
       <div
         class="p-1"
+        v-if="page.id !== 'create' && page.settings.template === 'default'"
+      >
+        <button class="flex items-center btn btn-default"
+          @click.prevent="$router.push({ name: 'editor', params: { id: 'create', duplicate: page.id } }); $router.go()">
+          <i class="mr-2 text-base text-gray-500 fad fa-clone"></i>
+          Duplicate
+        </button>
+      </div>
+      <div
+        class="p-1"
         v-if="
           (page.title[lang] &&
             page.settings.template === 'default' &&
@@ -74,7 +84,7 @@
       >
         <button class="flex items-center btn btn-primary" @click="savePage">
           <i
-            class="mr-2 text-base text-white text-opacity-50  far fa-cloud-upload-alt"
+            class="mr-2 text-base text-white text-opacity-50 far fa-cloud-upload-alt"
           ></i>
           <template v-if="page.id !== 'create'">Save</template>
           <template v-else>Publish</template>

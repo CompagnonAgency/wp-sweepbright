@@ -1,0 +1,114 @@
+{
+  "name": "Estate - price",
+  "id": "estate-price",
+  "icon": "fad fa-euro-sign",
+  "category": "sweepbright",
+  "type": "estate",
+  "fields": [
+    {
+      "name": "Office commission",
+      "id": "office_commission",
+      "type": "select",
+      "default": "false",
+      "sync": true,
+      "options": {
+        "false": "Disable",
+        "true": "Enable"
+      }
+    },
+    {
+      "name": "Offices",
+      "id": "offices_group",
+      "type": "group",
+      "condition": {
+        "office_commission": [
+          "true"
+        ]
+      },
+      "subfields": [
+        {
+          "name": "Office name",
+          "id": "office_name",
+          "type": "text",
+          "default": "Team 1",
+          "sync": true
+        },
+        {
+          "name": "File description",
+          "id": "file_description",
+          "type": "text",
+          "default": "",
+          "allow_empty": true
+        },
+        {
+          "name": "Document",
+          "id": "document",
+          "type": "upload_file",
+          "default": ""
+        }
+      ],
+      "default": []
+    },
+    {
+      "name": "Show heading",
+      "id": "show_heading",
+      "type": "select",
+      "default": "true",
+      "sync": true,
+      "options": {
+        "false": "Disable",
+        "true": "Enable"
+      }
+    },
+    {
+      "name": "Locale",
+      "id": "locale",
+      "type": "locale",
+      "sync": true,
+      "default": {
+        "nl": {
+          "heading": "Prijsinformatie",
+          "fees": "Kosten",
+          "buyer_label": "Door de koper te betalen vergoedingen",
+          "vendor_label": "Door de verkoper te betalen vergoedingen",
+          "property_taxes": "Eigendom belasting",
+          "vat_regime": "BTW regime",
+          "yearly_budgeted_building_costs": "Jaarlijkse condominiumkosten",
+          "recurring_costs": "Vaste kosten",
+          "cadastral_income": "Kadastraal inkomen",
+          "unavailable": "Deze woning is niet langer beschikbaar.",
+          "from": "Beschikbaar vanaf",
+          "occupied": "Niet beschikbaar"
+        },
+        "fr": {
+          "heading": "Informations sur les prix",
+          "fees": "Honoraires",
+          "buyer_label": "Honoraires à la charge de l'acquéreur",
+          "vendor_label": "Honoraires à la charge de vendeur",
+          "property_taxes": "Taxes foncières",
+          "vat_regime": "Régime TVA",
+          "yearly_budgeted_building_costs": "Charges annuelles de copropriété",
+          "recurring_costs": "Coûts récurrents",
+          "cadastral_income": "Valeur locative cadastrale",
+          "unavailable": "Cette propriété n'est plus disponible.",
+          "from": "Libre à partir de",
+          "occupied": "Indisponible"
+        },
+        "en": {
+          "heading": "Price information",
+          "fees": "Fees",
+          "buyer_label": "Fees payable by the purchaser",
+          "vendor_label": "Fees payable by the vendor",
+          "property_taxes": "Property taxes",
+          "vat_regime": "VAT regime",
+          "yearly_budgeted_building_costs": "Annual co-ownership charges",
+          "recurring_costs": "",
+          "cadastral_income": "Cadastral income",
+          "unavailable": "This property is no longer available.",
+          "from": "Available from",
+          "occupied": "Unavailable"
+        }
+      }
+    }
+  ]
+}

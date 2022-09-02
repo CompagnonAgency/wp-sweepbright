@@ -50,6 +50,28 @@
           "true"
         ]
       }
+    },
+    {
+      "name": "Enable anchor link",
+      "id": "enable_url_anchor",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "False",
+        "true": "True"
+      }
+    },
+    {
+      "name": "Anchor link",
+      "id": "anchor_link",
+      "type": "text",
+      "sync": true,
+      "condition": {
+        "enable_url_anchor": [
+          "true"
+        ]
+      }
     }
   ]
 }

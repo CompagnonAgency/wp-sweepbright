@@ -10,7 +10,7 @@
 
 /* Inputs */
 label {
-  @apply block font-semibold text-sm mb-2;
+  @apply font-semibold text-sm mb-2 block;
 }
 
 input[type="text"],
@@ -18,7 +18,7 @@ input[type="email"],
 input[type="phone"],
 select,
 textarea {
-  @apply appearance-none text-base w-full py-1 px-2 transition duration-200 outline-none;
+  @apply outline-none text-base w-full py-1 px-2 transition duration-200 appearance-none;
 }
 
 input[type="text"]:focus,
@@ -30,7 +30,7 @@ textarea:focus {
 }
 
 input[type="text"].input-heading {
-  @apply border-transparent px-2 pl-8 shadow-none text-gray-800;
+  @apply border-transparent shadow-none px-2 pl-8 text-gray-800;
 }
 
 input[type="text"].input-heading:disabled {
@@ -56,15 +56,15 @@ input[type="file"] {
 }
 
 .toggle-checkbox {
-  @apply border-0 rounded-full h-6 w-6 m-0 min-w-0 shadow-sm !important;
+  @apply rounded-full border-0 h-6 m-0 shadow-sm min-w-0 w-6 !important;
 }
 
 .toggle-checkbox:checked::before {
-  @apply hidden;
+  @apply hidden !important;
 }
 
 .toggle-checkbox:checked {
-  @apply right-0 border-blue-500 !important;
+  @apply border-blue-500 right-0 !important;
 }
 .toggle-checkbox:checked + .toggle-label {
   @apply bg-blue-500 !important;

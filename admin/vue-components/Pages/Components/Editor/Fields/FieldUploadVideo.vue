@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div class="relative mb-2" v-if="inputData(field, col)">
+    <div class="mb-2 relative" v-if="inputData(field, col)">
       <div class="aspect-ratio-16/9"></div>
       <video
         :key="inputData(field, col)"
-        class="absolute top-0 left-0 object-contain object-center w-full h-full bg-gray-200 border-none rounded "
+        class="border-none rounded h-full object-contain object-center bg-gray-200 w-full top-0 left-0 absolute "
         controls
         autoplay
         muted
@@ -13,7 +13,7 @@
         <source :src="inputData(field, col)" type="video/mp4" />
       </video>
     </div>
-    <div class="flex mt-2 space-x-2">
+    <div class="flex space-x-2 mt-2">
       <button class="w-1/2 btn btn-primary" @click="openLibrary">
         Select video
       </button>
@@ -65,9 +65,8 @@ export default {
             if (attachment.attributes.type === "video") {
               if (attachment.toJSON().url) {
                 const path = attachment
-                  .toJSON()
-                  .url.replace(/^(?:\/\/|[^/]+)*\//, "");
-                self.col.data["default"][self.field.id] = `/${path}`;
+                  .toJSON().url;
+                self.col.data["default"][self.field.id] = path;
                 self.$forceUpdate();
               }
             } else {

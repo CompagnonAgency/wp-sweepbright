@@ -101,6 +101,11 @@ class WP_SweepBright_Controller_Pages
     // Set theme
     switch_theme('wp-sweepbright-theme');
 
+    // Remove templates
+    if (get_option('wp_sweepbright_db_templates')) {
+      delete_option('wp_sweepbright_db_templates');
+    }
+
     // Create pages
     $this->create_pages($data);
 
@@ -120,7 +125,7 @@ class WP_SweepBright_Controller_Pages
 
   public static function raw_data()
   {
-    $id = get_the_ID();
+    $id = WP_Wrapper::ID();
     if (
       get_post($id)->post_name === 'home-francais' ||
       get_post($id)->post_name === 'home-english' ||
@@ -160,6 +165,7 @@ class WP_SweepBright_Controller_Pages
       function change_title($title)
       {
         global $post;
+
         $title = get_the_title();
         $lang = WP_SweepBright_Controller_Pages::current_lang();
 
@@ -299,6 +305,7 @@ class WP_SweepBright_Controller_Pages
 
     foreach ($list_pages as $page) {
       wp_delete_post($page->ID, true);
+      delete_option('wp_sweepbright_page_' . $page->ID);
     }
 
     foreach ($pages as &$name) {
@@ -309,6 +316,10 @@ class WP_SweepBright_Controller_Pages
         'post_type' => 'page'
       );
       $id = wp_insert_post($page);
+      add_option('wp_sweepbright_page_' . $id, [
+        'id' => intval($id),
+        'layout' => false,
+      ]);
 
       if ($name === 'Home') {
         // Default home
@@ -363,6 +374,7 @@ class WP_SweepBright_Controller_Pages
         isset($field['type']) && ($field['type'] == 'upload_single'
           || $field['type'] == 'upload_multiple'
           || $field['type'] == 'upload_video'
+          || $field['type'] == 'upload_file'
           || $field['type'] == 'page_select'
           || $field['type'] == 'page_select_multiple'
           || $field['type'] == 'group')
@@ -448,7 +460,7 @@ class WP_SweepBright_Controller_Pages
 
   public static function sync_defaults($data, $components)
   {
-    if ($data['layout']) {
+    if ($data && $data['layout']) {
       foreach ($data['layout'] as &$layout) {
         foreach ($layout['columns'] as &$column) {
           $component = array_values(array_filter($components->data, function ($k) use ($column) {
@@ -553,7 +565,7 @@ class WP_SweepBright_Controller_Pages
           "template" => "blog",
         ],
       ];
-    } else if ($data['id'] === 'create') {
+    } else if ($data['id'] === 'create' && empty($data['duplicate'])) {
       $link = '';
       $page = [
         "id" => "create",
@@ -583,6 +595,11 @@ class WP_SweepBright_Controller_Pages
       ];
     } else {
       $locked = false;
+
+      // Duplicate
+      if (isset($data['duplicate'])) {
+        $data['id'] = $data['duplicate'];
+      }
 
       // Make the homepage locked
       if (get_post($data["id"])->post_name === 'home') {
@@ -625,6 +642,12 @@ class WP_SweepBright_Controller_Pages
           ],
         ],
       ];
+
+      // Duplicate
+      if (isset($data['duplicate'])) {
+        $page['id'] = 'create';
+        $page['updated'] = false;
+      }
 
       $page["slug"] = sanitize_title($page['title'][WP_SweepBright_Helpers::setting('default_language')]);
     }
@@ -722,6 +745,114 @@ class WP_SweepBright_Controller_Pages
       'UPDATED' => date('c'),
       'PAGE' => $data['page'],
       'LINK' => get_the_permalink($id),
+    ];
+    return rest_ensure_response($result);
+  }
+
+  public function pages_column($args)
+  {
+    $tmp = get_option('wp_sweepbright_db_templates');
+
+    $data = array_filter($tmp, function ($v, $k) {
+      return strpos($k, 'col_') !== false;
+    }, ARRAY_FILTER_USE_BOTH);
+
+    $result = [
+      'STATUS_CODE' => http_response_code(200),
+      'DATA' => $data,
+    ];
+    return rest_ensure_response($result);
+  }
+
+  public function pages_column_save($data)
+  {
+    // Store in database
+    $temp = get_option('wp_sweepbright_db_templates');
+    $temp['col_' . $data['name']] = [
+      'name' => $data['name'],
+      'data' => $data['data'],
+    ];
+    update_option('wp_sweepbright_db_templates', $temp);
+
+    $output = array_filter($temp, function ($v, $k) {
+      return strpos($k, 'col_') !== false;
+    }, ARRAY_FILTER_USE_BOTH);
+
+    $result = [
+      'STATUS_CODE' => http_response_code(200),
+      'NAME' => $data['name'],
+      'DATA' => $output,
+    ];
+    return rest_ensure_response($result);
+  }
+
+  public function pages_column_delete($data)
+  {
+    $templates = get_option('wp_sweepbright_db_templates');
+    unset($templates['col_' . $data['name']]);
+    update_option('wp_sweepbright_db_templates', $templates);
+
+    $output = array_filter($templates, function ($v, $k) {
+      return strpos($k, 'col_') !== false;
+    }, ARRAY_FILTER_USE_BOTH);
+
+    $result = [
+      'STATUS_CODE' => http_response_code(200),
+      'DATA' => $output,
+    ];
+    return rest_ensure_response($result);
+  }
+
+  public function pages_row($args)
+  {
+    $tmp = get_option('wp_sweepbright_db_templates');
+
+    $data = array_filter($tmp, function ($v, $k) {
+      return strpos($k, 'row_') !== false;
+    }, ARRAY_FILTER_USE_BOTH);
+
+    $result = [
+      'STATUS_CODE' => http_response_code(200),
+      'DATA' => $data,
+    ];
+    return rest_ensure_response($result);
+  }
+
+  public function pages_row_save($data)
+  {
+    // Store in database
+    $temp = get_option('wp_sweepbright_db_templates');
+    $temp['row_' . $data['name']] = [
+      'name' => $data['name'],
+      'data' => $data['data'],
+    ];
+    update_option('wp_sweepbright_db_templates', $temp);
+
+    $output = array_filter($temp, function ($v, $k) {
+      return strpos($k, 'row_') !== false;
+    }, ARRAY_FILTER_USE_BOTH);
+
+    $result = [
+      'STATUS_CODE' => http_response_code(200),
+      'NAME' => $data['name'],
+      'DATA' => $output,
+    ];
+    return rest_ensure_response($result);
+  }
+
+  public function pages_row_delete($data)
+  {
+    $templates = get_option('wp_sweepbright_db_templates');
+    unset($templates['row_' . $data['name']]);
+    update_option('wp_sweepbright_db_templates', $templates);
+
+    $output = array_filter($templates, function ($v, $k) {
+      return strpos($k, 'row_') !== false;
+    }, ARRAY_FILTER_USE_BOTH);
+
+    $result = [
+      'STATUS_CODE' => http_response_code(200),
+      'DATA' => $output,
     ];
     return rest_ensure_response($result);
   }
@@ -847,7 +978,7 @@ class WP_SweepBright_Controller_Pages
     $components = [];
 
     // Load the scripts from a page template
-    $id = get_the_ID();
+    $id = WP_Wrapper::ID();
 
     if (get_field('estate')['id']) {
       // Load the scripts from an estate template

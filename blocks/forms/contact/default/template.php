@@ -49,7 +49,7 @@
               <p class="mb-4 text-uppercase"><?= $field_label; ?> <?php if ($field_required) : ?>*<?php endif; ?></p>
 
               <?php if ($field_name === 'message') : ?>
-                <textarea class="w-full form-input textarea-medium" name="form_<?= $field_name; ?>" <?= $field_required; ?>></textarea>
+                <textarea class="w-full form-input textarea-medium" name="form_<?= $field_name; ?>" <?= $field_required; ?>><?php if (isset($_GET[$field_name])) : ?><?= $_GET[$field_name]; ?><?php endif; ?></textarea>
               <?php elseif ($field_name === 'subject' && $field_options) : ?>
                 <div class="form-select">
                   <select class="w-full form-input" name="form_<?= $field_name; ?>" value="<?php if (isset($_GET[$field_name])) : ?><?= $_GET[$field_name]; ?><?php endif; ?>" <?= $field_required; ?>>
@@ -62,12 +62,19 @@
                   </select>
                 </div>
               <?php else : ?>
-                <input type="text" class="w-full form-input" name="form_<?= $field_name; ?>" <?= $field_required; ?>>
+                <input type="text" class="w-full form-input" name="form_<?= $field_name; ?>" value="<?php if (isset($_GET[$field_name])) : ?><?= $_GET[$field_name]; ?><?php endif; ?>" <?= $field_required; ?>>
               <?php endif; ?>
             </div>
           <?php endforeach; ?>
         </div>
       <?php endforeach; ?>
+
+      <div>
+        <label>
+          <input type="checkbox" required>
+          <span><?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['privacy_policy']; ?></span>
+        </label>
+      </div>
     </div>
 
     <input type="hidden" name="recaptcha_response" id="recaptchaResponse">

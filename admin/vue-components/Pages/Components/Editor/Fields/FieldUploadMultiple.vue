@@ -1,22 +1,22 @@
 <template>
   <div>
-    <div class="mb-5 divide-gray-200 divide-y-1">
+    <div class="divide-gray-200 divide-y-1 mb-5">
       <draggable
         v-if="col.data.default[field.id]"
         v-model="col.data.default[field.id]"
         @change="endDrag($event, col.data.default[field.id])"
       >
         <div
-          class="flex items-center p-3 cursor-pointer hover:bg-gray-200"
+          class="cursor-pointer flex p-3 items-center hover:bg-gray-200"
           v-for="slide in col.data.default[field.id]"
           :key="slide.id"
         >
-          <i class="mr-3 text-lg text-gray-500 cursor-move far fa-bars"></i>
+          <i class="cursor-move mr-3 text-lg text-gray-500 far fa-bars"></i>
 
-          <div class="relative flex-1" v-if="slide.url">
+          <div class="flex-1 relative" v-if="slide.url">
             <div class="aspect-ratio-16/9"></div>
             <img
-              class="absolute top-0 left-0 object-contain object-center w-full h-full border-none rounded"
+              class="border-none rounded h-full object-contain object-center w-full top-0 left-0 absolute"
               :src="slide.url"
             />
           </div>
@@ -24,7 +24,7 @@
           <i
             v-tooltip="{ content: 'Remove slide' }"
             @click="deleteImage(field, slide.id)"
-            class="ml-3 text-lg text-red-500 far fa-trash"
+            class="text-lg ml-3 text-red-500 far fa-trash"
           ></i>
         </div>
       </draggable>
@@ -100,10 +100,10 @@ export default {
               if (attachment.toJSON().url) {
                 const path = attachment
                   .toJSON()
-                  .url.replace(/^(?:\/\/|[^/]+)*\//, "");
+                  .url;
                 bus.$emit("addImage", {
                   id: attachment.attributes.id,
-                  url: `/${path}`,
+                  url: path,
                   col: self.col,
                   field: self.field,
                 });

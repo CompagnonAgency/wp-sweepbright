@@ -21,18 +21,30 @@
           <?php endif; ?>
 
           <?php if (WP_Wrapper::get('email', $component, $args, $people) || WP_Wrapper::get('phone', $component, $args, $people)) : ?>
-            <ul class="inline-flex mt-4 space-x-7">
+            <ul class="inline-flex mt-4 <?php if (WP_Wrapper::get('display_mode', $component, $args, $people) !== 'icon') : ?>flex-col space-y-2<?php else : ?>space-x-7<?php endif; ?>">
               <?php if (WP_Wrapper::get('phone', $component, $args, $people)) : ?>
                 <li>
-                  <a href="tel:<?= WP_Wrapper::get('phone', $component, $args, $people); ?>">
-                    <i class="fas fa-phone"></i>
+                  <a href="tel:<?= WP_Wrapper::get('phone', $component, $args, $people); ?>" class="space-x-2">
+                    <?php if (WP_Wrapper::get('display_mode', $component, $args, $people) === 'icon' || WP_Wrapper::get('display_mode', $component, $args, $people) === 'icon_text') : ?>
+                      <i class="fas fa-phone"></i>
+                    <?php endif; ?>
+
+                    <?php if (WP_Wrapper::get('display_mode', $component, $args, $people) === 'text' || WP_Wrapper::get('display_mode', $component, $args, $people) === 'icon_text') : ?>
+                      <span><?= WP_Wrapper::get('phone', $component, $args, $people); ?></span>
+                    <?php endif; ?>
                   </a>
                 </li>
               <?php endif; ?>
               <?php if (WP_Wrapper::get('email', $component, $args, $people)) : ?>
                 <li>
-                  <a href="mailto:<?= WP_Wrapper::get('email', $component, $args, $people); ?>">
-                    <i class="fas fa-envelope"></i>
+                  <a href="mailto:<?= WP_Wrapper::get('email', $component, $args, $people); ?>" class="space-x-2">
+                    <?php if (WP_Wrapper::get('display_mode', $component, $args, $people) === 'icon' || WP_Wrapper::get('display_mode', $component, $args, $people) === 'icon_text') : ?>
+                      <i class="fas fa-envelope"></i>
+                    <?php endif; ?>
+
+                    <?php if (WP_Wrapper::get('display_mode', $component, $args, $people) === 'text' || WP_Wrapper::get('display_mode', $component, $args, $people) === 'icon_text') : ?>
+                      <span><?= WP_Wrapper::get('email', $component, $args, $people); ?></span>
+                    <?php endif; ?>
                   </a>
                 </li>
               <?php endif; ?>

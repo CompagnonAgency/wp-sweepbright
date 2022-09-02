@@ -6,18 +6,21 @@
  * @package FieldFacilities
  */
 
-class FieldFacilities {
+class FieldFacilities
+{
 
-	public function __construct() {
+	public function __construct()
+	{
 	}
 
-	public static function retrieve() {
-    return [
-      'key' => 'facilities',
-      'name' => 'facilities',
-      'label' => 'Facilities',
-      'layout' => 'row',
-      'type' => 'group',
+	public static function retrieve()
+	{
+		return [
+			'key' => 'facilities',
+			'name' => 'facilities',
+			'label' => 'Facilities',
+			'layout' => 'row',
+			'type' => 'group',
 			'sub_fields' => [
 				[
 					'key'    => 'kitchens',
@@ -73,8 +76,13 @@ class FieldFacilities {
 					'name'   => 'showrooms',
 					'type'   => 'number',
 				],
+				[
+					'key'    => 'shower_rooms',
+					'label'  => 'Shower rooms',
+					'name'   => 'shower_rooms',
+					'type'   => 'number',
+				],
 			],
-    ];
+		];
 	}
-
 }

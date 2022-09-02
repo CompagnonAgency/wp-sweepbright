@@ -5,7 +5,7 @@
     :class="'z-' + zIndex"
   >
     <div
-      class="flex items-center justify-between h-full py-2 cursor-pointer select-none  lg:py-auto form-input lg:w-48"
+      class="flex items-center justify-between h-full py-2 cursor-pointer select-none lg:py-auto form-input lg:w-48"
       :class="`${theme.rounded_lg} ${dropdown.open ? 'border-primary' : ''} ${
         theme.form_style !== 'line' ? 'px-4' : ''
       }`"
@@ -26,7 +26,8 @@
     </div>
 
     <div
-      class="absolute top-0 left-0 w-full overflow-hidden bg-white border border-gray-200  lg:max-w-xs mt-14"
+      class="absolute top-0 left-0 w-full overflow-hidden bg-white border border-gray-200 lg:max-w-xs mt-14"
+      style="min-width: 250px; max-height: 310px; overflow-y: auto;"
       :class="`${theme.rounded}`"
       v-if="dropdown.open"
     >
@@ -35,7 +36,7 @@
           v-for="(item, index) in dropdown.dropdown"
           :key="index"
           @click="setDropdown(item)"
-          class="px-3 py-2 transition duration-200 cursor-pointer  hover:bg-gray-100"
+          class="px-3 py-2 transition duration-200 cursor-pointer hover:bg-gray-100"
         >
           {{ item.label }}
         </li>

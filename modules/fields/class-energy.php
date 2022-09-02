@@ -6,18 +6,21 @@
  * @package FieldEnergy
  */
 
-class FieldEnergy {
+class FieldEnergy
+{
 
-	public function __construct() {
+	public function __construct()
+	{
 	}
 
-	public static function retrieve() {
-    return [
-      'key' => 'energy_details',
-      'name' => 'energy_details',
-      'label' => 'Energy details',
-      'layout' => 'row',
-      'type' => 'group',
+	public static function retrieve()
+	{
+		return [
+			'key' => 'energy_details',
+			'name' => 'energy_details',
+			'label' => 'Energy details',
+			'layout' => 'row',
+			'type' => 'group',
 			'sub_fields' => [
 				[
 					'key' => 'epc_value',
@@ -57,6 +60,50 @@ class FieldEnergy {
 					'label' => 'Total EPC value',
 					'name' => 'total_epc_value',
 					'type' => 'number',
+				],
+				[
+					'key' => 'energy_dpe',
+					'label' => 'DPE category',
+					'name' => 'energy_dpe',
+					'type' => 'select',
+					'default_value' => '',
+					'readonly' => 0,
+					'disabled' => 0,
+					'allow_null' => 1,
+					'choices' => [
+						'A' => 'A',
+						'B' => 'B',
+						'C' => 'C',
+						'D' => 'D',
+						'E' => 'E',
+						'F' => 'F',
+						'G' => 'G',
+					],
+				],
+				[
+					'key' => 'greenhouse_emissions',
+					'label' => 'Greenhouse emissions',
+					'name' => 'greenhouse_emissions',
+					'type' => 'select',
+					'default_value' => '',
+					'readonly' => 0,
+					'disabled' => 0,
+					'allow_null' => 1,
+					'choices' => [
+						'A' => 'A',
+						'B' => 'B',
+						'C' => 'C',
+						'D' => 'D',
+						'E' => 'E',
+						'F' => 'F',
+						'G' => 'G',
+					],
+				],
+				[
+					'key' => 'co2_emissions',
+					'label' => 'CO2 emissions',
+					'name' => 'co2_emissions',
+					'type' => 'text',
 				],
 				[
 					'key'           => 'nabers',
@@ -125,12 +172,6 @@ class FieldEnergy {
 					]
 				],
 				[
-					'key' => 'co2_emissions',
-					'label' => 'CO2 emissions',
-					'name' => 'co2_emissions',
-					'type' => 'text',
-				],
-				[
 					'key' => 'e_level',
 					'label' => 'E level',
 					'name' => 'e_level',
@@ -183,7 +224,6 @@ class FieldEnergy {
 					],
 				],
 			],
-    ];
+		];
 	}
-
 }

@@ -6,18 +6,21 @@
  * @package FieldSecurity
  */
 
-class FieldSecurity {
+class FieldSecurity
+{
 
-	public function __construct() {
+	public function __construct()
+	{
 	}
 
-	public static function retrieve() {
-    return [
-      'key' => 'security',
-      'name' => 'security',
-      'label' => 'Security',
-      'layout' => 'table',
-      'type' => 'group',
+	public static function retrieve()
+	{
+		return [
+			'key' => 'security',
+			'name' => 'security',
+			'label' => 'Security',
+			'layout' => 'table',
+			'type' => 'group',
 			'sub_fields' => [
 				[
 					'key'    => 'alarm',
@@ -41,7 +44,6 @@ class FieldSecurity {
 					'ui' => true,
 				],
 			],
-    ];
+		];
 	}
-
 }

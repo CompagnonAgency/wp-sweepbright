@@ -1,0 +1,69 @@
+{
+  "name": "PriceHubble",
+  "id": "pricehubble",
+  "icon": "fad fa-barcode-read",
+  "category": "widgets",
+  "fields": [
+    {
+      "name": "API key",
+      "id": "api_key",
+      "type": "text",
+      "default": "insert_api_key_here",
+      "sync": true
+    },
+    {
+      "name": "Language",
+      "id": "language",
+      "type": "select",
+      "default": "en",
+      "sync": true,
+      "options": {
+        "en": "English",
+        "fr": "French",
+        "nl": "Dutch"
+      }
+    },
+    {
+      "name": "Text color",
+      "id": "text_color",
+      "type": "text",
+      "default": "171717",
+      "sync": true
+    },
+    {
+      "name": "Active color",
+      "id": "active_color",
+      "type": "text",
+      "default": "1d4ed8",
+      "sync": true
+    },
+    {
+      "name": "Button color",
+      "id": "button_color",
+      "type": "text",
+      "default": "1d4ed8",
+      "sync": true
+    },
+    {
+      "name": "Google Analytics ID",
+      "id": "ga_id",
+      "type": "text",
+      "allow_empty": "true",
+      "sync": true
+    },
+    {
+      "name": "Google Tag Manager ID",
+      "id": "gtm_id",
+      "type": "text",
+      "allow_empty": "true",
+      "sync": true
+    },
+    {
+      "name": "Scroll offset",
+      "id": "scroll_top_offset",
+      "type": "text",
+      "allow_empty": "true",
+      "sync": true
+    }
+  ]
+}

@@ -10,7 +10,7 @@
  * Author: Compagnon Agency
  * Author URI: https://compagnon.agency/
  * Text Domain: wp-sweepbright
- * Version: 2.1.0
+ * Version: 2.5.0
  */
 
 // If this file is called directly, abort.
@@ -23,7 +23,7 @@ if (!defined('WPINC')) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define('WP_SWEEPBRIGHT_VERSION', '2.1.0');
+define('WP_SWEEPBRIGHT_VERSION', '2.6.0');
 
 /**
  * The code that runs during plugin activation.
@@ -180,7 +180,13 @@ function redirect_pand()
     WP_SweepBright_Helpers::setting('unavailable_properties') === 'hidden'
   ) {
     // Redirect projects & estates
-    if (get_field('estate', $post->ID)['status'] !== 'available') {
+    if (
+      get_field('estate', $post->ID)['status'] === 'option'
+      || get_field('estate', $post->ID)['status'] === 'rented'
+      || get_field('estate', $post->ID)['status'] === 'sold'
+      || get_field('estate', $post->ID)['status'] === 'bid'
+      || (get_field('estate', $post->ID)['status'] === 'under_contract' && WP_SweepBright_Helpers::setting('available_properties') === 'available')
+    ) {
       $wp_query->set_404();
       status_header(404);
       get_template_part(404);
@@ -189,7 +195,13 @@ function redirect_pand()
 
     // Redirect units
     if (get_field('estate', $post->ID)['project_id']) {
-      if (get_field('estate', WP_SweepBright_Helpers::get_project())['status'] !== 'available') {
+      if (
+        get_field('estate', WP_SweepBright_Helpers::get_project())['status'] === 'option' ||
+        get_field('estate', WP_SweepBright_Helpers::get_project())['status'] === 'rented' ||
+        get_field('estate', WP_SweepBright_Helpers::get_project())['status'] === 'sold' ||
+        get_field('estate', WP_SweepBright_Helpers::get_project())['status'] === 'bid' ||
+        (get_field('estate', $post->ID)['status'] === 'under_contract' && WP_SweepBright_Helpers::setting('available_properties') === 'available')
+      ) {
         $wp_query->set_404();
         status_header(404);
         get_template_part(404);
@@ -205,15 +217,6 @@ add_action('template_redirect', 'redirect_pand');
  * admin-specific hooks, and public-facing site hooks.
  */
 require plugin_dir_path(__FILE__) . 'includes/class-wp-sweepbright.php';
-
-/**
- * Auto update module.
- */
-require plugin_dir_path(__FILE__) . 'lib/BFIGitHubPluginUploader.php';
-
-if (is_admin()) {
-  new BFIGitHubPluginUpdater(__FILE__, 'CompagnonAgency', 'wp-sweepbright');
-}
 
 /**
  * Begins execution of the plugin.

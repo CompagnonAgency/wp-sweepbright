@@ -50,7 +50,7 @@
         </div>
       </div>
     </transition>
-
+    
     <!-- Filter (toggle / clear filters) -->
     <div
       class="relative z-10 flex flex-col mb-10 text-base lg:items-center lg:justify-between text-dark lg:flex-row"
@@ -110,7 +110,7 @@
       <!-- Empty: favorites -->
       <div
         v-if="
-          estates.length === 0 && totalPages === 0 && data.mode === 'favorites'
+          estates.length === 0 && !totalPages && data.mode === 'favorites'
         "
         class="text-center"
       >
@@ -264,8 +264,12 @@ export default {
           this.request.filters.negotiation = "sale_non_projects";
           break;
         default:
-          this.request.filters.negotiation = false;
           break;
+      }
+    },
+    officeFilter() {
+      if (this.data.office_name) {
+        this.request.filters.office = this.data.office_name;
       }
     },
     loadMap() {
@@ -320,6 +324,7 @@ export default {
 
       window.addEventListener("filterChange", (args) => {
         this.request = args.detail.request;
+        this.negotiationFilter();
         this.filtered = true;
 
         this.$search();
@@ -330,10 +335,10 @@ export default {
     },
     init() {
       this.configCache = JSON.parse(JSON.stringify(this.config));
-      this.loadFavorites();
       this.listeners();
       this.defaultFilters();
       this.negotiationFilter();
+      this.officeFilter();
       this.$events();
       this.$cloneFilters();
 
@@ -345,6 +350,7 @@ export default {
           recent: this.data.results_per_row,
         });
       } else if (this.data.mode === "favorites") {
+        this.loadFavorites();
         this.request.favorites = true;
         this.$list();
       }

@@ -109,7 +109,7 @@
 
       <tbody>
         <tr v-for="estate in estates" :key="estate.uid">
-          <td class="flex items-center" data-colname="Property">
+          <td class="flex items-center" data-colname="Property" v-if="estate">
             <a href="#" class="inline-block">
               <router-link
                 :to="{ name: 'edit', params: { id: estate.meta.estate.id } }"
@@ -137,13 +137,13 @@
               </p>
             </div>
           </td>
-          <td class="capitalize" data-colname="Status">
+          <td class="capitalize" data-colname="Status" v-if="estate">
             <template v-if="estate.meta.estate.is_project">
               <i class="fal fa-check"></i>
             </template>
             <template v-else> - </template>
           </td>
-          <td class="capitalize" data-colname="Status">
+          <td class="capitalize" data-colname="Status" v-if="estate">
             <template v-if="estate.meta.estate.is_project">
               <template v-if="estate.meta.estate.properties">
                 {{ estate.meta.estate.properties.length }}
@@ -152,7 +152,7 @@
             </template>
             <template v-else> - </template>
           </td>
-          <td class="capitalize" data-colname="Status">
+          <td class="capitalize" data-colname="Status" v-if="estate">
             {{ estate.meta.estate.status }}
           </td>
         </tr>
@@ -303,6 +303,8 @@ export default {
       axios
         .post("/wp-json/v1/sweepbright/list", this.request)
         .then((response) => {
+          console.log(response.data);
+
           if (response.data.estates && response.data.estates.length > 0) {
             this.estates = this.generateUid(response.data.estates);
           }

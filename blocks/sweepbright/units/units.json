@@ -31,6 +31,7 @@
           },
           "negotiation": {
             "sale": "Te koop",
+            "let": "Te huur",
             "option": "In optie",
             "sold": "Verkocht",
             "rented": "Verhuurd"
@@ -58,6 +59,7 @@
           },
           "negotiation": {
             "sale": "À vendre",
+            "let": "A louer",
             "option": "En option",
             "sold": "Vendu",
             "rented": "Loué"
@@ -85,6 +87,7 @@
           },
           "negotiation": {
             "sale": "For sale",
+            "let": "For rent",
             "option": "In option",
             "sold": "Sold",
             "rented": "Rented"

@@ -399,6 +399,7 @@ class WP_SweepBright_Controller_Hook
 		require_once plugin_dir_path(__DIR__) . 'modules/update/class-office-update.php';
 		require_once plugin_dir_path(__DIR__) . 'modules/update/class-occupancy-update.php';
 		require_once plugin_dir_path(__DIR__) . 'modules/update/class-orientation-update.php';
+		require_once plugin_dir_path(__DIR__) . 'modules/update/class-mandate-update.php';
 
 		// Run updates
 		WP_SweepBright_Helpers::status([
@@ -545,6 +546,12 @@ class WP_SweepBright_Controller_Hook
 			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
 		]);
 		FieldOrientationUpdate::update($estate, $post_id);
+		WP_SweepBright_Helpers::status([
+			'message' => 'Updating mandate...',
+			'status' => 'running',
+			'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+		]);
+		FieldMandateUpdate::update($estate, $post_id);
 
 		WP_SweepBright_Helpers::status([
 			'message' => 'Saving changes...',

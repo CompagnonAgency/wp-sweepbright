@@ -40,7 +40,9 @@ export default {
               new_home: false, // new, used
               negotiation: false, // sale, let, projects, sale_non_projects
               category: [], // see API docs `type`
-              subcategory: [], // see API docs `type`
+              subcategory: [], // see API docs `type`,
+              agent: false,
+              office: false,
               facilities: {
                 bedrooms: {
                   min: false,
@@ -59,6 +61,7 @@ export default {
                 min: false,
                 max: false,
               },
+              locations: [],
               location: {
                 region: '',
                 lat: false,
@@ -70,6 +73,14 @@ export default {
         };
       },
       methods: {
+        $getNumberFormat(locale) {
+          let format = 'DOT';
+
+          if (locale === 'en') {
+            format = 'COMMA';
+          }
+          return format;
+        },
         $formatNumber(price, format) {
           switch (format) {
             case "DOT":
