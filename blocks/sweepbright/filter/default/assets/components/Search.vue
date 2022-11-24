@@ -10,7 +10,7 @@
     ></i>
     <input
       type="text"
-      class="w-full h-full pr-5 placeholder-black placeholder-opacity-50 form-input"
+      class="w-full h-full pr-5 placeholder-black placeholder-opacity-50  form-input"
       :class="`${theme.form_style === 'line' ? 'pl-7' : 'pl-11'} ${
         theme.rounded_lg
       } ${location.focus ? 'border-primary' : ''}`"
@@ -21,7 +21,7 @@
       :placeholder="data.search_placeholder"
     />
     <GeoSuggest
-      class="absolute top-0 left-0 w-full overflow-hidden border border-gray-200 mt-14"
+      class="absolute top-0 left-0 w-full overflow-hidden border border-gray-200  mt-14"
       :country="data.search_country"
       :types="['(cities)']"
       :search="searchDefault"
@@ -39,7 +39,7 @@
               v-for="(suggestion, index) in suggestions"
               :key="index"
               @click="setSuggestion(suggestion)"
-              class="px-3 py-2 transition duration-200 cursor-pointer hover:bg-gray-100"
+              class="px-3 py-2 transition duration-200 cursor-pointer  hover:bg-gray-100"
             >
               {{ suggestion.description }}
             </li>
@@ -51,11 +51,11 @@
 </template>
 
 <script>
-import { GeoSuggest, loadGmaps } from "vue-geo-suggest";
-import ClickOutside from "vue-click-outside";
+import { GeoSuggest, loadGmaps } from 'vue-geo-suggest'
+import ClickOutside from 'vue-click-outside'
 
 export default {
-  props: ["component", "location", "filters", "zIndex"],
+  props: ['component', 'location', 'filters', 'zIndex'],
   components: {
     GeoSuggest,
   },
@@ -67,11 +67,11 @@ export default {
       get() {
         const val = this.store.searchEdited
           ? this.store.search
-          : decodeURI(this.location.region);
-        return val;
+          : decodeURI(this.location.region)
+        return val
       },
       set(value) {
-        this.store.search = value;
+        this.store.search = value
       },
     },
   },
@@ -82,7 +82,7 @@ export default {
       data: window[this.component],
       store: {
         searchEdited: false,
-        search: "",
+        search: '',
       },
       config: {
         geosuggest: {
@@ -91,33 +91,36 @@ export default {
           address: null,
         },
       },
-    };
+    }
   },
   methods: {
     searchFocus(focus) {
       if (!focus && !this.searchDefault) {
-        this.$bus.$emit("setLocation", false);
+        this.$bus.$emit('setLocation', false)
       }
-      this.$bus.$emit("searchFocus", focus);
+      this.$bus.$emit('searchFocus', focus)
     },
     openSuggest() {
-      this.store.searchEdited = true;
-      this.config.geosuggest.open = true;
+      this.store.searchEdited = true
+      this.config.geosuggest.open = true
     },
     closeSuggest() {
-      this.config.geosuggest.open = false;
+      this.config.geosuggest.open = false
     },
     setSuggestion(suggestion) {
-      this.config.geosuggest.selectedSuggestion = suggestion;
-      this.closeSuggest();
+      this.config.geosuggest.selectedSuggestion = suggestion
+      this.closeSuggest()
     },
     geocode($event) {
-      this.$bus.$emit("setLocation", $event.location);
-      this.searchDefault = $event.name;
+      const location = $event.location
+      location.region =
+        this.config.geosuggest.selectedSuggestion.description.split(',')[0]
+      this.$bus.$emit('setLocation', location)
+      this.searchDefault = $event.name
     },
   },
   mounted() {
-    loadGmaps("AIzaSyDeE8uomuOzvqJ43ULf_gJLrVj3vJWb7uo");
+    loadGmaps('AIzaSyDeE8uomuOzvqJ43ULf_gJLrVj3vJWb7uo')
   },
-};
+}
 </script>

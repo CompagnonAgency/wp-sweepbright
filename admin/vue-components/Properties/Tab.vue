@@ -26,7 +26,12 @@
       </li>
     </ul>
 
-    <div class="mt-10 mb-10" v-if="estate.meta.estate.project_id">
+    <div
+      class="mt-10 mb-10"
+      v-if="
+        estate.meta.estate.project_id && estate.meta.estate.project_id !== '0'
+      "
+    >
       <router-link
         :to="{ name: 'units', params: { id: estate.meta.estate.project_id } }"
         class="button action"

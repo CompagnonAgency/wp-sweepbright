@@ -1,4 +1,7 @@
 <?php
+
+use function DeliciousBrains\WPMDB\Container\DI\value;
+
 if (WP_Wrapper::get('breadcrumb_parent', $component, $args)) {
   $breadcrumb_buy = WP_Wrapper::page(
     $component,
@@ -34,7 +37,27 @@ if (get_field('features')['negotiation'] === 'sale') {
     <ul class="inline-flex mb-6 space-x-3 text-uppercase">
       <li>
         <?php if (!get_field('estate')['project_id']) : ?>
-          <a href="<?= $breadcrumb["url"]; ?>" class="font-semibold">
+          <?php
+          $previous_url = $_SERVER['HTTP_REFERER'];
+          $query_string = substr($previous_url, strpos($previous_url, '?') + 1);
+
+          if (
+            strpos($query_string, 'negotiation') >= 0 ||
+            strpos($query_string, 'locations') >= 0 ||
+            strpos($query_string, 'category') >= 0 ||
+            strpos($query_string, 'subcategory') >= 0 ||
+            strpos($query_string, 'price') >= 0 ||
+            strpos($query_string, 'plot_area') >= 0 ||
+            strpos($query_string, 'liveable_area') >= 0 ||
+            strpos($query_string, 'sort') >= 0
+          ) {
+            $previous_url = $previous_url;
+          } else {
+            $previous_url = $breadcrumb['url'];
+          }
+          ?>
+
+          <a href="<?= $previous_url; ?>" class="font-semibold">
             <i class="mr-1 far fa-long-arrow-alt-left"></i>
             <?= $breadcrumb["title"]; ?>
           </a>

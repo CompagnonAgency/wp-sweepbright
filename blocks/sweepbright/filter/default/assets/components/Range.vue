@@ -5,7 +5,7 @@
     :class="'z-' + zIndex"
   >
     <div
-      class="flex items-center justify-between h-full py-2 cursor-pointer select-none form-input lg:py-auto"
+      class="flex items-center justify-between h-full py-2 cursor-pointer select-none  form-input lg:py-auto"
       :class="`${theme.rounded_lg} ${range.open ? 'border-primary' : ''} ${
         theme.form_style !== 'line' ? 'px-4' : ''
       }`"
@@ -18,7 +18,7 @@
     </div>
 
     <div
-      class="absolute top-0 left-0 z-20 w-full p-5 overflow-x-hidden bg-white border border-gray-200 lg:w-56 mt-14"
+      class="absolute top-0 left-0 z-20 w-full p-5 overflow-x-hidden bg-white border border-gray-200  lg:w-56 mt-14"
       :class="`${theme.rounded}`"
       v-if="range.open"
       @click.stop="range.open = true"
@@ -40,7 +40,7 @@
         >
           <template v-slot:tooltip="{ value }">
             <div
-              class="p-1 px-2 text-base font-medium text-white bg-black rounded-lg shadow-md py whitespace-nowrap"
+              class="p-1 px-2 text-base font-medium text-white bg-black rounded-lg shadow-md  py whitespace-nowrap"
             >
               {{ formatMark(value, item) }}
             </div>
@@ -52,12 +52,12 @@
 </template>
 
 <script>
-import ClickOutside from "vue-click-outside";
-import VueSlider from "vue-slider-component";
-import "vue-slider-component/theme/default.css";
+import ClickOutside from 'vue-click-outside'
+import VueSlider from 'vue-slider-component'
+import 'vue-slider-component/theme/default.css'
 
 export default {
-  props: ["range", "id", "zIndex"],
+  props: ['range', 'id', 'zIndex'],
   components: {
     VueSlider,
   },
@@ -68,55 +68,55 @@ export default {
     return {
       lang: window.lang,
       theme: window.theme,
-    };
+    }
   },
   methods: {
     formatMark(value, item) {
-      let str = "";
-      value = this.$formatNumber(value, this.$getNumberFormat(this.lang));
+      let str = ''
+      value = this.$formatNumber(value, this.$getNumberFormat(this.lang))
       switch (item.symbol_position) {
-        case "before":
-          str = `${item.symbol} ${value}`;
-          break;
-        case "after":
-          str = `${value} ${item.symbol} `;
-          break;
+        case 'before':
+          str = `${item.symbol} ${value}`
+          break
+        case 'after':
+          str = `${value} ${item.symbol} `
+          break
         default:
-          str = value;
-          break;
+          str = value
+          break
       }
-      return str;
+      return str
     },
     getMarks(item) {
-      const obj = {};
-      obj[item.min] = this.formatMark(item.min, item);
-      obj[item.max] = `${this.formatMark(item.max, item)} +`;
-      return obj;
+      const obj = {}
+      obj[item.min] = this.formatMark(item.min, item)
+      obj[item.max] = `${this.formatMark(item.max, item)} +`
+      return obj
     },
     hideDropdowns() {
-      this.range.open = false;
+      this.range.open = false
     },
     toggleDropdown() {
-      this.$bus.$emit("toggleDropdown", this.id);
+      this.$bus.$emit('toggleDropdown', this.id)
     },
     getResults(item) {
       if (this.range.selected[item.id][1] === item.max) {
-        this.range.selected[item.id][1] = false;
+        this.range.selected[item.id][1] = false
       }
 
       this.$bus.$emit(
-        "setRange",
+        'setRange',
         this.id,
         item.id,
         this.range.selected[item.id]
-      );
+      )
 
       if (!this.range.selected[item.id][1]) {
-        this.range.selected[item.id][1] = item.max;
+        this.range.selected[item.id][1] = item.max
       }
     },
   },
-};
+}
 </script>
 
 <style>

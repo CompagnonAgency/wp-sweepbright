@@ -8,7 +8,7 @@
       </div>
 
       <div
-        class="flex flex-col space-y-3 text-base lg:items-start lg:flex-row lg:space-x-7 lg:space-y-0 text-dark"
+        class="flex flex-col space-y-3 text-base  lg:items-start lg:flex-row lg:space-x-7 lg:space-y-0 text-dark"
       >
         <Search
           v-if="data.multi_location === 'false'"
@@ -22,6 +22,7 @@
           v-if="data.multi_location === 'true'"
           :zIndex="50"
           :location="config.location"
+          :locations="config.locations"
           :component="component"
           :filters="request.filters"
         ></MultiSearch>
@@ -55,13 +56,13 @@
 </template>
 
 <script>
-import Search from "./Search";
-import MultiSearch from "./MultiSearch";
-import Dropdown from "./Dropdown";
-import Range from "./Range";
+import Search from './Search'
+import MultiSearch from './MultiSearch'
+import Dropdown from './Dropdown'
+import Range from './Range'
 
 export default {
-  props: ["component"],
+  props: ['component'],
   components: {
     Search,
     MultiSearch,
@@ -75,11 +76,11 @@ export default {
       data: window[this.component],
       configCache: {},
       config: {
+        locations: [],
         location: {
-          // focus: false,
           lat: false,
           lng: false,
-          region: "",
+          region: '',
         },
         dropdowns: {
           negotiation: {
@@ -96,13 +97,13 @@ export default {
                     .label,
               },
               {
-                value: "sale",
+                value: 'sale',
                 label:
                   window[this.component].locale[window.lang].filters.negotiation
                     .sale,
               },
               {
-                value: "let",
+                value: 'let',
                 label:
                   window[this.component].locale[window.lang].filters.negotiation
                     .let,
@@ -122,29 +123,29 @@ export default {
                     .all_categories,
               },
               {
-                value: ["house"],
+                value: ['house'],
                 label: window[this.component].locale[window.lang].type.house,
               },
               {
-                value: ["apartment"],
+                value: ['apartment'],
                 label:
                   window[this.component].locale[window.lang].type.apartment,
               },
               {
-                value: ["land"],
+                value: ['land'],
                 label: window[this.component].locale[window.lang].type.land,
               },
               {
-                value: ["office"],
+                value: ['office'],
                 label: window[this.component].locale[window.lang].type.office,
               },
               {
-                value: ["commercial"],
+                value: ['commercial'],
                 label:
                   window[this.component].locale[window.lang].type.commercial,
               },
               {
-                value: ["parking"],
+                value: ['parking'],
                 label: window[this.component].locale[window.lang].type.parking,
               },
             ],
@@ -162,138 +163,165 @@ export default {
                     .all_subcategories,
               },
               {
-                value: ["semi_detached"],
-                label: window[this.component].locale[window.lang].type.semi_detached,
-              },
-              {
-                value: ["detached"],
+                value: ['semi_detached'],
                 label:
-                  window[this.component].locale[window.lang].type.detached,
+                  window[this.component].locale[window.lang].type.semi_detached,
               },
               {
-                value: ["terraced"],
+                value: ['detached'],
+                label: window[this.component].locale[window.lang].type.detached,
+              },
+              {
+                value: ['terraced'],
                 label: window[this.component].locale[window.lang].type.terraced,
               },
               {
-                value: ["bungalow"],
+                value: ['bungalow'],
                 label: window[this.component].locale[window.lang].type.bungalow,
               },
               {
-                value: ["villa"],
-                label:
-                  window[this.component].locale[window.lang].type.villa,
+                value: ['villa'],
+                label: window[this.component].locale[window.lang].type.villa,
               },
               {
-                value: ["condo"],
+                value: ['condo'],
                 label: window[this.component].locale[window.lang].type.condo,
               },
               {
-                value: ["loft"],
+                value: ['loft'],
                 label: window[this.component].locale[window.lang].type.loft,
               },
               {
-                value: ["duplex"],
+                value: ['duplex'],
                 label: window[this.component].locale[window.lang].type.duplex,
               },
               {
-                value: ["penthouse"],
-                label: window[this.component].locale[window.lang].type.penthouse,
+                value: ['penthouse'],
+                label:
+                  window[this.component].locale[window.lang].type.penthouse,
               },
               {
-                value: ["student_accommodation"],
-                label: window[this.component].locale[window.lang].type.student_accommodation,
+                value: ['student_accommodation'],
+                label:
+                  window[this.component].locale[window.lang].type
+                    .student_accommodation,
               },
               {
-                value: ["healthcare"],
-                label: window[this.component].locale[window.lang].type.healthcare,
+                value: ['healthcare'],
+                label:
+                  window[this.component].locale[window.lang].type.healthcare,
               },
               {
-                value: ["industrial"],
-                label: window[this.component].locale[window.lang].type.industrial,
+                value: ['industrial'],
+                label:
+                  window[this.component].locale[window.lang].type.industrial,
               },
               {
-                value: ["leasure_and_sports"],
-                label: window[this.component].locale[window.lang].type.leasure_and_sports,
+                value: ['leasure_and_sports'],
+                label:
+                  window[this.component].locale[window.lang].type
+                    .leasure_and_sports,
               },
               {
-                value: ["restaurant_and_café"],
-                label: window[this.component].locale[window.lang].type.restaurant_and_café,
+                value: ['restaurant_and_café'],
+                label:
+                  window[this.component].locale[window.lang].type
+                    .restaurant_and_café,
               },
               {
-                value: ["retail"],
+                value: ['retail'],
                 label: window[this.component].locale[window.lang].type.retail,
               },
               {
-                value: ["shop"],
+                value: ['shop'],
                 label: window[this.component].locale[window.lang].type.shop,
               },
               {
-                value: ["warehouse"],
-                label: window[this.component].locale[window.lang].type.warehouse,
+                value: ['warehouse'],
+                label:
+                  window[this.component].locale[window.lang].type.warehouse,
               },
               {
-                value: ["townhouse"],
-                label: window[this.component].locale[window.lang].type.townhouse,
+                value: ['townhouse'],
+                label:
+                  window[this.component].locale[window.lang].type.townhouse,
               },
               {
-                value: ["cottage"],
+                value: ['cottage'],
                 label: window[this.component].locale[window.lang].type.cottage,
               },
               {
-                value: ["mansion"],
+                value: ['mansion'],
                 label: window[this.component].locale[window.lang].type.mansion,
               },
               {
-                value: ["farm"],
+                value: ['farm'],
                 label: window[this.component].locale[window.lang].type.farm,
               },
               {
-                value: ["investment_property"],
-                label: window[this.component].locale[window.lang].type.investment_property,
+                value: ['investment_property'],
+                label:
+                  window[this.component].locale[window.lang].type
+                    .investment_property,
               },
               {
-                value: ["agricultural"],
-                label: window[this.component].locale[window.lang].type.agricultural,
+                value: ['agricultural'],
+                label:
+                  window[this.component].locale[window.lang].type.agricultural,
               },
               {
-                value: ["buildable"],
-                label: window[this.component].locale[window.lang].type.buildable,
+                value: ['buildable'],
+                label:
+                  window[this.component].locale[window.lang].type.buildable,
               },
               {
-                value: ["recreational"],
-                label: window[this.component].locale[window.lang].type.recreational,
+                value: ['recreational'],
+                label:
+                  window[this.component].locale[window.lang].type.recreational,
               },
               {
-                value: ["pasture_land"],
-                label: window[this.component].locale[window.lang].type.pasture_land,
+                value: ['pasture_land'],
+                label:
+                  window[this.component].locale[window.lang].type.pasture_land,
               },
               {
-                value: ["coworking"],
-                label: window[this.component].locale[window.lang].type.coworking,
+                value: ['coworking'],
+                label:
+                  window[this.component].locale[window.lang].type.coworking,
               },
               {
-                value: ["flex_office"],
-                label: window[this.component].locale[window.lang].type.flex_office,
+                value: ['flex_office'],
+                label:
+                  window[this.component].locale[window.lang].type.flex_office,
               },
               {
-                value: ["open_office"],
-                label: window[this.component].locale[window.lang].type.open_office,
+                value: ['open_office'],
+                label:
+                  window[this.component].locale[window.lang].type.open_office,
               },
               {
-                value: ["private_garage"],
-                label: window[this.component].locale[window.lang].type.private_garage,
+                value: ['private_garage'],
+                label:
+                  window[this.component].locale[window.lang].type
+                    .private_garage,
               },
               {
-                value: ["indoor_parking_space"],
-                label: window[this.component].locale[window.lang].type.indoor_parking_space,
+                value: ['indoor_parking_space'],
+                label:
+                  window[this.component].locale[window.lang].type
+                    .indoor_parking_space,
               },
               {
-                value: ["outdoor_parking_space"],
-                label: window[this.component].locale[window.lang].type.outdoor_parking_space,
+                value: ['outdoor_parking_space'],
+                label:
+                  window[this.component].locale[window.lang].type
+                    .outdoor_parking_space,
               },
               {
-                value: ["covered_outdoor_space"],
-                label: window[this.component].locale[window.lang].type.covered_outdoor_space,
+                value: ['covered_outdoor_space'],
+                label:
+                  window[this.component].locale[window.lang].type
+                    .covered_outdoor_space,
               },
             ],
           },
@@ -307,9 +335,9 @@ export default {
                 .placeholder,
             range: [
               {
-                id: "price",
-                symbol: "€",
-                symbol_position: "before",
+                id: 'price',
+                symbol: '€',
+                symbol_position: 'before',
                 label:
                   window[this.component].locale[window.lang].filters.price
                     .label,
@@ -330,9 +358,9 @@ export default {
                 .placeholder,
             range: [
               {
-                id: "plot_area",
-                symbol: "m²",
-                symbol_position: "after",
+                id: 'plot_area',
+                symbol: 'm²',
+                symbol_position: 'after',
                 label:
                   window[this.component].locale[window.lang].filters.sizes
                     .plot_area_label,
@@ -341,9 +369,9 @@ export default {
                 max: 1000,
               },
               {
-                id: "liveable_area",
-                symbol: "m²",
-                symbol_position: "after",
+                id: 'liveable_area',
+                symbol: 'm²',
+                symbol_position: 'after',
                 label:
                   window[this.component].locale[window.lang].filters.sizes
                     .liveable_area_label,
@@ -355,52 +383,207 @@ export default {
           },
         },
       },
-    };
+    }
   },
   methods: {
     defaultLocales() {
       this.config.dropdowns.price.range[0].symbol = this.$getUnits(
         window.lang
-      ).currency;
+      ).currency
       this.config.dropdowns.sizes.range[0].symbol = this.$getUnits(
         window.lang
-      ).plot_area;
+      ).plot_area
       this.config.dropdowns.sizes.range[1].symbol = this.$getUnits(
         window.lang
-      ).liveable_area;
+      ).liveable_area
     },
     defaultFilters() {
+      // Negotiation
       if (this.$urlParam().negotiation) {
-        this.config.dropdowns.negotiation.selected = this.$urlParam().negotiation;
+        this.config.dropdowns.negotiation.selected =
+          this.$urlParam().negotiation
       }
 
+      // Location: latitude
       if (this.$urlParam().lat) {
-        this.config.location.lat = this.$urlParam().lat;
+        this.config.location.lat = this.$urlParam().lat
       }
 
+      // Location: longitude
       if (this.$urlParam().lng) {
-        this.config.location.lng = this.$urlParam().lng;
+        this.config.location.lng = this.$urlParam().lng
       }
 
+      // Location: region
       if (this.$urlParam().region) {
-        this.config.location.region = this.$urlParam().region;
+        this.config.location.region = this.$urlParam().region
+      }
+
+      // Locations
+      if (this.$urlParam().locations) {
+        const locations = this.$urlParam().locations
+          ? decodeURIComponent(this.$urlParam().locations.replace(/\+/g, '%20'))
+              .split('[')
+              .slice(1)
+          : false
+
+        const locationArr = []
+        if (locations) {
+          locations.forEach((item) => {
+            const location = item.slice(0, -1).split(',')
+            location[1] = parseFloat(location[1])
+            location[2] = parseFloat(location[2])
+            locationArr.push({
+              value: location[0],
+              latLng: {
+                lat: location[1],
+                lng: location[2],
+              },
+            })
+          })
+        }
+
+        this.config.locations = locationArr
+      }
+
+      // Category
+      if (this.$urlParam().category) {
+        this.config.dropdowns.category.selected = [this.$urlParam().category]
+      }
+
+      // Subcategory
+      if (this.$urlParam().subcategory) {
+        this.config.dropdowns.subcategory.selected = [
+          this.$urlParam().subcategory,
+        ]
+      }
+
+      // Plot area
+      const plot_area = this.$urlParam().plot_area
+        ? decodeURIComponent(this.$urlParam().plot_area).split(',')
+        : false
+      if (this.$urlParam().plot_area && plot_area && plot_area.length === 2) {
+        plot_area[1] =
+          plot_area[1] === 'false'
+            ? this.config.dropdowns.sizes.range[1].max
+            : plot_area[1]
+        this.config.dropdowns.sizes.selected.plot_area = plot_area
+      }
+
+      // Liveable area
+      const liveable_area = this.$urlParam().liveable_area
+        ? decodeURIComponent(this.$urlParam().liveable_area).split(',')
+        : false
+      if (
+        this.$urlParam().liveable_area &&
+        liveable_area &&
+        liveable_area.length === 2
+      ) {
+        liveable_area[1] =
+          liveable_area[1] === 'false'
+            ? this.config.dropdowns.sizes.range[1].max
+            : liveable_area[1]
+        this.config.dropdowns.sizes.selected.liveable_area = liveable_area
+      }
+
+      // Price
+      const price = this.$urlParam().price
+        ? decodeURIComponent(this.$urlParam().price).split(',')
+        : false
+      if (this.$urlParam().price && price && price.length === 2) {
+        price[1] =
+          price[1] === 'false'
+            ? this.config.dropdowns.price.range[0].max
+            : price[1]
+        this.config.dropdowns.price.selected.price = price
+      }
+    },
+    setUrlParam(name, value) {
+      const searchParams = new URLSearchParams(window.location.search)
+      searchParams.set(name, value)
+
+      const newRelativePathQuery = `${
+        window.location.pathname
+      }?${searchParams.toString()}`
+      window.history.pushState(null, '', newRelativePathQuery)
+    },
+    removeUrlParam(name) {
+      const searchParams = new URLSearchParams(window.location.search)
+      searchParams.delete(name)
+
+      const newRelativePathQuery = `${
+        window.location.pathname
+      }?${searchParams.toString()}`
+      window.history.pushState(null, '', newRelativePathQuery)
+    },
+    setFilter(filters) {
+      switch (filters.type) {
+        case 'string':
+          const stringDefault = filters.value ? filters.value : ''
+          this.setUrlParam(filters.name, stringDefault)
+          break
+        case 'array':
+          const arrayDefault = filters.value[0] ? filters.value[0] : ''
+          this.setUrlParam(filters.name, arrayDefault)
+          break
+        case 'range':
+          this.setUrlParam(
+            filters.name,
+            filters.value[0] + ',' + filters.value[1]
+          )
+          break
+        case 'location':
+          const region = filters.value.region ? filters.value.region : ''
+          const lat = filters.value.lat ? filters.value.lat : ''
+          const lng = filters.value.lng ? filters.value.lng : ''
+
+          this.setUrlParam('region', region)
+          this.setUrlParam('lat', lat)
+          this.setUrlParam('lng', lng)
+          break
+        case 'locations':
+          let locations = ''
+
+          filters.value.forEach((location, index) => {
+            locations += '['
+            locations += location.value + ','
+            locations += location.latLng.lat + ','
+            locations += location.latLng.lng
+            locations += ']'
+
+            if (index < filters.value.length - 1) {
+              locations += ','
+            }
+          })
+
+          this.setUrlParam(filters.name, locations)
+          break
       }
     },
     init() {
-      this.defaultFilters();
-      // this.defaultLocales();
-      this.configCache = JSON.parse(JSON.stringify(this.config));
-      this.configCache.location.region = "";
-      this.$events();
+      this.configCache = JSON.parse(JSON.stringify(this.config))
+      this.configCache.location.region = ''
+      this.defaultFilters()
+      this.$events()
 
-      window.addEventListener("filterReset", () => {
-        this.config = JSON.parse(JSON.stringify(this.configCache));
-        this.$forceUpdate();
-      });
+      window.addEventListener('filterReset', (e) => {
+        this.removeUrlParam('locations')
+        this.removeUrlParam('category')
+        this.removeUrlParam('subcategory')
+        this.removeUrlParam('negotiation')
+        this.removeUrlParam('price')
+        this.removeUrlParam('plot_area')
+        this.removeUrlParam('liveable_area')
+        this.config = JSON.parse(JSON.stringify(this.configCache))
+      })
+
+      window.addEventListener('filterUpdate', (e) => {
+        this.setFilter(e.detail.field)
+      })
     },
   },
   mounted() {
-    this.init();
+    this.init()
   },
-};
+}
 </script>

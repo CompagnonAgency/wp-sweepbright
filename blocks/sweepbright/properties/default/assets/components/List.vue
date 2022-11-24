@@ -17,7 +17,7 @@
       <div
         v-if="modalOpen"
         @click="hideModal"
-        class="fixed top-0 left-0 z-50 flex flex-col items-center justify-center w-full h-screen pb-20 overflow-hidden overflow-y-auto bg-black bg-opacity-70"
+        class="fixed top-0 left-0 z-50 flex flex-col items-center justify-center w-full h-screen pb-20 overflow-hidden overflow-y-auto bg-black  bg-opacity-70"
       >
         <div
           class="max-w-lg mb-10 overflow-hidden text-center rounded shadow-lg"
@@ -50,10 +50,10 @@
         </div>
       </div>
     </transition>
-    
+
     <!-- Filter (toggle / clear filters) -->
     <div
-      class="relative z-10 flex flex-col mb-10 text-base lg:items-center lg:justify-between text-dark lg:flex-row"
+      class="relative z-10 flex flex-col mb-10 text-base  lg:items-center lg:justify-between text-dark lg:flex-row"
       v-if="data.mode === 'filter' || data.mode === 'favorites'"
     >
       <div class="mb-5 text-2xl font-semibold lowercase lg:w-1/2 lg:mb-0">
@@ -80,7 +80,7 @@
     <!-- List -->
     <template v-if="view === 'list'">
       <div
-        class="relative z-0 flex flex-col flex-wrap space-y-5 lg:-m-5 lg:flex-row lg:space-y-0"
+        class="relative z-0 flex flex-col flex-wrap space-y-5  lg:-m-5 lg:flex-row lg:space-y-0"
         v-if="estates.length > 0 && totalPages > 0"
       >
         <div
@@ -109,9 +109,7 @@
 
       <!-- Empty: favorites -->
       <div
-        v-if="
-          estates.length === 0 && !totalPages && data.mode === 'favorites'
-        "
+        v-if="estates.length === 0 && !totalPages && data.mode === 'favorites'"
         class="text-center"
       >
         <div class="mb-5 text-6xl text-primary">
@@ -168,17 +166,17 @@
 </template>
 
 <script>
-import axios from "axios";
-import Loading from "vue-loading-overlay";
-import "vue-loading-overlay/dist/vue-loading.css";
+import axios from 'axios'
+import Loading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/vue-loading.css'
 
-import Dropdown from "./Dropdown";
-import Card from "./Card";
-import Map from "./Map";
-import ToggleMode from "./ToggleMode";
+import Dropdown from './Dropdown'
+import Card from './Card'
+import Map from './Map'
+import ToggleMode from './ToggleMode'
 
 export default {
-  props: ["component"],
+  props: ['component'],
   components: {
     Loading,
     ToggleMode,
@@ -192,7 +190,7 @@ export default {
       theme: window.theme,
       data: window[this.component],
       favorites: [],
-      view: "list",
+      view: 'list',
       modalOpen: false,
       markersLoaded: false,
       filtered: false,
@@ -205,26 +203,26 @@ export default {
             placeholder: window[this.component].locale[window.lang].sort.label,
             dropdown: [
               {
-                value: "relevance",
+                value: 'relevance',
                 label:
                   window[this.component].locale[window.lang].sort.relevance,
               },
               {
-                value: "price_asc",
+                value: 'price_asc',
                 label:
                   window[this.component].locale[window.lang].sort.price_asc,
               },
               {
-                value: "price_desc",
+                value: 'price_desc',
                 label:
                   window[this.component].locale[window.lang].sort.price_desc,
               },
               {
-                value: "date_asc",
+                value: 'date_asc',
                 label: window[this.component].locale[window.lang].sort.date_asc,
               },
               {
-                value: "date_desc",
+                value: 'date_desc',
                 label:
                   window[this.component].locale[window.lang].sort.date_desc,
               },
@@ -232,134 +230,187 @@ export default {
           },
         },
       },
-    };
+    }
   },
   methods: {
     openModal() {
-      this.modalOpen = true;
+      this.modalOpen = true
     },
     hideModal() {
-      this.modalOpen = false;
+      this.modalOpen = false
     },
     defaultFilters() {
-      this.request.maxPerPage = this.data.max_results_per_page;
-      this.request.geoDistance = this.data.geo_distance;
+      this.request.maxPerPage = this.data.max_results_per_page
+      this.request.geoDistance = this.data.geo_distance
 
-      if (this.$urlParam().negotiation || this.$urlParam().region) {
-        this.filtered = true;
+      if (
+        this.$urlParam().negotiation ||
+        this.$urlParam().region ||
+        this.$urlParam().locations ||
+        this.$urlParam().category ||
+        this.$urlParam().subcategory ||
+        this.$urlParam().plot_area ||
+        this.$urlParam().liveable_area ||
+        this.$urlParam().price
+      ) {
+        this.filtered = true
+      }
+
+      if (this.$urlParam().sort) {
+        const sort = this.$urlParam().sort
+          ? decodeURIComponent(this.$urlParam().sort).split(',').join('_')
+          : false
+        this.config.dropdowns.sort.selected = sort
       }
     },
     negotiationFilter() {
       switch (this.data.filter) {
-        case "sale":
-          this.request.filters.negotiation = "sale";
-          break;
-        case "let":
-          this.request.filters.negotiation = "let";
-          break;
-        case "projects":
-          this.request.filters.negotiation = "projects";
-          break;
-        case "sale_non_projects":
-          this.request.filters.negotiation = "sale_non_projects";
-          break;
+        case 'sale':
+          this.request.filters.negotiation = 'sale'
+          break
+        case 'let':
+          this.request.filters.negotiation = 'let'
+          break
+        case 'projects':
+          this.request.filters.negotiation = 'projects'
+          break
+        case 'sale_non_projects':
+          this.request.filters.negotiation = 'sale_non_projects'
+          break
         default:
-          break;
+          break
       }
     },
     officeFilter() {
       if (this.data.office_name) {
-        this.request.filters.office = this.data.office_name;
+        this.request.filters.office = this.data.office_name
       }
     },
     loadMap() {
-      window.addEventListener("loadedMap", () => {
-        this.markersLoaded = true;
-      });
+      window.addEventListener('loadedMap', () => {
+        this.markersLoaded = true
+      })
       this.$search({
         mapMode: true,
-      });
+      })
     },
     loadFavorites() {
-      axios.get("/wp-json/v1/sweepbright/favorites").then((response) => {
-        this.favorites = response.data.DATA;
-      });
+      axios.get('/wp-json/v1/sweepbright/favorites').then((response) => {
+        this.favorites = response.data.DATA
+      })
     },
     listeners() {
-      this.$bus.$on("favorite", (action, id) => {
-        this.isLoading = true;
+      this.$bus.$on('favorite', (action, id) => {
+        this.isLoading = true
         axios
-          .post("/wp-json/v1/sweepbright/favorites/update", {
+          .post('/wp-json/v1/sweepbright/favorites/update', {
             action,
             id,
           })
           .then(() => {
             if (!action) {
-              this.favorites = this.favorites.filter((key) => key !== id);
+              this.favorites = this.favorites.filter((key) => key !== id)
             } else {
-              this.favorites.push(id);
+              this.favorites.push(id)
             }
 
-            const event = new CustomEvent("favorite", {
+            const event = new CustomEvent('favorite', {
               bubbles: true,
               cancelable: true,
               composed: false,
               detail: {
                 favorited: action,
               },
-            });
-            window.dispatchEvent(event);
+            })
+            window.dispatchEvent(event)
 
-            this.isLoading = false;
-          });
-      });
+            this.isLoading = false
+          })
+      })
 
-      this.$bus.$on("openModal", (data) => {
-        this.openModal(data);
-      });
+      this.$bus.$on('openModal', (data) => {
+        this.openModal(data)
+      })
 
-      this.$bus.$on("setView", (view) => {
-        this.view = view;
-      });
+      this.$bus.$on('setView', (view) => {
+        this.view = view
+      })
 
-      window.addEventListener("filterChange", (args) => {
-        this.request = args.detail.request;
-        this.negotiationFilter();
-        this.filtered = true;
+      window.addEventListener('filterReset', () => {
+        this.removeUrlParam('sort')
+        this.config = JSON.parse(JSON.stringify(this.configCache))
+      })
 
-        this.$search();
+      window.addEventListener('filterUpdate', (e) => {
+        this.setFilter(e.detail.field)
+      })
+
+      window.addEventListener('filterChange', (args) => {
+        this.request = args.detail.request
+        this.negotiationFilter()
+        this.filtered = true
+
+        this.$search()
         this.$search({
           mapMode: true,
-        });
-      });
+        })
+      })
+    },
+    setUrlParam(name, value) {
+      const searchParams = new URLSearchParams(window.location.search)
+      searchParams.set(name, value)
+
+      const newRelativePathQuery = `${
+        window.location.pathname
+      }?${searchParams.toString()}`
+      window.history.pushState(null, '', newRelativePathQuery)
+    },
+    removeUrlParam(name) {
+      const searchParams = new URLSearchParams(window.location.search)
+      searchParams.delete(name)
+
+      const newRelativePathQuery = `${
+        window.location.pathname
+      }?${searchParams.toString()}`
+      window.history.pushState(null, '', newRelativePathQuery)
+    },
+    setFilter(filters) {
+      switch (filters.type) {
+        case 'sort':
+          this.setUrlParam(
+            filters.name,
+            filters.value.orderBy + ',' + filters.value.order
+          )
+          break
+      }
     },
     init() {
-      this.configCache = JSON.parse(JSON.stringify(this.config));
-      this.listeners();
-      this.defaultFilters();
-      this.negotiationFilter();
-      this.officeFilter();
-      this.$events();
-      this.$cloneFilters();
+      this.configCache = JSON.parse(JSON.stringify(this.config))
+      this.listeners()
+      this.defaultFilters()
+      this.negotiationFilter()
+      this.officeFilter()
+      this.$events()
+      this.$cloneFilters()
 
-      if (this.data.mode === "filter") {
-        this.$list();
-        this.loadMap();
-      } else if (this.data.mode === "recent") {
+      if (this.data.mode === 'filter') {
+        this.$list()
+        this.loadMap()
+      } else if (this.data.mode === 'recent') {
         this.$sweepBrightInit({
           recent: this.data.results_per_row,
-        });
-      } else if (this.data.mode === "favorites") {
-        this.loadFavorites();
-        this.request.favorites = true;
-        this.$list();
+        })
+      } else if (this.data.mode === 'favorites') {
+        this.loadFavorites()
+        this.request.favorites = true
+        this.$list()
       }
     },
   },
   mounted() {
-    this.init();
+    this.init()
   },
-};
+}
 </script>
 
 <style>

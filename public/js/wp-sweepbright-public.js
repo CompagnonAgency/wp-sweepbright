@@ -1,11 +1,11 @@
 // wp-sweepbright-public.js
-import axios from 'axios';
-import $ from 'jquery';
-import Paginate from 'vuejs-paginate';
+import axios from "axios";
+import $ from "jquery";
+import Paginate from "vuejs-paginate";
 
 export default {
   install(Vue) {
-    Vue.component('paginate', Paginate);
+    Vue.component("paginate", Paginate);
 
     Vue.mixin({
       computed: {
@@ -13,8 +13,7 @@ export default {
           get() {
             return this.request.page;
           },
-          set() {
-          },
+          set() {},
         },
       },
       data() {
@@ -30,8 +29,8 @@ export default {
           request: {
             page: 1,
             sort: {
-              order: 'desc', // desc, asc
-              orderBy: 'relevance', // relevance, price, date
+              order: "desc", // desc, asc
+              orderBy: "relevance", // relevance, price, date
             },
             recent: false,
             showAll: false,
@@ -63,7 +62,7 @@ export default {
               },
               locations: [],
               location: {
-                region: '',
+                region: "",
                 lat: false,
                 lng: false,
                 distance: false, // false (= default setting) or <int> in kilometers e.g. 5, 10, 15, ...
@@ -74,10 +73,10 @@ export default {
       },
       methods: {
         $getNumberFormat(locale) {
-          let format = 'DOT';
+          let format = "DOT";
 
-          if (locale === 'en') {
-            format = 'COMMA';
+          if (locale === "en") {
+            format = "COMMA";
           }
           return format;
         },
@@ -102,11 +101,14 @@ export default {
           let vars = {};
           let url = window.location.href;
 
-          if (url.indexOf('#') > -1) {
-            url = window.location.href.substr(0, window.location.href.lastIndexOf("#"));
+          if (url.indexOf("#") > -1) {
+            url = window.location.href.substr(
+              0,
+              window.location.href.lastIndexOf("#")
+            );
           }
 
-          url.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
+          url.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m, key, value) {
             vars[key] = value;
           });
           return vars;
@@ -117,16 +119,111 @@ export default {
           const lat = parseFloat(this.$urlParam()["lat"]);
           const lng = parseFloat(this.$urlParam()["lng"]);
 
+          // Negotiation
           if (negotiation) {
-            this.request.filters['negotiation'] = negotiation;
+            this.request.filters["negotiation"] = negotiation;
           }
 
+          // Location
           if (lat && lng && region) {
-            this.request.filters['location']['region'] = region;
-            this.request.filters['location']['lat'] = lat;
-            this.request.filters['location']['lng'] = lng;
+            this.request.filters["location"]["region"] = region;
+            this.request.filters["location"]["lat"] = lat;
+            this.request.filters["location"]["lng"] = lng;
           }
 
+          // Locations
+          if (this.$urlParam().locations) {
+            const locations = this.$urlParam().locations
+              ? decodeURIComponent(
+                  this.$urlParam().locations.replace(/\+/g, "%20")
+                )
+                  .split("[")
+                  .slice(1)
+              : false;
+
+            if (locations) {
+              locations.forEach((item) => {
+                const location = item.slice(0, -1).split(",");
+                location[1] = parseFloat(location[1]);
+                location[2] = parseFloat(location[2]);
+                this.request.filters["locations"].push({
+                  latLng: {
+                    lat: location[1],
+                    lng: location[2],
+                  },
+                });
+              });
+            }
+          }
+
+          // Price
+          const price = this.$urlParam().price
+            ? decodeURIComponent(this.$urlParam().price).split(",")
+            : false;
+          if (this.$urlParam().price && price && price.length === 2) {
+            price[1] = price[1] === "false" ? false : parseInt(price[1]);
+            this.request.filters["price"] = {
+              min: parseInt(price[0]),
+              max: price[1],
+            };
+          }
+
+          // Plot area
+          const plot_area = this.$urlParam().plot_area
+            ? decodeURIComponent(this.$urlParam().plot_area).split(",")
+            : false;
+          if (
+            this.$urlParam().plot_area &&
+            plot_area &&
+            plot_area.length === 2
+          ) {
+            plot_area[1] =
+              plot_area[1] === "false" ? false : parseFloat(plot_area[1]);
+            this.request.filters["plot_area"] = {
+              min: parseFloat(plot_area[0]),
+              max: plot_area[1],
+            };
+          }
+
+          // Liveable area
+          const liveable_area = this.$urlParam().liveable_area
+            ? decodeURIComponent(this.$urlParam().liveable_area).split(",")
+            : false;
+          if (
+            this.$urlParam().liveable_area &&
+            liveable_area &&
+            liveable_area.length === 2
+          ) {
+            liveable_area[1] =
+              liveable_area[1] === "false"
+                ? false
+                : parseFloat(liveable_area[1]);
+            this.request.filters["liveable_area"] = {
+              min: parseFloat(liveable_area[0]),
+              max: liveable_area[1],
+            };
+          }
+
+          // Sort
+          if (this.$urlParam().sort) {
+            const sort = this.$urlParam().sort
+              ? decodeURIComponent(this.$urlParam().sort).split(",")
+              : false;
+            this.request.sort.order = sort[1];
+            this.request.sort.orderBy = sort[0];
+          }
+
+          // Category
+          if (this.$urlParam().category) {
+            this.request.filters.category = [this.$urlParam().category];
+          }
+
+          // Subcategory
+          if (this.$urlParam().subcategory) {
+            this.request.filters.subcategory = [this.$urlParam().subcategory];
+          }
+
+          // Pagination
           let page = 1;
           if (window.location.hash) {
             page = parseInt(window.location.hash.substr(1), 10);
@@ -134,6 +231,7 @@ export default {
           this.$search({
             page,
           });
+          window.requestFromUrl = this.request;
           this.$forceUpdate();
         },
         $search(params) {
@@ -163,16 +261,19 @@ export default {
         generateUUID() {
           let d = new Date().getTime();
           if (
-            typeof performance !== 'undefined'
-            && typeof performance.now === 'function'
+            typeof performance !== "undefined" &&
+            typeof performance.now === "function"
           ) {
             d += performance.now();
           }
-          return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-            const r = (d + Math.random() * 16) % 16 | 0;
-            d = Math.floor(d / 16);
-            return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
-          });
+          return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+            /[xy]/g,
+            (c) => {
+              const r = (d + Math.random() * 16) % 16 | 0;
+              d = Math.floor(d / 16);
+              return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
+            }
+          );
         },
         generateUid(estates) {
           estates.forEach((estate) => {
@@ -189,7 +290,7 @@ export default {
           this.totalPages = response.data.totalPages;
           this.totalPosts = response.data.totalPosts;
 
-          const event = new Event('loadedEstates');
+          const event = new Event("loadedEstates");
           window.dispatchEvent(event);
           this.isLoading = false;
 
@@ -197,14 +298,20 @@ export default {
             params.callback();
           }
           if (window.location.hash) {
-            if (document.querySelector('[data-sweepbright-list]')) {
-              $('html, body').animate({
-                scrollTop: $('[data-sweepbright-list]').offset().top - 100,
-              }, 200);
+            if (document.querySelector("[data-sweepbright-list]")) {
+              $("html, body").animate(
+                {
+                  scrollTop: $("[data-sweepbright-list]").offset().top - 100,
+                },
+                200
+              );
 
-              $('[data-sweepbright-list]').animate({
-                scrollTop: 0,
-              }, 200);
+              $("[data-sweepbright-list]").animate(
+                {
+                  scrollTop: 0,
+                },
+                200
+              );
             }
           }
         },
@@ -217,18 +324,20 @@ export default {
           this.totalPages = response.data.totalPages;
           this.totalPosts = response.data.totalPosts;
 
-          const event = new Event('loadedMap');
+          const event = new Event("loadedMap");
           window.dispatchEvent(event);
         },
         getEstates(params) {
           this.isLoading = true;
-          axios.post('/wp-json/v1/sweepbright/list', this.request).then((response) => {
-            if (params && params.mapMode) {
-              this.storeMarkers(response);
-            } else {
-              this.storeEstates(params, response);
-            }
-          });
+          axios
+            .post("/wp-json/v1/sweepbright/list", this.request)
+            .then((response) => {
+              if (params && params.mapMode) {
+                this.storeMarkers(response);
+              } else {
+                this.storeEstates(params, response);
+              }
+            });
         },
         $sweepBrightPaginate(page) {
           this.request.page = page;
@@ -281,12 +390,16 @@ export default {
         $eventListener() {
           this.countListener += 1;
           if (this.countListener === 1) {
-            window.addEventListener('hashchange', () => {
-              this.$loadEstates({
-                sort: this.request.sort,
-                filters: this.request.filters,
-              });
-            }, false);
+            window.addEventListener(
+              "hashchange",
+              () => {
+                this.$loadEstates({
+                  sort: this.request.sort,
+                  filters: this.request.filters,
+                });
+              },
+              false
+            );
           }
         },
         $sweepBrightInit(params, callback) {

@@ -10,7 +10,7 @@
  * Author: Compagnon Agency
  * Author URI: https://compagnon.agency/
  * Text Domain: wp-sweepbright
- * Version: 2.5.0
+ * Version: 2.7.0
  */
 
 // If this file is called directly, abort.
@@ -23,7 +23,7 @@ if (!defined('WPINC')) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define('WP_SWEEPBRIGHT_VERSION', '2.6.0');
+define('WP_SWEEPBRIGHT_VERSION', '2.7.0');
 
 /**
  * The code that runs during plugin activation.
@@ -49,17 +49,21 @@ register_deactivation_hook(__FILE__, 'deactivate_wp_sweepbright');
 // Delete post media
 function delete_post_media($post_id)
 {
-  $attachments = get_posts(
-    [
-      'post_type' => 'attachment',
-      'posts_per_page' => -1,
-      'post_status' => 'any',
-      'post_parent' => $post_id,
-    ]
-  );
+  if ($post_id !== 0) {
+    $attachments = get_posts(
+      [
+        'post_type' => 'attachment',
+        'posts_per_page' => -1,
+        'post_status' => 'any',
+        'post_parent' => $post_id,
+      ]
+    );
 
-  foreach ($attachments as $attachment) {
-    wp_delete_attachment($attachment->ID);
+    foreach ($attachments as $attachment) {
+      wp_delete_attachment($attachment->ID);
+    }
+  } else {
+    error_log(print_r('Error in `delete_post_media`. `post_id` is not defined', true));
   }
 }
 add_action('delete_post', 'delete_post_media');

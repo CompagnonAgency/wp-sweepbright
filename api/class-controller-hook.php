@@ -83,48 +83,78 @@ class WP_SweepBright_Controller_Hook
 		switch ($event) {
 			case 'estate-added':
 				$estate = $this->get_estate($estate_id);
-				$cron = $this->add_estate($estate);
-				$cron['action'] = 'add';
-				$this->schedule_estate($cron);
 
-				// Child properties
-				if (isset($estate['properties']) && count($estate['properties']) > 0) {
-					foreach ($estate['properties'] as $key => $property) {
-						$cron = $this->add_estate($property);
-						$cron['action'] = 'add_unit';
-						$this->schedule_estate($cron);
-					}
-				}
-				break;
-			case 'estate-updated':
-				$estate = $this->get_estate($estate_id);
-				$cron = $this->edit_estate($estate);
-				$cron['action'] = 'update';
-				$this->schedule_estate($cron);
+				if ($estate) {
+					$cron = $this->add_estate($estate);
+					$cron['action'] = 'add';
+					$this->schedule_estate($cron);
 
-				// Clean up archived child properties
-				if ($estate['properties'] && count($estate['properties']) > 0) {
-					WP_SweepBright_Query::archive_units($estate['id'], $estate['properties']);
-				}
-
-				// Child properties
-				if ($estate['properties'] && count($estate['properties']) > 0) {
-					foreach ($estate['properties'] as $key => $property) {
-						if (WP_SweepBright_Query::estate_exists($property['id'])) {
-							$cron = $this->edit_estate($property);
-							$cron['action'] = 'update_unit';
-							$this->schedule_estate($cron);
-						} else {
+					// Child properties
+					if (isset($estate['properties']) && count($estate['properties']) > 0) {
+						foreach ($estate['properties'] as $key => $property) {
 							$cron = $this->add_estate($property);
 							$cron['action'] = 'add_unit';
 							$this->schedule_estate($cron);
 						}
 					}
+				} else {
+					error_log(print_r('Publication has been blocked due to missing property information.', true));
+					WP_SweepBright_Helpers::status([
+						'message' => 'Publication failed.',
+						'status' => 'completed',
+						'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+					]);
+				}
+				break;
+			case 'estate-updated':
+				// Only execute when there is an existing property with a status of 'published'
+				// This is a fix of 13 okt 2022, and resolves the issue where estate_id/post_id = null
+				if (WP_SweepBright_Helpers::get_post_ID_from_estate($estate_id)) {
+					$estate = $this->get_estate($estate_id);
+					$cron = $this->edit_estate($estate);
+					$cron['action'] = 'update';
+					$this->schedule_estate($cron);
+
+					// Clean up archived child properties
+					if (isset($estate['properties']) && $estate['properties'] && count($estate['properties']) > 0) {
+						WP_SweepBright_Query::archive_units($estate['id'], $estate['properties']);
+					}
+
+					// Child properties
+					if (isset($estate['properties']) && $estate['properties'] && count($estate['properties']) > 0) {
+						foreach ($estate['properties'] as $key => $property) {
+							if (WP_SweepBright_Query::estate_exists($property['id'])) {
+								$cron = $this->edit_estate($property);
+								$cron['action'] = 'update_unit';
+								$this->schedule_estate($cron);
+							} else {
+								$cron = $this->add_estate($property);
+								$cron['action'] = 'add_unit';
+								$this->schedule_estate($cron);
+							}
+						}
+					}
+				} else {
+					error_log(print_r('Publication has been blocked due to the existing property being in "concept".', true));
+					WP_SweepBright_Helpers::status([
+						'message' => 'Publication already running.',
+						'status' => 'completed',
+						'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+					]);
 				}
 				break;
 			case 'estate-deleted':
-				$this->delete_estate($estate_id);
-				$this->delete_units($estate_id);
+				if (WP_SweepBright_Helpers::get_post_ID_from_estate($estate_id)) {
+					$this->delete_estate($estate_id);
+					$this->delete_units($estate_id);
+				} else {
+					error_log(print_r('Deletion has been blocked due to the existing property being in "concept".', true));
+					WP_SweepBright_Helpers::status([
+						'message' => 'Deletion already running.',
+						'status' => 'completed',
+						'date' => date_i18n('d M Y, h:i:s A', current_time('timestamp')),
+					]);
+				}
 				break;
 			default:
 				break;
@@ -247,6 +277,10 @@ class WP_SweepBright_Controller_Hook
 	public function publish_estate($data)
 	{
 		$locale = $GLOBALS['wp_sweepbright_config']['default_locale'];
+
+		if ($data['post_id'] === 0) {
+			error_log(print_r('Error in publish_estate. `post_id` is not defined', true));
+		}
 
 		// Update all of the data to the custom fields
 		if (is_numeric($data['post_id'])) {
