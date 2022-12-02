@@ -955,6 +955,9 @@ class WP_SweepBright_Query
 					'hidden' => get_post_meta($id, 'price_hidden', true),
 					'price_costs' => get_post_meta($id, 'price_price_costs', true),
 				],
+				'energy_details' => [
+					'epc_category' => get_post_meta($id, 'energy_details_epc_category', true),
+				],
 				'sizes' => [
 					'liveable_area' => [
 						'size' => get_post_meta($id, 'sizes_liveable_area_size', true),
