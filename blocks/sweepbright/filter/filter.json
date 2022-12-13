@@ -33,17 +33,6 @@
       }
     },
     {
-      "name": "Multiple location search",
-      "id": "multi_location",
-      "type": "select",
-      "default": "false",
-      "sync": true,
-      "options": {
-        "true": "Enabled",
-        "false": "Disabled"
-      }
-    },
-    {
       "name": "Search placeholder",
       "id": "search_placeholder",
       "type": "text",

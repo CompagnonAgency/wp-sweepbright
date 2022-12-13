@@ -1,4 +1,6 @@
 import $ from "jquery";
+
+import "./tags.css";
 import Vue from "vue";
 import Search from "./components/Search.vue";
 
@@ -8,10 +10,11 @@ Vue.config.devtools = false;
 $(".banner-default-search").each((index, el) => {
   new Vue({
     el: `.${el.className}`,
-    render: (h) => h(Search, {
-      props: {
-        component: $(el).data("component"),
-      },
-    }),
+    render: (h) =>
+      h(Search, {
+        props: {
+          component: $(el).data("component"),
+        },
+      }),
   });
 });

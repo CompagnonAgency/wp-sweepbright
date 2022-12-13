@@ -69,6 +69,7 @@ class WP_SweepBright
 
 		$this->load_dependencies();
 		$this->set_locale();
+
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
 	}
@@ -151,6 +152,9 @@ class WP_SweepBright
 
 		// Load geo
 		$this->loader->add_action('init', $plugin_admin, 'load_wp_sweepbright_geo');
+
+		// Load locations
+		$this->loader->add_action('init', $plugin_admin, 'load_wp_sweepbright_locations');
 
 		// Load helpers
 		$this->loader->add_action('init', $plugin_admin, 'load_wp_sweepbright_helpers');

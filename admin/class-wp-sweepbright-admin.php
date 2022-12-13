@@ -154,6 +154,15 @@ class WP_SweepBright_Admin
 	}
 
 	/**
+	 * Load the locations API.
+	 */
+	public function load_wp_sweepbright_locations()
+	{
+		require_once plugin_dir_path(__DIR__) . 'api/class-controller-locations.php';
+		$wp_sweepbright_controller_locations = new WP_SweepBright_Controller_Locations();
+	}
+
+	/**
 	 * Load the pages API.
 	 */
 	public function load_wp_sweepbright_pages()

@@ -8,18 +8,9 @@
       </div>
 
       <div
-        class="flex flex-col space-y-3 text-base  lg:items-start lg:flex-row lg:space-x-7 lg:space-y-0 text-dark"
+        class="flex flex-col space-y-3 text-base lg:items-start lg:flex-row lg:space-x-7 lg:space-y-0 text-dark"
       >
-        <Search
-          v-if="data.multi_location === 'false'"
-          :zIndex="50"
-          :location="config.location"
-          :component="component"
-          :filters="request.filters"
-        ></Search>
-
         <MultiSearch
-          v-if="data.multi_location === 'true'"
           :zIndex="50"
           :location="config.location"
           :locations="config.locations"
@@ -56,7 +47,6 @@
 </template>
 
 <script>
-import Search from './Search'
 import MultiSearch from './MultiSearch'
 import Dropdown from './Dropdown'
 import Range from './Range'
@@ -64,7 +54,6 @@ import Range from './Range'
 export default {
   props: ['component'],
   components: {
-    Search,
     MultiSearch,
     Dropdown,
     Range,

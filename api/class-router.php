@@ -171,7 +171,6 @@ class WP_SweepBright_Router
 				'permission_callback' => '__return_true',
 			));
 
-
 			register_rest_route('v1/sweepbright', '/favorites', array(
 				'methods' => 'GET',
 				'callback' => __CLASS__ . '::favorites_list',
@@ -181,6 +180,12 @@ class WP_SweepBright_Router
 			register_rest_route('v1/sweepbright', '/favorites/update', array(
 				'methods' => 'POST',
 				'callback' => __CLASS__ . '::favorites_update',
+				'permission_callback' => '__return_true',
+			));
+
+			register_rest_route('v1/sweepbright', '/locations', array(
+				'methods' => 'GET',
+				'callback' => __CLASS__ . '::locations',
 				'permission_callback' => '__return_true',
 			));
 		});
@@ -370,5 +375,11 @@ class WP_SweepBright_Router
 	{
 		$wp_sweepbright_controller_pages = new WP_SweepBright_Controller_Pages();
 		return $wp_sweepbright_controller_pages->favorites_update($data);
+	}
+
+	public static function locations($data)
+	{
+		$wp_sweepbright_controller_locations = new WP_SweepBright_Controller_Locations();
+		return $wp_sweepbright_controller_locations->locations($data);
 	}
 }

@@ -1,46 +1,45 @@
 <template>
   <div class="relative flex-1" :class="'z-' + zIndex">
+    <i
+      class="absolute top-0 left-0 mt-2.5 text-base far fa-search z-10"
+      :class="theme.form_style === 'line' ? 'ml-0' : 'ml-5'"
+    ></i>
     <tags-input
-      :wrapper-class="`tags-input-wrapper-default ${theme.rounded_lg}`"
+      ref="tagsinput"
+      :wrapper-class="`tags-input-wrapper-default ${theme.rounded_lg} ${theme.form_style === 'line' ? 'is-line' : 'is-regular'}`"
       input-id="tag-input"
-      @change="autoComplete"
+      @tag-added="filterResults"
       @tag-removed="filterResults"
       :only-existing-tags="true"
-      :before-adding-tag="beforeAddingTag"
       :placeholder="data.search_placeholder"
-      :limit="5"
+      :typeahead-activation-threshold="3"
       :typeahead="true"
       typeahead-style="dropdown"
-      :existing-tags="config.geosuggest.suggestions"
+      :typeahead-callback="search_tags"
       :typeahead-hide-discard="true"
       v-model="store.selectedTags"
     >
     </tags-input>
-
-    <GeoSuggest
-      class="absolute top-0 left-0 w-full overflow-hidden border border-gray-200 opacity-25  mt-14"
-      :country="data.search_country"
-      :types="['sublocality', 'postal_code', 'locality']"
-      :search="searchDefault"
-      @suggestions="loadSuggestions"
-    >
-    </GeoSuggest>
   </div>
 </template>
 
 <script>
-import { GeoSuggest, loadGmaps } from 'vue-geo-suggest'
-import ClickOutside from 'vue-click-outside'
+import axios from 'axios'
 import VoerroTagsInput from '@voerro/vue-tagsinput'
 
 export default {
   props: ['component', 'location', 'locations', 'filters', 'zIndex'],
   components: {
-    GeoSuggest,
     'tags-input': VoerroTagsInput,
   },
   watch: {
+    locations() {
+      this.store.selectedTags = this.locations
+    },
     'location.region'() {
+      const region = this.location.region
+      const decodedRegion = decodeURIComponent(region)
+
       this.store.selectedTags.push({
         key: this.location.region,
         placeId: false,
@@ -48,111 +47,51 @@ export default {
           lat: parseFloat(this.location.lat),
           lng: parseFloat(this.location.lng),
         },
-        value: this.location.region,
+        value: decodedRegion,
       })
     },
-    locations() {
-      this.store.selectedTags = this.locations
-    },
-  },
-  directives: {
-    ClickOutside,
   },
   data() {
     return {
       lang: window.lang,
       theme: window.theme,
       data: window[this.component],
-      searchDefault: '',
       store: {
-        searchEdited: false,
-        search: '',
         selectedTags: [],
-      },
-      config: {
-        geosuggest: {
-          open: false,
-          suggestions: [],
-        },
       },
     }
   },
   methods: {
-    autoComplete(e) {
-      this.searchDefault = e
-      this.store.searchEdited = true
+    search_tags(query) {
+      return new Promise((resolve) => {
+        axios
+          .get(`/wp-json/v1/sweepbright/locations?search=${query}&country=${this.data.search_country}`)
+          .then((res) => {
+            resolve(res.data)
+            const searchParam = query.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+            this.$refs.tagsinput.doSearch(searchParam)
+          });
+      });
     },
-    loadSuggestions(e) {
-      const suggestions = []
-      e.forEach((suggestion) => {
-        suggestions.push({
-          key: suggestion.placeId,
-          placeId: suggestion.placeId,
-          latLng: false,
-          value: suggestion.description,
-        })
-      })
+    removeUrlParam(name) {
+      const searchParams = new URLSearchParams(window.location.search)
+      searchParams.delete(name)
 
-      this.config.geosuggest.suggestions = suggestions
+      const newRelativePathQuery = `${
+        window.location.pathname
+      }?${searchParams.toString()}`
+      window.history.pushState(null, '', newRelativePathQuery)
     },
     filterResults() {
+      this.removeUrlParam('region')
+      this.removeUrlParam('lat')
+      this.removeUrlParam('lng')
+
       this.$bus.$emit(
         'setLocations',
         JSON.parse(JSON.stringify(this.store.selectedTags))
       )
     },
-    beforeAddingTag(e) {
-      if (e.placeId) {
-        e.value = ''
-
-        const geocoder = new google.maps.Geocoder()
-
-        geocoder
-          .geocode({ placeId: e.placeId })
-          .then(({ results }) => {
-            if (results && results[0]) {
-              const location = results[0]
-
-              let postalCode = location.address_components.find((component) => {
-                return component.types.includes('postal_code')
-              })
-
-              let locality = location.address_components.find((component) => {
-                return component.types.includes('locality')
-              })
-
-              let sublocality = location.address_components.find(
-                (component) => {
-                  return component.types.includes('sublocality')
-                }
-              )
-
-              value = locality.short_name
-              if (sublocality) {
-                value = sublocality.short_name
-              }
-
-              if (postalCode) {
-                value += ` (${postalCode.short_name})`
-              }
-
-              e.latLng = {
-                lat: location.geometry.location.lat(),
-                lng: location.geometry.location.lng(),
-              }
-              e.value = value
-
-              this.filterResults()
-            }
-          })
-          .catch((e) => console.log('Geocoder failed due to: ' + e))
-      }
-
-      return true
-    },
-  },
-  mounted() {
-    loadGmaps('AIzaSyDeE8uomuOzvqJ43ULf_gJLrVj3vJWb7uo')
   },
 }
 </script>

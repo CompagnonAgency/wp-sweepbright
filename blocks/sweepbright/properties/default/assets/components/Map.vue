@@ -96,19 +96,19 @@ export default {
       data: window[this.component],
       lang: window.lang,
       markerLocations: [],
-      markerActive: `/wp-content/plugins/wp-sweepbright/blocks/sweepbright/properties/default/${require("../images/marker-active.svg")}`,
-      markerInactive: `/wp-content/plugins/wp-sweepbright/blocks/sweepbright/properties/default/${require("../images/marker-inactive.svg")}`,
+      markerActive: `${require("../images/marker-active.svg")}`,
+      markerInactive: `${require("../images/marker-inactive.svg")}`,
       markerCluster: true,
       infoWinOpen: true,
       infoWindowPos: null,
       infoWindowData: {},
       infoOptions: {
-        pixelOffset: new google.maps.Size(0, -55),
+        pixelOffset: false,
       },
       clusterStyle: [
         {
           textColor: "white",
-          url: `/wp-content/plugins/wp-sweepbright/blocks/sweepbright/properties/default/${require("../images/cluster.svg")}`,
+          url: `${require("../images/cluster.svg")}`,
           height: 30,
           width: 30,
           textSize: 14,
@@ -289,6 +289,10 @@ export default {
   mounted() {
     this.renderMarkers();
 
+    this.$refs.gmap.$mapPromise.then(() => {
+      this.infoOptions.pixelOffset = new google.maps.Size(0, -50);
+    });
+
     this.$bus.$on("mode", (mode) => {
       if (mode === "map") {
         this.renderMarkers();
@@ -317,7 +321,10 @@ export default {
 
 .gm-style .gm-style-iw-t::after {
   margin-top: -2px !important;
-  background: black;
   @apply shadow-none !important;
+}
+
+.gm-style .gm-style-iw-tc::after {
+  background: black;
 }
 </style>
