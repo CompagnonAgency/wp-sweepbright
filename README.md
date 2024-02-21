@@ -1,7 +1,5 @@
 # WP SweepBright PRO
 
-<img src="https://compagnon.agency/wp-content/themes/compagnon/assets/img/sweepbright.png" width="150">
-
 3rd party WordPress plugin for SweepBright.
 
 ## 1. Introduction
