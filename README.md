@@ -11,7 +11,7 @@
 - PHP 7.3+
 - Dedicated, managed or fast WordPress hosting (ability to resize & crop large image files 10MB+)
 - [Advanced Custom Fields PRO](https://www.advancedcustomfields.com/pro/)
-- Yearly license (€99,00 annually, per website).
+- Yearly license ([contact sales](mailto:info@compagnon.agency))
 
 ### 1.2. Features
 
@@ -42,7 +42,7 @@
 
 SweepBright uses a [webhook](https://website.sweepbright.com/docs/#header-1.-publish-a-property-to-the-custom-website) for publishing properties to your website. The webhook on your website should be responsible for retrieving and storing all of the property's information whenever a publication occurs in SweepBright.
 
-However, if you have a lot of publications scheduled at the same time it could take up a lot of processing resources. 
+However, if you have a lot of publications scheduled at the same time it could take up a lot of processing resources.
 Potentially leading to unpredictable or unreliable behavior.
 
 We've solved this by creating our own webhook server which acts as a "man in the middle" between SweepBright and your website.
@@ -57,7 +57,7 @@ Whenever a publication is scheduled in SweepBright it will first connect to our 
 
 ### 2.3. What's the price / additional costs?
 
-> €99,00 annually, per website.
+> The plugin comes with a yearly subscription, dependent on the usage of our webhook server.
 
 Additional costs may occur depending on your usage of our webhook server.
 For regular use or less than 15 publications per day on average, there are no additional costs.

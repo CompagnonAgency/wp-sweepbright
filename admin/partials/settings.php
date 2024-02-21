@@ -95,6 +95,17 @@
             </select>
           </td>
         </tr>
+        <tr>
+          <th scope="row">
+            <label for="country">Country</label>
+          </th>
+          <td>
+            <select name="country" id="country" class="postform" value="<?= WP_SweepBright_Helpers::setting('country'); ?>">
+              <option class="level-0" value="be" <?= WP_SweepBright_Helpers::setting('country') === 'be' ? 'selected' : ''; ?>>Belgium</option>
+              <option class="level-0" value="fr" <?= WP_SweepBright_Helpers::setting('country') === 'fr' ? 'selected' : ''; ?>>France</option>
+            </select>
+          </td>
+        </tr>
       </tbody>
     </table>
 

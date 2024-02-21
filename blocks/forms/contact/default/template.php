@@ -40,7 +40,7 @@
           <?php foreach ($column['fields']['data']['default']['field_group'] as &$field) : ?>
             <?php
             $field_name = $field['fields']['data']['default']['field'];
-            $field_label = WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()][$field_name];
+            $field_label = WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()][$field_name] ?? '';
             $field_required = $field['fields']['data']['default']['required'] === 'required' ? 'required' : '';
             $field_options = isset($field['fields']['data']['default']['options_group']) ? $field['fields']['data']['default']['options_group'] : false;
             ?>

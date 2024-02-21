@@ -53,7 +53,9 @@
             "Bid": "Geboden",
             "sold": "Verkocht",
             "rented": "Verhuurd"
-          }
+          },
+          "month": "Maand",
+          "costs_included": "Kosten inbegrepen"
         },
         "fr": {
           "all_units": "Afficher toutes les unités",
@@ -68,7 +70,9 @@
             "Bid": "Enchère",
             "sold": "Vendu",
             "rented": "Loué"
-          }
+          },
+          "month": "Mois",
+          "costs_included": "Charges comprises"
         },
         "en": {
           "all_units": "Show all units",
@@ -83,7 +87,9 @@
             "Bid": "Bid",
             "sold": "Sold",
             "rented": "Rented"
-          }
+          },
+          "month": "Month",
+          "costs_included": "Costs included"
         }
       }
     }

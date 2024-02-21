@@ -20,7 +20,7 @@ class WP_SweepBright_Cache
     */
 
     // Create the table which is used for storing properties (WordPress posts) in cache
-    if (!get_option('wp_sweepbright_migrate_00003')) {
+    if (!get_option('wp_sweepbright_migrate_00005')) {
       // Truncate database
       WP_SweepBright_Cache::drop_table();
 
@@ -28,14 +28,14 @@ class WP_SweepBright_Cache
       global $wpdb;
       $table_name = $wpdb->prefix . 'sweepbright_estates';
       $wpdb->query("CREATE TABLE `$table_name` (
-        `id` int(11) NOT NULL,
+        `id` int(11) NOT NULL AUTO_INCREMENT,
         `date` datetime NOT NULL,
         `post_id` int(11) NOT NULL,
         `estate_id` varchar(255) NOT NULL,
         `status` varchar(255) NOT NULL,
         `is_unit` tinyint(1) NOT NULL,
         `is_project` tinyint(1) NOT NULL,
-        `general_condition` varchar(255) NOT NULL,
+        `General_condition` varchar(255) NOT NULL,
         `negotiation` varchar(255) NOT NULL,
         `category` varchar(255) NOT NULL,
         `subcategory` varchar(255) NOT NULL,
@@ -47,16 +47,15 @@ class WP_SweepBright_Cache
         `lat` decimal(8,6) NOT NULL,
         `lng` decimal(9,6) NOT NULL,
         `has_open_home` tinyint(1) NOT NULL,
-        `office_name` varchar(255) NOT NULL
+        `office_name` varchar(255) NOT NULL,
+        PRIMARY KEY (`id`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-      $wpdb->query("ALTER TABLE `$table_name` ADD PRIMARY KEY (`id`);");
-      $wpdb->query("ALTER TABLE `$table_name` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
 
       // Migrate
       WP_SweepBright_Cache::migrate_properties();
 
       // Finish migration
-      add_option('wp_sweepbright_migrate_00003', true);
+      add_option('wp_sweepbright_migrate_00005', true);
     }
   }
 

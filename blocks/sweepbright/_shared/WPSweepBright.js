@@ -1,8 +1,13 @@
-import EventBus from "./bus.js";
-
 export default {
   install(Vue) {
-    Vue.mixin(EventBus);
+    const bus = new Vue();
+    const busMixin = {
+      beforeCreate() {
+        this.$bus = bus;
+      },
+    };
+
+    Vue.mixin(busMixin);
 
     Vue.mixin({
       methods: {
@@ -52,9 +57,8 @@ export default {
         },
         $events() {
           this.$bus.$on("toggleDropdown", (dropdown) => {
-            this.config.dropdowns[dropdown].open = !this.config.dropdowns[
-              dropdown
-            ].open;
+            this.config.dropdowns[dropdown].open =
+              !this.config.dropdowns[dropdown].open;
 
             for (const [key] of Object.entries(this.config.dropdowns)) {
               if (dropdown !== key) {

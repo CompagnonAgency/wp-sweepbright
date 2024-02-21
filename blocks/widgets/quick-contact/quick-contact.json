@@ -55,7 +55,13 @@
       }
     },
     {
-      "name": "Location",
+      "name": "Location title",
+      "id": "location_title",
+      "type": "text",
+      "allow_empty": "true"
+    },
+    {
+      "name": "Location content",
       "id": "location",
       "type": "wysiwyg",
       "default": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>",
@@ -63,6 +69,17 @@
         "enable_location": [
           ""
         ]
+      }
+    },
+    {
+      "name": "Button text color",
+      "id": "button_text_color",
+      "type": "select",
+      "default": "white",
+      "sync": true,
+      "options": {
+        "white": "White",
+        "black": "Black"
       }
     },
     {

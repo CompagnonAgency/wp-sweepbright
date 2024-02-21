@@ -96,6 +96,8 @@ class WP_Wrapper
           foreach ($page["columns"] as $column) {
             if ($column['component'] === 'banner') {
               $has_banner = true;
+            } else if ($column['component'] === 'banner-image') {
+              $has_banner = true;
             }
           }
         }

@@ -36,7 +36,22 @@
           "flood_risk": "Overstromingsgevoelig gebied",
           "no_flood_risk_area": "Neen",
           "potential_flood_sensitive_area": "Mogelijk gevoelig",
-          "effective_flood_sensitive_area": "Verhoogd risico"
+          "effective_flood_sensitive_area": "Verhoogd risico",
+          "land_use_designation": "Stedenbouwkundige bestemming",
+          "residential": "Residentieel",
+          "mixed_residential": "Gemengd residentieel",
+          "industrial": "Industrieel",
+          "recreational": "Recreatief",
+          "park": "Park",
+          "area_with_economical_activity": "Gebied met economische activiteit",
+          "forest_area": "Bosgebied",
+          "agricultural": "Landbouw",
+          "nature_area": "Natuurgebied",
+          "natural_reserve": "Natuurreservaat",
+          "residential_area_with_cultural_historical_value": "Residentieel gebied met culturele en/of historische waarde",
+          "industrial_area_for_sme": "Industriegebied voor KMO's",
+          "day_recreation_area": "Dagrecreatiegebied",
+          "other": "Andere"
         },
         "fr": {
           "heading": "Aménagement urbain",
@@ -54,7 +69,22 @@
           "flood_risk": "Zone sujette aux inondations",
           "no_flood_risk_area": "Non",
           "potential_flood_sensitive_area": "Potentiellement sensible",
-          "effective_flood_sensitive_area": "Risque accru"
+          "effective_flood_sensitive_area": "Risque accru",
+          "land_use_designation": "Destination urbanistique",
+          "residential": "Résidentiel",
+          "mixed_residential": "Mixte résidentiel",
+          "industrial": "Industriel",
+          "recreational": "Récréatif",
+          "park": "Parc",
+          "area_with_economical_activity": "Zone avec activité économique",
+          "forest_area": "Zone forestière",
+          "agricultural": "Agricole",
+          "nature_area": "Zone naturelle",
+          "natural_reserve": "Réserve naturelle",
+          "residential_area_with_cultural_historical_value": "Zone résidentielle avec valeur culturelle et/ou historique",
+          "industrial_area_for_sme": "Zone industrielle pour PME",
+          "day_recreation_area": "Zone de loisirs de jour",
+          "other": "Autre"
         },
         "en": {
           "heading": "Urban planning",
@@ -72,7 +102,22 @@
           "flood_risk": "Flood risk",
           "no_flood_risk_area": "No",
           "potential_flood_sensitive_area": "Potentially sensitive",
-          "effective_flood_sensitive_area": "Effective risk"
+          "effective_flood_sensitive_area": "Effective risk",
+          "land_use_designation": "Land use designation",
+          "residential": "Residential",
+          "mixed_residential": "Mixed residential",
+          "industrial": "Industrial",
+          "recreational": "Recreational",
+          "park": "Park",
+          "area_with_economical_activity": "Area with economical activity",
+          "forest_area": "Forest area",
+          "agricultural": "Agricultural",
+          "nature_area": "Nature area",
+          "natural_reserve": "Natural reserve",
+          "residential_area_with_cultural_historical_value": "Residential area with cultural and/or historical value",
+          "industrial_area_for_sme": "Industrial area for SME",
+          "day_recreation_area": "Day recreation area",
+          "other": "Other"
         }
       }
     }

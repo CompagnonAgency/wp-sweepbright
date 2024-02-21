@@ -1,0 +1,150 @@
+{
+  "name": "Banner Image",
+  "id": "banner-image",
+  "icon": "fad fa-pager",
+  "category": "banner",
+  "navigations": [
+    "navigation"
+  ],
+  "fields": [
+    {
+      "name": "Title",
+      "id": "title",
+      "type": "text",
+      "default": "A new page."
+    },
+    {
+      "name": "Slogan",
+      "id": "slogan",
+      "type": "wysiwyg",
+      "allow_empty": true
+    },
+    {
+      "name": "Button",
+      "id": "button",
+      "type": "select",
+      "default": "false",
+      "sync": true,
+      "options": {
+        "false": "Disable",
+        "true": "Enable"
+      }
+    },
+    {
+      "name": "Button label",
+      "id": "button_label",
+      "type": "text",
+      "default": "",
+      "allow_empty": true,
+      "condition": {
+        "button": [
+          "true"
+        ]
+      }
+    },
+    {
+      "name": "Button link",
+      "id": "button_link",
+      "type": "page_select",
+      "default": [],
+      "condition": {
+        "button": [
+          "true"
+        ]
+      }
+    },
+    {
+      "name": "Enable URL parameter",
+      "id": "enable_url_param",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "False",
+        "true": "True"
+      },
+      "condition": {
+        "button": [
+          "true"
+        ]
+      }
+    },
+    {
+      "name": "URL parameter",
+      "id": "url_param",
+      "type": "text",
+      "default": "",
+      "condition": {
+        "enable_url_param": [
+          "true"
+        ]
+      }
+    },
+    {
+      "name": "Enable anchor link",
+      "id": "enable_url_anchor",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "False",
+        "true": "True"
+      },
+      "condition": {
+        "button": [
+          "true"
+        ]
+      }
+    },
+    {
+      "name": "Anchor link",
+      "id": "anchor_link",
+      "type": "text",
+      "sync": true,
+      "condition": {
+        "enable_url_anchor": [
+          "true"
+        ]
+      }
+    },
+    {
+      "name": "Background image",
+      "id": "background_image",
+      "type": "select",
+      "default": "false",
+      "sync": true,
+      "options": {
+        "false": "Disable",
+        "true": "Enable"
+      }
+    },
+    {
+      "name": "Image",
+      "id": "image",
+      "type": "upload_single",
+      "default": "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2250&q=80",
+      "condition": {
+        "background_image": [
+          "true"
+        ]
+      }
+    },
+    {
+      "name": "Background position",
+      "id": "background_position",
+      "type": "select",
+      "default": "object-center",
+      "sync": true,
+      "condition": {
+        "background_image": [
+          "true"
+        ]
+      },
+      "options": {
+        "object-center": "Center",
+        "object-top": "Top",
+        "object-bottom": "Bottom"
+      }
+    }
+  ]
+}

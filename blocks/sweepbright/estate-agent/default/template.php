@@ -1,3 +1,19 @@
+<?php
+$details = [];
+$agents = WP_Wrapper::get('agent_information', $component, $args);
+
+if ($agents) {
+  foreach ($agents as $key => $agent) {
+    if (WP_Wrapper::get('agent_email', $component, $args, $agent) === get_field('negotiator')['email']) {
+      $details[] = [
+        'agent_email' => WP_Wrapper::get('agent_email', $component, $args, $agent),
+        'additional_information' => WP_Wrapper::get('additional_information', $component, $args, $agent),
+      ];
+    }
+  }
+}
+?>
+
 <div>
   <?php if (get_field('negotiator')['photo']) : ?>
     <div class="inline-block w-48">
@@ -36,5 +52,17 @@
         </ul>
       <?php endif; ?>
     </div>
+  <?php endif; ?>
+
+  <?php if ($details) : ?>
+    <?php foreach ($details as $detail) : ?>
+      <?php if ($detail['additional_information']) : ?>
+        <div class="mt-10 text-xs">
+          <div class="post">
+            <?= $detail['additional_information']; ?>
+          </div>
+        </div>
+      <?php endif; ?>
+    <?php endforeach; ?>
   <?php endif; ?>
 </div>

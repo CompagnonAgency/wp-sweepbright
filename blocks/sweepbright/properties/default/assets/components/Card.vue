@@ -6,18 +6,46 @@
     @click.prevent="openWindow(estate)"
   >
     <div
-      class="absolute top-0 left-0 z-10 m-5 text-sm tracking-wide text-white uppercase "
+      class="absolute top-0 left-0 z-10 m-5 text-sm tracking-wide text-white uppercase"
     >
       <div
         class="inline-block p-2 mr-2 bg-black"
         :class="`${data.card_border_radius}`"
       >
-        {{ data.locale[lang].status[estate.meta.estate.status] }}
+        <template v-if="estate.meta.features.negotiation === 'sale'">
+          {{ data.locale[lang].status[estate.meta.estate.status] }}
+        </template>
+
+        <template v-if="estate.meta.features.negotiation === 'let'">
+          <template
+            v-if="
+              data.available_properties === 'available' &&
+              estate.meta.estate.status === 'available'
+            "
+          >
+            {{ data.locale[lang].status.for_rent }}
+          </template>
+          <template
+            v-else-if="
+              data.available_properties === 'under_contract' &&
+              (estate.meta.estate.status === 'available' ||
+                estate.meta.estate.status === 'under_contract')
+            "
+          >
+            {{ data.locale[lang].status.for_rent }}
+          </template>
+          <template v-else>
+            {{ data.locale[lang].status[estate.meta.estate.status] }}
+          </template>
+        </template>
       </div>
       <div
         class="inline-block p-2 mr-2 bg-black"
         :class="`${data.card_border_radius}`"
-        v-if="estate.meta.open_homes.hasOpenHome && estate.meta.estate.status === 'available'"
+        v-if="
+          estate.meta.open_homes.hasOpenHome &&
+          estate.meta.estate.status === 'available'
+        "
       >
         {{ data.locale[lang].open_home }}
       </div>
@@ -32,7 +60,7 @@
           <div class="relative">
             <div class="aspect-ratio-4/3"></div>
             <img
-              class="absolute top-0 left-0 z-0 object-cover object-center w-full h-full "
+              class="absolute top-0 left-0 z-0 object-cover object-center w-full h-full"
               :src="image.sizes.large"
             />
           </div>
@@ -91,14 +119,19 @@
             class="text-base font-semibold tracking-wide uppercase"
             v-if="
               (estate.meta.estate.status === 'available' &&
-              data.available_properties === 'available' &&
-              !estate.meta.price.hidden) ||
+                data.available_properties === 'available') ||
               (estate.meta.estate.status === 'under_contract' &&
-              data.available_properties === 'under_contract' &&
-              !estate.meta.price.hidden)
+                data.available_properties === 'under_contract' &&
+                !estate.meta.price.hidden)
             "
           >
-            {{ getPrice(estate.meta.price.amount) }}
+            <template v-if="estate.meta.features.negotiation === 'sale'">
+              {{ getPrice(estate.meta.price.amount) }}
+            </template>
+            <template v-else>
+              {{ getPrice(estate.meta.price.amount) }}
+              <span>/</span> {{ data.locale[lang].month }}
+            </template>
           </p>
         </div>
         <div class="flex justify-end w-1/2">
@@ -110,27 +143,16 @@
     </div>
 
     <div
-      class="
-        absolute
-        bottom-0
-        left-0
-        w-0
-        h-0.5
-        transition-all
-        duration-300
-        bg-black
-        bg-opacity-10
-        group-hover:w-full
-      "
+      class="absolute bottom-0 left-0 w-0 h-0.5 transition-all duration-300 bg-black bg-opacity-10 group-hover:w-full"
     ></div>
   </a>
 </template>
 
 <script>
-import { Glide, GlideSlide } from "vue-glide-js";
+import { Glide, GlideSlide } from 'vue-glide-js'
 
 export default {
-  props: ["component", "estate", "favorites"],
+  props: ['component', 'estate', 'favorites'],
   components: {
     [Glide.name]: Glide,
     [GlideSlide.name]: GlideSlide,
@@ -138,12 +160,12 @@ export default {
   computed: {
     checkFavorited: {
       get() {
-        let isFavorited = false;
+        let isFavorited = false
         if (this.favorites.includes(parseFloat(this.estate.id))) {
-          isFavorited = true;
+          isFavorited = true
         }
-        this.isFavorited = isFavorited;
-        return isFavorited;
+        this.isFavorited = isFavorited
+        return isFavorited
       },
     },
   },
@@ -160,59 +182,63 @@ export default {
         },
       },
       store: {},
-    };
+    }
   },
   methods: {
     getPrice(price) {
-      let currency = "";
-      let format = "";
+      let currency = ''
+      let format = ''
       switch (this.estate.meta.price.currency) {
-        case "EUR":
-          currency = "€";
-          format = "DOT";
-          break;
-        case "USD":
-          currency = "$";
-          format = "COMMA";
-          break;
-        case "GBP":
-          currency = "£";
-          format = "COMMA";
-          break;
+        case 'EUR':
+          currency = '€'
+          format = 'DOT'
+          break
+        case 'USD':
+          currency = '$'
+          format = 'COMMA'
+          break
+        case 'GBP':
+          currency = '£'
+          format = 'COMMA'
+          break
         default:
-          break;
+          break
       }
-      return `${currency} ${this.$formatNumber(price, format)}`;
+      return `${currency} ${this.$formatNumber(price, format)}`
     },
     toggleFavorite(e) {
-      this.isFavorited = !this.isFavorited;
-      e.preventDefault();
-      this.$bus.$emit("favorite", this.isFavorited, parseFloat(this.estate.id));
-      return false;
+      this.isFavorited = !this.isFavorited
+      e.preventDefault()
+      this.$bus.$emit('favorite', this.isFavorited, parseFloat(this.estate.id))
+      return false
     },
     back(e) {
-      this.$refs.carousel.glide.go("<");
-      e.preventDefault();
-      return false;
+      this.$refs.carousel.glide.go('<')
+      e.preventDefault()
+      return false
     },
     next(e) {
-      this.$refs.carousel.glide.go(">");
-      e.preventDefault();
-      return false;
+      this.$refs.carousel.glide.go('>')
+      e.preventDefault()
+      return false
     },
     openWindow(data) {
-      if (data.meta.estate.status === "available") {
-        window.location.href = data.permalink;
-      } else if (data.meta.estate.status !== "available" && this.data.unavailable_properties === "visible") {
-        window.location.href = data.permalink;
-      } else if (data.meta.estate.status === "under_contract" && this.data.available_properties === "under_contract") {
-        window.location.href = data.permalink;
+      if (data.meta.estate.status === 'available') {
+        window.location.href = data.permalink
+      } else if (
+        data.meta.estate.status !== 'available' &&
+        this.data.unavailable_properties === 'visible'
+      ) {
+        window.location.href = data.permalink
+      } else if (
+        data.meta.estate.status === 'under_contract' &&
+        this.data.available_properties === 'under_contract'
+      ) {
+        window.location.href = data.permalink
       } else {
-        this.$bus.$emit("openModal", data);
+        this.$bus.$emit('openModal', data)
       }
     },
   },
-  mounted() {
-  },
-};
+}
 </script>

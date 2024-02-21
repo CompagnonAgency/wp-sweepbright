@@ -6,8 +6,9 @@ import Glide from "@glidejs/glide";
 $(".slider-default").each((index, el) => {
   const data = window[$(el).data("component")];
 
-  let autoplay; let gap; let
-    perView;
+  let autoplay;
+  let gap;
+  let perView;
 
   switch (data.autoplay) {
     case "true":
@@ -67,6 +68,7 @@ $(".slider-default").each((index, el) => {
     dragThreshold: false,
     breakpoints: {
       1024: {
+        perView: 2,
         dragThreshold: 120,
       },
     },

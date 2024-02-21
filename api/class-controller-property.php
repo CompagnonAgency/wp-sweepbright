@@ -53,25 +53,19 @@ class WP_SweepBright_Controller_Property
     $id = WP_SweepBright_Helpers::get_post_ID_from_estate($data['estate_id']);
 
     // Save tag
-    if (trim($data['form']['tag'])) {
-      update_field('custom_fields', [
-        'tag' => trim($data['form']['tag']),
-      ], $id);
-    }
+    update_field('custom_fields', [
+      'tag' => trim($data['form']['tag']),
+    ], $id);
 
     // Save style
-    if (trim($data['form']['style'])) {
-      update_field('custom_fields', [
-        'style' => trim($data['form']['style']),
-      ], $id);
-    }
+    update_field('custom_fields', [
+      'style' => trim($data['form']['style']),
+    ], $id);
 
     // Save type
-    if (trim($data['form']['type'])) {
-      update_field('custom_fields', [
-        'type' => trim($data['form']['type']),
-      ], $id);
-    }
+    update_field('custom_fields', [
+      'type' => trim($data['form']['type']),
+    ], $id);
 
     // Save USPs
     $usps = [];
@@ -130,7 +124,6 @@ class WP_SweepBright_Controller_Property
     update_field('custom_fields', [
       'setle_link' => $data['form']['setle_link'],
     ], $id);
-
 
     // Save additional price information
     update_field('custom_fields', [

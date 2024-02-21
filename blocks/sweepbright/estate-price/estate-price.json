@@ -6,6 +6,17 @@
   "type": "estate",
   "fields": [
     {
+      "name": "Local law",
+      "id": "local_law",
+      "type": "select",
+      "default": "be",
+      "sync": true,
+      "options": {
+        "be": "Belgium",
+        "fr": "France"
+      }
+    },
+    {
       "name": "Office commission",
       "id": "office_commission",
       "type": "select",
@@ -75,10 +86,14 @@
           "vat_regime": "BTW regime",
           "yearly_budgeted_building_costs": "Jaarlijkse condominiumkosten",
           "recurring_costs": "Vaste kosten",
+          "rental_costs" :"Door de huurder te betalen vergoedingen",
           "cadastral_income": "Kadastraal inkomen",
           "unavailable": "Deze woning is niet langer beschikbaar.",
           "from": "Beschikbaar vanaf",
-          "occupied": "Niet beschikbaar"
+          "occupied": "Niet beschikbaar",
+          "month": "Maand",
+          "costs_included": "Kosten inbegrepen",
+          "base_price": "Basisprijs"
         },
         "fr": {
           "heading": "Informations sur les prix",
@@ -88,11 +103,15 @@
           "property_taxes": "Taxes foncières",
           "vat_regime": "Régime TVA",
           "yearly_budgeted_building_costs": "Charges annuelles de copropriété",
-          "recurring_costs": "Coûts récurrents",
+          "recurring_costs": "Provisions pour charges avec régularisation annuelle",
+          "rental_costs" :"Honoraires à la charge du locataire",
           "cadastral_income": "Valeur locative cadastrale",
           "unavailable": "Cette propriété n'est plus disponible.",
           "from": "Libre à partir de",
-          "occupied": "Indisponible"
+          "occupied": "Indisponible",
+          "month": "Mois",
+          "costs_included": "Charges comprises",
+          "base_price": "Loyer de base"
         },
         "en": {
           "heading": "Price information",
@@ -102,11 +121,15 @@
           "property_taxes": "Property taxes",
           "vat_regime": "VAT regime",
           "yearly_budgeted_building_costs": "Annual co-ownership charges",
-          "recurring_costs": "",
+          "recurring_costs": "Recurring costs",
+          "rental_costs" :"Fees payable by the tenant",
           "cadastral_income": "Cadastral income",
           "unavailable": "This property is no longer available.",
           "from": "Available from",
-          "occupied": "Unavailable"
+          "occupied": "Unavailable",
+          "month": "Month",
+          "costs_included": "Fees included",
+          "base_price": "Base price"
         }
       }
     }

@@ -343,11 +343,16 @@ class WP_SweepBright_Query
 				$formatter->setAttribute(\NumberFormatter::FRACTION_DIGITS, 0);
 				$formatter->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, 0);
 				$formatter->setAttribute(NumberFormatter::DECIMAL_ALWAYS_SHOWN, 0);
-				$price = $formatter->formatCurrency(get_field('price')['amount'], get_field('price')['currency']);
 
-				if ($iso === 'en_GB') {
-					// $price = substr($price, 0, -3);
+				$amount = get_field('price')['amount'];
+
+				/*
+				if (get_field('features')['negotiation'] === 'let' && WP_SweepBright_Helpers::setting('country') === 'fr') {
+					$amount += get_field('price')['price_recurring_costs']['amount'];
 				}
+				*/
+
+				$price = $formatter->formatCurrency($amount, get_field('price')['currency']);
 			}
 		} else {
 			$price = false;
@@ -735,8 +740,8 @@ class WP_SweepBright_Query
 			}
 
 			// Order by status
-			$condition_let = "CASE WHEN status = 'lost' THEN 8.5 WHEN status = 'prospect' THEN 7.5 WHEN status = 'rented' THEN 6.5 WHEN status = 'bid' THEN 5.5 WHEN status = 'sold' THEN 4.5 WHEN status = 'option' THEN 3.5 WHEN status = 'under_contract' THEN 2.5 WHEN status = 'available' THEN 1.5 END";
-			$condition_sale = "CASE WHEN status = 'lost' THEN 8 WHEN status = 'prospect' THEN 7 WHEN status = 'rented' THEN 6 WHEN status = 'bid' THEN 5 WHEN status = 'sold' THEN 4 WHEN status = 'option' THEN 3 WHEN status = 'under_contract' THEN 2 WHEN status = 'available' THEN 1 END";
+			$condition_let = "CASE WHEN status = 'lost' THEN 8.5 WHEN status = 'prospect' THEN 7.5 WHEN status = 'rented' THEN 6.5 WHEN status = 'bid' THEN 5.5 WHEN status = 'sold' THEN 4.5 WHEN status = 'agreement' THEN 4 WHEN status = 'option' THEN 3.5 WHEN status = 'under_contract' THEN 2.5 WHEN status = 'available' THEN 1.5 END";
+			$condition_sale = "CASE WHEN status = 'lost' THEN 8 WHEN status = 'prospect' THEN 7 WHEN status = 'rented' THEN 6 WHEN status = 'bid' THEN 5 WHEN status = 'sold' THEN 4 WHEN status = 'agreement' THEN 3.5 WHEN status = 'option' THEN 3 WHEN status = 'under_contract' THEN 2 WHEN status = 'available' THEN 1 END";
 
 			if (WP_SweepBright_Helpers::setting('available_properties') === 'available') {
 				$args['posts'] = $args['posts']
@@ -952,8 +957,8 @@ class WP_SweepBright_Query
 				'price' => [
 					'amount' => get_post_meta($id, 'price_amount', true),
 					'currency' => get_post_meta($id, 'price_currency', true),
-					'hidden' => get_post_meta($id, 'price_hidden', true),
-					'price_costs' => get_post_meta($id, 'price_price_costs', true),
+					'hidden' => get_post_meta($id, 'price_hidden', true) === '1' || get_post_meta($id, 'price_hidden', true) === 1 ? true : false,
+					'price_costs' => get_post_meta($id, 'price_price_recurring_costs_amount', true),
 				],
 				'energy_details' => [
 					'epc_category' => get_post_meta($id, 'energy_details_epc_category', true),

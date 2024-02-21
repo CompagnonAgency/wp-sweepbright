@@ -126,13 +126,15 @@ class WP_SweepBright_Controller_Pages
   public static function raw_data()
   {
     $id = WP_Wrapper::ID();
+
     if (
       get_post($id)->post_name === 'home-francais' ||
       get_post($id)->post_name === 'home-english' ||
       get_post($id)->post_name === 'home-nederlands'
     ) {
-      $id = url_to_postid('home');
+      $id = get_page_by_path('home')->ID;
     }
+
     return get_option('wp_sweepbright_page_' . $id);
   }
 
@@ -613,7 +615,7 @@ class WP_SweepBright_Controller_Pages
         get_post($data["id"])->post_name === 'home-english' ||
         get_post($data["id"])->post_name === 'home-nederlands'
       ) {
-        $data["id"] = url_to_postid('home');
+        $data["id"] = get_page_by_path('home')->ID;
       }
 
       $link = get_the_permalink($data['id']);
@@ -753,9 +755,13 @@ class WP_SweepBright_Controller_Pages
   {
     $tmp = get_option('wp_sweepbright_db_templates');
 
-    $data = array_filter($tmp, function ($v, $k) {
-      return strpos($k, 'col_') !== false;
-    }, ARRAY_FILTER_USE_BOTH);
+    $data = [];
+
+    if ($tmp) {
+      $data = array_filter($tmp, function ($v, $k) {
+        return strpos($k, 'col_') !== false;
+      }, ARRAY_FILTER_USE_BOTH);
+    }
 
     $result = [
       'STATUS_CODE' => http_response_code(200),

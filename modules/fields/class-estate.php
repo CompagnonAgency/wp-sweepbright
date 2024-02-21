@@ -48,6 +48,7 @@ class FieldEstate
 						'prospect' => 'Prospect',
 						'bid' => 'Bid',
 						'under_contract' => 'Under contract',
+						'agreement' => 'Agreement',
 					],
 				],
 				[

@@ -2,9 +2,11 @@
   <div class="flex flex-col flex-wrap space-y-5 lg:-m-5 lg:flex-row lg:space-y-0">
     <?php foreach (WP_Wrapper::get('people', $component, $args) as $index => $people) : ?>
       <div class="w-full min-w-0 lg:p-5 lg:w-1/<?= WP_Wrapper::get('members_per_row', $component, $args); ?>">
-        <div class="relative mb-6">
-          <div class="aspect-ratio-<?= WP_Wrapper::get('aspect_ratio', $component, $args); ?>"></div>
-          <img class="absolute top-0 left-0 object-cover object-center w-full h-full <?= WP_Wrapper::get('border_radius', $component, $args); ?>" src="<?= WP_Wrapper::get('profile', $component, $args, $people); ?>">
+        <div class="w-7/12 <?php if (WP_Wrapper::get('alignment', $component, $args) === 'text-center') : ?>mx-auto<?php endif; ?>">
+          <div class="relative mb-6">
+            <div class="aspect-ratio-<?= WP_Wrapper::get('aspect_ratio', $component, $args); ?>"></div>
+            <img class="absolute top-0 left-0 object-cover object-center w-full h-full <?= WP_Wrapper::get('border_radius', $component, $args); ?>" src="<?= WP_Wrapper::get('profile', $component, $args, $people); ?>">
+          </div>
         </div>
 
         <div class="<?= WP_Wrapper::get('alignment', $component, $args); ?>">

@@ -41,25 +41,36 @@
               </div>
 
               <div v-if="data.instagram_username">
-                <h4 v-if="!data.hide_labels">{{ data.locale[lang].instagram }}</h4>
+                <h4 v-if="!data.hide_labels">
+                  {{ data.locale[lang].instagram }}
+                </h4>
                 <div class="mt-2">
                   <i class="w-7 fab fa-instagram"></i>
-                  <a :href="`https://instagram.com/${data.instagram_username}`" target="_blank">@{{ data.instagram_username }}</a>
+                  <a
+                    :href="`https://instagram.com/${data.instagram_username}`"
+                    target="_blank"
+                    >@{{ data.instagram_username }}</a
+                  >
                 </div>
               </div>
 
               <div v-if="data.whatsapp">
-                <h4 v-if="!data.hide_labels">{{ data.locale[lang].whatsapp }}</h4>
+                <h4 v-if="!data.hide_labels">
+                  {{ data.locale[lang].whatsapp }}
+                </h4>
                 <div class="mt-2">
                   <i class="w-7 fab fa-whatsapp"></i>
-                  <a :href="data.whatsapp" target="_blank">{{ data.locale[lang].whatsapp_chat }}</a>
+                  <a :href="data.whatsapp" target="_blank">{{
+                    data.locale[lang].whatsapp_chat
+                  }}</a>
                 </div>
               </div>
             </div>
           </div>
 
           <div v-if="!data.enable_location">
-            <h2>{{ data.locale[lang].office }}</h2>
+            <h2 v-if="data.location_title">{{ data.location_title }}</h2>
+            <h2 v-else>{{ data.locale[lang].office }}</h2>
             <div class="mt-8" v-html="data.location"></div>
           </div>
         </div>
@@ -70,11 +81,12 @@
       <button
         data-scroll
         class="flex items-center space-x-2 btn btn-secondary"
-        :class="
+        :class="[
           data.negotiator.photo && data.negotiator.photo.sizes.medium
             ? 'pl-1 pt-1 pb-1'
-            : ''
-        "
+            : '',
+          data.button_text_color === 'black' ? 'text-black' : '',
+        ]"
         @click="toggleMenu"
       >
         <i class="mt-1 fal fa-comment-dots" v-if="!data.estate_id"></i>
@@ -108,8 +120,8 @@ export default {
   methods: {
     toggleMenu() {
       if (
-        this.data.negotiator.photo
-        && this.data.negotiator.photo.sizes.medium
+        this.data.negotiator.photo &&
+        this.data.negotiator.photo.sizes.medium
       ) {
         $("html, body").animate(
           {

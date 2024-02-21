@@ -14,7 +14,7 @@
       <template v-if="conditionalField(field)">
         <template v-if="field.type !== 'locale'">
           <p
-            class="mb-3 text-xs font-medium tracking-wide text-gray-600 uppercase "
+            class="mb-3 text-xs font-medium tracking-wide text-gray-600 uppercase"
           >
             {{ field.name }}
             <template
@@ -119,6 +119,14 @@
             </FieldGroup>
           </template>
 
+          <template v-else-if="field.type === 'textarea'">
+            <FieldTextArea
+              :field="field"
+              :col="col"
+              :lang="lang"
+            ></FieldTextArea>
+          </template>
+
           <template v-else>
             <FieldText :field="field" :col="col" :lang="lang"></FieldText>
           </template>
@@ -131,6 +139,7 @@
 <script>
 import FieldGroup from "./FieldGroup";
 import FieldText from "./FieldText";
+import FieldTextArea from "./FieldTextArea";
 import FieldWysiwyg from "./FieldWysiwyg";
 import FieldNumber from "./FieldNumber";
 import FieldRange from "./FieldRange";
@@ -155,6 +164,7 @@ export default {
   components: {
     FieldGroup,
     FieldText,
+    FieldTextArea,
     FieldWysiwyg,
     FieldNumber,
     FieldRange,

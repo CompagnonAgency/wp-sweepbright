@@ -78,3 +78,7 @@ error_log
 .cache
 **/.cache
 **/.cache/*
+
+/db/
+/db/*
+!/db/.keep

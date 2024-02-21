@@ -166,9 +166,11 @@
             "available": "Beschikbaar",
             "option": "In optie",
             "under_contract": "Onder contract",
+            "for_rent": "Te huur",
             "Bid": "Geboden",
             "sold": "Verkocht",
-            "rented": "Verhuurd"
+            "rented": "Verhuurd",
+            "agreement": "Overeenkomst"
           },
           "properties": "Panden",
           "open_home": "Opendeur",
@@ -181,7 +183,8 @@
             "close": "Sluiten"
           },
           "back": "Vorige",
-          "next": "Volgende"
+          "next": "Volgende",
+          "month": "Maand"
         },
         "fr": {
           "type": {
@@ -211,9 +214,11 @@
             "available": "Disponible",
             "option": "Option",
             "under_contract": "En vente",
+            "for_rent": "A louer",
             "Bid": "Enchère",
             "sold": "Vendu",
-            "rented": "Loué"
+            "rented": "Loué",
+            "agreement": "Sous compromis"
           },
           "properties": "Propriétés",
           "open_home": "Porte ouverte",
@@ -226,7 +231,8 @@
             "close": "Fermer"
           },
           "back": "Précédent",
-          "next": "suivante"
+          "next": "suivante",
+          "month": "Mois"
         },
         "en": {
           "type": {
@@ -256,9 +262,11 @@
             "available": "Available",
             "option": "Option",
             "under_contract": "Under contract",
+            "for_rent": "For rent",
             "Bid": "Bid",
             "sold": "Sold",
-            "rented": "Rented"
+            "rented": "Rented",
+            "agreement": "Agreement"
           },
           "properties": "Properties",
           "open_home": "Open home",
@@ -271,7 +279,8 @@
             "close": "Close"
           },
           "back": "Back",
-          "next": "Next"
+          "next": "Next",
+          "month": "Month"
         }
       }
     }

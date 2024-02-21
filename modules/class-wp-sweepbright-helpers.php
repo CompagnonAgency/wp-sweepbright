@@ -42,6 +42,7 @@ class WP_SweepBright_Helpers
 			'available_properties' => WP_SweepBright_Helpers::setting('available_properties'),
 			'dynamic_url' => WP_SweepBright_Helpers::setting('dynamic_url'),
 			'enable_pages' => WP_SweepBright_Helpers::setting('enable_pages'),
+			'country' => WP_SweepBright_Helpers::setting('country'),
 		];
 
 		// Show warning that you need to add settings
@@ -389,6 +390,7 @@ class WP_SweepBright_Helpers
 			'unavailable_properties' => 'hidden',
 			'available_properties' => 'available',
 			'dynamic_url' => false,
+			'country' => 'be',
 		];
 	}
 
@@ -429,6 +431,7 @@ class WP_SweepBright_Helpers
 			$data['recaptcha_secret_key'] = $_POST['recaptcha_secret_key'];
 			$data['unavailable_properties'] = $_POST['unavailable_properties'];
 			$data['available_properties'] = $_POST['available_properties'];
+			$data['country'] = $_POST['country'];
 
 			if (isset($_POST['enable_pages'])) {
 				$data['enable_pages'] = true;

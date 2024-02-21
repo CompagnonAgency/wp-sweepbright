@@ -16,6 +16,10 @@ ________________________________________________________________________ */
   @apply fixed bg-white shadow-md;
 }
 
+.js-navigation.is-detached.text-white {
+  @apply text-black;
+}
+
 .js-navigation.is-attached {
   @apply fixed bg-transparent;
 }

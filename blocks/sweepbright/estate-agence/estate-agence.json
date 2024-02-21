@@ -1,0 +1,142 @@
+{
+  "name": "Estate - agence",
+  "id": "estate-agence",
+  "icon": "fad fa-building",
+  "category": "sweepbright",
+  "type": "estate",
+  "fields": [
+    {
+      "name": "Offices",
+      "id": "offices_group",
+      "type": "group",
+      "subfields": [
+        {
+          "name": "Office name",
+          "id": "office_name",
+          "type": "text",
+          "default": "Team 1",
+          "sync": true
+        },
+        {
+          "name": "Image",
+          "id": "image",
+          "type": "upload_single",
+          "default": "https://images.unsplash.com/photo-1570126688035-1e6adbd61053?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=974&q=80"
+        },
+        {
+          "name": "Address",
+          "id": "address",
+          "type": "text",
+          "default": "",
+          "sync": true,
+          "allow_empty": true
+        },
+        {
+          "name": "Phone",
+          "id": "phone",
+          "type": "text",
+          "default": "",
+          "sync": true,
+          "allow_empty": true
+        },
+        {
+          "name": "Email",
+          "id": "email",
+          "type": "text",
+          "default": "",
+          "sync": true,
+          "allow_empty": true
+        },
+        {
+          "name": "n° TVA / VAT",
+          "id": "vat",
+          "type": "text",
+          "default": "",
+          "sync": true,
+          "allow_empty": true
+        },
+        {
+          "name": "Activity",
+          "id": "activity",
+          "type": "text",
+          "default": "",
+          "allow_empty": true
+        },
+        {
+          "name": "Additional information",
+          "id": "additional_information",
+          "type": "wysiwyg",
+          "default": "",
+          "allow_empty": true
+        }
+      ],
+      "default": []
+    },
+    {
+      "name": "Show heading",
+      "id": "show_heading",
+      "type": "select",
+      "default": "true",
+      "sync": true,
+      "options": {
+        "false": "Disable",
+        "true": "Enable"
+      }
+    },
+    {
+      "name": "Locale",
+      "id": "locale",
+      "type": "locale",
+      "sync": true,
+      "default": {
+        "nl": {
+          "heading": "Kantoor & legale informatie",
+          "vat": "BTW",
+          "activity": "Activiteit",
+          "legal_mentions": "Juridische vermeldingen"
+        },
+        "fr": {
+          "heading": "Agence & informations légales",
+          "vat": "TVA",
+          "activity": "Activité",
+          "legal_mentions": "Mentions légales"
+        },
+        "en": {
+          "heading": "Office & legal information",
+          "vat": "VAT",
+          "activity": "Activity",
+          "legal_mentions": "Legal mentions"
+        }
+      }
+    },
+    {
+      "name": "Border radius",
+      "id": "border_radius",
+      "type": "select",
+      "default": "",
+      "sync": true,
+      "options": {
+        "": "None",
+        "rounded": "Small",
+        "rounded-lg": "Large",
+        "rounded-xl": "XL",
+        "rounded-full": "Full"
+      }
+    },
+    {
+      "name": "Aspect ratio",
+      "id": "aspect_ratio",
+      "type": "select",
+      "default": "square",
+      "sync": true,
+      "options": {
+        "square": "Square",
+        "4/3": "Photo",
+        "5/6": "Vertical (regular)",
+        "2/3": "Vertical (tall)",
+        "16/9": "Horizontal (widescreen)",
+        "21/9": "Horizontal (cinema)"
+      }
+    }
+  ]
+}

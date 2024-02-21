@@ -6,12 +6,15 @@
  * @package FieldPropertyUpdate
  */
 
-class FieldPropertyUpdate {
+class FieldPropertyUpdate
+{
 
-	public function __construct() {
-	}
+  public function __construct()
+  {
+  }
 
-	public static function update($estate, $post_id) {
+  public static function update($estate, $post_id)
+  {
     update_field('property_and_land', [
       'purchased_year' => $estate['legal']['property_and_land']['purchased_year'],
     ], $post_id);
@@ -27,6 +30,5 @@ class FieldPropertyUpdate {
     update_field('property_and_land', [
       'land_use_designation' => $estate['legal']['property_and_land']['land_use_designation'],
     ], $post_id);
-	}
-
+  }
 }

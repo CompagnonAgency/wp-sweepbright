@@ -1,0 +1,15 @@
+{
+  "name": "HTML",
+  "id": "html",
+  "icon": "fad fa-code",
+  "category": "widgets",
+  "fields": [
+    {
+      "name": "Code",
+      "id": "code",
+      "type": "textarea",
+      "default": "",
+      "sync": true
+    }
+  ]
+}

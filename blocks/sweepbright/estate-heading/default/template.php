@@ -38,7 +38,7 @@ if (get_field('features')['negotiation'] === 'sale') {
       <li>
         <?php if (!get_field('estate')['project_id']) : ?>
           <?php
-          $previous_url = $_SERVER['HTTP_REFERER'];
+          $previous_url = $_SERVER['HTTP_REFERER'] ?? $breadcrumb['url'];
           $query_string = substr($previous_url, strpos($previous_url, '?') + 1);
 
           if (
@@ -105,13 +105,24 @@ if (get_field('features')['negotiation'] === 'sale') {
               <?= get_field('location')['city']; ?>
             </p>
           <?php endif; ?>
-          <p class="text-2xl font-medium">
-            <?php if (get_field('estate')['is_project']) : ?>
-              <?= WP_SweepBright_Query::min_max_price(WP_Wrapper::lang(), false, true)['min']; ?>
-              -
-              <?= WP_SweepBright_Query::min_max_price(WP_Wrapper::lang(), false, true)['max']; ?>
-            <?php else : ?>
-              <?= WP_SweepBright_Query::get_the_price(WP_Wrapper::lang()); ?>
+          <p>
+            <span class="text-2xl font-medium">
+              <?php if (get_field('estate')['is_project']) : ?>
+                <?= WP_SweepBright_Query::min_max_price(WP_Wrapper::lang(), false, true)['min']; ?>
+                -
+                <?= WP_SweepBright_Query::min_max_price(WP_Wrapper::lang(), false, true)['max']; ?>
+              <?php else : ?>
+                <?= WP_SweepBright_Query::get_the_price(WP_Wrapper::lang()); ?>
+              <?php endif; ?>
+            </span>
+            <?php if (get_field('features')['negotiation'] === 'let') : ?>
+              <span class="text-sm lowercase">/ <?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['month']; ?></span>
+
+              <?php if (WP_SweepBright_Helpers::setting('country') === 'fr') : ?>
+                <span class="text-sm lowercase">
+                  <?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['costs_included']; ?>
+                </span>
+              <?php endif; ?>
             <?php endif; ?>
           </p>
 
@@ -121,10 +132,12 @@ if (get_field('features')['negotiation'] === 'sale') {
             </p>
           <?php endif; ?>
 
-          <?php if (get_field('price')['vendor_percentage'] || get_field('price')['vendor_fixed_fee']) : ?>
-            <p class="mt-2 text-sm opacity-75">
-              <?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['vendor_label']; ?>
-            </p>
+          <?php if (get_field('features')['negotiation'] === 'sale') : ?>
+            <?php if (get_field('price')['vendor_percentage'] || get_field('price')['vendor_fixed_fee']) : ?>
+              <p class="mt-2 text-sm opacity-75">
+                <?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['vendor_label']; ?>
+              </p>
+            <?php endif; ?>
           <?php endif; ?>
         <?php else : ?>
           <?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['unavailable']; ?>

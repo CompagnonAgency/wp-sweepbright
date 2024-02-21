@@ -1,6 +1,6 @@
 <template>
   <div
-    class="inline-flex flex-col w-full transition-all duration-300 form-input lg:max-w-2xl lg:flex-row lg:items-center"
+    class="inline-flex flex-col w-full transition-all duration-300 wp-banner form-input lg:max-w-2xl lg:flex-row lg:items-center"
     :class="`${theme.rounded} lg:${theme.rounded_lg} ${
       theme.form_style !== 'line' && theme.form_style !== 'filled'
         ? 'shadow-md'

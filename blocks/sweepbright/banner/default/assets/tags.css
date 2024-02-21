@@ -1,60 +1,60 @@
 /* Tag input */
 
-.tags-input-wrapper-default {
+.wp-banner .tags-input-wrapper-default {
   @apply p-1 border-none !important;
 }
 
-.tags-input {
+.wp-banner .tags-input {
   @apply flex flex-wrap items-center;
 }
 
-.tags-input input {
+.wp-banner .tags-input input {
   @apply bg-transparent font-medium border-none flex-1 ml-2 py-1;
 }
 
-.is-line .tags-input input {
+.wp-banner .is-line .tags-input input {
   @apply text-white;
 }
 
-.tags-input span {
+.wp-banner .tags-input span {
   @apply mr-1;
 }
 
 /* Tag remove */
 
-.tags-input-remove {
+.wp-banner .tags-input-remove {
   @apply cursor-pointer mt-0.5 mr-2 transition top-0 right-0 duration-150 absolute hover:opacity-70;
 }
 
-.tags-input-remove:before {
+.wp-banner .tags-input-remove:before {
   content: '\2715';
   @apply text-white text-base;
 }
 
 /* Tag badge styles */
-.tags-input-badge {
+.wp-banner .tags-input-badge {
   @apply rounded-sm text-sm text-center leading-tight py-1 px-2 pr-6 overflow-hidden overflow-ellipsis align-baseline whitespace-nowrap inline-block relative;
 }
 
 /* Typeahead */
-.typeahead-hide-btn {
+.wp-banner .typeahead-hide-btn {
   @apply text-black italic;
 }
 
 /* Typeahead - dropdown */
-.typeahead-dropdown {
+.wp-banner .typeahead-dropdown {
   @apply bg-white border rounded list-none border-gray-200 m-0 mt-1.5 text-black w-full p-0 z-50 absolute overflow-hidden text-left;
 }
 
-.typeahead-dropdown li {
+.wp-banner .typeahead-dropdown li {
   @apply border-b cursor-pointer font-medium border-gray-100 p-2 last:border-b-0;
 }
 
 /* Typeahead elements style/theme */
-.tags-input-typeahead-item-default {
+.wp-banner .tags-input-typeahead-item-default {
   @apply bg-white text-black;
 }
 
-.tags-input-typeahead-item-highlighted-default {
+.wp-banner .tags-input-typeahead-item-highlighted-default {
   @apply bg-gray-100 text-black;
 }

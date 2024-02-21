@@ -52,7 +52,10 @@
           "consumption": "Consumptie",
           "per_year": ".jr",
           "emmissions": "Emissies",
-          "empty": "Geen informatie over energie beschikbaar."
+          "empty": "Geen informatie over energie beschikbaar.",
+          "report_electricity_gas": "Keuring elektriciteit en gas",
+          "conform": "Conform",
+          "not_conform": "Niet conform"
         },
         "fr": {
           "heading": "Énergie",
@@ -75,7 +78,10 @@
           "consumption": "Consommation",
           "per_year": ".an",
           "emmissions": "Emissions",
-          "empty": "Aucune information énergétique disponible."
+          "empty": "Aucune information énergétique disponible.",
+          "report_electricity_gas": "Rapport d'électricité et de gaz",
+          "conform": "Conforme",
+          "not_conform": "Non conforme"
         },
         "en": {
           "heading": "Energy",
@@ -98,7 +104,10 @@
           "consumption": "Consumption",
           "per_year": ".yr",
           "emmissions": "Emmissions",
-          "empty": "No energy information available."
+          "empty": "No energy information available.",
+          "report_electricity_gas": "Electricity and gas report",
+          "conform": "Comform",
+          "not_conform": "Not comform"
         }
       }
     }

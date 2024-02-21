@@ -171,6 +171,19 @@ if (
     <?php endif; ?>
 
     <ul class="flex flex-wrap -m-5">
+      <?php if (get_field('energy_details')['report_electricity_gas']) : ?>
+        <li class="w-1/2 lg:w-1/<?= WP_Wrapper::get('max_rows', $component, $args); ?> p-5">
+          <p class="mb-3 text-uppercase"><?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['report_electricity_gas']; ?></p>
+          <p class="text-xl font-medium">
+            <?php if (get_field('energy_details')['report_electricity_gas'] === 'conform') : ?>
+              <?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['conform']; ?>
+            <?php else : ?>
+              <?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['not_conform']; ?>
+            <?php endif; ?>
+          </p>
+        </li>
+      <?php endif; ?>
+
       <?php if (get_field('heating_cooling')['central_heating']) : ?>
         <li class="w-1/2 lg:w-1/<?= WP_Wrapper::get('max_rows', $component, $args); ?> p-5">
           <p class="mb-3 text-uppercase"><?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['central_heating']; ?></p>

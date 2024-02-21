@@ -6,6 +6,28 @@
   "type": "estate",
   "fields": [
     {
+      "name": "Agent Information",
+      "id": "agent_information",
+      "type": "group",
+      "subfields": [
+        {
+          "name": "Agent email",
+          "id": "agent_email",
+          "type": "text",
+          "default": "john.doe@immo-site.com",
+          "sync": true
+        },
+        {
+          "name": "Additional information",
+          "id": "additional_information",
+          "type": "wysiwyg",
+          "default": "",
+          "allow_empty": true
+        }
+      ],
+      "default": []
+    },
+    {
       "name": "Border radius",
       "id": "border_radius",
       "type": "select",

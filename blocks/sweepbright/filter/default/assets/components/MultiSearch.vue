@@ -1,7 +1,7 @@
 <template>
-  <div class="relative flex-1" :class="'z-' + zIndex">
+  <div class="relative flex-1 wp-filter" :class="'z-' + zIndex">
     <i
-      class="absolute top-0 left-0 mt-2.5 text-base far fa-search z-10"
+      class="absolute top-0 left-0 mt-3.5 text-base far fa-search z-10"
       :class="theme.form_style === 'line' ? 'ml-0' : 'ml-5'"
     ></i>
     <tags-input
