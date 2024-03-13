@@ -28,6 +28,9 @@ if ($offices) {
         <ul class="space-y-4">
           <li>
             <span class="text-2xl"><?= WP_SweepBright_Query::get_the_price(WP_Wrapper::lang()); ?></span>
+            <?php if (get_field('price')['buyer_percentage'] || get_field('price')['buyer_fixed_fee']) : ?>
+              <span class="lowercase text-sm"><?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['buyer_costs_included']; ?></span>
+            <?php endif; ?>
 
             <?php if (get_field('features')['negotiation'] === 'let') : ?>
               <span class="text-sm lowercase"> / <?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['month']; ?></span>
@@ -41,10 +44,26 @@ if ($offices) {
           <?php if (get_field('features')['negotiation'] === 'sale') : ?>
             <?php if (get_field('price')['buyer_percentage'] || get_field('price')['buyer_fixed_fee']) : ?>
               <li class="opacity-50">
-                <?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['buyer_label']; ?>:
+                <?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['buyer_prefix']; ?>:
+                <?php
+                $price = get_field('price')['amount'];
+                $price_exc = $price;
+                $price_perc = get_field('price')['buyer_percentage'];
+                $price_fixed = get_field('price')['buyer_fixed_fee'];
+
+                if ($price_perc) {
+                  $price_exc = $price / (1 + $price_perc / 100);
+                } elseif ($price_fixed) {
+                  $price_exc = $price - $price_fixed;
+                }
+                echo WP_SweepBright_Query::format_price($price_exc, WP_Wrapper::lang());
+                ?>
+              </li>
+              <li class="opacity-50">
+                <?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['buyer_label']; ?>:<br>
 
                 <?php if (get_field('price')['buyer_percentage']) : ?>
-                  <?= get_field('price')['buyer_percentage']; ?>%
+                  <?= get_field('price')['buyer_percentage']; ?>% <?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['buyer_suffix']; ?>
                 <?php else : ?>
                   <?= WP_SweepBright_Query::format_price(get_field('price')['buyer_fixed_fee'], WP_Wrapper::lang()); ?>
                 <?php endif; ?>

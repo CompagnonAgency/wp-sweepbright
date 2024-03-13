@@ -20,7 +20,7 @@ class WP_SweepBright_Cache
     */
 
     // Create the table which is used for storing properties (WordPress posts) in cache
-    if (!get_option('wp_sweepbright_migrate_00005')) {
+    if (!get_option('wp_sweepbright_migrate_00006')) {
       // Truncate database
       WP_SweepBright_Cache::drop_table();
 
@@ -55,7 +55,7 @@ class WP_SweepBright_Cache
       WP_SweepBright_Cache::migrate_properties();
 
       // Finish migration
-      add_option('wp_sweepbright_migrate_00005', true);
+      add_option('wp_sweepbright_migrate_00006', true);
     }
   }
 
