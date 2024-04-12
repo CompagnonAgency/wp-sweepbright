@@ -210,6 +210,46 @@ class FieldPrice
 					'name'   => 'custom_price',
 					'type'   => 'text',
 				],
+				[
+					'key'    => 'price_inventory_report_cost',
+					'label'  => 'Price inventory report cost',
+					'name'   => 'price_inventory_report_cost',
+					'type' => 'group',
+					'sub_fields' => [
+						[
+							'key'    => 'amount',
+							'label'  => 'Amount',
+							'name'   => 'amount',
+							'type'   => 'number',
+						],
+						[
+							'key'    => 'currency',
+							'label'  => 'Currency',
+							'name'   => 'currency',
+							'type'   => 'text',
+						],
+					],
+				],
+				[
+					'key'    => 'price_guarantee',
+					'label'  => 'Price guarantee',
+					'name'   => 'price_guarantee',
+					'type' => 'group',
+					'sub_fields' => [
+						[
+							'key'    => 'amount',
+							'label'  => 'Amount',
+							'name'   => 'amount',
+							'type'   => 'number',
+						],
+						[
+							'key'    => 'currency',
+							'label'  => 'Currency',
+							'name'   => 'currency',
+							'type'   => 'text',
+						],
+					],
+				],
 			],
 		];
 	}
