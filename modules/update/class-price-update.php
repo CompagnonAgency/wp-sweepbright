@@ -94,5 +94,19 @@ class FieldPriceUpdate
     update_field('price', [
       'custom_price' => $estate['custom_price'],
     ], $post_id);
+
+    update_field('price', [
+      'price_inventory_report_cost' => [
+        'amount' => $estate['price_inventory_report_cost']['amount'],
+        'currency' => $estate['price_inventory_report_cost']['currency'],
+      ],
+    ], $post_id);
+
+    update_field('price', [
+      'price_guarantee' => [
+        'amount' => $estate['price_guarantee']['amount'],
+        'currency' => $estate['price_guarantee']['currency'],
+      ],
+    ], $post_id);
   }
 }
