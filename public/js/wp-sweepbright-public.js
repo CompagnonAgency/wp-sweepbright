@@ -108,7 +108,7 @@ export default {
             );
           }
 
-          url.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m, key, value) {
+          url.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
             vars[key] = value;
           });
           return vars;
@@ -144,14 +144,27 @@ export default {
             if (locations) {
               locations.forEach((item) => {
                 const location = item.slice(0, -1).split(",");
-                location[1] = parseFloat(location[1]);
-                location[2] = parseFloat(location[2]);
-                this.request.filters["locations"].push({
-                  latLng: {
+
+                if (location.length === 3) {
+                  location[1] = parseFloat(location[1]);
+                  location[2] = parseFloat(location[2]);
+                } else {
+                  location[1] = false;
+                  location[2] = false;
+                }
+
+                const locationItem = {
+                  value: location[0],
+                };
+
+                if (location[1] && location[2]) {
+                  locationItem.latLng = {
                     lat: location[1],
                     lng: location[2],
-                  },
-                });
+                  };
+                }
+
+                this.request.filters["locations"].push(locationItem);
               });
             }
           }

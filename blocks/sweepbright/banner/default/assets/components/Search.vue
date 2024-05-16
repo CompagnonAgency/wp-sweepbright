@@ -22,6 +22,7 @@
         :typeahead-callback="search_tags"
         :typeahead-hide-discard="true"
         v-model="store.selectedTags"
+        :sort-search-results="false"
       >
       </tags-input>
     </div>

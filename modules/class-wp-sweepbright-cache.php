@@ -20,7 +20,7 @@ class WP_SweepBright_Cache
     */
 
     // Create the table which is used for storing properties (WordPress posts) in cache
-    if (!get_option('wp_sweepbright_migrate_00006')) {
+    if (!get_option('wp_sweepbright_migrate_00009')) {
       // Truncate database
       WP_SweepBright_Cache::drop_table();
 
@@ -46,6 +46,7 @@ class WP_SweepBright_Cache
         `bedrooms` int(11) NOT NULL,
         `lat` decimal(8,6) NOT NULL,
         `lng` decimal(9,6) NOT NULL,
+        `postal_code` varchar(255) NOT NULL,
         `has_open_home` tinyint(1) NOT NULL,
         `office_name` varchar(255) NOT NULL,
         PRIMARY KEY (`id`)
@@ -55,7 +56,7 @@ class WP_SweepBright_Cache
       WP_SweepBright_Cache::migrate_properties();
 
       // Finish migration
-      add_option('wp_sweepbright_migrate_00006', true);
+      add_option('wp_sweepbright_migrate_00009', true);
     }
   }
 
@@ -97,6 +98,7 @@ class WP_SweepBright_Cache
           'bedrooms' => get_post_meta($id, 'facilities_bedrooms', true) ? get_post_meta($id, 'facilities_bedrooms', true) : '',
           'lat' => get_post_meta($id, 'location_latitude', true) ? get_post_meta($id, 'location_latitude', true) : '',
           'lng' => get_post_meta($id, 'location_longitude', true) ? get_post_meta($id, 'location_longitude', true) : '',
+          'postal_code' => get_post_meta($id, 'location_postal_code', true) ? get_post_meta($id, 'location_postal_code', true) : '',
           'has_open_home' => get_post_meta($id, 'open_homes_hasOpenHome', true) ? 1 : 0,
           'office_name' => get_post_meta($id, 'office_name', true) ? get_post_meta($id, 'office_name', true) : '',
         ]);

@@ -26,5 +26,9 @@ class FieldMandateUpdate
     update_field('mandate', [
       'mandate_exclusive' => $estate['mandate']['exclusive'],
     ], $post_id);
+
+    update_field('mandate', [
+      'mandate_number' => $estate['mandate']['number'],
+    ], $post_id);
   }
 }

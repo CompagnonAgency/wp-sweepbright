@@ -683,29 +683,39 @@ class WP_SweepBright_Query
 			$args['posts'] = $args['posts']->andWhere(function ($q) use ($args) {
 				$count = 0;
 				foreach ($args['params']['filters']['locations'] as $location) {
-					$geopoint = new GeoPoint($location['latLng']['lat'], $location['latLng']['lng']);
-					$distance = WP_SweepBright_Helpers::settings_form()['geo_distance'];
-					if (isset($args['params']['filters']['location']['distance']) && $args['params']['filters']['location']['distance']) {
-						$distance = $args['params']['filters']['location']['distance'];
-					}
-					$boundingBox = $geopoint->boundingBox(intval($distance), 'km');
+					if (isset($location['latLng'])) {
+						$geopoint = new GeoPoint($location['latLng']['lat'], $location['latLng']['lng']);
+						$distance = WP_SweepBright_Helpers::settings_form()['geo_distance'];
+						if (isset($args['params']['filters']['location']['distance']) && $args['params']['filters']['location']['distance']) {
+							$distance = $args['params']['filters']['location']['distance'];
+						}
+						$boundingBox = $geopoint->boundingBox(intval($distance), 'km');
 
-					if ($count === 0) {
-						$q->andWhere(function ($w) use ($boundingBox) {
-							$w->andWhere('lat', '>', $boundingBox->getMinLatitude());
-							$w->andWhere('lat', '<=', $boundingBox->getMaxLatitude());
+						if ($count === 0) {
+							$q->andWhere(function ($w) use ($boundingBox) {
+								$w->andWhere('lat', '>', $boundingBox->getMinLatitude());
+								$w->andWhere('lat', '<=', $boundingBox->getMaxLatitude());
 
-							$w->andWhere('lng', '>', $boundingBox->getMinLongitude());
-							$w->andWhere('lng', '<=', $boundingBox->getMaxLongitude());
-						});
+								$w->andWhere('lng', '>', $boundingBox->getMinLongitude());
+								$w->andWhere('lng', '<=', $boundingBox->getMaxLongitude());
+							});
+						} else {
+							$q->orWhere(function ($w) use ($boundingBox) {
+								$w->andWhere('lat', '>', $boundingBox->getMinLatitude());
+								$w->andWhere('lat', '<=', $boundingBox->getMaxLatitude());
+
+								$w->andWhere('lng', '>', $boundingBox->getMinLongitude());
+								$w->andWhere('lng', '<=', $boundingBox->getMaxLongitude());
+							});
+						}
 					} else {
-						$q->orWhere(function ($w) use ($boundingBox) {
-							$w->andWhere('lat', '>', $boundingBox->getMinLatitude());
-							$w->andWhere('lat', '<=', $boundingBox->getMaxLatitude());
+						$postal_code = substr($location['value'], strrpos($location['value'], '(') + 1, -1);
 
-							$w->andWhere('lng', '>', $boundingBox->getMinLongitude());
-							$w->andWhere('lng', '<=', $boundingBox->getMaxLongitude());
-						});
+						if ($count === 0) {
+							$q->andWhere('postal_code', 'LIKE', $postal_code . '%');
+						} else {
+							$q->orWhere('postal_code', 'LIKE', $postal_code . '%');
+						}
 					}
 
 					$count += 1;

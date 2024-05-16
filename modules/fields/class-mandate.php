@@ -41,6 +41,12 @@ class FieldMandate
 					'type'   => 'true_false',
 					'ui' => true,
 				],
+				[
+					'key'    => 'mandate_number',
+					'label'  => 'Number',
+					'name'   => 'number',
+					'type'   => 'text',
+				],
 			],
 		];
 	}
