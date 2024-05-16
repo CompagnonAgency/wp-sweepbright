@@ -126,7 +126,7 @@ if (get_field('features')['negotiation'] === 'sale') {
             <?php endif; ?>
           </p>
 
-          <?php if (get_field('price')['buyer_percentage'] || get_field('price')['buyer_fixed_fee']) : ?>
+          <?php if ((get_field('price')['buyer_percentage'] || get_field('price')['buyer_fixed_fee']) && (get_field('features')['negotiation'] === 'sale')) : ?>
             <p class="mt-2 text-sm opacity-75">
               <?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['buyer_label']; ?>
             </p>

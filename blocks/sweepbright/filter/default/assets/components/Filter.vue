@@ -420,15 +420,21 @@ export default {
         if (locations) {
           locations.forEach((item) => {
             const location = item.slice(0, -1).split(',')
+
             location[1] = parseFloat(location[1])
             location[2] = parseFloat(location[2])
-            locationArr.push({
+
+            const locationItem = {
               value: location[0],
-              latLng: {
+            }
+
+            if (location[1] && location[2]) {
+              locationItem.latLng = {
                 lat: location[1],
                 lng: location[2],
-              },
-            })
+              }
+            }
+            locationArr.push(locationItem)
           })
         }
 
@@ -535,9 +541,14 @@ export default {
 
           filters.value.forEach((location, index) => {
             locations += '['
-            locations += location.value + ','
-            locations += location.latLng.lat + ','
-            locations += location.latLng.lng
+            locations += location.value
+
+            if (location.latLng) {
+              locations += ','
+              locations += location.latLng.lat + ','
+              locations += location.latLng.lng
+            }
+
             locations += ']'
 
             if (index < filters.value.length - 1) {

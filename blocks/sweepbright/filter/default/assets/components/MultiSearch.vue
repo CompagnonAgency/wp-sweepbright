@@ -6,25 +6,27 @@
     ></i>
     <tags-input
       ref="tagsinput"
-      :wrapper-class="`tags-input-wrapper-default ${theme.rounded_lg} ${theme.form_style === 'line' ? 'is-line' : 'is-regular'}`"
+      :wrapper-class="`tags-input-wrapper-default ${theme.rounded_lg} ${
+        theme.form_style === 'line' ? 'is-line' : 'is-regular'
+      }`"
       input-id="tag-input"
       @tag-added="filterResults"
       @tag-removed="filterResults"
       :only-existing-tags="true"
       :placeholder="data.search_placeholder"
-      :typeahead-activation-threshold="3"
+      :typeahead-activation-threshold="2"
       :typeahead="true"
       typeahead-style="dropdown"
       :typeahead-callback="search_tags"
       :typeahead-hide-discard="true"
       v-model="store.selectedTags"
+      :sort-search-results="false"
     >
     </tags-input>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
 import VoerroTagsInput from '@voerro/vue-tagsinput'
 
 export default {
@@ -62,16 +64,20 @@ export default {
     }
   },
   methods: {
-    search_tags(query) {
-      return new Promise((resolve) => {
-        axios
-          .get(`/wp-json/v1/sweepbright/locations?search=${query}&country=${this.data.search_country}`)
-          .then((res) => {
-            resolve(res.data)
-            const searchParam = query.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    async search_tags(query) {
+      return await fetch(
+        `/wp-json/v1/sweepbright/locations?search=${query}&country=${this.data.search_country}`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          setTimeout(() => {
+            const searchParam = query
+              .normalize('NFD')
+              .replace(/[\u0300-\u036f]/g, '')
             this.$refs.tagsinput.doSearch(searchParam)
-          });
-      });
+          }, 100)
+          return data
+        })
     },
     removeUrlParam(name) {
       const searchParams = new URLSearchParams(window.location.search)

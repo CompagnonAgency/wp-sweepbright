@@ -6,18 +6,21 @@
  * @package FieldSizes
  */
 
-class FieldSizes {
+class FieldSizes
+{
 
-	public function __construct() {
+	public function __construct()
+	{
 	}
 
-	public static function retrieve() {
-    return [
-      'key' => 'sizes',
-      'name' => 'sizes',
-      'label' => 'Sizes',
-      'layout' => 'row',
-      'type' => 'group',
+	public static function retrieve()
+	{
+		return [
+			'key' => 'sizes',
+			'name' => 'sizes',
+			'label' => 'Sizes',
+			'layout' => 'row',
+			'type' => 'group',
 			'sub_fields' => [
 				[
 					'key'           => 'sizes_plot_area',
@@ -61,8 +64,28 @@ class FieldSizes {
 						],
 					]
 				],
+				[
+					'key'           => 'sizes_loi_carrez_area',
+					'name'          => 'loi_carrez_area',
+					'label'         => 'Loi Carrez area',
+					'layout'       => 'table',
+					'type'          => 'group',
+					'sub_fields'    => [
+						[
+							'key'    => 'loi_carrez_area_size',
+							'label'  => 'Size',
+							'name'   => 'size',
+							'type'   => 'number',
+						],
+						[
+							'key'    => 'loi_carrez_area_unit',
+							'label'  => 'Unit',
+							'name'   => 'unit',
+							'type'   => 'text',
+						],
+					]
+				],
 			],
-    ];
+		];
 	}
-
 }
