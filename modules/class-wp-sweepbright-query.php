@@ -683,7 +683,7 @@ class WP_SweepBright_Query
 			$args['posts'] = $args['posts']->andWhere(function ($q) use ($args) {
 				$count = 0;
 				foreach ($args['params']['filters']['locations'] as $location) {
-					if (isset($location['latLng'])) {
+					if (isset($location['latLng']) && $location['latLng']['lat'] && $location['latLng']['lng']) {
 						$geopoint = new GeoPoint($location['latLng']['lat'], $location['latLng']['lng']);
 						$distance = WP_SweepBright_Helpers::settings_form()['geo_distance'];
 						if (isset($args['params']['filters']['location']['distance']) && $args['params']['filters']['location']['distance']) {
