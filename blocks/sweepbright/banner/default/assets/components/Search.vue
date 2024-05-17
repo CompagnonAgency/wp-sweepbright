@@ -135,7 +135,11 @@ export default {
       }
 
       if (this.store.selectedTags.length > 0) {
-        destination += `region=${this.store.selectedTags[0].value}&lat=${this.store.selectedTags[0].latLng.lat}&lng=${this.store.selectedTags[0].latLng.lng}&`
+        destination += `region=${this.store.selectedTags[0].value}&`
+
+        if (this.store.selectedTags[0].latLng) {
+          destination += `lat=${this.store.selectedTags[0].latLng.lat}&lng=${this.store.selectedTags[0].latLng.lng}&`
+        }
       }
 
       if (this.store.negotiation) {
