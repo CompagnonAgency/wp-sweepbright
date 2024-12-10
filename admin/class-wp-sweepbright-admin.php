@@ -234,7 +234,7 @@ class WP_SweepBright_Admin
 			$this->plugin_name . '-properties',
 			'Database',
 			'Database',
-			'activate_plugins',
+			'publish_pages',
 			'edit.php?post_type=sweepbright_estates',
 			false,
 		);
@@ -244,7 +244,7 @@ class WP_SweepBright_Admin
 			$this->plugin_name . '-properties',
 			'Contact',
 			'Contact',
-			'activate_plugins',
+			'publish_pages',
 			$this->plugin_name . '-contact',
 			array($this, 'load_admin_contact'),
 		);
@@ -254,7 +254,7 @@ class WP_SweepBright_Admin
 			$this->plugin_name . '-properties',
 			'Settings',
 			'Settings',
-			'activate_plugins',
+			'publish_pages',
 			$this->plugin_name . '-settings',
 			array($this, 'load_admin_settings'),
 		);
