@@ -244,7 +244,7 @@ class WP_SweepBright_Admin
 			$this->plugin_name . '-properties',
 			'Contact',
 			'Contact',
-			'publish_pages',
+			'activate_plugins',
 			$this->plugin_name . '-contact',
 			array($this, 'load_admin_contact'),
 		);
@@ -254,7 +254,7 @@ class WP_SweepBright_Admin
 			$this->plugin_name . '-properties',
 			'Settings',
 			'Settings',
-			'publish_pages',
+			'activate_plugins',
 			$this->plugin_name . '-settings',
 			array($this, 'load_admin_settings'),
 		);
