@@ -231,7 +231,6 @@ class FieldFeatures
 						'cottage' => 'Cottage',
 						'mansion' => 'Mansion',
 						'farm' => 'Farm',
-						'investment_property' => 'Investment property',
 						'agricultural' => 'Agricultural',
 						'buildable' => 'Buildable',
 						'recreational' => 'Recreational',

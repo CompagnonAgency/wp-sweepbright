@@ -20,7 +20,7 @@ class WP_SweepBright_Cache
     */
 
     // Create the table which is used for storing properties (WordPress posts) in cache
-    if (!get_option('wp_sweepbright_migrate_00009')) {
+    if (!get_option('wp_sweepbright_migrate_00010')) {
       // Truncate database
       WP_SweepBright_Cache::drop_table();
 
@@ -56,7 +56,7 @@ class WP_SweepBright_Cache
       WP_SweepBright_Cache::migrate_properties();
 
       // Finish migration
-      add_option('wp_sweepbright_migrate_00009', true);
+      add_option('wp_sweepbright_migrate_00010', true);
     }
   }
 
@@ -129,6 +129,7 @@ class WP_SweepBright_Cache
       'bedrooms' => $estate['bedrooms'] ? $estate['bedrooms'] : '',
       'lat' => $estate['location']['geo']['latitude'] ? $estate['location']['geo']['latitude'] : '',
       'lng' => $estate['location']['geo']['longitude'] ? $estate['location']['geo']['longitude'] : '',
+      'postal_code' => $estate['location']['postal_code'] ? $estate['location']['postal_code'] : '',
       'has_open_home' => count($estate['open_homes']) > 0 ? 1 : 0,
       'office_name' => $estate['office']['name'] ? $estate['office']['name'] : '',
     ];

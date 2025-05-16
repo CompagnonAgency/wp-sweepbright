@@ -153,7 +153,7 @@ class FieldFeaturesUpdate
     ], $post_id);
 
     update_field('features', [
-      'subtype' => $estate['sub_type']
+      'sub_type' => $estate['sub_type']
     ], $post_id);
   }
 }
