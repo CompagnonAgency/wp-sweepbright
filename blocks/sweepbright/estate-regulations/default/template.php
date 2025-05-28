@@ -112,6 +112,42 @@
       </li>
     <?php endif; ?>
 
+	  <?php if (get_field('regulations')['ongoing_litigation']) : ?>
+          <li class="<?php if (WP_Wrapper::get('max_rows', $component, $args) > 1) : ?>w-1/2 lg:w-1/<?= WP_Wrapper::get('max_rows', $component, $args); ?><?php else : ?>w-full<?php endif; ?> p-5">
+              <p class="mb-3 text-uppercase"><?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['ongoing_litigation']; ?></p>
+              <p class="text-xl font-medium">
+                  <i class="fal fa-check"></i>
+              </p>
+          </li>
+	  <?php endif; ?>
+
+	  <?php if (get_field('regulations')['renovation_obligation']) : ?>
+          <li class="<?php if (WP_Wrapper::get('max_rows', $component, $args) > 1) : ?>w-1/2 lg:w-1/<?= WP_Wrapper::get('max_rows', $component, $args); ?><?php else : ?>w-full<?php endif; ?> p-5">
+              <p class="mb-3 text-uppercase"><?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['renovation_obligation']; ?></p>
+              <p class="text-xl font-medium">
+                  <i class="fal fa-check"></i>
+              </p>
+          </li>
+	  <?php endif; ?>
+
+	  <?php if (get_field('regulations')['asbestos_certificate']) : ?>
+          <li class="<?php if (WP_Wrapper::get('max_rows', $component, $args) > 1) : ?>w-1/2 lg:w-1/<?= WP_Wrapper::get('max_rows', $component, $args); ?><?php else : ?>w-full<?php endif; ?> p-5">
+              <p class="mb-3 text-uppercase"><?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['asbestos_certificate']; ?></p>
+              <p class="text-xl font-medium">
+                  <i class="fal fa-check"></i>
+              </p>
+          </li>
+	  <?php endif; ?>
+
+	  <?php if (get_field('regulations')['asbestos_certificate_reference']) : ?>
+          <li class="<?php if (WP_Wrapper::get('max_rows', $component, $args) > 1) : ?>w-1/2 lg:w-1/<?= WP_Wrapper::get('max_rows', $component, $args); ?><?php else : ?>w-full<?php endif; ?> p-5">
+              <p class="mb-3 text-uppercase"><?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['asbestos_certificate_reference']; ?></p>
+              <p class="text-xl font-medium">
+				  <?php echo get_field('regulations')['asbestos_certificate_reference'] ?>
+              </p>
+          </li>
+	  <?php endif; ?>
+
     <?php if (get_field('property_and_land')['land_use_designation']) : ?>
       <li class="<?php if (WP_Wrapper::get('max_rows', $component, $args) > 1) : ?>w-1/2 lg:w-1/<?= WP_Wrapper::get('max_rows', $component, $args); ?><?php else : ?>w-full<?php endif; ?> p-5">
         <p class="mb-3 text-uppercase"><?= WP_Wrapper::get('locale', $component, $args)[WP_Wrapper::lang()]['land_use_designation']; ?></p>

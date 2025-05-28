@@ -135,5 +135,45 @@ class FieldRegulationsUpdate
         'urban_planning_certificate' => $val,
       ], $post_id);
     }
+
+	  // ongoing_litigation
+	  if (isset($estate['legal']['regulations']['ongoing_litigation'])) {
+		  $val = 0;
+		  if ($estate['legal']['regulations']['ongoing_litigation']) {
+			  $val = 1;
+		  }
+		  update_field('regulations', [
+			  'ongoing_litigation' => $val,
+		  ], $post_id);
+	  }
+
+	  // renovation_obligation
+	  if (isset($estate['legal']['regulations']['renovation_obligation'])) {
+		  $val = 0;
+		  if ($estate['legal']['regulations']['renovation_obligation']) {
+			  $val = 1;
+		  }
+		  update_field('regulations', [
+			  'renovation_obligation' => $val,
+		  ], $post_id);
+	  }
+
+	  // asbestos_certificate
+	  if (isset($estate['legal']['regulations']['asbestos_certificate'])) {
+		  $val = 0;
+		  if ($estate['legal']['regulations']['asbestos_certificate']) {
+			  $val = 1;
+		  }
+		  update_field('regulations', [
+			  'asbestos_certificate' => $val,
+		  ], $post_id);
+	  }
+
+	  // asbestos_certificate_reference
+	  if (isset($estate['legal']['regulations']['asbestos_certificate_reference'])) {
+		  update_field('regulations', [
+			  'asbestos_certificate_reference' => $estate['legal']['regulations']['asbestos_certificate_reference'],
+		  ], $post_id);
+	  }
   }
 }

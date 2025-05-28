@@ -58,7 +58,11 @@
           "residential_expansion_area": "Woonuitbreidingsgebied",
           "residential_park": "Woonpark",
           "flood_risk_building_score": "Gebouwscore overstromingsgevoeligheid",
-          "flood_risk_plot_score": "Perceelscore overstromingsgevoeligheid"
+          "flood_risk_plot_score": "Perceelscore overstromingsgevoeligheid",
+          "ongoing_litigation": "Lopende procedure",
+          "renovation_obligation": "Renovatieverplichting",
+          "asbestos_certificate": "Asbestattest",
+          "asbestos_certificate_reference": "Asbestattestnummer"
         },
         "fr": {
           "heading": "Aménagement urbain",
@@ -98,7 +102,11 @@
           "residential_expansion_area": "Zone d'expansion résidentielle",
           "residential_park": "Parc résidentiel",
           "flood_risk_building_score": "Risque d'inondation : cl. du bâtiment",
-          "flood_risk_plot_score": "Risque d'inondation : cl. de la parcelle"
+          "flood_risk_plot_score": "Risque d'inondation : cl. de la parcelle",
+          "ongoing_litigation": "Procédure en cours",
+          "renovation_obligation": "Renovation obligation",
+          "asbestos_certificate": "Certificat d’amiante",
+          "asbestos_certificate_reference": "No. de certificat d’amiante"
         },
         "en": {
           "heading": "Urban planning",
@@ -138,7 +146,11 @@
           "residential_expansion_area": "Residential expansion area",
           "residential_park": "Residential park",
           "flood_risk_building_score": "Flood Risk Building Score",
-          "flood_risk_plot_score": "Flood Risk Plot Score"
+          "flood_risk_plot_score": "Flood Risk Plot Score",
+          "ongoing_litigation": "Ongoing litigation",
+          "renovation_obligation": "Renovation obligation",
+          "asbestos_certificate": "Asbestos certificate",
+          "asbestos_certificate_reference": "Asbestos certificate reference"
         }
       }
     }
