@@ -56,7 +56,9 @@
           "agricultural_area_with_scenic_value": "Landschappelijk waardevol agrarisch gebied",
           "area_for_leisure_accomodation": "Gebied voor verblijfrecreatie",
           "residential_expansion_area": "Woonuitbreidingsgebied",
-          "residential_park": "Woonpark"
+          "residential_park": "Woonpark",
+          "flood_risk_building_score": "Gebouwscore overstromingsgevoeligheid",
+          "flood_risk_plot_score": "Perceelscore overstromingsgevoeligheid"
         },
         "fr": {
           "heading": "Aménagement urbain",
@@ -94,7 +96,9 @@
           "agricultural_area_with_scenic_value": "Zone agricole à valeur panoramique",
           "area_for_leisure_accomodation": "Zone pour l'hébergement de loisirs",
           "residential_expansion_area": "Zone d'expansion résidentielle",
-          "residential_park": "Parc résidentiel"
+          "residential_park": "Parc résidentiel",
+          "flood_risk_building_score": "Risque d'inondation : cl. du bâtiment",
+          "flood_risk_plot_score": "Risque d'inondation : cl. de la parcelle"
         },
         "en": {
           "heading": "Urban planning",
@@ -132,7 +136,9 @@
           "agricultural_area_with_scenic_value": "Agricultural area with scenic value",
           "area_for_leisure_accomodation": "Area for leisure accommodation",
           "residential_expansion_area": "Residential expansion area",
-          "residential_park": "Residential park"
+          "residential_park": "Residential park",
+          "flood_risk_building_score": "Flood Risk Building Score",
+          "flood_risk_plot_score": "Flood Risk Plot Score"
         }
       }
     }

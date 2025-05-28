@@ -27,6 +27,14 @@ class FieldPropertyUpdate
       'flood_risk' => $estate['legal']['property_and_land']['flood_risk'],
     ], $post_id);
 
+	  update_field('property_and_land', [
+		  'flood_risk_building_score' => $estate['legal']['property_and_land']['flood_risk_building_score'],
+	  ], $post_id);
+
+	  update_field('property_and_land', [
+		  'flood_risk_plot_score' => $estate['legal']['property_and_land']['flood_risk_plot_score'],
+	  ], $post_id);
+
     update_field('property_and_land', [
       'land_use_designation' => $estate['legal']['property_and_land']['land_use_designation'],
     ], $post_id);
