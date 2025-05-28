@@ -49,9 +49,14 @@
           "nature_area": "Natuurgebied",
           "natural_reserve": "Natuurreservaat",
           "residential_area_with_cultural_historical_value": "Residentieel gebied met culturele en/of historische waarde",
+          "residential_area_with_a_rural_character": "Woongebied met een landelijk karakter",
           "industrial_area_for_sme": "Industriegebied voor KMO's",
           "day_recreation_area": "Dagrecreatiegebied",
-          "other": "Andere"
+          "other": "Andere",
+          "agricultural_area_with_scenic_value": "Landschappelijk waardevol agrarisch gebied",
+          "area_for_leisure_accomodation": "Gebied voor verblijfrecreatie",
+          "residential_expansion_area": "Woonuitbreidingsgebied",
+          "residential_park": "Woonpark"
         },
         "fr": {
           "heading": "Aménagement urbain",
@@ -82,9 +87,14 @@
           "nature_area": "Zone naturelle",
           "natural_reserve": "Réserve naturelle",
           "residential_area_with_cultural_historical_value": "Zone résidentielle avec valeur culturelle et/ou historique",
+          "residential_area_with_a_rural_character": "Zone résidentielle à caractère rural",
           "industrial_area_for_sme": "Zone industrielle pour PME",
           "day_recreation_area": "Zone de loisirs de jour",
-          "other": "Autre"
+          "other": "Autre",
+          "agricultural_area_with_scenic_value": "Zone agricole à valeur panoramique",
+          "area_for_leisure_accomodation": "Zone pour l'hébergement de loisirs",
+          "residential_expansion_area": "Zone d'expansion résidentielle",
+          "residential_park": "Parc résidentiel"
         },
         "en": {
           "heading": "Urban planning",
@@ -115,9 +125,14 @@
           "nature_area": "Nature area",
           "natural_reserve": "Natural reserve",
           "residential_area_with_cultural_historical_value": "Residential area with cultural and/or historical value",
+          "residential_area_with_a_rural_character": "Residential area with a rural character",
           "industrial_area_for_sme": "Industrial area for SME",
           "day_recreation_area": "Day recreation area",
-          "other": "Other"
+          "other": "Other",
+          "agricultural_area_with_scenic_value": "Agricultural area with scenic value",
+          "area_for_leisure_accomodation": "Area for leisure accommodation",
+          "residential_expansion_area": "Residential expansion area",
+          "residential_park": "Residential park"
         }
       }
     }
