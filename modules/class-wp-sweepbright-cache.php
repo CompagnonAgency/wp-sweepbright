@@ -94,7 +94,8 @@ class WP_SweepBright_Cache
           'negotiator_email' => get_post_meta($id, 'negotiator_email', true),
           'price' => get_post_meta($id, 'price_amount', true) ? get_post_meta($id, 'price_amount', true) : '',
           'plot_area' => get_post_meta($id, 'sizes_plot_area_size', true) ? get_post_meta($id, 'sizes_plot_area_size', true) : '',
-          'liveable_area' => get_post_meta($id, 'sizes_liveable_area_size', true) ? get_post_meta($id, 'sizes_liveable_area_size', true) : '',
+          // Offices do not have liveable area, so use net_area instead if available
+          'liveable_area' => get_post_meta($id, 'sizes_liveable_area_size', true) ?: get_post_meta($id, 'sizes_net_area_size', true) ?: '',
           'bedrooms' => get_post_meta($id, 'facilities_bedrooms', true) ? get_post_meta($id, 'facilities_bedrooms', true) : '',
           'lat' => get_post_meta($id, 'location_latitude', true) ? get_post_meta($id, 'location_latitude', true) : '',
           'lng' => get_post_meta($id, 'location_longitude', true) ? get_post_meta($id, 'location_longitude', true) : '',
@@ -111,6 +112,12 @@ class WP_SweepBright_Cache
     global $wpdb;
     $table_name = $wpdb->prefix . 'sweepbright_estates';
 
+	// Offices do not have liveable area, so use net_area instead if available
+	$liveable_area = $estate['sizes']['liveable_area']['size'] ? $estate['sizes']['liveable_area']['size'] : '';
+	if($estate['sizes']['net_area']['size']){
+		$liveable_area = $estate['sizes']['net_area']['size'];
+	}
+
     $data = [
       'date' => date('c'),
       'post_id' => $post_id,
@@ -125,7 +132,7 @@ class WP_SweepBright_Cache
       'negotiator_email' => $estate['negotiator']['email'],
       'price' => $estate['price']['amount'] ? $estate['price']['amount'] : '',
       'plot_area' => $estate['sizes']['liveable_area']['size'] ? $estate['sizes']['liveable_area']['size'] : '',
-      'liveable_area' => $estate['sizes']['liveable_area']['size'] ? $estate['sizes']['liveable_area']['size'] : '',
+      'liveable_area' =>$liveable_area,
       'bedrooms' => $estate['bedrooms'] ? $estate['bedrooms'] : '',
       'lat' => $estate['location']['geo']['latitude'] ? $estate['location']['geo']['latitude'] : '',
       'lng' => $estate['location']['geo']['longitude'] ? $estate['location']['geo']['longitude'] : '',

@@ -293,6 +293,12 @@ class WP_SweepBright_Query
 				$size =  WP_SweepBright_Query::format_number(get_field('sizes')['liveable_area']['size'], $iso) . WP_SweepBright_Query::format_unit(get_field('sizes')['liveable_area']['unit']);
 			}
 		}
+
+		if ($type === 'net_area') {
+			if (get_field('sizes')['net_area']['size']) {
+				$size =  WP_SweepBright_Query::format_number(get_field('sizes')['net_area']['size'], $iso) . WP_SweepBright_Query::format_unit(get_field('sizes')['net_area']['unit']);
+			}
+		}
 		return $size;
 	}
 
